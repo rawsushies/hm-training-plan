@@ -1,15 +1,13 @@
-/* Firebase web client configuration.
- * Fill in the values from Firebase console → Project settings → Your apps → Web app.
- * These are public identifiers (not secrets). Security comes from firestore.rules and the
- * Authentication "Authorised domains" list. Leave as null to run the app local-only.
- * See docs/FIREBASE_SETUP.md. */
-window.HMTP_FIREBASE_CONFIG = window.HMTP_FIREBASE_CONFIG || null;
-/* Example:
-window.HMTP_FIREBASE_CONFIG = {
-  apiKey: "AIza...",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project",
-  appId: "1:1234567890:web:abcdef",
-  messagingSenderId: "1234567890"
+/* Firebase web client configuration for project "we-run-it".
+ * These are public identifiers (not secrets): every Firebase web app ships them to the browser.
+ * Access is controlled by firestore.rules and the Authentication "Authorized domains" list.
+ * See docs/FIREBASE_SETUP.md. Set to null to run the app local-only. */
+window.HMTP_FIREBASE_CONFIG = window.HMTP_FIREBASE_CONFIG !== undefined ? window.HMTP_FIREBASE_CONFIG : {
+  apiKey: "AIzaSyCxz4eZuB7RC2iRoNmO6NAXYL2q2q34OfU",
+  authDomain: "we-run-it.firebaseapp.com",
+  projectId: "we-run-it",
+  appId: "1:227466072680:web:719c7f0f748bb5f73361dd",
+  messagingSenderId: "227466072680"
 };
-*/
+// Where installed apps (APK) download live updates from.
+window.HMTP_UPDATE_URL = window.HMTP_UPDATE_URL || "https://we-run-it.web.app/";

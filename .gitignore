@@ -1,5 +1,4 @@
 node_modules/
-.firebaserc
 *.log
 firebase-debug.log*
 firestore-debug.log*
@@ -7,3 +6,5 @@ ui-debug.log*
 .env
 test-results/
 test/artifacts/
+.firebase/
+dist/

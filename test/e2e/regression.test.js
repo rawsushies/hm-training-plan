@@ -47,6 +47,7 @@ const PROBE = () => {
 
 test("the new build computes the same plan, states, reviews, badges, goals and pace numbers as the original", async () => {
   const ctx = await (await import("playwright")).chromium.launch().then(b => b.newContext());
+  await ctx.addInitScript(() => { window.HMTP_FIREBASE_CONFIG = null; });
   const page = await ctx.newPage();
   await page.route("**/__legacy.html", r => r.fulfill({ body: LEGACY, contentType: "text/html" }));
   const run = async (url, key) => {

@@ -9,8 +9,8 @@ const AUTH = process.env.FIREBASE_AUTH_EMULATOR_HOST || "127.0.0.1:9099";
 export const CONFIG = { apiKey: "demo-api-key", authDomain: `${PROJECT}.firebaseapp.com`, projectId: PROJECT, appId: "1:1:web:1" };
 
 let server, port;
-export async function startServer() {
-  server = createServer({ root: "public", cache: -1, silent: true });
+export async function startServer(root = "public") {
+  server = createServer({ root, cache: -1, silent: true });
   await new Promise(r => server.listen(0, "127.0.0.1", r));
   port = server.server.address().port;
   return port;
@@ -30,7 +30,7 @@ export async function closeBrowser() { await browser?.close(); }
 /** A "device": its own browser context (separate localStorage / IndexedDB), with Firebase config injected. */
 export async function device({ viewport = { width: 390, height: 844 }, seed = null, cloud = true } = {}) {
   const ctx = await browser.newContext({ viewport });
-  if (cloud) await ctx.addInitScript(cfg => { window.HMTP_FIREBASE_CONFIG = cfg; }, CONFIG);
+  await ctx.addInitScript(cfg => { window.HMTP_FIREBASE_CONFIG = cfg; }, cloud ? CONFIG : null);
   if (seed) await ctx.addInitScript(s => { if (!localStorage.getItem("__seeded")) { for (const [k, v] of Object.entries(s)) localStorage.setItem(k, typeof v === "string" ? v : JSON.stringify(v)); localStorage.setItem("__seeded", "1"); } }, seed);
   const page = await ctx.newPage();
   page.errors = [];

@@ -12,3 +12,9 @@ for (const f of ["firebase-app.js", "firebase-auth.js", "firebase-firestore.js"]
   writeFileSync(`${out}/${f}`, src);
   console.log(`${out}/${f}`, src.length);
 }
+
+// Capacitor's runtime (window.Capacitor.registerPlugin etc.) for the Android app; harmless on the web.
+const capV = JSON.parse(readFileSync("node_modules/@capacitor/core/package.json", "utf8")).version;
+mkdirSync(`public/vendor/capacitor/${capV}`, { recursive: true });
+writeFileSync(`public/vendor/capacitor/${capV}/capacitor.js`, readFileSync("node_modules/@capacitor/core/dist/capacitor.js", "utf8").replace(/\n\/\/# sourceMappingURL=.*$/m, ""));
+console.log(`public/vendor/capacitor/${capV}/capacitor.js`);

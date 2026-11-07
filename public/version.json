@@ -1,0 +1,102 @@
+{
+ "version": "3.1.1",
+ "build": "2026-11-07T05:10:50Z",
+ "minApp": "3.0.0",
+ "minNative": 1,
+ "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
+ "notes": [
+  "Login Google di aplikasi Android: coba cara kedua otomatis, pesan error lebih jelas"
+ ],
+ "files": [
+  {
+   "p": "firebase-config.js",
+   "h": "a2f1065ee3193d5ee32b2f3b9caa9597d0a2b4ae3406c5ef604f0ad3fe9fb6c3",
+   "s": 785
+  },
+  {
+   "p": "icon-192.png",
+   "h": "d46aae877e39136b25a6e4bc819b9cf7e178b4fd6a463925ac74e912506b6665",
+   "s": 6796
+  },
+  {
+   "p": "icon-512.png",
+   "h": "9257ec4d86b885135fce04bce218c13e6d331d8a443521c0e9bc7e1e06e2c259",
+   "s": 18741
+  },
+  {
+   "p": "icon.svg",
+   "h": "50609761faf288d32cd939447c9856d6609c05f40751578140b7d2c750ed900b",
+   "s": 450
+  },
+  {
+   "p": "index.html",
+   "h": "895bea682056534fd6eed68623f54c7302fc340d761a580d862e23e3e561167e",
+   "s": 251802
+  },
+  {
+   "p": "js/cloud-firebase.js",
+   "h": "2b3928c9899fcacf9568df4ad17560857ed1b95299643953bf1bdda97ab1c21d",
+   "s": 15323
+  },
+  {
+   "p": "js/logic.js",
+   "h": "5b1c00535eeff72033dde37ed645684808d89a39098dc0c4736f6533aa70a231",
+   "s": 31196
+  },
+  {
+   "p": "js/notify.js",
+   "h": "a3f8e27764da39dd6a65c3ade4e2e4c6d4f3edffcfcc9b7719ace34a85d65fc3",
+   "s": 2153
+  },
+  {
+   "p": "js/sync.js",
+   "h": "bcdbd2d631446ade0c9c55b4abda98832e9dab603b71d4d84bfcfadcaa70ce40",
+   "s": 8584
+  },
+  {
+   "p": "js/tutorial.js",
+   "h": "a286283c258d7c1737fba841b365d20d3c465042837df7c49d5c22f20049dfb7",
+   "s": 30056
+  },
+  {
+   "p": "js/updater.js",
+   "h": "3ff086a0ae9d0585b69f76bc4da478fd4bd150f488ccea9fed02e3db3483330b",
+   "s": 11541
+  },
+  {
+   "p": "js/version.js",
+   "h": "2fca81dacba2c714bae88d54c1cf590c60107f555e2b488324637f2595e4a75e",
+   "s": 139
+  },
+  {
+   "p": "manifest.webmanifest",
+   "h": "496f8628d7af650a03221f815b55a064f0c76ae8a4fa02b62e217f87b1773f32",
+   "s": 442
+  },
+  {
+   "p": "sw.js",
+   "h": "cc8918e4c4b8d32defdbc51bdcdbfedb918ca5e2e1a7b3b839751b7f54041e1b",
+   "s": 2274
+  },
+  {
+   "p": "vendor/capacitor/8.5.3/capacitor.js",
+   "h": "9b9a78ff8d39c1db9714813de075494b984ef32580edf25c751b85dfe87beccc",
+   "s": 8688
+  },
+  {
+   "p": "vendor/firebase/12.19.0/firebase-app.js",
+   "h": "39691e000b96df9124bcce7d77afb38121501c624774473be0766094ac3b5476",
+   "s": 106435
+  },
+  {
+   "p": "vendor/firebase/12.19.0/firebase-auth.js",
+   "h": "ed36687bda5ba3337dc7af5451f72cf53cac044139cc255ad8c31cc1e52492b2",
+   "s": 157030
+  },
+  {
+   "p": "vendor/firebase/12.19.0/firebase-firestore.js",
+   "h": "331014a4ad65d4e8255738c8ce33e81480d1274e37ea7ac2239d847fdd01469f",
+   "s": 684895
+  }
+ ]
+}

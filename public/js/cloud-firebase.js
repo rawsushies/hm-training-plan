@@ -15,6 +15,44 @@ const PATH_RE = /^(runs|strength|checkins|shoes|reviews|plan)\/[A-Za-z0-9_-]{1,6
 const chunk = (a, n) => { const o = []; for (let i = 0; i < a.length; i += n) o.push(a.slice(i, i + n)); return o; };
 const rand = bytes => { const b = crypto.getRandomValues(new Uint8Array(bytes)); return btoa(String.fromCharCode(...b)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); };
 const userOf = u => u ? { uid: u.uid, displayName: u.displayName || "", email: u.email || "", photoURL: u.photoURL || "" } : null;
+const nativeAuth = () => {
+  const C = globalThis.Capacitor;
+  if (!(C && C.isNativePlatform && C.isNativePlatform())) return null;
+  return C.Plugins.FirebaseAuthentication || C.registerPlugin("FirebaseAuthentication");
+};
+/* Android native Google sign-in. Credential Manager first; if it fails for any reason other than the
+ * user cancelling, the classic Google Sign-In screen (useCredentialManager:false) is tried, which works
+ * on phones where Credential Manager misbehaves. The method that worked is remembered. If both fail, the
+ * error carries a readable code plus the raw native messages (shown in the app for diagnosis). */
+const NATIVE_PREF = "hmtp:nativeSignIn";
+const classifyNative = m => /cancel|12501|user denied/i.test(m) ? "auth/user-cancelled"
+  : /28444|developer console|DEVELOPER_ERROR|\b10:|\[10\]/i.test(m) ? "auth/android-config"
+  : /no credential|NoCredential/i.test(m) ? "auth/no-google-account"
+  : /network|\b7:|\[7\]|timeout|unavailable/i.test(m) ? "auth/network-request-failed"
+  : "auth/native-failed";
+const nativeMsg = e => String((e && (e.message || e.errorMessage || e.code)) || e || "unknown").slice(0, 300);
+async function nativeGoogleIdToken(nat, selectAccount) {
+  if (selectAccount) await nat.signOut().catch(() => {});
+  let order = [true, false];
+  try { if (localStorage.getItem(NATIVE_PREF) === "legacy") order = [false, true]; } catch (e) {}
+  const tried = [];
+  for (const useCM of order) {
+    try {
+      const res = await nat.signInWithGoogle({ skipNativeAuth: true, useCredentialManager: useCM });
+      const tok = res && res.credential && res.credential.idToken;
+      if (!tok) throw new Error("Google tidak mengirim ID token");
+      try { localStorage.setItem(NATIVE_PREF, useCM ? "cm" : "legacy"); } catch (e) {}
+      return tok;
+    } catch (e) {
+      const m = nativeMsg(e), code = classifyNative(m);
+      tried.push(`${useCM ? "CredentialManager" : "GoogleSignIn"}: ${m}`);
+      if (code === "auth/user-cancelled") throw Object.assign(new Error(m), { code, detail: tried.join(" | ") });
+    }
+  }
+  const codes = tried.map(t => classifyNative(t));
+  const code = codes.find(c => c !== "auth/native-failed") || "auth/native-failed";
+  throw Object.assign(new Error(tried.join(" | ")), { code, detail: tried.join(" | ") });
+}
 const safePhoto = u => /^https:\/\/[^"<> ]+$/.test(u || "") && u.length <= 600 ? u : "";
 
 export async function createCloud(config, opts = {}) {
@@ -31,7 +69,7 @@ export async function createCloud(config, opts = {}) {
 
   // Finish a redirect sign-in if one was in flight (popup-blocked fallback).
   let redirectError = null;
-  try { await A.getRedirectResult(auth); } catch (e) { redirectError = e; }
+  if (!nativeAuth()) { try { await A.getRedirectResult(auth); } catch (e) { redirectError = e; } }
 
   const userRef = uid => F.doc(db, "users", uid);
   const recRef = (uid, key) => { if (!PATH_RE.test(key)) throw new Error("bad key " + key); const [c, id] = key.split("/"); return F.doc(db, "users", uid, c, id); };
@@ -45,6 +83,10 @@ export async function createCloud(config, opts = {}) {
 
     /* ---------- Auth ---------- */
     async signInGoogle({ selectAccount = false, forceRedirect = false } = {}) {
+      // Android app: Google blocks OAuth inside embedded WebViews, so use the native account picker
+      // (@capacitor-firebase/authentication, skipNativeAuth) and hand the ID token to the JS SDK.
+      const nat = nativeAuth();
+      if (nat) return userOf((await A.signInWithCredential(auth, A.GoogleAuthProvider.credential(await nativeGoogleIdToken(nat, selectAccount)))).user);
       provider.setCustomParameters(selectAccount ? { prompt: "select_account" } : {});
       if (forceRedirect) { await A.signInWithRedirect(auth, provider); return null; }
       try { return userOf((await A.signInWithPopup(auth, provider)).user); }
@@ -60,7 +102,7 @@ export async function createCloud(config, opts = {}) {
     async signInWithGoogleIdToken(idToken) {
       return userOf((await A.signInWithCredential(auth, A.GoogleAuthProvider.credential(idToken))).user);
     },
-    async signOut() { await A.signOut(auth); },
+    async signOut() { const nat = nativeAuth(); if (nat) await nat.signOut().catch(() => {}); await A.signOut(auth); },
 
     /* ---------- Private records ---------- */
     async getUserDoc(uid) { const s = await F.getDoc(userRef(uid)); return s.exists() ? s.data() : null; },

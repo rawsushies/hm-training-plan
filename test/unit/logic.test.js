@@ -155,3 +155,12 @@ test("weekly analysis reminder only states facts from logs", () => {
   const wk = r.find(x => x.id === "wk:w1");
   assert.match(wk.body, /2 lari, 11 dari 13 km/);
 });
+
+test("updater version comparison", async () => {
+  globalThis.document = { addEventListener() {} }; globalThis.localStorage = { getItem: () => null, setItem() {} };
+  await import("../../public/js/updater.js");
+  const U = globalThis.HMTPUpdate;
+  assert.ok(U.cmpVer("3.10.0", "3.9.9") > 0); assert.ok(U.cmpVer("3.1.0", "3.1.0") === 0); assert.ok(U.cmpVer("2.9", "3.0.0") < 0);
+  assert.ok(U.isNewer({ version: "3.1.0", build: "2026-11-08T00:00:00Z" }, { version: "3.1.0", build: "2026-11-07T00:00:00Z" }));
+  assert.ok(!U.isNewer({ version: "3.0.9", build: "2027-01-01T00:00:00Z" }, { version: "3.1.0", build: "2026-01-01T00:00:00Z" }));
+});
