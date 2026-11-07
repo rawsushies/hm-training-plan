@@ -191,6 +191,8 @@ table.t th{font-size:12px;color:var(--mu);font-weight:600}
 ol.steps{margin:6px 0 0;padding-left:20px}
 ol.steps li{margin:4px 0}
 .avatar{width:36px;height:36px;border-radius:50%;flex:none;object-fit:cover;background:var(--s2)}
+.avatar.ini{position:relative;display:inline-flex;align-items:center;justify-content:center;font-weight:800;color:var(--mu);overflow:hidden}
+.avatar.ini img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .acct{display:flex;align-items:center;gap:12px;padding:12px;background:var(--s1);border:1px solid var(--line);border-radius:8px}
 .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle;background:var(--mu)}
 .dot.on{background:var(--ok)}
@@ -980,7 +982,7 @@ const storageNote = () => STORAGE_OK ? "" : `<div class="note bad" style="margin
 /* ---------- Home ---------- */
 function weekStrip(cur){
   const W = 340, H = 64, n = PLANW.length, bw = W / n, max = 30;
-  let s = `<svg viewBox="0 0 ${W} ${H+14}" role="img" aria-label="Km per minggu, 31 minggu">`;
+  let s = `<svg viewBox="0 -10 ${W} ${H+24}" role="img" aria-label="Km per minggu, 31 minggu">`;
   PLANW.forEach((w,i) => {
     const h = Math.max(4, (Math.min(w.total, max)/max) * H), x = i*bw + 1, y = H - h;
     const ratio = Math.min(1, sum(logsIn(w.start, w.end), l => l.distance) / w.total);
@@ -1360,7 +1362,7 @@ function vReview(){
 
 /* ---------- Menu + account ---------- */
 const G_LOGO = '<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>';
-const avatarImg = url => /^https:\/\/[^"<> ]+$/.test(url || "") ? `<img class="avatar" src="${esc(url)}" alt="" referrerpolicy="no-referrer" onerror="this.style.visibility='hidden'">` : `<span class="avatar" aria-hidden="true"></span>`;
+const avatarImg = (url, name) => `<span class="avatar ini" aria-hidden="true">${esc(String(name || "?").trim().charAt(0).toUpperCase() || "?")}${/^https:\/\/[^"<> ]+$/.test(url || "") ? `<img src="${esc(url)}" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ""}</span>`;
 function acctBox(){
   const st = CLOUD.state, u = CLOUD.user;
   if(st === "off") return `<div class="acct" style="align-items:flex-start">${mascot("mascot-inline")}<div class="who"><b>Mode lokal</b><p class="sm mu" style="margin-top:2px">Data tersimpan di perangkat ini aja. Login Google belum disetel di app ini (pengelola app perlu ngisi konfigurasi Firebase, lihat docs/FIREBASE_SETUP.md). Semua fitur latihan tetap jalan.</p></div></div>`;
@@ -1371,7 +1373,7 @@ function acctBox(){
       <div class="acct-actions"><button class="gbtn" data-act="signIn" ${busy ? "disabled" : ""}>${G_LOGO}${st === "signingin" ? "Lagi masuk..." : "Masuk dengan Google"}</button></div></div></div>`;
   }
   const pending = SYNC ? SYNC.pendingCount() : 0;
-  return `<div class="acct" style="align-items:flex-start;flex-wrap:wrap">${avatarImg(u.photoURL)}<div class="who"><b>${esc(u.displayName || "Akun Google")}</b><p class="sm mu em">${esc(u.email)}</p>
+  return `<div class="acct" style="align-items:flex-start;flex-wrap:wrap">${avatarImg(u.photoURL, u.displayName || u.email)}<div class="who"><b>${esc(u.displayName || "Akun Google")}</b><p class="sm mu em">${esc(u.email)}</p>
     <p class="xs js-sync" style="margin-top:6px">${syncLine()}</p>
     ${CLOUD.state === "firstwait" ? `<p class="xs mu" style="margin-top:4px">Pertama kali masuk di perangkat ini, app perlu ngecek data akun kamu dulu. Data di layar sekarang masih data perangkat ini (tanpa akun).</p>` : ""}
     <div class="acct-actions">${SYNC ? `<button class="btn sm" data-act="syncNow">Sinkron sekarang${pending ? ` (${pending})` : ""}</button>` : CLOUD.state === "firstwait" ? `<button class="btn sm" data-act="retryAcct">Coba lagi</button>` : ""}<button class="btn sm ghost" data-act="askSignOut" data-v="switch">Ganti akun</button><button class="btn sm ghost" data-act="askSignOut">Keluar</button></div></div></div>`;
@@ -1391,7 +1393,7 @@ function progressCard(m, p, isMe, isOwner, canRemove){
       <p class="xs mu" style="margin-top:6px">${fmtKm(p.weekKm)} km minggu ini (Week ${Number(p.week) || "–"}) · pace tercepat ${fmtPace(Number(p.bestPace) || null)} · lari terakhir ${p.lastRun && validYmd(p.lastRun) ? fmtD(p.lastRun) : "–"}</p>`
     : `<p class="sm mu" style="margin-top:6px">${isMe ? "Kamu belum berbagi progres. Nyalain di atas kalau mau kelihatan di grup." : "Belum berbagi progres."}</p>`;
   return `<div style="padding:12px 0;border-bottom:1px solid var(--line)">
-    <div style="display:flex;align-items:center;gap:10px">${avatarImg(m.photoURL)}<div class="grow" style="flex:1;min-width:0"><b>${name}</b>${isMe ? ' <span class="chip">kamu</span>' : ""}${isOwner ? ' <span class="chip">pemilik</span>' : ""}</div>
+    <div style="display:flex;align-items:center;gap:10px">${avatarImg(m.photoURL, m.displayName)}<div class="grow" style="flex:1;min-width:0"><b>${name}</b>${isMe ? ' <span class="chip">kamu</span>' : ""}${isOwner ? ' <span class="chip">pemilik</span>' : ""}</div>
     ${canRemove ? `<button class="btn sm ghost" data-act="grpRemove" data-id="${esc(m.uid)}">Keluarkan</button>` : ""}</div>${body}</div>`;
 }
 function vBareng(){
