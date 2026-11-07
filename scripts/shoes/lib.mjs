@@ -138,3 +138,28 @@ export function validate(cat, today) {
   }
   return true;
 }
+
+/**
+ * Fold edition/colour-pack names into their base model: "Pegasus 42 Keely Hodgkinson" → "Pegasus 42" when the base
+ * exists (same brand) and the extra words carry no version number. Waterproof variants (GTX/Gore-Tex) stay separate.
+ */
+export function collapseEditions(models) {
+  const byBrand = {};
+  for (const m of models) (byBrand[m.brand] = byBrand[m.brand] || []).push(m);
+  const out = [];
+  for (const list of Object.values(byBrand)) {
+    const sorted = [...list].sort((a, b) => a.model.length - b.model.length), keep = [];
+    for (const m of sorted) {
+      const base = keep.find(k => m.model.toLowerCase().startsWith(k.model.toLowerCase() + " ")
+        && !/\d/.test(m.model.slice(k.model.length)) && !/\b(gtx|gore-?tex|waterproof|wide)\b/i.test(m.model.slice(k.model.length)));
+      if (!base) { keep.push(m); continue; }
+      if (m.released < base.released) { base.released = m.released; base.source = m.source; }
+      for (const [k, v] of Object.entries(m.specs)) if (v !== null && v !== false && (base.specs[k] === undefined || base.specs[k] === null)) base.specs[k] = v;
+      if (m.specs.price && (!base.specs.price || m.specs.price < base.specs.price)) { base.specs.price = m.specs.price; base.specs.priceCurrency = m.specs.priceCurrency; }
+      if (!base.image && m.image) base.image = m.image;
+      for (const src of m.sources || []) if (!base.sources.some(x => x.label === src.label)) base.sources.push(src);
+    }
+    out.push(...keep);
+  }
+  return out;
+}

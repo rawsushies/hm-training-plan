@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { brandOf, isRunningShoe, modelName, parseSpecs, useOf, buildModels, derivePlusMinus, merge, validate } from "../../scripts/shoes/lib.mjs";
+import { brandOf, isRunningShoe, modelName, parseSpecs, useOf, buildModels, collapseEditions, derivePlusMinus, merge, validate } from "../../scripts/shoes/lib.mjs";
 
 const P = (id, vendor, title, o = {}) => Object.assign({ id, vendor, title, handle: title.toLowerCase().replace(/[^a-z0-9]+/g, "-"), product_type: "Footwear", tags: ["Running"], published_at: "2026-07-01T10:00:00+10:00", body_html: "", variants: [{ price: "220.00" }], images: [{ src: "https://cdn.shopify.com/s/files/1/x/" + id + ".jpg?v=1" }] }, o);
 const feedA = { label: "Shop A", base: "https://a.example", currency: "AUD", products: [
@@ -60,4 +60,12 @@ test("merge keeps first-seen dates and validate rejects bad data", () => {
   assert.equal(validate(cat, "2026-11-07"), true);
   cat.models[0] = Object.assign({}, cat.models[0], { image: { url: "javascript:alert(1)", credit: "x" } });
   assert.throws(() => validate(cat, "2026-11-07"), /bad image/);
+});
+
+test("editions fold into the base model (price/photo kept), numbered versions and GTX stay separate", () => {
+  const M = (model, price, released = "2026-05-01", extra = {}) => Object.assign({ id: model, brand: "Nike", model, released, use: "daily", specs: { price, priceCurrency: "AUD" }, image: null, source: { label: "S", url: "https://s.example/" + model }, sources: [] }, extra);
+  const out = collapseEditions([M("Pegasus 42", null), M("Pegasus 42 Keely Hodgkinson", 169, "2026-04-20", { image: { url: "https://cdn.shopify.com/p.jpg", credit: "S" } }), M("Pegasus 42 GTX", 200), M("Adios Pro", 300), M("Adios Pro Evo 2", 600)]);
+  assert.deepEqual(out.map(m => m.model).sort(), ["Adios Pro", "Adios Pro Evo 2", "Pegasus 42", "Pegasus 42 GTX"]);
+  const p = out.find(m => m.model === "Pegasus 42");
+  assert.equal(p.specs.price, 169); assert.equal(p.released, "2026-04-20"); assert.ok(p.image);
 });

@@ -1,17 +1,17 @@
 {
- "version": "3.14.0",
- "build": "2026-11-07T23:07:49Z",
+ "version": "3.14.1",
+ "build": "2026-11-07T23:17:38Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "Sepatu: katalog otomatis tiap minggu dengan foto, spesifikasi, dan plus/minus otomatis"
+  "Perbaikan sepatu: plus/minus nggak bikin layar loncat ke atas, harga tampil (plus perkiraan rupiah)"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "38972c848166472dda39fbb2c64e4f219b64c08ebad11abb31acba7b8d150ced",
-   "s": 17791
+   "h": "92128f5408d137aa4bb2ab8c9ef568970f7c9bb700b3c355e7572a8e036fdfd3",
+   "s": 17889
   },
   {
    "p": "favicon-32.png",
@@ -125,7 +125,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "238171139c22c113385753a350eab780f568c62fde096dd6f0bdad9182a41603",
+   "h": "70535136dfd47a4002a5ed973dc1cf133e7d09d6df0af27a322a176c99674354",
    "s": 140
   },
   {
@@ -135,8 +135,8 @@
   },
   {
    "p": "js/views-m4.js",
-   "h": "eb36d85ccc92fee92cd14152f05ace9e9a83ddc30267b8d7bafc4a2ee25b9e84",
-   "s": 18485
+   "h": "940a56a8bf0f328ef79c2b1e1ddb4b015e5b30cab1018b2556f33f72d61988d6",
+   "s": 21084
   },
   {
    "p": "js/views-notify.js",
@@ -170,7 +170,7 @@
   },
   {
    "p": "sw.js",
-   "h": "05dc431b2dc7a80ebdd5d4a0cf00a139f1269f5ed69447be93434d24f47491be",
+   "h": "6e80c6c5ecc38f9355073104c475e52756dd023a53ddfb9f470d0e4429b05879",
    "s": 2615
   },
   {

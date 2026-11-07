@@ -54,7 +54,7 @@ Object.assign(ACT, {
 // .github/workflows/shoes.yml from public retailer feeds and published to the data-shoes branch; the app pulls
 // it directly (cached 12 h, offline-safe). Seed entries win for facts/notes; auto data adds images, specs, new models.
 const CAT = WRI_SHOE_CATALOG;
-const CAT_URL = "https://raw.githubusercontent.com/rawsushies/hm-training-plan/data-shoes/shoes.json", CAT_KEY = "hmtp:shoes:remote:v1";
+const CAT_URL = "https://raw.githubusercontent.com/rawsushies/hm-training-plan/data-shoes/shoes.json", CAT_KEY = "hmtp:shoes:remote:v2";
 const catKey = (b, m) => (b + " " + m).toLowerCase().replace(/[^a-z0-9]+/g, "");
 const HTTPS_RE = /^https:\/\/[^\s"<>]+$/, USES_OK = ["daily", "tempo", "long", "race", "trail"];
 function cleanRemote(j){
@@ -69,7 +69,8 @@ function cleanRemote(j){
       specs:{weightG:n(sp.weightG), dropMm:n(sp.dropMm), stackMm:n(sp.stackMm), plate:["carbon", "plate"].includes(sp.plate) ? sp.plate : null, price:n(sp.price), priceCurrency:str(sp.priceCurrency, 3)},
       plus:arr(m.plus), minus:arr(m.minus)};
   }).filter(Boolean);
-  return {retrieved:/^\d{4}-\d{2}-\d{2}$/.test(j.retrieved || "") ? j.retrieved : null, models};
+  const fx = j.fx && j.fx.rates && typeof j.fx.rates === "object" ? {date:/^\d{4}-\d{2}-\d{2}$/.test(j.fx.date || "") ? j.fx.date : null, source:str(j.fx.source, 60), rates:Object.fromEntries(Object.entries(j.fx.rates).filter(([k, v]) => /^[A-Z]{3}$/.test(k) && typeof v === "number" && v > 0 && v < 1e6))} : null;
+  return {retrieved:/^\d{4}-\d{2}-\d{2}$/.test(j.retrieved || "") ? j.retrieved : null, fx, models};
 }
 const SHOECAT = {
   busy:false,
@@ -83,16 +84,39 @@ const SHOECAT = {
   },
   models(){
     const seed = CAT.models.map(m => Object.assign({}, m, {retrieved:CAT.retrieved})), r = this.remote(), byKey = new Map(seed.map(m => [catKey(m.brand, m.model), m]));
+    // An auto entry belongs to a seed model when it is the same name, or the seed name plus edition words without a
+    // version number ("Pegasus 42 Keely Hodgkinson" → Pegasus 42). GTX/waterproof variants stay their own card.
+    const seedFor = a => seed.find(s => s.brand.toLowerCase() === a.brand.toLowerCase() && (catKey("", a.model) === catKey("", s.model)
+      || (a.model.toLowerCase().startsWith(s.model.toLowerCase() + " ") && !/\d/.test(a.model.slice(s.model.length)) && !/\b(gtx|gore-?tex|waterproof)\b/i.test(a.model.slice(s.model.length)))));
     if(r) for(const a of r.data.models){
-      const k = catKey(a.brand, a.model), s = byKey.get(k);
-      if(s){ if(!s.image && a.image) s.image = a.image; if(!s.specs) s.specs = a.specs; }      // seed facts + notes stay; auto adds photo/specs
-      else byKey.set(k, Object.assign({}, a, {retrieved:r.data.retrieved}));
+      const s = seedFor(a);
+      if(s){   // seed facts + notes stay; auto adds photo, specs and the lowest shop price
+        if(!s.image && a.image) s.image = a.image;
+        s.specs = Object.assign({}, a.specs, s.specs || {});
+        if(a.specs.price && (!s.specs.price || a.specs.price < s.specs.price)){ s.specs.price = a.specs.price; s.specs.priceCurrency = a.specs.priceCurrency; s.priceSource = a.source; }
+        else if(a.specs.price && !s.priceSource) s.priceSource = a.source;
+      } else { const k = catKey(a.brand, a.model); if(!byKey.has(k)) byKey.set(k, Object.assign({}, a, {retrieved:r.data.retrieved, priceSource:a.source})); }
     }
     return [...byKey.values()];
   }
 };
 const fmtRel = (d, approx) => { const [y, m, dd] = d.split("-").map(Number); return `${approx ? "sekitar " : ""}${dd} ${["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"][m - 1]} ${y}`; };
-const specLine = sp => !sp ? "" : [sp.weightG ? `${sp.weightG} g` : "", sp.dropMm !== null && sp.dropMm !== undefined ? `drop ${String(sp.dropMm).replace(".", ",")} mm` : "", sp.stackMm ? `stack ${String(sp.stackMm).replace(".", ",")} mm` : "", sp.plate === "carbon" ? "carbon plate" : sp.plate === "plate" ? "plate" : "", sp.price ? `${sp.priceCurrency || ""} ${sp.price}`.trim() : ""].filter(Boolean).join(" · ");
+const specLine = sp => !sp ? "" : [sp.weightG ? `${sp.weightG} g` : "", sp.dropMm !== null && sp.dropMm !== undefined ? `drop ${String(sp.dropMm).replace(".", ",")} mm` : "", sp.stackMm ? `stack ${String(sp.stackMm).replace(".", ",")} mm` : "", sp.plate === "carbon" ? "carbon plate" : sp.plate === "plate" ? "plate" : ""].filter(Boolean).join(" · ");
+const rupiah = v => v >= 1e6 ? `Rp ${(Math.round(v / 1e5) / 10).toString().replace(".", ",")} jt` : `Rp ${Math.round(v / 1e3)} rb`;
+function priceRow(x){
+  const sp = x.specs || {}, fx = (SHOECAT.remote() || {data:{}}).data.fx;
+  if(!sp.price) return `<p class="cat-price mu">Harga: belum ada di toko yang dipantau</p>`;
+  const rate = fx && sp.priceCurrency && fx.rates[sp.priceCurrency], idr = rate ? sp.price * rate : null;
+  return `<p class="cat-price"><b>${esc(sp.priceCurrency || "")} ${esc(String(sp.price))}</b>${idr ? ` <span class="mu">≈ ${rupiah(idr)}</span>` : ""}</p>
+    <p class="xs mu">Harga terendah di ${x.priceSource ? `<a href="${esc(x.priceSource.url)}" target="_blank" rel="noopener">${esc(x.priceSource.label)}</a>` : "toko"}${idr && fx.date ? ` · kurs ${esc(fx.source || "ECB")} ${fmtRel(fx.date)}` : ""} · belum termasuk ongkir/pajak, harga di Indonesia bisa beda</p>`;
+}
+function catNotes(x, side){
+  return `<div class="cat-notes">
+      ${segPill("cat:" + x.id, [[x.id + "|plus", "Plus"], [x.id + "|minus", "Minus"]], x.id + "|" + side, "catSide")}
+      ${x[side] && x[side].length ? `<ul class="cat-list ${side}">${x[side].map(t => `<li>${esc(t)}</li>`).join("")}</ul>` : `<p class="sm mu" style="margin:8px 0">Belum ada data spesifikasi yang cukup untuk catatan ${side === "plus" ? "plus" : "minus"}.</p>`}
+      <p class="xs mu">${x.auto ? "Otomatis dari spesifikasi yang ditulis toko (bukan uji lab)" : "Catatan WeRunIt (opini, bukan uji lab)"}</p>
+    </div>`;
+}
 function catCard(x){
   const side = (S.ui.catSide || {})[x.id] || "plus", owned = S.shoes.some(s => s.brand === x.brand && s.model === x.model), sl = specLine(x.specs);
   return `<article class="card cat" style="margin-top:10px" data-cat="${esc(x.id)}">
@@ -101,14 +125,11 @@ function catCard(x){
       <p class="xs mu">${esc(x.brand)}</p>
       <div class="titlerow"><h3 style="margin:0">${esc(x.model)}</h3><span class="chip">${esc(SHO.USES[x.use])}</span></div>
       <p class="sm" style="margin-top:4px">${x.auto ? "Pertama terdaftar di toko" : "Rilis"} ${fmtRel(x.released, x.approx && !x.auto)}</p>
+      ${priceRow(x)}
       ${sl ? `<p class="xs" style="margin-top:2px">${esc(sl)} <span class="mu">· dari toko</span></p>` : ""}
       <p class="xs mu" style="margin-top:2px">Sumber: <a href="${esc(x.source.url)}" target="_blank" rel="noopener">${esc(x.source.label)}</a>${x.retrieved ? ` · diambil ${fmtRel(x.retrieved)}` : ""}</p>
     </div>
-    <div class="cat-notes">
-      ${segPill("cat:" + x.id, [[x.id + "|plus", "Plus"], [x.id + "|minus", "Minus"]], x.id + "|" + side, "catSide")}
-      ${x[side] && x[side].length ? `<ul class="cat-list ${side}">${x[side].map(t => `<li>${esc(t)}</li>`).join("")}</ul>` : `<p class="sm mu" style="margin:8px 0">Belum ada data spesifikasi yang cukup untuk catatan ${side === "plus" ? "plus" : "minus"}.</p>`}
-      <p class="xs mu">${x.auto ? "Otomatis dari spesifikasi yang ditulis toko (bukan uji lab)" : "Catatan WeRunIt (opini, bukan uji lab)"}</p>
-    </div>
+    ${catNotes(x, side)}
     <div class="btns" style="margin-top:8px">${owned ? `<span class="chip done">Ada di sepatuku</span>` : `<button class="btn sm" data-act="catAdd" data-id="${esc(x.id)}">+ Tambah ke sepatuku</button>`}</div>
   </article>`;
 }
@@ -124,8 +145,16 @@ function shoeCatalog(){
 }
 Object.assign(ACT, {
   catUse:d => { S.ui.catUse = d.v; S.ui.catN = 20; render(true); },
-  catMore:() => { S.ui.catN = (S.ui.catN || 20) + 20; render(true); },
-  catSide:d => { const [id, side] = String(d.v).split("|"); if(!id || !["plus", "minus"].includes(side)) return; S.ui.catSide = Object.assign({}, S.ui.catSide, {[id]:side}); render(true); },
+  catMore:() => { const y = window.scrollY; S.ui.catN = (S.ui.catN || 20) + 20; render(true); window.scrollTo(0, y); },
+  // In place: no full re-render, so the page keeps its scroll position and only the pill animates.
+  catSide:d => {
+    const [id, side] = String(d.v).split("|"); if(!id || !["plus", "minus"].includes(side)) return;
+    S.ui.catSide = Object.assign({}, S.ui.catSide, {[id]:side});
+    const card = [...document.querySelectorAll("[data-cat]")].find(el => el.dataset.cat === id), x = SHOECAT.models().find(m => m.id === id);
+    if(!card || !x){ render(true); return; }
+    card.querySelector(".cat-notes").outerHTML = catNotes(x, side);
+    mountSegPills(card);
+  },
   catAdd:d => {
     const x = SHOECAT.models().find(m => m.id === d.id); if(!x) return;
     const sh = HMTP.sanitizeState(Object.assign(defaults(), {shoes:[{id:uid(), name:`${x.brand} ${x.model}`.slice(0, 60), limit:x.use === "race" ? 400 : x.use === "trail" ? 600 : 700, brand:x.brand, model:x.model, use:x.use === "long" ? "long" : x.use, since:todayYmd()}]}), defaults).shoes[0];
