@@ -15,7 +15,8 @@ const IS_SHOE = /\b(shoe|shoes|footwear|running|runner|trainer|racer|spike)\b/i;
 export function isRunningShoe(p) {
   const text = [p.title, p.product_type, ...(Array.isArray(p.tags) ? p.tags : String(p.tags || "").split(","))].join(" ");
   if (NOT_SHOE.test(p.title || "") || NOT_SHOE.test(p.product_type || "")) return false;
-  if (/\b(spike|track spike|xc spike)\b/i.test(text)) return false;          // track spikes are out of scope
+  if (/\b(spikes?|track spike|xc spike|long jump|high jump|triple jump|pole vault|javelin|sprint elite|distance elite)\b/i.test(text)) return false;   // track & field spikes are out of scope
+  if (/\brun-?t\b|t-shirt/i.test(p.title || "")) return false;
   return IS_SHOE.test(text) || /footwear|shoe/i.test(p.product_type || "");
 }
 
@@ -28,7 +29,7 @@ export function modelName(title, brand) {
   t = t.replace(/\b(men'?s|women'?s|womens|mens|unisex|kids'?|junior|youth|w|m)\b\.?/gi, " ").replace(/\s{2,}/g, " ").trim();
   if (brand) t = t.replace(new RegExp("^\\s*" + brand.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\s+", "i"), "");
   t = t.replace(/^(nike|air zoom|zoom)\s+(?=\S)/i, m => /air zoom|zoom/i.test(m) && brand === "Nike" ? "" : m);   // "Air Zoom Pegasus 42" = "Pegasus 42"
-  t = t.replace(/\b(tenka|rsg|laced|prm|premium|limited edition|limited|special edition|se|pas normal studios|pns)\b/gi, " ");   // editions/colour packs
+  t = t.replace(/\b(tenka|rsg|laced|prm|premium|limited edition|limited|special edition|se|pas normal studios|pns|proto|prototype|paf)\b/gi, " ");   // editions/colour packs
   t = t.replace(/\b(2e|4e|d|b|extra wide|wide|narrow|running shoes?|road running shoes?|shoes?|sneakers?)\b/gi, " ");
   t = t.replace(/\s{2,}/g, " ").trim();
   while (/\s(road|racing|race|running|performance|trail|sneaker)$/i.test(t)) t = t.replace(/\s(road|racing|race|running|performance|trail|sneaker)$/i, "").trim();   // trailing descriptors only ("Pegasus Trail 5" keeps Trail)

@@ -26,6 +26,9 @@ test("feed parsing: brands, shoe filter, model names without gender/width/colour
   assert.equal(modelName("Adizero Adios Pro Evo 2 x Satisfy", "adidas"), "Adizero Adios Pro Evo 2");
   assert.equal(modelName("Speedgoat 7 GTX", "HOKA"), "Speedgoat 7 GTX");
   assert.equal(isRunningShoe({ title: "Nike ACG Radical AirFlow Long-Sleeve Running Top", product_type: "Footwear", tags: [] }), false);
+  assert.equal(isRunningShoe({ title: "Nike Long Jump Elite", product_type: "Footwear", tags: ["Running"] }), false);
+  assert.equal(isRunningShoe({ title: "Oversize Run-T LN1", product_type: "Footwear", tags: [] }), false);
+  assert.equal(modelName("Air Zoom Alphafly Next% 4 PROTO", "Nike"), "Alphafly Next% 4");
 });
 
 test("specs only from stated text; missing stays null", () => {

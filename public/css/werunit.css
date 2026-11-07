@@ -235,3 +235,6 @@ body{font-size:var(--fs-body);line-height:1.5}
 .cat-list li{margin:3px 0}
 .cat-list.plus li::marker{content:"+  ";color:var(--ok)}
 .cat-list.minus li::marker{content:"–  ";color:var(--warn)}
+.cat-img{margin:0 0 10px;border-radius:14px;overflow:hidden;background:#fff}
+.cat-img img{display:block;width:100%;aspect-ratio:16/10;object-fit:contain;background:#fff}
+.cat-img figcaption{padding:4px 8px;background:var(--s1)}

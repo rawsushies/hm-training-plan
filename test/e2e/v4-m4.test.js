@@ -89,3 +89,26 @@ test("Health Connect (Android bridge): read-only permission, runs only, review b
   assert.equal(await page.evaluate(() => M.items.filter(i => i.dup).length), 2, "second sync: both already imported");
   assert.deepEqual(page.errors, []);
 });
+
+test("auto catalogue: weekly data is pulled, merged with the seed (seed notes win, photo added), new models appear with auto notes; bad data rejected", async () => {
+  const d = await H.device();
+  const data = { schema: 1, retrieved: "2026-11-09", models: [
+    { id: "nike-pegasus-42", brand: "Nike", model: "Pegasus 42", released: "2026-04-01", use: "daily", source: { label: "Shop A", url: "https://a.example/products/peg" }, image: { url: "https://cdn.shopify.com/x/peg.jpg?width=480", credit: "Shop A", page: "https://a.example/products/peg" }, specs: { weightG: 280 }, plus: ["auto plus"], minus: [] },
+    { id: "puma-deviate-nitro-4", brand: "PUMA", model: "Deviate Nitro 4", released: "2026-10-20", use: "tempo", source: { label: "Shop B", url: "https://b.example/products/dn4" }, image: { url: "https://cdn.shopify.com/x/dn4.jpg?width=480", credit: "Shop B", page: "https://b.example/products/dn4" }, specs: { weightG: 245, dropMm: 8, plate: "carbon", price: 260, priceCurrency: "AUD" }, plus: ["Pakai carbon plate untuk race dan sesi cepat"], minus: ["Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"] },
+    { id: "evil", brand: "X", model: "<img src=x onerror=alert(1)>", released: "2026-10-01", use: "daily", source: { label: "x", url: "javascript:alert(1)" }, plus: [], minus: [] }
+  ] };
+  await d.ctx.route(/raw\.githubusercontent\.com\/rawsushies\/hm-training-plan\/data-shoes\/shoes\.json/, r => r.fulfill({ json: data, headers: { "access-control-allow-origin": "*" } }));
+  await d.ctx.route(/cdn\.shopify\.com/, r => r.fulfill({ status: 200, contentType: "image/svg+xml", body: '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"/>' }));
+  const { page } = d; await H.open(page);
+  await H.act(page, "nav", { t: "shoes" });
+  await page.click('[data-act="shoeTab"][data-v="catalog"]');
+  await page.waitForSelector('[data-cat="auto-pumadeviatenitro4"]');
+  const auto = await page.textContent('[data-cat="auto-pumadeviatenitro4"]');
+  assert.match(auto, /Pertama terdaftar di toko 20 Okt 2026/); assert.match(auto, /245 g · drop 8 mm · carbon plate · AUD 260/);
+  assert.match(auto, /Otomatis dari spesifikasi yang ditulis toko/); assert.match(auto, /Foto: Shop B/);
+  const peg = await page.textContent('[data-cat="nike-pegasus-42"]');
+  assert.match(peg, /Rilis 9 Apr 2026/, "seed date wins"); assert.match(peg, /Serba bisa/, "seed notes win"); assert.match(peg, /Foto: Shop A/, "photo added from auto data");
+  assert.equal(await page.$('[data-cat="auto-xltimgsrcxonerroralert1gt"]'), null);
+  assert.ok(!(await page.content()).includes("onerror=alert"), "invalid entry dropped");
+  assert.deepEqual(page.errors, []);
+});

@@ -42,7 +42,7 @@ async function feed(src) {
 }
 
 const [prevPath, outPath] = process.argv.slice(2);
-const SCHEMA = 2;                                   // bump when normalization changes: older data is rebuilt, not merged
+const SCHEMA = 3;                                   // bump when normalization changes: older data is rebuilt, not merged
 let prev = prevPath && existsSync(prevPath) ? JSON.parse(readFileSync(prevPath, "utf8")) : null;
 if (prev && prev.schema !== SCHEMA) { console.log(`previous catalogue schema ${prev.schema} → rebuilding`); prev = null; }
 const feeds = [];

@@ -1,18 +1,17 @@
 {
- "version": "3.13.0",
- "build": "2026-11-07T22:50:02Z",
+ "version": "3.14.0",
+ "build": "2026-11-07T23:07:49Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "Teman: cari pakai nama atau email, tanpa link undangan",
-  "Sepatu: rekomendasi model terbaru dengan sumber, plus & minus"
+  "Sepatu: katalog otomatis tiap minggu dengan foto, spesifikasi, dan plus/minus otomatis"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "45ae75eff5b4675b573aa97316665b5b7e594d6d3effcc39f5e356438784e0da",
-   "s": 17563
+   "h": "38972c848166472dda39fbb2c64e4f219b64c08ebad11abb31acba7b8d150ced",
+   "s": 17791
   },
   {
    "p": "favicon-32.png",
@@ -126,7 +125,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "f3342e1373b16c4aefec285ce6aea03701e2b6b3a08e896632cfc419f88815ed",
+   "h": "238171139c22c113385753a350eab780f568c62fde096dd6f0bdad9182a41603",
    "s": 140
   },
   {
@@ -136,8 +135,8 @@
   },
   {
    "p": "js/views-m4.js",
-   "h": "a4e9e28d2bb2f6f0467876b683a9ce4dda93dacf0fc0b420cb941b0656d4fd47",
-   "s": 13608
+   "h": "eb36d85ccc92fee92cd14152f05ace9e9a83ddc30267b8d7bafc4a2ee25b9e84",
+   "s": 18485
   },
   {
    "p": "js/views-notify.js",
@@ -171,7 +170,7 @@
   },
   {
    "p": "sw.js",
-   "h": "9ffe2b7b8967fe6a9bd6edc7c521449c6c630638e7dc61092e8a5e9feec240bd",
+   "h": "05dc431b2dc7a80ebdd5d4a0cf00a139f1269f5ed69447be93434d24f47491be",
    "s": 2615
   },
   {
