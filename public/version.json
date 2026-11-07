@@ -1,19 +1,17 @@
 {
- "version": "3.11.0",
- "build": "2026-11-07T10:14:13Z",
+ "version": "3.11.1",
+ "build": "2026-11-07T11:10:03Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "Sepatu: km awal, saran rotasi, cari sepatu",
-  "Integrasi: Health Connect (perlu APK baru), status jujur tiap sumber",
-  "Tampilan: semua pilihan pakai pil kaca yang sama"
+  "Perbaikan: kotak biru saat tap menu, susunan judul dan teks lebih rapi"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "3bca1b5e217ac3c930a0c3df0ac73a09ff4c7c9cab8134c409a85b6f64e22d44",
-   "s": 15121
+   "h": "94f0f35ed1336b05b28ecaa8d89497c4fe8635b0208509f7f5304b412acf43c4",
+   "s": 16701
   },
   {
    "p": "favicon-32.png",
@@ -47,8 +45,8 @@
   },
   {
    "p": "index.html",
-   "h": "06c132f11810022b1a76882b44920a6d84706e7e04c1726b99e70018d68f731c",
-   "s": 271444
+   "h": "472ab50b54e84fade5ff91981b43aab08570635552841987aa29ceede08f7571",
+   "s": 271415
   },
   {
    "p": "js/brand.js",
@@ -112,8 +110,8 @@
   },
   {
    "p": "js/ui-glass.js",
-   "h": "44f0f4dc2489ab6ce204337a606ecc5cfe06d9f7fae2a9aa8935133da4f4394e",
-   "s": 2848
+   "h": "e275bb124632b462539681e182fdbbbc5105967a76b18bfbf758eae63f3505b2",
+   "s": 3165
   },
   {
    "p": "js/updater.js",
@@ -122,7 +120,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "4bfd9e1289bade9750c49f8ae86a32ee8c0db0156d74d551cd7bebb6e005d5b5",
+   "h": "f1ce6d739db7c40d5049924c7293086abf0e15590951577d9d8ab99e93f554d7",
    "s": 140
   },
   {
@@ -132,8 +130,8 @@
   },
   {
    "p": "js/views-notify.js",
-   "h": "7973b9d6e6c26fc4f35f082bbdd6597e63f41c1110ccf32985127ff780c61d19",
-   "s": 9278
+   "h": "eacb434e38ea403a3706657373c2fa68ae79bff98c342c2b7de646a9fecba53e",
+   "s": 9134
   },
   {
    "p": "js/views-social.js",
@@ -147,8 +145,8 @@
   },
   {
    "p": "js/views-weather.js",
-   "h": "65e44093a1360ab07d1a8ca015ad445ea66ac0c17c2c0f9170e5ba745c8f463a",
-   "s": 10221
+   "h": "48c8fe896a10672195123b0997e5b582ba7519fbf3427e75141796db2300fa22",
+   "s": 10162
   },
   {
    "p": "js/weather.js",
@@ -162,7 +160,7 @@
   },
   {
    "p": "sw.js",
-   "h": "8a135371c13fada3ba50bb5e06dd5910203117effadc63b387cf18002ac447d2",
+   "h": "b5044f67a12ede74ca8ac0acc370445f665a45ae19e019568eed3c74046b7804",
    "s": 2573
   },
   {

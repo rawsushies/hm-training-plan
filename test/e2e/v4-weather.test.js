@@ -28,7 +28,7 @@ async function setup({ hot = false, failForecast = false } = {}) {
 test("weather: nothing is requested until the user picks a location; city search → forecast card with source, units, tips + why", async () => {
   const { page, calls } = await setup();
   await page.waitForSelector('[data-tour="weather"]');
-  assert.match(await page.textContent('[data-tour="weather"]'), /Pilih lokasi/);
+  assert.match(await page.textContent('[data-tour="weather"]'), /Atur lokasi/);
   assert.equal(calls.length, 0, "no location, no request");
   await page.click('[data-act="wxLoc"]');
   await page.fill("#wx-q", "Jakarta"); await page.click('[data-act="wxSearch"]');

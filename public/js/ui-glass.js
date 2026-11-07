@@ -39,3 +39,6 @@ function mountSegPills(root = document){
 }
 const _afterPaintG = afterPaint;
 afterPaint = function(){ _afterPaintG(); mountSegPills(); };
+
+// Page intros are clamped to two lines; tapping toggles the rest.
+document.addEventListener("click", e => { const l = e.target.closest && e.target.closest(".lead"); if(!l || e.target.closest("a,button")) return; l.classList.toggle("open"); l.setAttribute("aria-expanded", String(l.classList.contains("open"))); });

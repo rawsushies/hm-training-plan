@@ -2337,7 +2337,7 @@ function cockpit({days, w, wi, done, pct, next, goalSec, hello}){
     <div class="hero-count"><span class="big num" data-roll="${Math.max(0, days)}">${Math.max(0, days)}</span><span class="cap"><b>${days > 0 ? "hari lagi" : days === 0 ? "Hari ini race day!" : "Race udah lewat"}</b><br><span class="mu">ke ${esc(ev.name)}</span></span></div>
     <div class="meta" style="display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:12px;font-size:14px"><span><b>${fmtDay(ev.eventDate)} ${parseYmd(ev.eventDate).getFullYear()}</b></span><span><b>${fmtKm(ev.distanceKm)} km</b></span>${evGoal ? `<span>Target <b>&lt; ${esc(fmtDur(evGoal))}</b> <span class="mu">(${fmtPace(evGoal/ev.distanceKm)})</span></span>` : ""}</div>
     <div class="strip" style="margin-top:14px">${weekStrip(wi)}</div>
-    <p class="xs mu" style="margin-top:6px">Tiap batang = target km 1 minggu dari 31 minggu. Terisi = km yang udah kamu catat.</p>
+    <p class="xs mu" style="margin-top:6px">Batang = target km per minggu · terisi = km tercatat</p>
   </section>
   <section class="card ring-row" data-reveal aria-label="Progres minggu ini">
     <div class="ring"><svg viewBox="0 0 108 108" aria-hidden="true"><circle class="track" cx="54" cy="54" r="46"/><circle class="val" cx="54" cy="54" r="46" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - pct / 100)).toFixed(1)}"/></svg><div class="rv-num"><b class="tnum" data-roll="${pct}">${pct}</b><span class="xs mu">% km</span></div></div>

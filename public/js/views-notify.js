@@ -50,7 +50,7 @@ NAV_MORE.forEach(x => { if(x[0] === "notif") x[1] = "Notifikasi"; });
 
 function notifStatus(){
   const P = NOTIF.platform, n = S.settings.notif;
-  if(P === "web") return `<div class="note info" style="margin:12px 0"><b>Notifikasi hanya di aplikasi Android.</b> Browser nggak bisa mengirim pengingat di latar belakang secara andal, jadi versi web nggak minta izin dan nggak mengirim apa pun. Pilihan di bawah tersimpan${SYNC ? " di akunmu" : ""} dan dipakai aplikasi Android kamu.</div>`;
+  if(P === "web") return `<div class="note info" style="margin:12px 0"><b>Notifikasi hanya di aplikasi Android.</b> Pilihan di bawah tersimpan${SYNC ? " di akunmu" : ""} dan dipakai di sana.</div>`;
   if(P === "native-missing-plugin") return `<div class="note warn" style="margin:12px 0"><b>Perlu update aplikasi.</b> Versi APK yang terpasang belum punya modul notifikasi. Pasang APK terbaru (data kamu tetap aman), lalu buka halaman ini lagi.</div>`;
   if(!n.enabled) return `<div class="note info" style="margin:12px 0">Notifikasi mati. Nyalakan di bawah; Android akan menanyakan izin sekali.</div>`;
   if(NOTIF.perm === "denied") return `<div class="note warn" style="margin:12px 0"><b>Izin notifikasi ditolak.</b> Buka Pengaturan Android → Aplikasi → WeRunIt → Notifikasi, lalu izinkan. Setelah itu kembali ke sini.</div>`;

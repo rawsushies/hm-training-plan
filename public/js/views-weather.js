@@ -39,7 +39,7 @@ function wxSession(data){
 function sessMinutes(s){ const gp = parseDur(activeEvent().targetFinish || S.settings.goalTime) / activeEvent().distanceKm || 420; return Math.round((s.dist || 5) * gp * (s.type === "easy" || s.type === "long" || s.type === "recovery" ? 1.15 : 1) / 60); }
 function weatherCard(){
   const l = WX.loc();
-  if(!l) return `<section class="card wx" data-reveal data-tour="weather"><h3 style="margin:0 0 4px">Cuaca buat latihan</h3><p class="sm mu">Pilih lokasi buat lihat prakiraan di jam latihanmu dan tips yang menyesuaikan cuaca. Lokasi cuma disimpan di perangkat ini.</p><div class="btns" style="margin-top:8px"><button class="btn sm pri" data-act="wxLoc">Atur lokasi</button></div></section>`;
+  if(!l) return `<section class="card wx" data-reveal data-tour="weather"><h3 style="margin:0 0 4px">Cuaca buat latihan</h3><p class="sm mu">Prakiraan di jam latihanmu + tips. Lokasi cuma di perangkat ini.</p><div class="btns" style="margin-top:8px"><button class="btn sm pri" data-act="wxLoc">Atur lokasi</button></div></section>`;
   const d = WX.cache(); setTimeout(() => WX.load(false), 0);
   if(!d) return `<section class="card wx" data-reveal data-tour="weather"><h3 style="margin:0 0 4px">Cuaca · ${esc(l.name)}</h3><p class="sm mu">${WX.busy ? "Mengambil prakiraan..." : WX.err ? esc(WX.err) : "Mengambil prakiraan..."}</p>${WX.err ? `<div class="btns" style="margin-top:8px"><button class="btn sm" data-act="wxRefresh">Coba lagi</button><button class="btn sm ghost" data-act="wxLoc">Ganti lokasi</button></div>` : ""}${wxAttrib()}</section>`;
   const fr = WXL.freshness(d), cur = d.current, s = wxSession(d), U = d.units;
