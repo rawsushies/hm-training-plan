@@ -10,8 +10,8 @@
     steps: [
       { tab: "home", sel: null, t: "Halo! Aku Kiki 👋", b: "Selamat datang di WeRunIt! Aku temen lari kamu di sini. WeRunIt nyimpen rencana latihan 31 minggu kamu, nyatet lari, dan ngerangkum progres. Yuk kenalan 6 langkah aja." },
       { tab: "home", sel: "hero", t: "Dashboard: hitung mundur", b: "Angka besar = sisa hari ke race. Batang di bawahnya = target km tiap minggu dari minggu 1 sampai 31. Bagian hijau = km yang udah kamu catat." },
-      { tab: "home", sel: "week", t: "Minggu ini", b: "Target km minggu ini, yang udah kamu lari, sisanya, dan 3 sesi lari minggu ini. Label “Selesai”, “Kelewat”, “Skip”, atau “Nanti” nunjukin status tiap sesi. Tap sesi buat lihat detailnya." },
-      { tab: "home", sel: "next", t: "Workout berikutnya", b: "Ini sesi terdekat yang belum beres. Tombol “Mulai” di kartu “Minggu ini” juga langsung buka timernya. “▶ Mulai timer” buka timer yang mandu tiap bagian (pemanasan, interval, pendinginan). Pas tap “Selesai”, form catatan lari kebuka dengan waktu yang udah keisi." },
+      { tab: "home", sel: "week", t: "Minggu ini", b: "Batang = km yang udah kamu lari dibanding target minggu ini. Di bawahnya 7 hari: tiap bulatan satu sesi, warnanya jenis sesi. Penuh = selesai, bercincin = hari ini, garis putus merah = kelewat. Tap bulatan buat lihat detailnya." },
+      { tab: "home", sel: "next", t: "Workout berikutnya", b: "Ini sesi terdekat yang belum beres; angka besar = jaraknya. Ketuk kartunya buat detail. “Mulai timer” buka timer yang mandu tiap bagian (pemanasan, interval, pendinginan). Pas tap “Selesai”, form catatan lari kebuka dengan waktu yang udah keisi." },
       { tab: "log", sel: "log-new", t: "Catat lari", b: "Udah lari pakai jam atau aplikasi lain? Tap “Catat lari”, isi tanggal, jarak, dan waktu. Pace dihitung otomatis. Bisa juga import file GPX/TCX atau CSV Strava di kotak bawahnya." },
       { tab: "more", sel: "tut-hub", t: "Butuh bantuan?", b: "Di Menu → “Tutorial & bantuan” ada tur lengkap per fitur. Tiap halaman juga punya tombol “?” di pojok kanan atas buat penjelasan singkat fitur itu. Kata bergaris titik-titik bisa di-tap buat lihat artinya. Selamat latihan!" }
     ]
@@ -20,11 +20,11 @@
     dashboard: { title: "Dashboard", steps: [
       { tab: "home", sel: "hero", t: "Hitung mundur race", b: "Sisa hari ke tanggal race di Settings. Di bawahnya: tanggal, jarak 21,1 km, dan target finish kamu plus pace rata-rata yang dibutuhin." },
       { tab: "home", sel: "hero", t: "Grafik 31 minggu", b: "Tiap batang abu-abu = target km satu minggu (dari jadwal). Isian hijau = km yang udah kamu catat di minggu itu. Batang bergaris tepi = minggu ini." },
-      { tab: "home", sel: "week-stats", t: "Target vs aktual minggu ini", b: "“Target km” = total rencana minggu ini. “Udah lari” = jumlah km dari log di tanggal minggu ini (termasuk lari di luar jadwal). “Sisa” dan “Progres” dihitung dari dua angka itu." },
-      { tab: "home", sel: "week", t: "Sesi terencana vs selesai", b: "Tiap baris = sesi terencana. Kalau udah dicatat, angkanya jadi “aktual / rencana”. Sesi yang lewat tanpa catatan ditandai “Kelewat”; nggak usah dikejar, lanjut aja ke sesi berikutnya." },
-      { tab: "home", sel: "next", t: "Workout berikutnya", b: "Sesi terdekat yang belum selesai atau di-skip, lengkap dengan jam dan keterangannya. Dari sini bisa langsung mulai timer, catat, atau buka detail." },
-      { tab: "home", sel: "progress", t: "Progres kamu", b: "Angka-angka ini dihitung dari semua lari yang kamu catat: total km, jumlah lari, lari terjauh, km minggu ini, pace tercepat (lari ≥1 km), dan total tanjakan. Nggak ada angka karangan." },
-      { tab: "home", sel: "month", t: "Target bulan ini", b: "Program dibagi 8 blok ±4 minggu. Di sini target blok sekarang, sesi lari yang beres, dan km aktual vs rencana. “Buka review” buat lihat rangkuman lengkapnya." }
+      { tab: "home", sel: "week-stats", t: "Target vs aktual minggu ini", b: "Isian batang = km dari log di tanggal minggu ini (termasuk lari di luar jadwal). Garis tegak = target minggu ini. Kalau isian lewat garis, kamu udah melebihi target." },
+      { tab: "home", sel: "week", t: "Sesi terencana vs selesai", b: "Tiap bulatan = sesi terencana; angka di bawahnya km aktual kalau udah dicatat, atau km rencana. Sesi yang lewat tanpa catatan bergaris putus merah; nggak usah dikejar, lanjut aja ke sesi berikutnya." },
+      { tab: "home", sel: "next", t: "Workout berikutnya", b: "Sesi terdekat yang belum selesai atau di-skip. Angka besar = jarak, ketuk kartunya buat detail lengkap. Dari sini bisa langsung mulai timer atau catat." },
+      { tab: "home", sel: "progress", t: "Progres kamu", b: "Tiap kotak = satu angka dari semua lari yang kamu catat, dengan grafik kecil 8 minggu terakhir: total km, jumlah lari, lari terjauh, pace tercepat (lari ≥1 km), tanjakan, dan streak minggu lengkap. Nggak ada angka karangan." },
+      { tab: "home", sel: "month", t: "Target bulan ini", b: "Program dibagi 8 blok ±4 minggu. Dua batang: sesi lari yang beres dan km aktual, dibanding rencana blok ini. Ketuk kartunya buat review lengkap." }
     ] },
     calendar: { title: "Jadwal latihan", steps: [
       { tab: "cal", sel: "cal-mode", t: "Tampilan bulan atau per minggu", b: "“Bulan” nampilin kalender. “Per minggu” nampilin 31 minggu berurutan dengan target, km aktual, dan semua sesi (termasuk strength)." },

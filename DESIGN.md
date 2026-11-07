@@ -20,7 +20,7 @@ colors:
   # Brand
   primary: "#9673FF"
   primary-text: "#B9A4FF"
-  on-primary: "#FFFFFF"
+  on-primary: "#14102B"      # dark violet ink: 5.4:1 on primary, 7.5:1 on blue. Light theme: #FFFFFF on #7552F0
   blue: "#65A7FF"
   cyan: "#79E5DE"
   pink: "#F18CD5"
@@ -224,7 +224,9 @@ the design is wrong.
 
 ### Principles
 
-1. **Visual before verbal.** A ring, a dot or a line says it first; the number confirms; text explains only if asked.
+1. **Charts carry the information.** Every section opens with a visual (ring, bar, dot strip, heatmap, sparkline); the
+   number sits on it as a label; text is one line that names the chart or says what to do. A number never stands alone
+   in a grid of numbers, and a list of facts becomes a chart before it becomes a table.
 2. **The whole card is the button.** Cards, rings and chart tiles are tap targets. No "Lihat detail" links, no
    chevron-only hit areas. An arrow glyph (→) in the top-right only signals "this opens".
 3. **One primary action per screen.** It lives in the floating `+` (or the hero's single CTA). Secondary actions live
@@ -313,14 +315,24 @@ Two families: **Space Grotesk** for display and all numbers, **Inter** for readi
 
 ### Home screen order (fixed)
 
-1. Top bar: date headline with ▾ (left), avatar (right). No other buttons.
-2. **Readiness hero:** race countdown + readiness %, state glow, one coaching sentence, today's session chip.
-3. **Ring trio:** Beban (effort) · Pemulihan (recovery) · Tidur (sleep). Tap a ring to open its sheet.
-4. **Race progress strip:** weeks done / weeks total, km this block vs plan (plan line grey, actual line in primary).
-5. **Today vs 30-day tiles:** RHR, HRV, pace, consistency, in a 2-column grid.
-6. Weather tip card (existing Open-Meteo card) when it matters for today's session.
+Every block below leads with a chart. Built in `vHome()` (`public/index.html`).
 
-Nothing else on home. Shoes, friends, plans and settings live in Menu.
+1. **Readiness hero:** race countdown, readiness from today's check-in, and the 31-week volume strip (plan bars,
+   actual fill).
+2. **This week ring:** km done vs target, with one primary action (Mulai).
+3. **Today:** today's sessions.
+4. **Week strip** (`homeWeek`): a bullet bar of km vs target, then seven day columns with one dot per session, coloured
+   by type: filled = done, ringed = today, outlined = upcoming, dashed red = missed. Tap a dot to open the session.
+5. **Next workout** (`homeNext`): distance as the big figure, type dot, two-line description, Mulai timer + Catat.
+6. **Body** (`homeBody`): 14 days of check-ins as four rows of small bars (sleep, energy, soreness, pain; soreness and
+   pain flipped so a taller bar is always better).
+7. **Progress tiles** (`homeProgress`): total km, runs, longest run, best pace, elevation, streak. Each tile is a
+   value on its own 8-week mini chart.
+8. **Consistency** (`homeConsistency`): 8 weeks × 7 days heatmap: run days in the session colour, missed sessions
+   dashed, planned days outlined, today ringed.
+9. **Month target** (`homeBlock`): two bullet bars (runs, km) against the block plan; tap for the review.
+
+Shoes, friends, plans and settings live in Menu.
 
 ## Elevation & Depth
 
@@ -485,6 +497,10 @@ Every chart answers one question, stated in its caption.
 | **Activity heatmap** | Consistency over the block | Week rows × day columns, rounded bars; colour by session count or type; today outlined. |
 | **Sparkline tile** | Period-over-period trends | Label top-left, value top-right, delta chip below. |
 | **Consistency ticks** | Sleep and wake times | Time label above a short coloured tick; hatched band for the usual window. |
+| **Bullet bar** | Actual vs plan for one quantity (week km, block runs, block km) | 10px track; plan as a tinted fill with a tick at its end; actual as a primary→blue fill (primary→cyan when over plan); the value as a `stat-number` label above. |
+| **Week strip** | This week's sessions at a glance | Seven columns; one 34px dot per session in its `session-*` colour; done filled with a check, today ringed, missed dashed red with ✕, skipped faded; the km under each dot. |
+| **Check-in rows** | 14 days of how the body feels | Four rows of 14 bars; a taller bar is always better (soreness and pain flipped); low values in `state-caution`; empty days as a flat stub. |
+| **Spark tile** | One headline number with its trend | `label-caps`, value, then an 8-week mini bar or line (34px tall); the current week highlighted in cyan. |
 
 - Press and drag on a chart to scrub; a value chip follows the finger and hides on lift. No zoom buttons.
 - Axis labels in `text-faint` 11 px; at most three x-axis labels (start, middle, today).
@@ -493,6 +509,8 @@ Every chart answers one question, stated in its caption.
 
 ## Interaction rules (less hassle)
 
+- **A chart before a list.** If the same information can be a dot, bar or cell, draw it and make the mark the tap
+  target; keep plain rows for logs people scroll through.
 - **No visible edit or delete buttons on lists.** Swipe left to reveal Hapus; long-press for the context menu.
 - **No confirm dialogs for reversible actions.** Do it, then offer `Urungkan` in the toast for 5 s.
 - **Prefill everything.** Logging a run prefills today, the last distance and the last shoe. Health Connect and file
