@@ -1,0 +1,202 @@
+rules_version = '2';
+
+// Half Marathon Training Plan — Firestore security rules.
+//
+// Data model (see docs/ARCHITECTURE.md):
+//   users/{uid}                       private profile + migration metadata (owner only)
+//   users/{uid}/{coll}/{id}           private synced records (owner only), coll in SYNC_COLLS
+//   users/{uid}/conflicts/{id}        recoverable losing versions of conflicting edits (owner only)
+//   users/{uid}/memberships/{gid}     private index of the groups this user belongs to
+//   groups/{gid}                      a training group; readable by its members only
+//   groups/{gid}/members/{uid}        membership; created by the owner at creation or via a one-time invite
+//   groups/{gid}/invites/{id}         one-time invite tokens; readable by the owner only
+//   groups/{gid}/progress/{uid}       whitelisted progress SUMMARY a member opted to share
+//
+// Synced records use optimistic concurrency enforced here: a write must carry rev == previous rev + 1
+// (or rev == 1 for a new document). A device that edits from a stale base is rejected and resolves
+// the conflict client-side instead of silently overwriting another device's change.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function isUser(uid) { return signedIn() && request.auth.uid == uid; }
+    function isDate(v) { return v is string && v.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$'); }
+    function numIn(v, lo, hi) { return (v is int || v is float) && v >= lo && v <= hi; }
+    function optNum(m, k, lo, hi) { return !(k in m) || m[k] == null || numIn(m[k], lo, hi); }
+    function optStr(m, k, max) { return !(k in m) || m[k] == null || (m[k] is string && m[k].size() <= max); }
+    function safeId(id) { return id is string && id.matches('^[A-Za-z0-9_-]{1,60}$'); }
+    function httpsUrl(v) { return v is string && v.size() <= 600 && (v == '' || v.matches('^https://[^"<> ]+$')); }
+
+    // ---------------- Private user space ----------------
+    match /users/{uid} {
+      allow read: if isUser(uid);
+      allow create, update: if isUser(uid) && validUserDoc(request.resource.data);
+      allow delete: if false;
+
+      function validUserDoc(d) {
+        return d.keys().hasOnly(['profile', 'schemaVersion', 'migration', 'createdAt', 'updatedAt'])
+          && (!('profile' in d) || (d.profile is map
+                && d.profile.keys().hasOnly(['displayName', 'photoURL'])
+                && optStr(d.profile, 'displayName', 120)
+                && (!('photoURL' in d.profile) || httpsUrl(d.profile.photoURL))))
+          && (!('schemaVersion' in d) || d.schemaVersion is int)
+          && (!('migration' in d) || d.migration is map)
+          && d.updatedAt == request.time;
+      }
+
+      // Synced training records: runs, strength, checkins, shoes, reviews, plan.
+      match /{coll}/{docId} {
+        function syncColl() { return coll in ['runs', 'strength', 'checkins', 'shoes', 'reviews', 'plan']; }
+
+        function envelope(d) {
+          return d.keys().hasOnly(['data', 'rev', 'deleted', 'updatedAt', 'device'])
+            && d.rev is int && d.deleted is bool
+            && d.updatedAt == request.time
+            && d.device is string && d.device.size() <= 64
+            && ((d.deleted == true && d.data == null)
+                || (d.deleted == false && (d.data is map || d.data is string)));
+        }
+        // Per-collection payload checks (only for live records; tombstones carry data == null).
+        function payload(d) {
+          return d.deleted == true
+            || (coll == 'runs' && validRun(d.data))
+            || (coll == 'strength' && validStrength(d.data))
+            || (coll == 'checkins' && validCheckin(d.data))
+            || (coll == 'shoes' && validShoe(d.data))
+            || (coll == 'reviews' && d.data is map && docId.matches('^[0-7]$'))
+            || (coll == 'plan' && (d.data is map || d.data == 'skip'));
+        }
+        function validRun(r) {
+          return r is map && r.id == docId && isDate(r.date) && numIn(r.distance, 0, 1000)
+            && r.type in ['easy', 'long', 'recovery', 'locked', 'elevation', 'benchmark', 'race', 'other']
+            && optNum(r, 'duration', 1, 360000) && optNum(r, 'elev', 0, 20000)
+            && optNum(r, 'hrAvg', 20, 260) && optNum(r, 'hrMax', 20, 260) && optNum(r, 'rpe', 1, 10)
+            && optStr(r, 'notes', 2000) && optStr(r, 'weather', 80) && optStr(r, 'src', 20);
+        }
+        function validStrength(r) { return r is map && r.id == docId && isDate(r.date) && r.kind in ['A', 'B'] && r.done is list && r.done.size() <= 20; }
+        function validCheckin(c) {
+          return c is map && c.date == docId && isDate(c.date)
+            && numIn(c.sleep, 1, 5) && numIn(c.soreness, 1, 5) && numIn(c.fatigue, 1, 5)
+            && numIn(c.energy, 1, 5) && numIn(c.motivation, 1, 5) && numIn(c.pain, 1, 5);
+        }
+        function validShoe(x) { return x is map && x.id == docId && x.name is string && x.name.size() <= 60 && numIn(x.limit, 50, 5000); }
+
+        allow read: if isUser(uid) && (syncColl() || coll in ['conflicts', 'memberships']);
+
+        allow create: if isUser(uid) && syncColl() && safeId(docId)
+          && envelope(request.resource.data) && payload(request.resource.data)
+          && request.resource.data.rev == 1;
+        allow update: if isUser(uid) && syncColl()
+          && envelope(request.resource.data) && payload(request.resource.data)
+          && request.resource.data.rev == resource.data.rev + 1;
+
+        // Conflict archive: append-only, deletable by the owner once resolved.
+        allow create: if isUser(uid) && coll == 'conflicts'
+          && request.resource.data.keys().hasOnly(['key', 'kind', 'local', 'server', 'fields', 'at', 'device'])
+          && request.resource.data.key is string && request.resource.data.key.size() <= 120
+          && request.resource.data.kind is string && request.resource.data.at == request.time;
+        allow delete: if isUser(uid) && coll == 'conflicts';
+
+        // Membership index (private to the user).
+        allow create, update: if isUser(uid) && coll == 'memberships' && safeId(docId)
+          && request.resource.data.keys().hasOnly(['gid', 'name', 'joinedAt'])
+          && request.resource.data.gid == docId && request.resource.data.name is string
+          && request.resource.data.name.size() <= 60;
+        allow delete: if isUser(uid) && coll == 'memberships';
+      }
+    }
+
+    // ---------------- Training groups ----------------
+    match /groups/{gid} {
+      function groupPath() { return /databases/$(database)/documents/groups/$(gid); }
+      function memberPath(m) { return /databases/$(database)/documents/groups/$(gid)/members/$(m); }
+      function isMember() { return signedIn() && exists(memberPath(request.auth.uid)); }
+      function isOwner() { return signedIn() && exists(groupPath()) && get(groupPath()).data.ownerUid == request.auth.uid; }
+
+      allow read: if isMember();
+      allow create: if signedIn() && safeId(gid)
+        && request.resource.data.keys().hasOnly(['name', 'ownerUid', 'createdAt'])
+        && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.name is string && request.resource.data.name.size() >= 1 && request.resource.data.name.size() <= 60
+        && request.resource.data.createdAt == request.time
+        && existsAfter(memberPath(request.auth.uid));
+      allow update: if signedIn() && resource.data.ownerUid == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name'])
+        && request.resource.data.name is string && request.resource.data.name.size() >= 1 && request.resource.data.name.size() <= 60;
+      allow delete: if signedIn() && resource.data.ownerUid == request.auth.uid;
+
+      match /members/{mid} {
+        function validMember(d) {
+          return d.keys().hasOnly(['uid', 'displayName', 'photoURL', 'joinedAt', 'inviteId', 'token'])
+            && d.uid == mid && d.joinedAt == request.time
+            && d.displayName is string && d.displayName.size() <= 80
+            && httpsUrl(d.photoURL);
+        }
+        function invPath() { return /databases/$(database)/documents/groups/$(gid)/invites/$(request.resource.data.inviteId); }
+        // Founder: created in the same batch as the group itself.
+        function asFounder() {
+          return !exists(groupPath()) && getAfter(groupPath()).data.ownerUid == request.auth.uid
+            && !('inviteId' in request.resource.data);
+        }
+        // Joiner: must present the token of an unexpired, unused invite AND consume it in the same batch.
+        function withInvite() {
+          return exists(groupPath()) && ('inviteId' in request.resource.data) && safeId(request.resource.data.inviteId)
+            && exists(invPath())
+            && get(invPath()).data.token == request.resource.data.token
+            && get(invPath()).data.usedBy == null
+            && request.time < get(invPath()).data.expiresAt
+            && getAfter(invPath()).data.usedBy == request.auth.uid;
+        }
+
+        allow read: if isMember();
+        allow create: if signedIn() && mid == request.auth.uid && validMember(request.resource.data) && (asFounder() || withInvite());
+        allow update: if false;
+        // A member may leave; the owner may remove anyone. The owner's own membership only goes with the group.
+        allow delete: if signedIn() && (
+            (mid == request.auth.uid && (!isOwner() || !existsAfter(groupPath())))
+            || (isOwner() && mid != request.auth.uid));
+      }
+
+      match /invites/{iid} {
+        allow read: if isOwner();
+        allow create: if isOwner() && safeId(iid)
+          && request.resource.data.keys().hasOnly(['token', 'expiresAt', 'usedBy', 'usedAt', 'createdAt'])
+          && request.resource.data.token is string && request.resource.data.token.size() >= 22 && request.resource.data.token.size() <= 64
+          && request.resource.data.expiresAt is timestamp
+          && request.resource.data.expiresAt > request.time
+          && request.resource.data.expiresAt < request.time + duration.value(8, 'd')
+          && request.resource.data.usedBy == null && request.resource.data.usedAt == null
+          && request.resource.data.createdAt == request.time;
+        // Consumption by the joiner (same batch as their membership).
+        allow update: if signedIn() && resource.data.usedBy == null && request.time < resource.data.expiresAt
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['usedBy', 'usedAt'])
+          && request.resource.data.usedBy == request.auth.uid && request.resource.data.usedAt == request.time
+          && getAfter(memberPath(request.auth.uid)).data.inviteId == iid
+          && getAfter(memberPath(request.auth.uid)).data.token == resource.data.token;
+        allow delete: if isOwner();
+      }
+
+      // Shared progress: summary numbers only, never logs, notes, check-ins or pain records.
+      match /progress/{mid} {
+        function validProgress(d) {
+          return d.keys().hasOnly(['totalKm', 'weekKm', 'runs', 'longest', 'bestPace', 'fullWeeks', 'lastRun', 'week', 'displayName', 'photoURL', 'updatedAt'])
+            && numIn(d.totalKm, 0, 100000) && numIn(d.weekKm, 0, 2000) && d.runs is int && d.runs >= 0 && d.runs <= 100000
+            && numIn(d.longest, 0, 1000) && (d.bestPace == null || numIn(d.bestPace, 60, 3600))
+            && d.fullWeeks is int && d.fullWeeks >= 0 && d.fullWeeks <= 31
+            && (d.lastRun == null || isDate(d.lastRun)) && d.week is int && d.week >= 1 && d.week <= 31
+            && d.displayName is string && d.displayName.size() <= 80 && httpsUrl(d.photoURL)
+            && d.updatedAt == request.time;
+        }
+        allow read: if isMember();
+        allow create, update: if signedIn() && mid == request.auth.uid && isMember() && validProgress(request.resource.data);
+        allow delete: if signedIn() && (mid == request.auth.uid || isOwner());
+      }
+    }
+
+    // Everything else is denied.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

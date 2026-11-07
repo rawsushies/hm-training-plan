@@ -1,0 +1,22 @@
+{
+  "name": "hm-training-plan",
+  "private": true,
+  "version": "3.0.0",
+  "description": "Half Marathon Training Plan: single-file mobile web app with Firebase (Google sign-in + Firestore) sync",
+  "type": "module",
+  "scripts": {
+    "serve": "http-server public -p 5173 -c-1",
+    "test": "node --test test/unit/*.test.js",
+    "test:rules": "firebase emulators:exec --only firestore --project demo-hmtp \"node --test test/rules/*.test.js\"",
+    "test:e2e": "firebase emulators:exec --only auth,firestore --project demo-hmtp \"node --test --test-concurrency=1 test/e2e/*.test.js\"",
+    "test:all": "npm test && npm run test:rules && npm run test:e2e",
+    "emulators": "firebase emulators:start --project demo-hmtp"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.2",
+    "firebase": "^12.19.0",
+    "firebase-tools": "^15.35.0",
+    "http-server": "^14.1.1",
+    "playwright": "^1.63.0"
+  }
+}
