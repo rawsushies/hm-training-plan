@@ -38,7 +38,8 @@ jobs:
         id: v
         run: |
           echo "name=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
-          echo "code=$((1000 + GITHUB_RUN_NUMBER))" >> "$GITHUB_OUTPUT"
+          # versionCode from the version (3.11.0 → 31100): always grows with releases, same value as local builds
+          echo "code=$(node -p "const [a,b,c]=require('./package.json').version.split('.').map(Number); a*10000+b*100+c")" >> "$GITHUB_OUTPUT"
       - name: Signing key (from secrets, if present)
         env:
           KS: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}

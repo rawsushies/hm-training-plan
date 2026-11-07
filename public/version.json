@@ -1,6 +1,6 @@
 {
  "version": "3.11.0",
- "build": "2026-11-07T10:05:57Z",
+ "build": "2026-11-07T10:14:13Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
@@ -122,7 +122,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "60f356a255503685a09e599d999274e9d62b4cfcf56abfaa9487d0be5f0f2213",
+   "h": "4bfd9e1289bade9750c49f8ae86a32ee8c0db0156d74d551cd7bebb6e005d5b5",
    "s": 140
   },
   {
@@ -162,7 +162,7 @@
   },
   {
    "p": "sw.js",
-   "h": "626486c9b41440b61484ba224d9020691d9b3b80a2d8bbed8024e89fb41017f6",
+   "h": "8a135371c13fada3ba50bb5e06dd5910203117effadc63b387cf18002ac447d2",
    "s": 2573
   },
   {

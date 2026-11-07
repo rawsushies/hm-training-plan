@@ -54,7 +54,7 @@ npm ci && npx cap sync android
 ```
 
 ```bash
-cd android && ANDROID_KEYSTORE_FILE=/path/hmtp-release.jks ANDROID_KEYSTORE_PASSWORD=… ANDROID_KEY_ALIAS=hmtp ANDROID_KEY_PASSWORD=… VERSION_NAME=3.1.0 VERSION_CODE=1001 ./gradlew assembleRelease
+cd android && ANDROID_KEYSTORE_FILE=/path/hmtp-release.jks ANDROID_KEYSTORE_PASSWORD=… ANDROID_KEY_ALIAS=hmtp ANDROID_KEY_PASSWORD=… VERSION_NAME=3.11.0 VERSION_CODE=31100 ./gradlew assembleRelease
 ```
 
 Output: `android/app/build/outputs/apk/release/app-release.apk`.
@@ -78,3 +78,14 @@ The APK was built and its signature, package and embedded Firebase config were c
 not been run on a physical device from this environment (no Android emulator available here).
 Please test on your phone: install, sign in with Google, log a run, then check it appears on the
 website after signing in with the same account.
+
+## v4 native changes (APK 3.11.0, versionCode 31100)
+
+- Plugins: `@capacitor/local-notifications` 8.3.1, `@capgo/capacitor-health` 8.11.14 (with the existing auth/filesystem).
+- `minSdkVersion` 24 → **26** (Health Connect library). Android 7.x phones can keep the installed version but can't update.
+- Permissions: notifications (POST_NOTIFICATIONS, boot restore); location (weather, asked on tap); Health Connect read-only
+  exercise + distance. `SCHEDULE_EXACT_ALARM` and all other Health permissions are removed in the merged manifest.
+- versionCode is now derived from the version (`major·10000 + minor·100 + patch`) both locally and in CI.
+- User agent `HMTPNative/2`. Built and signed locally with the existing key (SHA-1 `72:EE:B6:…:08:69`). **Not published.**
+- The Gradle build logs a Kotlin metadata warning for the Health plugin (compiled with Kotlin 2.4 metadata), but the build succeeds
+  and the classes are in the APK. Watch for it on a device test.

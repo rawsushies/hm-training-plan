@@ -1,4 +1,6 @@
-# Architecture (v3)
+# Architecture (v3 core)
+
+> v4 builds on this core; new modules, data and status are in [V4.md](V4.md). Section 7 (groups) is retired. Friends replace it ([FRIENDS.md](FRIENDS.md)).
 
 ## 1. Overview
 

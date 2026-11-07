@@ -63,3 +63,11 @@ Primary = cloud when the cloud has data, otherwise the device. The function is i
 
 *Data & backup → Backup otomatis → Gabungkan* (safe) or *Download*. Conflicts: *Data & backup →
 perubahan bentrok → Pakai versi yang disimpan ini*.
+
+## v3 → v4
+
+- No migration step is needed. `sanitizeState` fills the new v4 fields with defaults locally, and new records are written only
+  once the user sets something (schedule, profile, race prefs, event, per-friend sharing, shoe extras). A v3 account
+  therefore produces byte-identical records after the upgrade (tested in `logic.test.js` and `migration-v4.test.js`).
+- Every v4 field survives the records → state → records cycle (tested), and merging a v4 device into a v3 account keeps both sides.
+- Group documents from v3 are left in place and never deleted automatically. The UI no longer reads them.
