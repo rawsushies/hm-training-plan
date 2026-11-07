@@ -1,17 +1,19 @@
 {
- "version": "3.9.0",
- "build": "2026-11-07T08:41:30Z",
+ "version": "3.10.0",
+ "build": "2026-11-07T09:41:41Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "WeRunIt: identitas baru, jadwal fleksibel, race event, strategi race day"
+  "Teman: undangan, berbagi privat per teman, target bersama",
+  "Notifikasi Android sungguhan (perlu APK baru)",
+  "Cuaca Open-Meteo + tips sesuai cuaca"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "0914d7f59cc60f5f5ef0c8d72ade5f352392439c1b5e602970570f37addc8945",
-   "s": 14125
+   "h": "8d49e9de308774b3dbb7acc3a4afc5142ec18aa1d005fd6649bce92fcb6dfd07",
+   "s": 14275
   },
   {
    "p": "favicon-32.png",
@@ -45,8 +47,8 @@
   },
   {
    "p": "index.html",
-   "h": "b4c8457f8ba2569877f1c23e240fb4d6215e5a6704e4b396556660c492361b8a",
-   "s": 270805
+   "h": "baa8b05846c1c17282749c8a3d379dfd0f4176b949e76b6cc1b7579018cd262e",
+   "s": 271063
   },
   {
    "p": "js/brand.js",
@@ -55,13 +57,13 @@
   },
   {
    "p": "js/cloud-firebase.js",
-   "h": "2b3928c9899fcacf9568df4ad17560857ed1b95299643953bf1bdda97ab1c21d",
-   "s": 15323
+   "h": "2d8f859ab2fa6f3ce1a7c5c85dd7d6c3a30b7fb62c19c869cd2489e5e5542c77",
+   "s": 20305
   },
   {
    "p": "js/logic.js",
-   "h": "08f3460140c18def63a839392cf2bddf523d92b5c38c573471148982a5aba258",
-   "s": 35687
+   "h": "dd7d7feb4168eefd80616c7697076436f76e6bef56f6b9a78a75b2dcd2af5b98",
+   "s": 37548
   },
   {
    "p": "js/motion.js",
@@ -70,8 +72,8 @@
   },
   {
    "p": "js/notify.js",
-   "h": "a3f8e27764da39dd6a65c3ade4e2e4c6d4f3edffcfcc9b7719ace34a85d65fc3",
-   "s": 2153
+   "h": "3501c5eaef0ace451382b5aa37d6341fea9d139d0c5fd323f2bd07ce648bdc3e",
+   "s": 6363
   },
   {
    "p": "js/race.js",
@@ -84,14 +86,19 @@
    "s": 13230
   },
   {
+   "p": "js/social.js",
+   "h": "8f6005f4514e1b9aaa845804f94dd9b98e27d3cdf57f9e7fe799e968ed70d82d",
+   "s": 5671
+  },
+  {
    "p": "js/sync.js",
    "h": "bcdbd2d631446ade0c9c55b4abda98832e9dab603b71d4d84bfcfadcaa70ce40",
    "s": 8584
   },
   {
    "p": "js/tutorial.js",
-   "h": "2ab228151e31e1a5eafced5befc157b377de78ec003c27433ff266e474c8a457",
-   "s": 30151
+   "h": "d0b3692ccdcaa8b7125ca836a533e9a96519753c036519e4d2e4edc5d167ce36",
+   "s": 30431
   },
   {
    "p": "js/updater.js",
@@ -100,13 +107,33 @@
   },
   {
    "p": "js/version.js",
-   "h": "c2eb0b84feb39f325bda4acfe44b229ad03e291f3caa058cf290c4655dad40aa",
-   "s": 139
+   "h": "2a51d5c1a57cc3ddc1cce32bc236ba66aaf916bc070d03de67397e88b4de445e",
+   "s": 140
+  },
+  {
+   "p": "js/views-notify.js",
+   "h": "7973b9d6e6c26fc4f35f082bbdd6597e63f41c1110ccf32985127ff780c61d19",
+   "s": 9278
+  },
+  {
+   "p": "js/views-social.js",
+   "h": "8d68ee7ddaff8d161b965d9ddef29c88948ff5194d5ac2fbe2a638c062c3a9cd",
+   "s": 23508
   },
   {
    "p": "js/views-v4.js",
    "h": "65381a4c66564c1e998a2b723552ed43751bec9bfc6242927891ad2f53978213",
    "s": 55148
+  },
+  {
+   "p": "js/views-weather.js",
+   "h": "65e44093a1360ab07d1a8ca015ad445ea66ac0c17c2c0f9170e5ba745c8f463a",
+   "s": 10221
+  },
+  {
+   "p": "js/weather.js",
+   "h": "ae5da57c685d7ab97217e3babb755ab4720e60225992f05afd04acca694031d5",
+   "s": 9299
   },
   {
    "p": "manifest.webmanifest",
@@ -115,8 +142,8 @@
   },
   {
    "p": "sw.js",
-   "h": "5d273e252e183b0bfc24688d1ef0963edab520240cbddca42ee81e8738a89905",
-   "s": 2399
+   "h": "3b52132053b611b38fd8134152c299c7fbab4d0650c6374df0d10b213fdd032f",
+   "s": 2500
   },
   {
    "p": "vendor/capacitor/8.5.3/capacitor.js",

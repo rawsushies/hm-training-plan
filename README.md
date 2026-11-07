@@ -42,7 +42,7 @@ npm run test:e2e     # Chromium end-to-end on Auth + Firestore emulators
 
 [Codebase audit](docs/CODEBASE_AUDIT.md) · [Architecture](docs/ARCHITECTURE.md) ·
 [Firebase setup](docs/FIREBASE_SETUP.md) · [Data migration](docs/DATA_MIGRATION.md) ·
-[Tutorial system](docs/TUTORIAL_SYSTEM.md) · [Notification roadmap](docs/NOTIFICATION_ROADMAP.md) ·
+[Tutorial system](docs/TUTORIAL_SYSTEM.md) · [Notifications](docs/NOTIFICATIONS.md) · [Friends](docs/FRIENDS.md) · [Weather](docs/WEATHER.md) ·
 [Test report](docs/TEST_REPORT.md)
 
 `legacy/hm-training-plan.claude.html` is the untouched v2 that keeps working on claude.ai.

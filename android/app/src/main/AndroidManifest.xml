@@ -39,6 +39,10 @@
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Weather card: asked only when the user taps "Pakai lokasi saya". Coordinates are rounded to ~1 km,
+         used only for the Open-Meteo request and stored on this device only. Android 12+ users can pick "approximate". -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- Reminders are scheduled inexactly (setAndAllowWhileIdle); the exact-alarm permission the
          local-notifications plugin declares is not needed and is removed from the merged manifest. -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" tools:node="remove" />

@@ -180,3 +180,7 @@ table.splits tr.five td{background:color-mix(in srgb,var(--acc) 10%,transparent)
   :root.printing-sheet .sheet .btns,:root.printing-sheet .sheet .x,:root.printing-sheet .sheet-bg{display:none!important}
   :root.printing-sheet body{background:#fff}
 }
+
+/* weather card */
+.wx-tips{list-style:none;padding:0;margin:0}
+.wx .titlerow{display:flex;align-items:center;justify-content:space-between;gap:8px}

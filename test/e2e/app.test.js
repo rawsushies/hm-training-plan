@@ -257,7 +257,7 @@ test("local-only mode (no Firebase config) works fully and is labelled honestly"
   await H.act(page, "nav", { t: "more" });
   assert.match(await page.textContent('[data-tour="acct"]'), /Mode lokal/);
   await H.act(page, "nav", { t: "notif" });
-  assert.match(await page.textContent("main"), /Belum ada notifikasi yang dikirim/);
+  assert.match(await page.textContent("main"), /Notifikasi hanya di aplikasi Android/);
   await page.click('[data-act="notifSave"]');
   assert.equal(await page.evaluate(() => window.__permAsked), 0, "notification permission is never requested");
   await page.reload();

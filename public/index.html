@@ -275,6 +275,7 @@ ol.steps li{margin:4px 0}
 <script src="js/sync.js"></script>
 <script src="js/tutorial.js"></script>
 <script src="js/notify.js"></script>
+<script src="js/weather.js"></script>
 <script src="js/updater.js"></script>
 <script>
 "use strict";
@@ -1139,7 +1140,7 @@ function raceChecklist(){
 }
 function vHome(){
   const st = S.settings, t = todayYmd(), wi = curWeekIdx(), w = PLANW[wi];
-  const days = Math.round((parseYmd(st.raceDate) - parseYmd(t)) / DAY);
+  const days = Math.round((parseYmd(activeEvent().eventDate) - parseYmd(t)) / DAY);
   const wl = logsIn(w.start, w.end), done = sum(wl, l => l.distance), rem = Math.max(0, w.total - done), pct = Math.min(100, Math.round(done / w.total * 100));
   const before = t < PLANW[0].start;
   const next = allSessions().filter(s => s.date >= t && !["done","skip"].includes(sState(s))).sort((a,b) => a.date.localeCompare(b.date))[0];
@@ -2310,7 +2311,7 @@ function todayReadiness(){
   return `<button class="readiness" data-act="nav" data-t="recovery" style="--c:${col}" title="Dari check-in hari ini. Panduan sederhana, bukan diagnosa."><i></i>${RD_LBL[r.st]}</button>`;
 }
 function dailyTip(next){
-  // Deterministic, rule-based tips from the real plan/data (weather-aware tips arrive with live conditions).
+  // Deterministic, rule-based tips from the real plan/data. Weather-aware tips live in the weather card (js/views-weather.js).
   const t = todayYmd(), its = itemsOnDate(t).filter(s => s.type !== "strength"), w = PLANW[curWeekIdx()];
   if(persistentPain()) return {t:"Nyeri muncul berulang di check-in. Kurangi latihan dan pertimbangkan konsultasi.", why:"Dari check-in terakhirmu"};
   if(its.some(s => s.type === "long")) return {t:"Long run hari ini: mulai pelan, jaga RPE 3–4, dan bawa minum kalau lewat 60 menit.", why:"Dari jadwal hari ini"};
@@ -2320,15 +2321,15 @@ function dailyTip(next){
   return {t:"Konsisten lebih penting daripada cepat. Easy run harus terasa santai.", why:"Prinsip dasar program"};
 }
 function cockpit({days, w, wi, done, pct, next, goalSec, hello}){
-  const st = S.settings, u = CLOUD.user && ACTIVE_UID ? CLOUD.user : null;
+  const st = S.settings, u = CLOUD.user && ACTIVE_UID ? CLOUD.user : null, ev = activeEvent(), evGoal = parseDur(ev.targetFinish || "") || 0;
   const ses = w.sessions, dn = ses.filter(s => sState(s) === "done").length, C = 2 * Math.PI * 46;
   const vol = weekVolume(), tip = dailyTip(next);
   const recent = [...S.logs].filter(l => !l.sample).sort((a,b) => b.date.localeCompare(a.date)).slice(0,3);
   return `<div class="cockpit">
   <section class="hero-card glass holo-edge" data-tour="hero" data-reveal>
     <div class="hero-top">${u ? avatarImg(u.photoURL, u.displayName || u.email) : WRI_BRAND.mark({size:34})}<div class="who"><p class="sm mu">${hello}</p><p class="xs mu">${esc(KIND_LBL[w.kind])} · Week ${w.n}</p></div>${todayReadiness()}${helpBtn("home")}</div>
-    <div class="hero-count"><span class="big num" data-roll="${Math.max(0, days)}">${Math.max(0, days)}</span><span class="cap"><b>${days > 0 ? "hari lagi" : days === 0 ? "Hari ini race day!" : "Race udah lewat"}</b><br><span class="mu">ke BTN JAKIM Half Marathon</span></span></div>
-    <div class="meta" style="display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:12px;font-size:14px"><span><b>${fmtDay(st.raceDate)} ${parseYmd(st.raceDate).getFullYear()}</b></span><span><b>21,1 km</b></span><span>Target <b>&lt; ${esc(st.goalTime)}</b>${goalSec ? ` <span class="mu">(${fmtPace(goalSec/21.1)})</span>` : ""}</span></div>
+    <div class="hero-count"><span class="big num" data-roll="${Math.max(0, days)}">${Math.max(0, days)}</span><span class="cap"><b>${days > 0 ? "hari lagi" : days === 0 ? "Hari ini race day!" : "Race udah lewat"}</b><br><span class="mu">ke ${esc(ev.name)}</span></span></div>
+    <div class="meta" style="display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:12px;font-size:14px"><span><b>${fmtDay(ev.eventDate)} ${parseYmd(ev.eventDate).getFullYear()}</b></span><span><b>${fmtKm(ev.distanceKm)} km</b></span>${evGoal ? `<span>Target <b>&lt; ${esc(fmtDur(evGoal))}</b> <span class="mu">(${fmtPace(evGoal/ev.distanceKm)})</span></span>` : ""}</div>
     <div class="strip" style="margin-top:14px">${weekStrip(wi)}</div>
     <p class="xs mu" style="margin-top:6px">Tiap batang = target km 1 minggu dari 31 minggu. Terisi = km yang udah kamu catat.</p>
   </section>
@@ -2792,6 +2793,7 @@ function startApp(){
 <script src="js/views-v4.js"></script>
 <script src="js/views-social.js"></script>
 <script src="js/views-notify.js"></script>
+<script src="js/views-weather.js"></script>
 <script>startApp();</script>
 </body>
 </html>
