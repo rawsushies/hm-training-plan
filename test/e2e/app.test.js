@@ -138,50 +138,58 @@ test("concurrent edit of the same run: one wins, the other is preserved and rest
   await H.waitFor(a.page, () => window.__hmtpTest.S().logs[0].distance === 9);
 });
 
-test("groups: create, one-time invite, opt-in sharing, privacy, reuse rejected, owner removes member", async () => {
+test("friends: one-time invite, request/accept, private by default, per-friend permissions, shared goal, block", async () => {
   const a = await H.device(), b = await H.device(), c = await H.device();
   await H.open(a.page); await H.signIn(a.page, "alice"); await H.waitSynced(a.page);
   await H.act(a.page, "nav", { t: "bareng" });
-  await a.page.fill("#grp-name", "Lari Kantor"); await a.page.click('[data-act="grpCreate"]');
-  await a.page.waitForSelector('[data-act="grpInvite"]'); await a.page.click('[data-act="grpInvite"]');
-  const link = await a.page.inputValue("#inv-link");
-  assert.match(link, /#join=/);
-  // Bob opens the link, signs in, joins
-  await b.page.goto(H.appUrl() + link.slice(link.indexOf("#")));
-  await H.waitFor(b.page, () => window.__hmtpTest);
-  await H.ready(b.page);
-  await b.page.evaluate(() => { const x = document.querySelector('[data-act="tutClose"]'); if (x) x.click(); });
-  await H.signIn(b.page, "bob");
-  await b.page.waitForSelector('[data-act="doJoin"]');
-  await b.page.click('[data-act="doJoin"]');
-  await H.waitFor(b.page, () => !document.querySelector(".sheet") && document.body.textContent.includes("Lari Kantor"));
+  await a.page.click('[data-act="frInvite"]');
+  await a.page.waitForSelector("#fr-link");
+  const link = await a.page.inputValue("#fr-link");
+  assert.match(link, /#friend=/);
+  const joinVia = async (d, name) => {
+    await d.page.goto(H.appUrl() + link.slice(link.indexOf("#")));
+    await H.waitFor(d.page, () => window.__hmtpTest);
+    await H.ready(d.page); await H.finishOnboarding(d.page);
+    await d.page.evaluate(() => { const x = document.querySelector('[data-act="tutClose"]'); if (x) x.click(); });
+    await H.signIn(d.page, name);
+  };
+  // Bob opens the link, signs in, sends a request; Alice accepts
+  await joinVia(b, "bob");
+  await b.page.waitForSelector('[data-act="frSend"]'); await b.page.click('[data-act="frSend"]');
+  await H.waitFor(a.page, () => !!document.querySelector('[data-act="frAccept"]'));
+  assert.match(await a.page.textContent("main"), /Bob/);
+  await a.page.click('[data-act="frAccept"]');
+  await H.waitFor(a.page, () => !!document.querySelector('[data-act="frPerms"]'));
+  await H.waitFor(b.page, () => !!document.querySelector('[data-act="frPerms"]'));
+  // Bob logs a run with private notes. Private by default: Alice sees only his name.
   await H.logRun(b.page, { date: "2026-11-10", km: 7.5, dur: "52:00" }); await H.waitSynced(b.page);
-  // private by default: Alice sees Bob as member without numbers
-  await H.waitFor(a.page, () => document.body.textContent.includes("Bob"));
-  assert.match(await a.page.textContent('[data-tour="groups"]'), /Belum berbagi progres/);
-  // Bob opts in → only the whitelisted summary appears
-  await b.page.click('[data-act="toggleShare"]');
-  await H.waitFor(a.page, () => document.querySelector('[data-tour="groups"]').textContent.includes("7,5"));
-  const gid = await a.page.evaluate(() => window.__hmtpTest && document.querySelector('[data-tour="groups"]') && GROUPS.sel);
-  const prog = await H.adminDocs(`groups/${gid}/progress`);
-  assert.equal(prog.length, 1);
-  assert.deepEqual(Object.keys(prog[0].fields).sort(), ["bestPace", "displayName", "fullWeeks", "lastRun", "longest", "photoURL", "runs", "totalKm", "updatedAt", "week", "weekKm"]);
-  // Carol reuses the same link → rejected
-  await c.page.goto(H.appUrl() + link.slice(link.indexOf("#")));
-  await H.waitFor(c.page, () => window.__hmtpTest);
-  await H.ready(c.page);
-  await c.page.evaluate(() => { const x = document.querySelector('[data-act="tutClose"]'); if (x) x.click(); });
-  await H.signIn(c.page, "carol");
-  await c.page.waitForSelector('[data-act="doJoin"]'); await c.page.click('[data-act="doJoin"]');
-  await c.page.waitForSelector("#join-err .err");
-  assert.match(await c.page.textContent("#join-err"), /udah dipakai|kedaluwarsa/);
-  // Bob turns sharing off → summary deleted
-  await b.page.click('[data-act="toggleShare"]');
-  await H.waitFor(a.page, () => document.querySelector('[data-tour="groups"]').textContent.includes("Belum berbagi progres"));
-  assert.equal((await H.adminDocs(`groups/${gid}/progress`)).length, 0);
-  // Alice removes Bob → Bob loses access and his membership is cleaned up
-  await a.page.click('[data-act="grpRemove"]'); await a.page.click('[data-act="grpRemoveOk"]');
-  await H.waitFor(b.page, () => GROUPS.list && GROUPS.list.length === 0, null, 20000);
+  await H.waitFor(a.page, () => document.querySelector('[data-tour="share-toggle"]').textContent.includes("belum membagikan"));
+  const aUid = await a.page.evaluate(() => window.__hmtpTest.uid()), bUid = await b.page.evaluate(() => window.__hmtpTest.uid());
+  // Bob enables weekly distance for Alice only → only whitelisted fields reach the server
+  await b.page.click('[data-act="frPerms"]'); await b.page.check("#pm-weekly"); await b.page.click('[data-act="frPermsSave"]');
+  await H.waitFor(a.page, () => document.querySelector('[data-tour="share-toggle"]').textContent.includes("7,5"), null, 20000);
+  const sh = (await H.adminDocs("shares")).find(d => d.name.endsWith(`/${bUid}_${aUid}`));
+  assert.ok(sh, "share doc exists");
+  assert.deepEqual(Object.keys(sh.fields).sort(), ["name", "owner", "photo", "totalKm", "updatedAt", "viewer", "weekKm"]);
+  // Carol reuses the same one-time link → refused
+  await joinVia(c, "carol");
+  await H.waitFor(c.page, () => document.body.textContent.includes("udah dipakai") || !!document.querySelector('[data-act="frSend"]'));
+  if (await c.page.$('[data-act="frSend"]')) { await c.page.click('[data-act="frSend"]'); await H.waitFor(c.page, () => /nggak bisa dikirim|udah dipakai/.test(document.body.textContent)); }
+  // Shared goal: Alice creates, both see Bob's contribution
+  await a.page.click('[data-act="goalNew"]');
+  await a.page.fill("#gn-n", "100 km bareng"); await a.page.fill("#gn-k", "100"); await a.page.fill("#gn-d", "2027-06-13");
+  await a.page.click('[data-act="goalCreate"]');
+  await H.waitFor(b.page, () => document.body.textContent.includes("100 km bareng"), null, 20000);
+  // Bob revokes sharing → numbers disappear for Alice
+  await b.page.click('[data-act="frPerms"]'); await b.page.click('[data-act="frPermsNone"]');
+  await H.waitFor(a.page, () => document.querySelector('[data-tour="share-toggle"]').textContent.includes("belum membagikan"), null, 20000);
+  // Alice blocks Bob → friendship gone for both; Bob cannot read Alice's share any more
+  await a.page.click('[data-act="frBlock"]'); await a.page.click('[data-act="frBlockOk"]');
+  await H.waitFor(b.page, () => !document.querySelector('[data-act="frPerms"]'), null, 20000);
+  assert.equal((await H.adminDocs("friendships")).length, 0);
+  // both sides clean up their share docs once the friendship is gone
+  for (let i = 0; i < 50 && (await H.adminDocs("shares")).length; i++) await new Promise(r => setTimeout(r, 200));
+  assert.equal((await H.adminDocs("shares")).length, 0);
   for (const p of [a.page, b.page, c.page]) assert.deepEqual(p.errors, []);
 });
 

@@ -77,11 +77,13 @@ test("user doc: own profile only, whitelisted keys, https photo", async () => {
 
 // ---------------- Groups ----------------
 const member = (uid, extra = {}) => Object.assign({ uid, displayName: uid, photoURL: "", joinedAt: serverTimestamp() }, extra);
+// v4 retired group creation: legacy groups exist as data created before v4.
 async function makeGroup(owner = "alice", gid = "g1") {
-  const d = db(owner), b = writeBatch(d);
-  b.set(doc(d, `groups/${gid}`), { name: "Tim", ownerUid: owner, createdAt: serverTimestamp() });
-  b.set(doc(d, `groups/${gid}/members/${owner}`), member(owner));
-  await b.commit();
+  await env.withSecurityRulesDisabled(async ctx => {
+    const d = ctx.firestore();
+    await setDoc(doc(d, `groups/${gid}`), { name: "Tim", ownerUid: owner, createdAt: Timestamp.now() });
+    await setDoc(doc(d, `groups/${gid}/members/${owner}`), { uid: owner, displayName: owner, photoURL: "", joinedAt: Timestamp.now() });
+  });
 }
 async function makeInvite(owner = "alice", gid = "g1", iid = "i1", token = "t".repeat(32), ms = 864e5) {
   await setDoc(doc(db(owner), `groups/${gid}/invites/${iid}`), { token, expiresAt: Timestamp.fromMillis(Date.now() + ms), usedBy: null, usedAt: null, createdAt: serverTimestamp() });
@@ -93,8 +95,13 @@ function joinBatch(uid, token = "t".repeat(32), gid = "g1", iid = "i1") {
   return b;
 }
 
-test("create group: owner must add self as member in the same batch", async () => {
-  await assertSucceeds(makeGroup());
+test("legacy groups: no new group can be created any more (v4), existing ones stay readable to members", async () => {
+  await makeGroup();
+  const nd = db("dave"), nb = writeBatch(nd);
+  nb.set(doc(nd, "groups/gnew"), { name: "Baru", ownerUid: "dave", createdAt: serverTimestamp() });
+  nb.set(doc(nd, "groups/gnew/members/dave"), member("dave"));
+  await assertFails(nb.commit());
+  await assertSucceeds(getDoc(doc(db("alice"), "groups/g1")));
   const d = db("carol");
   await assertFails(setDoc(doc(d, "groups/g2"), { name: "X", ownerUid: "carol", createdAt: serverTimestamp() }));
   await assertFails(setDoc(doc(d, "groups/g3"), { name: "X", ownerUid: "alice", createdAt: serverTimestamp() })); // impersonation
@@ -163,4 +170,100 @@ test("member can leave voluntarily; owner deletes the whole group", async () => 
   const a = db("alice"), b = writeBatch(a);
   b.delete(doc(a, "groups/g1/invites/i1")); b.delete(doc(a, "groups/g1/members/alice")); b.delete(doc(a, "groups/g1"));
   await assertSucceeds(b.commit());
+});
+
+// ================= Friends (v4) =================
+const TOK = "c".repeat(26);
+const pair = (a, b) => a < b ? `${a}_${b}` : `${b}_${a}`;
+async function invite(from = "alice", code = TOK, ms = 864e5) {
+  await setDoc(doc(db(from), `invites/${code}`), { from, fromName: from, fromPhoto: "", expiresAt: Timestamp.fromMillis(Date.now() + ms), usedBy: null, createdAt: serverTimestamp() });
+}
+function requestBatch(by, to, code = TOK) {
+  const d = db(by), b = writeBatch(d);
+  b.update(doc(d, `invites/${code}`), { usedBy: by });
+  b.set(doc(d, `requests/${pair(by, to)}`), { from: by, to, fromName: by, fromPhoto: "", code, createdAt: serverTimestamp() });
+  return b;
+}
+function acceptBatch(by, other) {
+  const d = db(by), b = writeBatch(d), id = pair(by, other);
+  b.set(doc(d, `friendships/${id}`), { members: [by, other].sort(), createdAt: serverTimestamp() });
+  b.delete(doc(d, `requests/${id}`));
+  return b;
+}
+async function makeFriends(a = "alice", b = "bob") { await invite(a); await requestBatch(b, a).commit(); await acceptBatch(a, b).commit(); }
+
+test("friends: invite → request → accept; invite is single-use and codes cannot be listed", async () => {
+  await invite();
+  await assertFails(getDocs(collection(db("eve"), "invites")));                  // no enumeration
+  await assertSucceeds(getDoc(doc(db("bob"), `invites/${TOK}`)));                 // exact code only
+  await assertSucceeds(requestBatch("bob", "alice").commit());
+  await assertFails(requestBatch("carol", "alice").commit(), "already used");
+  await assertFails(acceptBatch("bob", "alice").commit(), "sender cannot accept own request");
+  await assertSucceeds(acceptBatch("alice", "bob").commit());
+  await assertSucceeds(getDoc(doc(db("bob"), `friendships/${pair("alice", "bob")}`)));
+  await assertFails(getDoc(doc(db("carol"), `friendships/${pair("alice", "bob")}`)));
+});
+
+test("friends: no friendship without a pending request; no requests without a valid invite; expired, self and impersonation denied", async () => {
+  await assertFails(setDoc(doc(db("bob"), `friendships/${pair("alice", "bob")}`), { members: ["alice", "bob"], createdAt: serverTimestamp() }));
+  await assertFails(setDoc(doc(db("bob"), `requests/${pair("alice", "bob")}`), { from: "bob", to: "alice", fromName: "b", fromPhoto: "", code: TOK, createdAt: serverTimestamp() }));
+  await assertFails(invite("alice", "e".repeat(26), -1), "an already-expired invite cannot be created");
+  await env.withSecurityRulesDisabled(async ctx => { await setDoc(doc(ctx.firestore(), `invites/${"x".repeat(26)}`), { from: "alice", fromName: "a", fromPhoto: "", expiresAt: Timestamp.fromMillis(Date.now() - 1000), usedBy: null, createdAt: Timestamp.now() }); });
+  await assertFails(requestBatch("bob", "alice", "x".repeat(26)).commit(), "expired");
+  await invite("alice");
+  await assertFails(requestBatch("alice", "alice").commit(), "self");
+  const d = db("bob"), b = writeBatch(d);                                        // bob pretends carol sent it
+  b.update(doc(d, `invites/${TOK}`), { usedBy: "bob" });
+  b.set(doc(d, `requests/${pair("carol", "alice")}`), { from: "carol", to: "alice", fromName: "c", fromPhoto: "", code: TOK, createdAt: serverTimestamp() });
+  await assertFails(b.commit());
+  await assertFails(setDoc(doc(db("bob"), `invites/${"z".repeat(26)}`), { from: "alice", fromName: "a", fromPhoto: "", expiresAt: Timestamp.fromMillis(Date.now() + 1e6), usedBy: null, createdAt: serverTimestamp() }), "invite in someone else's name");
+});
+
+test("friends: blocked users cannot send requests; either side can remove the friendship; cancel/reject", async () => {
+  await setDoc(doc(db("alice"), "users/alice/blocks/bob"), { at: serverTimestamp() });
+  await assertFails(getDoc(doc(db("bob"), "users/alice/blocks/bob")), "block list is private");
+  await invite();
+  await assertFails(requestBatch("bob", "alice").commit(), "blocked");
+  await deleteDoc(doc(db("alice"), "users/alice/blocks/bob"));
+  await assertSucceeds(requestBatch("bob", "alice").commit());
+  await assertSucceeds(deleteDoc(doc(db("bob"), `requests/${pair("alice", "bob")}`)), "sender cancels");
+  await invite("alice", "d".repeat(26));
+  await requestBatch("bob", "alice", "d".repeat(26)).commit();
+  await assertFails(deleteDoc(doc(db("carol"), `requests/${pair("alice", "bob")}`)));
+  await assertSucceeds(acceptBatch("alice", "bob").commit());
+  await assertFails(deleteDoc(doc(db("carol"), `friendships/${pair("alice", "bob")}`)));
+  await assertSucceeds(deleteDoc(doc(db("bob"), `friendships/${pair("alice", "bob")}`)));
+});
+
+const share = (o = {}) => Object.assign({ owner: "alice", viewer: "bob", name: "Alice", photo: "", weekKm: 12.5, weekDone: 2, weekPlanned: 3, updatedAt: serverTimestamp() }, o);
+test("shares: only to friends, only whitelisted fields, only the viewer reads, revocable", async () => {
+  await assertFails(setDoc(doc(db("alice"), "shares/alice_bob"), share()), "not friends yet");
+  await makeFriends();
+  await assertSucceeds(setDoc(doc(db("alice"), "shares/alice_bob"), share({ hrPace: [{ date: "2026-11-10", pace: 400, hrAvg: 150 }] })));
+  await assertFails(setDoc(doc(db("alice"), "shares/alice_bob"), share({ notes: "nyeri lutut" })), "private field rejected");
+  await assertFails(setDoc(doc(db("alice"), "shares/alice_bob"), share({ checkins: [] })), "check-ins never shareable");
+  await assertFails(setDoc(doc(db("bob"), "shares/alice_bob"), share()), "impersonating the owner");
+  await assertSucceeds(getDoc(doc(db("bob"), "shares/alice_bob")));
+  await assertFails(getDoc(doc(db("carol"), "shares/alice_bob")));
+  await deleteDoc(doc(db("bob"), `friendships/${pair("alice", "bob")}`));
+  await assertFails(getDoc(doc(db("bob"), "shares/alice_bob")), "unfriended → no access even if the share doc still exists");
+  await assertSucceeds(deleteDoc(doc(db("alice"), "shares/alice_bob")));
+  await assertSucceeds(getDoc(doc(db("bob"), "shares/carol_bob")), "viewer may listen before the first write (missing doc)");
+  await assertFails(getDoc(doc(db("dave"), "shares/carol_bob")), "but not on docs addressed to others");
+  await assertFails(getDoc(doc(db("bob"), "users/alice/runs/r1")), "friends never read private runs");
+});
+
+test("shared goals: friends only, participants read, each writes only own contribution", async () => {
+  const g = { name: "HM bareng", targetKm: 300, targetDate: "2027-06-13", participants: ["alice", "bob"], createdBy: "alice", status: "active", createdAt: serverTimestamp() };
+  await assertFails(setDoc(doc(db("alice"), "goals/g1"), g), "not friends");
+  await makeFriends();
+  await assertSucceeds(setDoc(doc(db("alice"), "goals/g1"), g));
+  await assertFails(setDoc(doc(db("alice"), "goals/g2"), Object.assign({}, g, { participants: ["alice", "carol"] })));
+  await assertSucceeds(setDoc(doc(db("bob"), "goals/g1/contrib/bob"), { km: 20.5, runs: 3, updatedAt: serverTimestamp() }));
+  await assertFails(setDoc(doc(db("bob"), "goals/g1/contrib/alice"), { km: 999, runs: 1, updatedAt: serverTimestamp() }));
+  await assertSucceeds(getDoc(doc(db("alice"), "goals/g1/contrib/bob")));
+  await assertFails(getDoc(doc(db("carol"), "goals/g1")));
+  await assertFails(getDoc(doc(db("carol"), "goals/g1/contrib/bob")));
+  await assertSucceeds(updateDoc(doc(db("bob"), "goals/g1"), { status: "completed" }));
+  await assertFails(updateDoc(doc(db("bob"), "goals/g1"), { targetKm: 1 }));
 });

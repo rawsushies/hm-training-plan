@@ -53,6 +53,7 @@ async function nativeGoogleIdToken(nat, selectAccount) {
   const code = codes.find(c => c !== "auth/native-failed") || "auth/native-failed";
   throw Object.assign(new Error(tried.join(" | ")), { code, detail: tried.join(" | ") });
 }
+const pairKey = (a, b) => a < b ? `${a}_${b}` : `${b}_${a}`;
 const safePhoto = u => /^https:\/\/[^"<> ]+$/.test(u || "") && u.length <= 600 ? u : "";
 
 export async function createCloud(config, opts = {}) {
@@ -230,6 +231,67 @@ export async function createCloud(config, opts = {}) {
       b.delete(F.doc(db, "groups", gid, "members", memberUid));
       await b.commit();
     },
+    /* ---------- Friends (v4) ---------- */
+    async createFriendInvite(user) {
+      const code = rand(24), expiresAt = new Date(Date.now() + 7 * 864e5);
+      await F.setDoc(F.doc(db, "invites", code), { from: user.uid, fromName: (user.displayName || "").slice(0, 80), fromPhoto: safePhoto(user.photoURL), expiresAt: F.Timestamp.fromDate(expiresAt), usedBy: null, createdAt: F.serverTimestamp() });
+      return { code, expiresAt };
+    },
+    async getFriendInvite(code) {
+      const s = await F.getDoc(F.doc(db, "invites", code)); if (!s.exists()) return null;
+      const d = s.data(); return { code, from: d.from, fromName: d.fromName, fromPhoto: d.fromPhoto, usedBy: d.usedBy, expiresAt: d.expiresAt && d.expiresAt.toDate() };
+    },
+    async cancelFriendInvite(code) { await F.deleteDoc(F.doc(db, "invites", code)); },
+    async sendFriendRequest(user, inv) {
+      const b = F.writeBatch(db), id = pairKey(user.uid, inv.from);
+      b.update(F.doc(db, "invites", inv.code), { usedBy: user.uid });
+      b.set(F.doc(db, "requests", id), { from: user.uid, to: inv.from, fromName: (user.displayName || "").slice(0, 80), fromPhoto: safePhoto(user.photoURL), code: inv.code, createdAt: F.serverTimestamp() });
+      await b.commit();
+    },
+    subscribeRequests(uid, cb, onErr) {
+      let inc = [], out = [];
+      const fire = () => cb({ incoming: inc, outgoing: out });
+      const u1 = F.onSnapshot(F.query(F.collection(db, "requests"), F.where("to", "==", uid)), qs => { inc = qs.docs.map(d => Object.assign({ id: d.id }, d.data())); fire(); }, onErr);
+      const u2 = F.onSnapshot(F.query(F.collection(db, "requests"), F.where("from", "==", uid)), qs => { out = qs.docs.map(d => Object.assign({ id: d.id }, d.data())); fire(); }, onErr);
+      return () => { u1(); u2(); };
+    },
+    async acceptFriendRequest(uid, other) {
+      const id = pairKey(uid, other), b = F.writeBatch(db);
+      b.set(F.doc(db, "friendships", id), { members: [uid, other].sort(), createdAt: F.serverTimestamp() });
+      b.delete(F.doc(db, "requests", id));
+      await b.commit();
+    },
+    async deleteFriendRequest(id) { await F.deleteDoc(F.doc(db, "requests", id)); },
+    subscribeFriendships(uid, cb, onErr) {
+      return F.onSnapshot(F.query(F.collection(db, "friendships"), F.where("members", "array-contains", uid)), qs => cb(qs.docs.map(d => ({ id: d.id, other: d.data().members.find(m => m !== uid), since: d.data().createdAt && d.data().createdAt.toDate() }))), onErr);
+    },
+    async removeFriend(uid, other) {
+      await F.deleteDoc(F.doc(db, "shares", `${uid}_${other}`)).catch(() => {});
+      await F.deleteDoc(F.doc(db, "friendships", pairKey(uid, other)));
+    },
+    async blockUser(uid, other) {
+      await F.setDoc(F.doc(db, "users", uid, "blocks", other), { at: F.serverTimestamp() });
+      await F.deleteDoc(F.doc(db, "shares", `${uid}_${other}`)).catch(() => {});
+      await F.deleteDoc(F.doc(db, "requests", pairKey(uid, other))).catch(() => {});
+      await F.deleteDoc(F.doc(db, "friendships", pairKey(uid, other))).catch(() => {});
+    },
+    async listBlocks(uid) { const qs = await F.getDocs(F.collection(db, "users", uid, "blocks")); return qs.docs.map(d => d.id); },
+    async unblockUser(uid, other) { await F.deleteDoc(F.doc(db, "users", uid, "blocks", other)); },
+    async writeShare(owner, viewer, body) { await F.setDoc(F.doc(db, "shares", `${owner}_${viewer}`), Object.assign({}, body, { owner, viewer, updatedAt: F.serverTimestamp() })); },
+    async deleteShare(owner, viewer) { await F.deleteDoc(F.doc(db, "shares", `${owner}_${viewer}`)); },
+    subscribeShareFrom(owner, viewer, cb, onErr) { return F.onSnapshot(F.doc(db, "shares", `${owner}_${viewer}`), s => cb(s.exists() ? s.data() : null), onErr); },
+    async createGoal(uid, friend, g) {
+      const id = rand(9).replace(/[^A-Za-z0-9]/g, "x");
+      await F.setDoc(F.doc(db, "goals", id), { name: g.name.slice(0, 60), targetKm: g.targetKm, targetDate: g.targetDate, participants: [uid, friend], createdBy: uid, status: "active", createdAt: F.serverTimestamp() });
+      return id;
+    },
+    subscribeGoals(uid, cb, onErr) {
+      return F.onSnapshot(F.query(F.collection(db, "goals"), F.where("participants", "array-contains", uid)), qs => cb(qs.docs.map(d => Object.assign({ id: d.id }, d.data(), { createdAt: d.data().createdAt && d.data().createdAt.toDate() }))), onErr);
+    },
+    subscribeContrib(goalId, cb, onErr) { return F.onSnapshot(F.collection(db, "goals", goalId, "contrib"), qs => cb(Object.fromEntries(qs.docs.map(d => [d.id, d.data()]))), onErr); },
+    async writeContrib(goalId, uid, c) { await F.setDoc(F.doc(db, "goals", goalId, "contrib", uid), { km: c.km, runs: c.runs, updatedAt: F.serverTimestamp() }); },
+    async setGoalStatus(goalId, status) { await F.updateDoc(F.doc(db, "goals", goalId), { status }); },
+    async deleteGoal(goalId) { await F.deleteDoc(F.doc(db, "goals", goalId)); },
     async deleteGroup(uid, gid) {
       const [ms, ps, is] = await Promise.all(["members", "progress", "invites"].map(c => F.getDocs(F.collection(db, "groups", gid, c))));
       const b = F.writeBatch(db);

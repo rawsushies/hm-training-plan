@@ -116,8 +116,8 @@
     account: { title: "Akun & teman", steps: [
       { tab: "more", sel: "acct", t: "Masuk dengan Google", b: "Tap “Masuk dengan Google”. Setelah masuk, data kamu ke-sync ke akun kamu dan bisa dibuka di perangkat lain. Tanpa masuk, app tetap jalan penuh, data cuma di perangkat ini." },
       { tab: "more", sel: "acct", t: "Sync & ganti akun", b: "Statusnya kelihatan di sini: ke-sync, lagi sync, offline (perubahan disimpan dan dikirim nanti), atau gagal. “Ganti akun” keluar dulu lalu pilih akun lain; tiap akun punya data sendiri yang terpisah di perangkat ini." },
-      { tab: "bareng", sel: "groups", t: "Grup latihan", b: "Bikin grup, lalu “Bikin link undangan”. Link berlaku 7 hari dan cuma bisa dipakai satu orang. Teman buka link, masuk pakai Google-nya sendiri, lalu gabung." },
-      { tab: "bareng", sel: "share-toggle", t: "Privat vs dibagikan", b: "Default privat. Kalau kamu nyalain berbagi, anggota grup cuma bisa lihat ringkasan: total km, km minggu ini, jumlah lari, terjauh, pace tercepat, minggu lengkap, dan tanggal lari terakhir. Log, catatan, check-in, nyeri, dan review nggak pernah dibagikan." }
+      { tab: "bareng", sel: "groups", t: "Tambah teman", b: "Buat link undangan dan kirim ke temanmu. Link berlaku 7 hari dan sekali pakai. Temanmu mengirim permintaan, kamu yang menerima atau menolak." },
+      { tab: "bareng", sel: "share-toggle", t: "Privat per teman", b: "Defaultnya nggak ada yang dibagikan. Untuk tiap teman kamu bisa menyalakan: jarak mingguan, sesi selesai, personal best, aktivitas tertentu, jadwal, dan HR di pace tertentu. Catatan, check-in, nyeri, rute, dan lokasi nggak pernah dibagikan." }
     ] },
     settings: { title: "Settings", steps: [
       { tab: "settings", sel: "st-days", t: "Hari & jam latihan", b: "Pilih hari lari weekday (Senin, Selasa, Kamis, atau Jumat; Rabu dikosongin) dan jam lari weekday/weekend. Strength ikut dijadwalkan di hari kerja lain." },

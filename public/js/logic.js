@@ -212,6 +212,8 @@
     const SC = G.WRI_SCHED;
     s.schedule = SC ? SC.cleanSchedule(saved.schedule) : null;
     s.events = SC ? cleanMap(saved.events, ID_RE, SC.cleanEvent) : {};
+    const SO = G.WRI_SOCIAL;   // per-friend sharing permissions (private settings; default: share nothing)
+    s.shareWith = SO ? cleanMap(saved.shareWith, ID_RE, p => { const c = SO.cleanPerms(p); return SO.anyShared(c) ? c : null; }) : {};
     s.profile = cleanProfile(saved.profile);
     s.racePrefs = cleanRacePrefs(saved.racePrefs);
     s.planMap = cleanPlanMap(saved.planMap);
@@ -258,7 +260,7 @@
    * (relative to users/{uid}). Each record syncs on its own, so two devices adding runs
    * never overwrite each other. */
   const PLAN_SINGLE = ["settings", "goals", "raceCheck", "tutorial"];
-  const PLAN_MAPS = { ovr: "overrides", status: "status", locked: "locked", elev: "elev", event: "events" };
+  const PLAN_MAPS = { ovr: "overrides", status: "status", locked: "locked", elev: "elev", event: "events", share: "shareWith" };
   // v4 single records (absent = not set; v3 users have none, which means "keep the v3 behaviour")
   const PLAN_V4 = { schedule: "schedule", profile: "profile", race: "racePrefs", planmap: "planMap" };
   const COLLS = ["runs", "strength", "checkins", "shoes", "reviews", "plan"];
@@ -284,7 +286,7 @@
   function recordsToState(recs, S, defaults) {
     const raw = { settings: recs["plan/settings"], goals: recs["plan/goals"], raceCheck: recs["plan/raceCheck"], tutorial: recs["plan/tutorial"],
       schedule: recs["plan/schedule"], profile: recs["plan/profile"], racePrefs: recs["plan/race"], planMap: recs["plan/planmap"],
-      overrides: {}, status: {}, locked: {}, elev: {}, events: {}, reviews: {}, logs: [], strength: [], checkins: [], shoes: [] };
+      overrides: {}, status: {}, locked: {}, elev: {}, events: {}, shareWith: {}, reviews: {}, logs: [], strength: [], checkins: [], shoes: [] };
     // keep existing array order where possible (stable rendering), append new ones
     const order = { runs: S.logs.map(x => x.id), strength: S.strength.map(x => x.id), checkins: S.checkins.map(x => x.date), shoes: S.shoes.map(x => x.id) };
     const buckets = { runs: [], strength: [], checkins: [], shoes: [] };
