@@ -3,15 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Half Marathon Training Plan</title>
-<meta name="theme-color" content="#131517">
-<meta name="description" content="Rencana latihan half marathon 31 minggu: jadwal, log lari, timer, review bulanan, dan progres bareng teman.">
+<title>WeRunIt</title>
+<meta name="theme-color" content="#13131C">
+<meta name="description" content="WeRunIt: teman latihan lari yang paham datamu. Rencana latihan, log lari, strategi race, sepatu, dan latihan bareng teman.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#eef0eb;--s1:#ffffff;--s2:#e4e7e0;--line:#d3d7cf;--tx:#15181a;--mu:#5b636a;
@@ -247,12 +248,25 @@ ol.steps li{margin:4px 0}
 .upd .btn.ghost{background:none;color:var(--on-acc)}
 .banner{display:flex;gap:12px;align-items:center;padding:10px 12px;border:1px solid var(--acc);border-radius:8px;background:var(--s1);margin-bottom:14px}
 </style>
+<link rel="stylesheet" href="css/werunit.css">
 </head>
 <body>
+<div id="boot" role="status" aria-live="polite" aria-label="Memuat WeRunIt">
+  <div class="boot-mark" id="boot-mark"></div>
+  <div class="boot-word">WeRun<span class="holo-text">It</span></div>
+  <ol id="boot-steps"></ol>
+</div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="wri-nav-holo" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F0EEFF"/><stop offset=".4" stop-color="#9673FF"/><stop offset=".7" stop-color="#65A7FF"/><stop offset="1" stop-color="#79E5DE"/></linearGradient>
+  <linearGradient id="wri-ring-holo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9673FF"/><stop offset=".5" stop-color="#65A7FF"/><stop offset="1" stop-color="#79E5DE"/></linearGradient>
+</defs></svg>
 <div id="app"></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <script src="vendor/capacitor/8.5.3/capacitor.js"></script>
 <script src="js/version.js"></script>
+<script src="js/brand.js"></script>
+<script src="js/motion.js"></script>
+<script>document.getElementById("boot-mark").innerHTML = WRI_BRAND.mark({size:96, cls:"wri-mark", liquid:!WRI_MOTION.reduced()});</script>
 <script src="firebase-config.js"></script>
 <script src="js/logic.js"></script>
 <script src="js/sync.js"></script>
@@ -862,7 +876,13 @@ const IC = {
   log:'<svg class="ico" viewBox="0 0 24 24"><path d="M5 3h10l4 4v14H5z"/><path d="M9 12h6M9 16h4"/></svg>',
   review:'<svg class="ico" viewBox="0 0 24 24"><path d="M5 20V11M11 20V5M17 20v-7M3 20h18"/></svg>',
   more:'<svg class="ico" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg>',
-  check:'<svg class="ico" viewBox="0 0 24 24" style="stroke-width:3"><path d="M5 12.5l4.5 4.5L19 7"/></svg>'
+  check:'<svg class="ico" viewBox="0 0 24 24" style="stroke-width:3"><path d="M5 12.5l4.5 4.5L19 7"/></svg>',
+  act:'<svg class="ico" viewBox="0 0 24 24"><path d="M3 12h4l2.5-6 4 12 2.5-6H21"/></svg>',
+  race:'<svg class="ico" viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>',
+  plus:'<svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+  play:'<svg class="ico" viewBox="0 0 24 24"><path d="M7 5l12 7-12 7z"/></svg>',
+  heart:'<svg class="ico" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
+  shoe:'<svg class="ico" viewBox="0 0 24 24"><path d="M3 16c0-3 1-7 3-8l3 2 3-1c1 3 4 4 7 4 1.5 0 2 1 2 2v1H3z"/><path d="M3 19h18"/></svg>'
 };
 function mascot(cls = "mascot"){
   return `<svg class="${cls}" viewBox="0 0 80 80" aria-hidden="true">
@@ -881,7 +901,11 @@ function mascot(cls = "mascot"){
     <path d="M63 44 Q71 49 75 45" stroke="#a9d12a" stroke-width="5" fill="none" stroke-linecap="round"/>
   </svg>`;
 }
-const NAV_MAIN = [["home","Home"],["cal","Jadwal"],["log","Log Lari"],["review","Review"],["more","Menu"]];
+const NAV_MAIN = [["home","Beranda"],["cal","Latihan"],["log","Aktivitas"],["race","Race"],["more","Menu"]];
+const DOCK_ICON = {home:"home", cal:"cal", log:"act", race:"race", more:"more"};
+// Which dock tab is lit for each page (every feature stays reachable; sub-pages light their parent).
+const DOCK_GROUP = {home:"home", cal:"cal", locked:"cal", elev:"cal", strength:"cal", recovery:"cal", log:"log", review:"log", shoes:"log", goals:"log", race:"race", pace:"race"};
+const dockTab = tab => DOCK_GROUP[tab] || "more";
 const NAV_MORE = [["bareng","Bareng teman"],["race","Race plan"],["shoes","Sepatu"],["locked","Locked-in"],["elev","Elevation"],["strength","Strength"],["recovery","Check-in harian"],["goals","Goals"],["guide","Panduan latihan"],["kamus","Kamus istilah"],["pace","Pace calculator"],["settings","Settings"],["notif","Notifikasi"],["data","Data & backup"],["tutorials","Tutorial & bantuan"],["about","Tentang & update"]];
 
 /* ============ Tutorial v3 (content in js/tutorial.js) ============
@@ -919,7 +943,7 @@ function tutFinish(completed){
   if(t && completed) toast(t.id === "quick" ? "Siap! Tur per fitur ada di Menu → Tutorial & bantuan." : `Tur “${tourDef(t.id).title}” selesai ✓`);
 }
 function maybeStartTutorial(){
-  if(RUN || S.ui.tut || M) return;
+  if(RUN || S.ui.tut || M || BOOTING || gateActive()) return;
   if(HMTP.tutorialStartMode(S) === "auto"){ S.ui.tut = {id:"quick", i:0}; S.ui.tab = "home"; }
 }
 function tutBubble(){
@@ -960,29 +984,58 @@ function render(keep){
   applyTheme(); PLANW = buildPlan();
   const tab = S.ui.tab;
   const views = {home:vHome,cal:vCal,log:vLog,review:vReview,more:vMore,bareng:vBareng,locked:vLocked,elev:vElev,strength:vStrength,recovery:vRecovery,goals:vGoals,guide:vGuide,kamus:vKamus,pace:vPace,settings:vSettings,data:vData,race:vRace,shoes:vShoes,notif:vNotif,tutorials:vTutorials,about:vAbout};
-  const mainTab = NAV_MAIN.some(x => x[0] === tab) ? tab : "more";
+  const mainTab = dockTab(tab);
+  if(gateActive()){ document.getElementById("app").innerHTML = vGate() + (M ? modal() : ""); setDock(null); return; }
   document.getElementById("app").innerHTML = `
   <div class="shell ${!RUN && S.ui.tut && !M ? "touring" : ""}">
     <nav class="side" aria-label="Navigasi">
-      <div class="brand">Half Marathon<br>Training Plan</div>
+      <div class="brand">${WRI_BRAND.lockup({size:30})}</div>
       <p class="xs js-sync" style="padding:0 10px 14px;color:var(--mu)">${syncLine()}</p>
-      ${NAV_MAIN.filter(x => x[0] !== "more").map(([k,l]) => `<button class="${tab===k?'on':''}" data-act="nav" data-t="${k}">${l}</button>`).join("")}
+      ${NAV_MAIN.filter(x => x[0] !== "more").map(([k,l]) => `<button class="${mainTab===k?'on':''}" data-act="nav" data-t="${k}">${l}</button>`).join("")}
       <hr>
       ${NAV_MORE.map(([k,l]) => `<button class="${tab===k?'on':''}" data-act="nav" data-t="${k}">${l}</button>`).join("")}
 
     </nav>
     <main>${updateBanner()}${(views[tab] || vHome)()}</main>
   </div>
-  <nav class="tabbar" aria-label="Navigasi utama">
-    ${NAV_MAIN.map(([k,l]) => `<button class="${mainTab===k?'on':''}" data-act="nav" data-t="${k}" aria-label="${l}">${IC[k]}<span>${l}</span></button>`).join("")}
-  </nav>
   ${M ? modal() : ""}
   ${RUN && !M ? runOverlay() : ""}
   ${!RUN && S.ui.tut && !M ? tutBubble() : ""}`;
   if(keep) window.scrollTo(0, y); else window.scrollTo(0, 0);
   if(S.ui._scrollWk && tab === "cal" && S.ui.calMode === "week"){ const el = document.getElementById("wk" + S.ui._scrollWk); if(el) el.scrollIntoView({block:"start"}); delete S.ui._scrollWk; }
+  setDock(RUN ? null : mainTab);
   if(S.ui.tut && !M && !RUN) placeTour();
   const f = document.querySelector(".sheet [data-autofocus]"); if(f) f.focus();
+  afterPaint();
+}
+/* ---------- Floating dock with the frosted spring pill (persists across renders) ---------- */
+let DOCK = null;
+function setDock(active){
+  if(!DOCK){
+    const nav = document.createElement("nav");
+    nav.className = "dock glass"; nav.id = "dock"; nav.setAttribute("aria-label", "Navigasi utama");
+    nav.innerHTML = `<div class="glass-pill"><i class="lens"></i></div>` + NAV_MAIN.map(([k,l]) => `<button data-act="nav" data-t="${k}" aria-label="${l}">${IC[DOCK_ICON[k]]}<span>${l}</span></button>`).join("");
+    document.body.appendChild(nav);
+    const btns = [...nav.querySelectorAll("button")];
+    const geo = () => { const r = nav.getBoundingClientRect(); const xs = btns.map(b => { const q = b.getBoundingClientRect(); return q.left - r.left + q.width / 2; }); const step = xs.length > 1 ? xs[1] - xs[0] : 80; return {tabX:i => xs[0] + i * step, half:Math.min(40, step / 2 - 4), minX:6, maxX:r.width - 6, baseH:56, cy:r.height / 2}; };
+    DOCK = {nav, btns, idx:-1, pill:null, geo};
+    DOCK.pill = new WRI_MOTION.GlassPill(nav.querySelector(".glass-pill"), Object.assign(geo(), {start:0}));
+    window.addEventListener("resize", () => { Object.assign(DOCK.pill.o, DOCK.geo()); DOCK.pill.snap(Math.max(0, DOCK.idx)); });
+  }
+  const i = NAV_MAIN.findIndex(x => x[0] === active);
+  DOCK.nav.hidden = i < 0;
+  DOCK.btns.forEach((b, j) => { b.classList.toggle("on", j === i); if(j === i) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
+  if(i < 0) return;
+  Object.assign(DOCK.pill.o, DOCK.geo());
+  if(DOCK.idx < 0) DOCK.pill.snap(i); else DOCK.pill.go(i);     // moves only on a real tab change
+  DOCK.idx = i;
+}
+/** Post-render motion: staggered reveals + number rolls (both skip under reduced motion). */
+function afterPaint(){
+  const app = document.getElementById("app");
+  const demo = document.getElementById("pill-demo"); if(demo && !demo.firstChild) WRI_MOTION.mountDemo(demo);
+  WRI_MOTION.reveal(app);
+  app.querySelectorAll("[data-roll]").forEach(el => WRI_MOTION.rollNumber(el, +el.dataset.roll, v => el.dataset.fmt === "km" ? fmtKm(v) : String(Math.round(v))));
 }
 let toastT;
 function toast(msg){ const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("on"), 2600); }
@@ -1064,18 +1117,12 @@ function vHome(){
   const hasSample = logs.some(l => l.sample) || S.strength.some(r => r.sample) || S.checkins.some(c => c.sample);
   const recent = [...logs].sort((a,b) => b.date.localeCompare(a.date)).slice(0,4);
   const goalSec = parseDur(st.goalTime);
-  const hello = CLOUD.user && ACTIVE_UID && CLOUD.user.displayName ? `Hai, ${esc(CLOUD.user.displayName.split(" ")[0])}` : "Half Marathon Training Plan";
+  const hello = CLOUD.user && ACTIVE_UID && CLOUD.user.displayName ? `Hai, ${esc(CLOUD.user.displayName.split(" ")[0])}` : "Hai, pelari";
   const tutMode = HMTP.tutorialStartMode(S);
   return `${storageNote()}
   ${tutMode === "banner" && !S.ui.tut ? `<div class="banner">${mascot("mascot-inline")}<div style="flex:1"><b>Tutorial baru dari Kiki</b><p class="sm mu">Sekarang ada tur per fitur dan tombol “?” di tiap halaman.</p><div class="btns" style="margin-top:8px"><button class="btn sm pri" data-act="tutStart" data-id="quick">Mulai (1 menit)</button><button class="btn sm ghost" data-act="tutBanner">Nanti aja</button></div></div></div>` : ""}
   ${hasSample ? `<div class="note info" style="margin-bottom:14px">Ini masih <b>contoh data</b>, bukan hasil lari asli kamu. <button class="link" data-act="clearSample">Hapus contoh data</button></div>` : ""}
-  <section class="hero" data-tour="hero">
-    <div class="titlerow" style="margin-bottom:10px"><p class="sm mu">${hello}</p>${helpBtn("home")}</div>
-    <div class="count"><span class="num">${Math.max(0, days)}</span><span class="cap"><b>${days > 0 ? "hari lagi" : days === 0 ? "Hari ini race day!" : "Race udah lewat"}</b><br><span class="mu">ke BTN JAKIM Half Marathon</span></span></div>
-    <div class="meta"><span><b>${fmtDay(st.raceDate)} ${parseYmd(st.raceDate).getFullYear()}</b></span><span><b>21,1 km</b></span><span>Target <b>&lt; ${esc(st.goalTime)}</b>${goalSec ? ` <span class="mu">(${fmtPace(goalSec/21.1)})</span>` : ""}</span></div>
-    <div class="strip">${weekStrip(wi)}</div>
-    <p class="xs mu" style="margin-top:6px">Tiap batang = target km 1 minggu. Hijau = yang udah kamu lari. Batas waktu 3:30 masih perkiraan dari tahun lalu, cek lagi di race guide 2027.</p>
-  </section>
+  ${cockpit({days, w, wi, done, pct, next, goalSec, hello})}
   ${persistentPain() ? `<div class="note bad" style="margin-bottom:14px">Kamu beberapa kali nyatet ada nyeri. Kurangi atau stop latihan dulu, dan coba konsultasi ke dokter atau fisioterapis kalau nggak membaik.</div>` : ""}
   ${todayCard()}
   <section class="sec" data-tour="week">
@@ -2209,6 +2256,111 @@ function mShoe(){
 }
 
 
+
+/* ---------- Dashboard cockpit (v4) ---------- */
+function weekVolume(n = 8){
+  const ci = curWeekIdx(), from = Math.max(0, ci - n + 1);
+  return PLANW.slice(from, ci + 1).map(w => ({l:"W" + w.n, a:w.total, b:+sum(logsIn(w.start, w.end).filter(l => !l.sample), l => l.distance).toFixed(1)}));
+}
+function sparkPace(){
+  const pts = [...S.logs].filter(l => !l.sample && l.distance >= 1 && paceOf(l)).sort((a,b) => a.date.localeCompare(b.date)).slice(-12).map(l => paceOf(l));
+  if(pts.length < 3) return `<p class="sm mu">Butuh minimal 3 lari dengan waktu buat grafik pace.</p>`;
+  const W = 300, H = 56, lo = Math.min(...pts) - 5, hi = Math.max(...pts) + 5, X = i => 4 + i * (W - 8) / (pts.length - 1), Y = v => 6 + (H - 12) * (v - lo) / (hi - lo);
+  const d = pts.map((v,i) => `${i ? "L" : "M"}${X(i).toFixed(1)} ${Y(v).toFixed(1)}`).join(" ");
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="Pace ${pts.length} lari terakhir, makin atas makin cepat"><defs><linearGradient id="spk" x1="0" x2="1"><stop offset="0" stop-color="#9673FF"/><stop offset="1" stop-color="#79E5DE"/></linearGradient></defs><path d="${d}" fill="none" stroke="url(#spk)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${pts.map((v,i) => i === pts.length - 1 ? `<circle cx="${X(i)}" cy="${Y(v)}" r="3.5" fill="#79E5DE"/>` : "").join("")}</svg><p class="xs mu">Terakhir ${fmtPace(pts[pts.length-1])} · terbaik dari ${pts.length} lari ${fmtPace(Math.min(...pts))}</p>`;
+}
+function todayReadiness(){
+  const c = S.checkins.find(x => x.date === todayYmd() && !x.sample);
+  if(!c) return `<button class="readiness" data-act="nav" data-t="recovery" style="--c:var(--mu2)"><i></i>Check-in hari ini</button>`;
+  const r = readiness(c), col = {ready:"var(--ok)", easy:"var(--warn)", rest:"var(--bad)"}[r.st];
+  return `<button class="readiness" data-act="nav" data-t="recovery" style="--c:${col}" title="Dari check-in hari ini. Panduan sederhana, bukan diagnosa."><i></i>${RD_LBL[r.st]}</button>`;
+}
+function dailyTip(next){
+  // Deterministic, rule-based tips from the real plan/data (weather-aware tips arrive with live conditions).
+  const t = todayYmd(), its = itemsOnDate(t).filter(s => s.type !== "strength"), w = PLANW[curWeekIdx()];
+  if(persistentPain()) return {t:"Nyeri muncul berulang di check-in. Kurangi latihan dan pertimbangkan konsultasi.", why:"Dari check-in terakhirmu"};
+  if(its.some(s => s.type === "long")) return {t:"Long run hari ini: mulai pelan, jaga RPE 3–4, dan bawa minum kalau lewat 60 menit.", why:"Dari jadwal hari ini"};
+  if(its.some(s => s.type === "locked" || s.type === "benchmark")) return {t:"Sesi locked-in: pemanasan 10–15 menit dulu, lalu jaga pace yang disepakati.", why:"Dari jadwal hari ini"};
+  if(w.kind.startsWith("taper")) return {t:"Minggu taper: jarak turun supaya kaki segar. Tidur jadi prioritas.", why:"Dari fase latihan"};
+  if(next && next.night) return {t:"Lari malam habis kerja: pakai baju terang dan pilih rute yang ramai.", why:"Dari jadwal berikutnya"};
+  return {t:"Konsisten lebih penting daripada cepat. Easy run harus terasa santai.", why:"Prinsip dasar program"};
+}
+function cockpit({days, w, wi, done, pct, next, goalSec, hello}){
+  const st = S.settings, u = CLOUD.user && ACTIVE_UID ? CLOUD.user : null;
+  const ses = w.sessions, dn = ses.filter(s => sState(s) === "done").length, C = 2 * Math.PI * 46;
+  const vol = weekVolume(), tip = dailyTip(next);
+  const recent = [...S.logs].filter(l => !l.sample).sort((a,b) => b.date.localeCompare(a.date)).slice(0,3);
+  return `<div class="cockpit">
+  <section class="hero-card glass holo-edge" data-tour="hero" data-reveal>
+    <div class="hero-top">${u ? avatarImg(u.photoURL, u.displayName || u.email) : WRI_BRAND.mark({size:34})}<div class="who"><p class="sm mu">${hello}</p><p class="xs mu">${esc(KIND_LBL[w.kind])} · Week ${w.n}</p></div>${todayReadiness()}${helpBtn("home")}</div>
+    <div class="hero-count"><span class="big num" data-roll="${Math.max(0, days)}">${Math.max(0, days)}</span><span class="cap"><b>${days > 0 ? "hari lagi" : days === 0 ? "Hari ini race day!" : "Race udah lewat"}</b><br><span class="mu">ke BTN JAKIM Half Marathon</span></span></div>
+    <div class="meta" style="display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:12px;font-size:14px"><span><b>${fmtDay(st.raceDate)} ${parseYmd(st.raceDate).getFullYear()}</b></span><span><b>21,1 km</b></span><span>Target <b>&lt; ${esc(st.goalTime)}</b>${goalSec ? ` <span class="mu">(${fmtPace(goalSec/21.1)})</span>` : ""}</span></div>
+    <div class="strip" style="margin-top:14px">${weekStrip(wi)}</div>
+    <p class="xs mu" style="margin-top:6px">Tiap batang = target km 1 minggu dari 31 minggu. Terisi = km yang udah kamu catat.</p>
+  </section>
+  <section class="card ring-row" data-reveal aria-label="Progres minggu ini">
+    <div class="ring"><svg viewBox="0 0 108 108" aria-hidden="true"><circle class="track" cx="54" cy="54" r="46"/><circle class="val" cx="54" cy="54" r="46" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - pct / 100)).toFixed(1)}"/></svg><div class="rv-num"><b class="tnum" data-roll="${pct}">${pct}</b><span class="xs mu">% km</span></div></div>
+    <div><h3 style="margin:0 0 4px">Minggu ini</h3><p class="num" style="font-size:22px"><span data-roll="${done}" data-fmt="km">${fmtKm(done)}</span> <span class="sm mu">/ ${fmtKm(w.total)} km</span></p><p class="sm mu">${dn} dari ${ses.length} sesi lari selesai</p>
+      <div class="btns" style="margin-top:8px">${next ? `<button class="btn sm pri" data-act="runStart" data-id="${next.id}">${IC.play} Mulai</button><button class="btn sm" data-act="logSess" data-id="${next.id}">Catat</button>` : ""}</div></div>
+  </section>
+  <div class="qa" data-reveal role="group" aria-label="Aksi cepat">
+    <button data-act="newLog">${IC.plus}Catat lari</button><button data-act="nav" data-t="recovery">${IC.heart}Check-in</button><button data-act="nav" data-t="race">${IC.race}Strategi</button><button data-act="nav" data-t="shoes">${IC.shoe}Sepatu</button>
+  </div>
+  <section class="card tipcard" data-reveal><div style="flex:1"><h3 style="margin:0 0 4px">Tips hari ini</h3><p class="sm">${esc(tip.t)}</p><p class="xs mu" style="margin-top:4px">${esc(tip.why)}</p></div></section>
+  <section class="card" data-reveal><h3>Volume mingguan</h3>${vol.some(x => x.b) ? chartBars(vol, {h:120, hi:vol.length - 1}) : `<p class="sm mu">Grafik muncul setelah kamu catat lari.</p>`}<p class="xs mu">Abu = target, berwarna = aktual (km)</p></section>
+  <section class="card" data-reveal><h3>Tren pace</h3>${sparkPace()}</section>
+  ${recent.length ? `<section class="card" data-reveal><h3>Aktivitas terakhir</h3><div class="timeline">${recent.map(l => `<button class="tl-item" style="--c:${tc(l.type)};display:block;width:100%;text-align:left;background:none;border:0;color:inherit" data-act="editLog" data-id="${l.id}"><b>${TYPES[l.type]}</b> <span class="num">${fmtKm(l.distance)} km</span> <span class="sm mu">· ${fmtDay(l.date)}${paceOf(l) ? " · " + fmtPace(paceOf(l)) : ""}${l.src ? " · " + esc(l.src) : ""}</span></button>`).join("")}</div></section>` : ""}
+  </div>`;
+}
+
+/* ---------- Sign-in gate (v4): new users sign in before onboarding/tutorial ---------- */
+const GATE_KEY = "hmtp:gate:v4";
+let BOOTING = true;
+function gateActive(){
+  if(CLOUD.state === "off" || CLOUD.user || ACTIVE_UID) return false;
+  if(["init","loading"].includes(CLOUD.state)) return false;      // still restoring a session (boot screen covers this)
+  return LS.get(GATE_KEY) !== "local";
+}
+function vGate(){
+  const offline = !isOnline(), hasData = HMTP.hasRealData(S), busy = CLOUD.state === "signingin";
+  return `<div class="gate">
+    <div class="gate-card glass holo-edge">
+      ${WRI_BRAND.mark({size:88, liquid:!WRI_MOTION.reduced()})}
+      <h1>WeRun<span class="holo-text">It</span></h1>
+      <p class="lead">Teman latihan lari yang paham datamu: rencana latihan, strategi race, sepatu, dan latihan bareng teman.</p>
+      <button class="gbtn" data-act="signIn" ${busy || offline ? "disabled" : ""}>${G_LOGO}${busy ? "Lagi masuk..." : "Masuk dengan Google"}</button>
+      ${CLOUD.err && CLOUD.state === "autherror" ? `<p class="err" style="margin-top:10px">${esc(errText(CLOUD.err))}</p>` : ""}
+      ${CLOUD.errDetail ? `<p class="xs mu" style="margin-top:6px;word-break:break-word">Detail teknis: <code id="err-detail">${esc(CLOUD.errDetail)}</code></p><button class="btn sm" style="margin-top:6px" data-act="copyErr">Salin detail</button>` : ""}
+      ${offline ? `<div class="note warn" style="margin-top:14px;text-align:left">Kamu lagi offline. Masuk butuh internet. Kamu bisa lanjut tanpa akun dulu, lalu masuk nanti dari Menu.</div><button class="btn" style="margin-top:10px;width:100%" data-act="gateLocal">Lanjut tanpa akun</button>`
+        : hasData ? `<p class="sm" style="margin-top:14px">Ada data latihan di perangkat ini. Masuk buat menyimpannya ke akunmu (kamu bisa pilih digabung atau nggak), atau lanjut tanpa akun.</p><button class="btn ghost" style="margin-top:8px;width:100%" data-act="gateLocal">Lanjut tanpa akun</button>` : ""}
+      <p class="fine">Akun Google cuma dipakai buat masuk dan sync antar perangkat. Data latihanmu privat.</p>
+    </div></div>`;
+}
+/* ---------- Startup sequence: every step listed is a real task, nothing is faked ---------- */
+const BOOT_STEPS = [["shell","Menyiapkan aplikasi"],["update","Cek versi terbaru"],["account","Memulihkan akun"],["data","Menyiapkan dashboard"]];
+function bootStep(id, state, note){
+  const ol = document.getElementById("boot-steps"); if(!ol) return;
+  if(!ol.children.length) ol.innerHTML = BOOT_STEPS.map(([k,l]) => `<li data-k="${k}"><i>·</i><span>${l}</span></li>`).join("");
+  const li = ol.querySelector(`[data-k="${id}"]`); if(!li) return;
+  li.className = state; li.querySelector("i").textContent = state === "ok" ? "✓" : state === "skip" ? "–" : "•";
+  if(note) li.querySelector("span").textContent = BOOT_STEPS.find(x => x[0] === id)[1] + " · " + note;
+}
+const waitFor = (cond, ms) => new Promise(res => { const t0 = Date.now(); const tick = () => { if(cond()) res(true); else if(Date.now() - t0 > ms) res(false); else setTimeout(tick, 60); }; tick(); });
+async function bootSequence(){
+  const t0 = Date.now();
+  bootStep("shell", "ok");
+  bootStep("update", "on");
+  if(!isOnline()) bootStep("update", "skip", "offline");
+  else { const ok = await waitFor(() => !["idle","checking"].includes(HMTPUpdate.state) || HMTPUpdate.mode === "none", 3500); bootStep("update", ok ? "ok" : "skip", ok ? (HMTPUpdate.state === "ready" ? "versi baru siap" : "terbaru") : "lewati (lambat)"); }
+  bootStep("account", "on");
+  const authed = await waitFor(() => !["init","loading"].includes(CLOUD.state), 4000);
+  bootStep("account", authed ? "ok" : "skip", CLOUD.state === "off" ? "mode lokal" : CLOUD.user ? (CLOUD.user.displayName || "").split(" ")[0] : authed ? "belum masuk" : "lanjut offline");
+  bootStep("data", "on");
+  BOOTING = false; render(false); bootStep("data", "ok");
+  const min = WRI_MOTION.reduced() ? 0 : 1100;
+  setTimeout(() => { const b = document.getElementById("boot"); if(b){ b.classList.add("done"); setTimeout(() => b.remove(), 600); } window.__bootDone = true; maybeStartTutorial(); if(S.ui.tut) render(false); }, Math.max(0, min - (Date.now() - t0)));
+}
+
 /* ============ In-app updates (js/updater.js) ============ */
 const UPD_TXT = {checking:"Lagi ngecek update...", uptodate:"Udah versi terbaru", downloading:"Lagi download versi baru...", ready:"Versi baru siap dipasang", available:"Versi baru tersedia", "native-required":"Perlu install APK baru", error:"Gagal ngecek update", idle:"Belum dicek"};
 const canApplyUpdate = () => !RUN && !M && !(document.activeElement && /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName));
@@ -2245,6 +2397,9 @@ function vAbout(){
     <label class="toggle" style="margin-top:12px"><span><b>Update otomatis</b><br><span class="xs mu">Versi baru dipasang sendiri pas app lagi di latar belakang atau pas dibuka lagi. Nggak pernah di tengah timer atau pas kamu ngisi form.</span></span><input type="checkbox" data-act="updAuto" ${u.auto ? "checked" : ""}></label>
   </div>
   ${L && L.notes && L.notes.length ? `<div class="sec"><h2>Yang baru di ${esc(L.version)}</h2><ul class="clean sm">${L.notes.map(n => `<li>${esc(n)}</li>`).join("")}</ul></div>` : ""}
+  <div class="sec"><div class="titlerow"><h2>${WRI_BRAND.lockup({size:28})}</h2></div><p class="sm mu" style="margin-top:6px">${esc(WRI_BRAND.TAGLINE)} Dulu bernama Half Marathon Training Plan; data dan akunmu tetap sama.</p>
+    <h3 style="margin-top:14px">Demo animasi indikator tab</h3><p class="xs mu">Referensi gerak 12 detik (diputar otomatis hanya di demo ini; navigasi asli cuma bergerak saat kamu tap).</p>
+    <div class="demo-wrap" id="pill-demo"></div></div>
   <div class="sec"><h3>Gimana cara kerjanya?</h3><p class="sm mu" style="margin-top:4px">App ngecek versi baru tiap dibuka dan tiap jam. ${u.mode === "native" ? "File versi baru didownload, dicek keasliannya (hash SHA-256), lalu dipakai. Kalau versi baru gagal jalan, app balik otomatis ke versi sebelumnya." : "Versi baru didownload di latar belakang, lalu dipasang pas kamu tap “Perbarui” atau otomatis."} Perubahan besar di bagian Android (misalnya izin baru) tetap butuh install APK baru, dan app bakal ngasih tahu.</p></div>`;
 }
 
@@ -2310,6 +2465,7 @@ const ACT = {
   tutBanner:() => { S.tutorial.bannerDismissed = true; persist(); render(true); toast("Oke. Tutorial ada di Menu → Tutorial & bantuan."); },
   tutReset:() => { S.tutorial.tours = {}; S.tutorial.quick = false; S.tutorial.bannerDismissed = true; persist(); render(true); toast("Tanda selesai tutorial direset."); },
   /* ---- account ---- */
+  gateLocal:() => { LS.set(GATE_KEY, "local"); render(false); maybeStartTutorial(); render(false); },
   signIn:() => signIn(false),
   retryAcct:() => { if(CLOUD.user) activateAccount(CLOUD.user); },
   syncNow:() => { if(SYNC){ SYNC.schedule(0); toast("Lagi sync..."); } },
@@ -2584,11 +2740,11 @@ function applyLocalConflict(c){
 }
 
 if(S.ui.run && Array.isArray(S.ui.run.steps)){ RUN = S.ui.run; startTicker(); }
-maybeStartTutorial();
 render(false);
 if(!Array.isArray(S.badges)){ checkBadges(); Storage.save(S); }
 initCloud();
 initUpdates();
+bootSequence();
 </script>
 </body>
 </html>

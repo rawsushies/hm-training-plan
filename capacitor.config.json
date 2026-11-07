@@ -1,6 +1,6 @@
 {
   "appId": "com.hmtrainingplan.app",
-  "appName": "HM Training Plan",
+  "appName": "WeRunIt",
   "webDir": "public",
   "appendUserAgent": "HMTPNative/1",
   "android": {

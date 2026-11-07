@@ -149,6 +149,7 @@ test("groups: create, one-time invite, opt-in sharing, privacy, reuse rejected, 
   // Bob opens the link, signs in, joins
   await b.page.goto(H.appUrl() + link.slice(link.indexOf("#")));
   await H.waitFor(b.page, () => window.__hmtpTest);
+  await H.ready(b.page);
   await b.page.evaluate(() => { const x = document.querySelector('[data-act="tutClose"]'); if (x) x.click(); });
   await H.signIn(b.page, "bob");
   await b.page.waitForSelector('[data-act="doJoin"]');
@@ -168,6 +169,7 @@ test("groups: create, one-time invite, opt-in sharing, privacy, reuse rejected, 
   // Carol reuses the same link → rejected
   await c.page.goto(H.appUrl() + link.slice(link.indexOf("#")));
   await H.waitFor(c.page, () => window.__hmtpTest);
+  await H.ready(c.page);
   await c.page.evaluate(() => { const x = document.querySelector('[data-act="tutClose"]'); if (x) x.click(); });
   await H.signIn(c.page, "carol");
   await c.page.waitForSelector('[data-act="doJoin"]'); await c.page.click('[data-act="doJoin"]');
@@ -187,6 +189,7 @@ test("tutorial: new user gets quick start; completion is per account and synced;
   const d = await H.device();
   await d.page.goto(H.appUrl());
   await H.waitFor(d.page, () => window.__hmtpTest);
+  await H.ready(d.page);
   assert.ok(await d.page.isVisible("#tour"));
   assert.match(await d.page.textContent("#tour"), /Langkah 1 dari 6/);
   await H.signIn(d.page, "dina"); await H.waitSynced(d.page);
@@ -205,7 +208,7 @@ test("tutorial: new user gets quick start; completion is per account and synced;
   for (let i = 0; i < 4; i++) await d.page.click('[data-act="tutNext"]');
   assert.ok(await d.page.$('[data-tour="cal-actions"].tour-hl'), "session actions highlighted on a day that has sessions");
   // a new device for the same account does not show the quick start again
-  const d2 = await H.device(); await d2.page.goto(H.appUrl()); await H.waitFor(d2.page, () => window.__hmtpTest);
+  const d2 = await H.device(); await d2.page.goto(H.appUrl()); await H.waitFor(d2.page, () => window.__hmtpTest); await H.ready(d2.page);
   await d2.page.evaluate(() => { const x = document.querySelector('[data-act="tutClose"]'); if (x) x.click(); });
   await H.signIn(d2.page, "dina"); await H.waitSynced(d2.page);
   assert.equal(await d2.page.evaluate(() => window.__hmtpTest.S().tutorial.quick), true);
@@ -215,6 +218,7 @@ test("mobile + desktop layouts: no horizontal overflow, tour bubble does not cov
   for (const vp of [{ width: 320, height: 640 }, { width: 390, height: 844 }, { width: 844, height: 390 }, { width: 1280, height: 800 }]) {
     const { page } = await H.device({ viewport: vp, cloud: false });
     await page.goto(H.appUrl().replace("?emulator=1", ""));
+    await H.ready(page);
     await page.waitForSelector("#tour");
     for (const t of ["home", "cal", "log", "review", "more", "bareng", "data", "notif", "tutorials", "settings"]) {
       await H.act(page, "nav", { t });
@@ -235,6 +239,7 @@ test("local-only mode (no Firebase config) works fully and is labelled honestly"
   const { page, ctx } = await H.device({ cloud: false });
   await ctx.addInitScript(() => { window.__permAsked = 0; if (window.Notification) Notification.requestPermission = () => { window.__permAsked++; return Promise.resolve("default"); }; });
   await page.goto(H.appUrl().replace("?emulator=1", ""));
+  await H.ready(page);
   await page.evaluate(() => document.querySelector('[data-act="tutClose"]').click());
   await H.logRun(page, { date: "2026-11-10", km: 5, dur: "35:00" });
   await H.act(page, "nav", { t: "more" });

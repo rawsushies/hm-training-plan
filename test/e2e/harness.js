@@ -28,9 +28,12 @@ export async function launch() { browser = await chromium.launch(); return brows
 export async function closeBrowser() { await browser?.close(); }
 
 /** A "device": its own browser context (separate localStorage / IndexedDB), with Firebase config injected. */
-export async function device({ viewport = { width: 390, height: 844 }, seed = null, cloud = true } = {}) {
+export async function device({ viewport = { width: 390, height: 844 }, seed = null, cloud = true, gate = false } = {}) {
   const ctx = await browser.newContext({ viewport });
   await ctx.addInitScript(cfg => { window.HMTP_FIREBASE_CONFIG = cfg; }, cloud ? CONFIG : null);
+  // v4 shows a Google sign-in gate to signed-out users; tests that exercise anonymous use opt out of it
+  // the same way a user does ("Lanjut tanpa akun"). Gate tests pass gate:true.
+  if (!gate) await ctx.addInitScript(() => { if (!localStorage.getItem("hmtp:gate:v4")) localStorage.setItem("hmtp:gate:v4", '"local"'); });
   if (seed) await ctx.addInitScript(s => { if (!localStorage.getItem("__seeded")) { for (const [k, v] of Object.entries(s)) localStorage.setItem(k, typeof v === "string" ? v : JSON.stringify(v)); localStorage.setItem("__seeded", "1"); } }, seed);
   const page = await ctx.newPage();
   page.errors = [];
@@ -42,7 +45,12 @@ export async function open(page, extra = "") {
   await page.goto(appUrl(extra));
   await page.waitForFunction(() => window.__hmtpTest || (window.HMTP && document.querySelector("main")), null, { timeout: 15000 });
   await page.waitForFunction(() => window.__hmtpTest, null, { timeout: 15000 });
+  await ready(page);
   await page.evaluate(() => { if (document.querySelector("#tour")) document.querySelector('[data-act="tutClose"]').click(); });
+}
+/** Wait until the v4 boot screen has finished and is gone (it covers the app while it runs). */
+export async function ready(page) {
+  await page.waitForFunction(() => window.__bootDone && !document.getElementById("boot"), null, { timeout: 15000 });
 }
 export const user = (n) => ({ sub: `sub-${n}`, email: `${n}@example.com`, email_verified: true, name: n[0].toUpperCase() + n.slice(1), picture: "https://example.com/" + n + ".png" });
 export async function signIn(page, n) {

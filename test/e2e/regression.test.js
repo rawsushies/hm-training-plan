@@ -12,6 +12,7 @@ const local = () => H.appUrl().replace("?emulator=1", "");
 async function fresh(viewport) {
   const d = await H.device({ cloud: false, viewport });
   await d.page.goto(local());
+  await H.ready(d.page);
   await d.page.evaluate(() => document.querySelector('[data-act="tutClose"]')?.click());
   return d;
 }
@@ -70,7 +71,7 @@ test("the new build computes the same plan, states, reviews, badges, goals and p
 test("timer: start, pause, resume, next step, finish opens the log form with the time filled", async () => {
   const { page } = await fresh();
   await page.clock.install({ time: new Date("2026-11-17T19:00:00") });
-  await page.reload(); await page.evaluate(() => document.querySelector('[data-act="tutClose"]')?.click());
+  await page.reload(); await H.ready(page); await page.evaluate(() => document.querySelector('[data-act="tutClose"]')?.click());
   await H.act(page, "runStart", { id: "w2-wd" });             // locked-in interval week 2
   await page.waitForSelector(".runmode");
   assert.match(await page.textContent(".runmode"), /Bagian 1 dari 9[\s\S]*Warm-up/);

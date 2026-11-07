@@ -8,10 +8,10 @@
   const QUICK = {
     id: "quick", title: "Mulai cepat", mins: 1,
     steps: [
-      { tab: "home", sel: null, t: "Halo! Aku Kiki 👋", b: "Aku temen lari kamu. App ini nyimpen rencana latihan half marathon 31 minggu kamu, nyatet lari, dan ngerangkum progres. Yuk kenalan 6 langkah aja." },
+      { tab: "home", sel: null, t: "Halo! Aku Kiki 👋", b: "Selamat datang di WeRunIt! Aku temen lari kamu di sini. WeRunIt nyimpen rencana latihan 31 minggu kamu, nyatet lari, dan ngerangkum progres. Yuk kenalan 6 langkah aja." },
       { tab: "home", sel: "hero", t: "Dashboard: hitung mundur", b: "Angka besar = sisa hari ke race. Batang di bawahnya = target km tiap minggu dari minggu 1 sampai 31. Bagian hijau = km yang udah kamu catat." },
       { tab: "home", sel: "week", t: "Minggu ini", b: "Target km minggu ini, yang udah kamu lari, sisanya, dan 3 sesi lari minggu ini. Label “Selesai”, “Kelewat”, “Skip”, atau “Nanti” nunjukin status tiap sesi. Tap sesi buat lihat detailnya." },
-      { tab: "home", sel: "next", t: "Workout berikutnya", b: "Ini sesi terdekat yang belum beres. “▶ Mulai timer” buka timer yang mandu tiap bagian (pemanasan, interval, pendinginan). Pas tap “Selesai”, form catatan lari kebuka dengan waktu yang udah keisi." },
+      { tab: "home", sel: "next", t: "Workout berikutnya", b: "Ini sesi terdekat yang belum beres. Tombol “Mulai” di kartu “Minggu ini” juga langsung buka timernya. “▶ Mulai timer” buka timer yang mandu tiap bagian (pemanasan, interval, pendinginan). Pas tap “Selesai”, form catatan lari kebuka dengan waktu yang udah keisi." },
       { tab: "log", sel: "log-new", t: "Catat lari", b: "Udah lari pakai jam atau aplikasi lain? Tap “Catat lari”, isi tanggal, jarak, dan waktu. Pace dihitung otomatis. Bisa juga import file GPX/TCX atau CSV Strava di kotak bawahnya." },
       { tab: "more", sel: "tut-hub", t: "Butuh bantuan?", b: "Di Menu → “Tutorial & bantuan” ada tur lengkap per fitur. Tiap halaman juga punya tombol “?” di pojok kanan atas buat penjelasan singkat fitur itu. Kata bergaris titik-titik bisa di-tap buat lihat artinya. Selamat latihan!" }
     ]

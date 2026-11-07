@@ -1,13 +1,23 @@
 {
- "version": "3.1.1",
- "build": "2026-11-07T05:10:50Z",
+ "version": "3.9.0",
+ "build": "2026-11-07T08:00:19Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "Login Google di aplikasi Android: coba cara kedua otomatis, pesan error lebih jelas"
+  "WeRunIt: identitas baru, navigasi kaca, layar pembuka, dashboard baru"
  ],
  "files": [
+  {
+   "p": "css/werunit.css",
+   "h": "a0bc98687d0a7d2ab12f908b837d243e3988717e8a2b2245b8db207c3a31503d",
+   "s": 12421
+  },
+  {
+   "p": "favicon-32.png",
+   "h": "093f01f9d9f9730008001eb5be589109ffc037654bd375592f3fff54e12cc73d",
+   "s": 1247
+  },
   {
    "p": "firebase-config.js",
    "h": "a2f1065ee3193d5ee32b2f3b9caa9597d0a2b4ae3406c5ef604f0ad3fe9fb6c3",
@@ -15,23 +25,33 @@
   },
   {
    "p": "icon-192.png",
-   "h": "d46aae877e39136b25a6e4bc819b9cf7e178b4fd6a463925ac74e912506b6665",
-   "s": 6796
+   "h": "5024289a3c524b3004bde2082637bb13f27625c357aec65f538da6a7d7a2e655",
+   "s": 12903
   },
   {
    "p": "icon-512.png",
-   "h": "9257ec4d86b885135fce04bce218c13e6d331d8a443521c0e9bc7e1e06e2c259",
-   "s": 18741
+   "h": "f0e7e9d2b0c7e46ddc2e21a1acce828ced716d7dc6413a56fd802bfbd74476cb",
+   "s": 55897
+  },
+  {
+   "p": "icon-maskable-512.png",
+   "h": "717477f402ff3de3914e13155e35dc04ca48e1b47172e16b63974985e33c501b",
+   "s": 23768
   },
   {
    "p": "icon.svg",
-   "h": "50609761faf288d32cd939447c9856d6609c05f40751578140b7d2c750ed900b",
-   "s": 450
+   "h": "5db246705670086d18d8f0a7f183e7922feb917958a441e7eb5fba20817e402c",
+   "s": 846
   },
   {
    "p": "index.html",
-   "h": "895bea682056534fd6eed68623f54c7302fc340d761a580d862e23e3e561167e",
-   "s": 251802
+   "h": "80dc2bddf3277fa14865fec907f942e9b272bacc3dea96ad467b58c94bc1820e",
+   "s": 267122
+  },
+  {
+   "p": "js/brand.js",
+   "h": "a1ce10dee900c03684fdf3c41408f3b29140c4c1edee394722f25343517e0d25",
+   "s": 3694
   },
   {
    "p": "js/cloud-firebase.js",
@@ -42,6 +62,11 @@
    "p": "js/logic.js",
    "h": "5b1c00535eeff72033dde37ed645684808d89a39098dc0c4736f6533aa70a231",
    "s": 31196
+  },
+  {
+   "p": "js/motion.js",
+   "h": "45a87a41552ed5c1b07c57ad7e5ff4129b5bc5fb6defd638dbc9db41399e7263",
+   "s": 8532
   },
   {
    "p": "js/notify.js",
@@ -55,8 +80,8 @@
   },
   {
    "p": "js/tutorial.js",
-   "h": "a286283c258d7c1737fba841b365d20d3c465042837df7c49d5c22f20049dfb7",
-   "s": 30056
+   "h": "2ab228151e31e1a5eafced5befc157b377de78ec003c27433ff266e474c8a457",
+   "s": 30151
   },
   {
    "p": "js/updater.js",
@@ -65,18 +90,18 @@
   },
   {
    "p": "js/version.js",
-   "h": "2fca81dacba2c714bae88d54c1cf590c60107f555e2b488324637f2595e4a75e",
+   "h": "d7e65c2d7b7c743541e26e340bd109d533654fa2003315ffa9b78db145dc269c",
    "s": 139
   },
   {
    "p": "manifest.webmanifest",
-   "h": "496f8628d7af650a03221f815b55a064f0c76ae8a4fa02b62e217f87b1773f32",
-   "s": 442
+   "h": "3039dda9858b09cc14f7ad794ac075866d3eb82ca055a3e71e28d4ce7fc9720d",
+   "s": 677
   },
   {
    "p": "sw.js",
-   "h": "cc8918e4c4b8d32defdbc51bdcdbfedb918ca5e2e1a7b3b839751b7f54041e1b",
-   "s": 2274
+   "h": "365e7761fa8eec54d7fa51be437a173e51844ebf87440ac1cbcf61406c5809c6",
+   "s": 2349
   },
   {
    "p": "vendor/capacitor/8.5.3/capacitor.js",
