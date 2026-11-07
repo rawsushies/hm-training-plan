@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>WeRunIt</title>
-<meta name="theme-color" content="#13131C">
+<meta name="theme-color" content="#141415">
 <meta name="description" content="WeRunIt: teman latihan lari yang paham datamu. Rencana latihan, log lari, strategi race, sepatu, dan latihan bareng teman.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#eef0eb;--s1:#ffffff;--s2:#e4e7e0;--line:#d3d7cf;--tx:#15181a;--mu:#5b636a;
@@ -257,8 +257,8 @@ ol.steps li{margin:4px 0}
   <ol id="boot-steps"></ol>
 </div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-  <linearGradient id="vz-bar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--blue)"/><stop offset="1" style="stop-color:var(--acc)"/></linearGradient><linearGradient id="vz-line" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:var(--acc)"/><stop offset="1" style="stop-color:var(--cyan)"/></linearGradient><linearGradient id="wri-nav-holo" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F0EEFF"/><stop offset=".4" stop-color="#9673FF"/><stop offset=".7" stop-color="#65A7FF"/><stop offset="1" stop-color="#79E5DE"/></linearGradient>
-  <linearGradient id="wri-ring-holo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9673FF"/><stop offset=".5" stop-color="#65A7FF"/><stop offset="1" stop-color="#79E5DE"/></linearGradient>
+  <linearGradient id="vz-bar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--mu2)"/><stop offset="1" style="stop-color:var(--mu2)"/></linearGradient><linearGradient id="vz-line" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:var(--tx)"/><stop offset="1" style="stop-color:var(--tx)"/></linearGradient><linearGradient id="wri-nav-holo" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse"><stop offset="0" style="stop-color:var(--acc)"/><stop offset="1" style="stop-color:var(--acc)"/></linearGradient>
+  <linearGradient id="wri-ring-holo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--acc)"/><stop offset="1" style="stop-color:var(--acc)"/></linearGradient>
 </defs></svg>
 <div id="app"></div>
 <div id="toast" role="status" aria-live="polite"></div>
@@ -426,7 +426,7 @@ const PLAN = [
   [5,13,4,"Taper awal + sedikit pace race. Tanpa time attack."],
   [5,11,3,"Taper. Semua lari santai dan segar."],
   [4,7,2,"Taper lanjut + pace touch singkat. Tanpa tes."],
-  [3,3,21.1,"Race week! 21,1 km hari Minggu, 13 Juni."]
+  [3,3,21.1,"Race week. 21,1 km hari Minggu, 13 Juni."]
 ];
 const KIND_LBL = {base:"Base building", locked:"Locked-in", elevation:"Elevation", benchmark:"Benchmark", taper1:"Taper", taper2:"Taper", taper3:"Taper", race:"Race week"};
 const KIND_TERM = {base:"Base building", locked:"Locked-in", elevation:"Elevation", benchmark:"Benchmark", taper1:"Taper", taper2:"Taper", taper3:"Taper", race:"Shakeout"};
@@ -459,7 +459,7 @@ const BLOCK_INFO = [
   {label:"Mar 2027",goal:"Long run makin jauh (sekitar 16 km), total 24–27 km per minggu."},
   {label:"Apr 2027",goal:"Jaga di 23–28 km per minggu, long run 16–17 km."},
   {label:"Mei 2027",goal:"Puncak latihan 27–30 km, peak long run 18 km kalau siap, lalu mulai taper."},
-  {label:"Jun 2027",goal:"Kurangi latihan, jaga kaki tetap segar, lalu race!"}
+  {label:"Jun 2027",goal:"Kurangi latihan, jaga kaki tetap segar, lalu race."}
 ];
 const TYPES = {easy:"Easy Run",long:"Long Run",recovery:"Recovery Run",locked:"Locked-in",elevation:"Elevation",benchmark:"Benchmark",race:"Race",other:"Lari lain",strength:"Strength",rest:"Istirahat"};
 const RUN_TYPES = ["easy","long","recovery","locked","elevation","benchmark","race","other"];
@@ -982,7 +982,7 @@ function tutFinish(completed){
     else if(completed) S.tutorial.tours[t.id] = true;
   }
   persist(); render(false);
-  if(t && completed) toast(t.id === "quick" ? "Siap! Tur per fitur ada di Menu → Tutorial & bantuan." : `Tur “${tourDef(t.id).title}” selesai ✓`);
+  if(t && completed) toast(t.id === "quick" ? "Siap. Tur per fitur ada di Menu → Tutorial & bantuan." : `Tur “${tourDef(t.id).title}” selesai ✓`);
 }
 function maybeStartTutorial(){
   if(RUN || S.ui.tut || M || BOOTING || gateActive()) return;
@@ -1081,7 +1081,7 @@ function afterPaint(){
 }
 let toastT;
 function toast(msg){ const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("on"), 2600); }
-const pageHead = (title, lead) => `<div class="pagehead"><button class="back" data-act="nav" data-t="more">‹ Menu</button></div><div class="titlerow"><h1>${title}</h1>${helpBtn(S.ui.tab)}</div>${lead ? `<p class="lead">${lead}</p>` : ""}`;
+const pageHead = (title) => `<div class="pagehead"><button class="back" data-act="nav" data-t="more">‹ Menu</button></div><div class="titlerow"><h1>${title}</h1>${helpBtn(S.ui.tab)}</div>`;   // explanations live behind the ? help button
 const pill = (type, label) => `<span class="pill" style="--c:${tc(type)}"><i></i>${label || TYPES[type]}</span>`;
 const storageNote = () => STORAGE_OK ? "" : `<div class="note bad" style="margin-bottom:12px">Browser ini nggak bisa nyimpen data. Kalau halaman ditutup, perubahan bisa hilang. Pakai Export buat backup.</div>`;
 
@@ -1102,7 +1102,7 @@ function weekStrip(cur){
 function sessRow(s){
   const st = sState(s), lg = s.type === "strength" ? null : logFor(s.id), d = parseYmd(s.date);
   return `<button class="row" data-act="openSess" data-id="${s.id}">
-    <span class="day"><b>${HARI[d.getDay()].slice(0,3)}</b><span>${d.getDate()} ${BULAN[d.getMonth()]}</span><span style="display:block">${s.night ? "🌙 " : ""}${esc(s.time || "")}</span></span>
+    <span class="day"><b>${HARI[d.getDay()].slice(0,3)}</b><span>${d.getDate()} ${BULAN[d.getMonth()]}</span><span style="display:block">${s.night ? "malam " : ""}${esc(s.time || "")}</span></span>
     <span class="stripe" style="--c:${tc(s.type)}"></span>
     <span class="grow"><b>${esc(s.title)}</b>${s.moved ? ' <span class="xs mu">(dipindah)</span>' : ""}<br><span class="sm mu">${s.type === "strength" ? (s.kind === "A" ? "Kaki & keseimbangan" : "Perut, pinggul, betis") : TYPES[s.type]}</span></span>
     <span class="r">${s.type === "strength" ? "" : `<span class="num" style="font-size:18px">${lg ? fmtKm(lg.distance) + '<span class="sm mu"> / ' + fmtKm(s.dist) + '</span>' : fmtKm(s.dist)}</span><span class="sm mu"> km</span>`}<br>${chip(st)}</span>
@@ -1129,7 +1129,7 @@ const NIGHT_TIPS = [
   "Habis lari: pendinginan, mandi, makan yang ada karbohidrat dan protein, lalu tetap tidur di jam biasa.",
   "Kalau sesi berat bikin susah tidur, coba mulai lebih awal atau bikin effort-nya lebih ringan."
 ];
-function nightTip(){ return `<details style="margin-top:10px;border-top:1px solid var(--line)"><summary>🌙 Tips lari malam habis kerja</summary><div class="bd"><ul class="clean">${NIGHT_TIPS.map(x => `<li>${x}</li>`).join("")}</ul></div></details>`; }
+function nightTip(){ return `<details style="margin-top:10px;border-top:1px solid var(--line)"><summary>Tips lari malam</summary><div class="bd"><ul class="clean">${NIGHT_TIPS.map(x => `<li>${x}</li>`).join("")}</ul></div></details>`; }
 const RACE_CHECK = [
   "Cek race guide 2027: jam start, cut-off, pos minum, rute resmi",
   "Ambil BIB / race pack",
@@ -1162,10 +1162,10 @@ function vHome(){
   ${false && tutMode === "banner" && !S.ui.tut ? `<div class="banner">${mascot("mascot-inline")}<div style="flex:1"><b>Tutorial baru dari Kiki</b><p class="sm mu">Sekarang ada tur per fitur dan tombol “?” di tiap halaman.</p><div class="btns" style="margin-top:8px"><button class="btn sm pri" data-act="tutStart" data-id="quick">Mulai (1 menit)</button><button class="btn sm ghost" data-act="tutBanner">Nanti aja</button></div></div></div>` : ""}
   ${hasSample ? `<div class="note info" style="margin-bottom:14px">Ini masih <b>contoh data</b>, bukan hasil lari asli kamu. <button class="link" data-act="clearSample">Hapus contoh data</button></div>` : ""}
   ${cockpit({days, w, wi, done, pct, next, goalSec, hello})}
-  ${persistentPain() ? `<div class="note bad" style="margin-bottom:14px">Kamu beberapa kali nyatet ada nyeri. Kurangi atau stop latihan dulu, dan coba konsultasi ke dokter atau fisioterapis kalau nggak membaik.</div>` : ""}
+  ${persistentPain() ? `<div class="note bad" style="margin-bottom:14px">Nyeri tercatat beberapa kali. Kurangi latihan, dan periksa ke dokter atau fisioterapis kalau nggak membaik.</div>` : ""}
   ${todayCard()}
   ${homeWeek(w, done, before)}
-  ${missed.length ? `<div class="note warn" style="margin-bottom:4px"><b>${missed.length} sesi kelewat.</b> Santai, nggak usah dikejar dan jangan dobel latihan. Lanjut ke sesi berikutnya aja, atau ulang minggu ini kalau badan butuh.
+  ${missed.length ? `<div class="note warn" style="margin-bottom:4px"><b>${missed.length} sesi kelewat</b> · jangan dikejar, lanjut ke sesi berikutnya
     <div class="btns" style="margin-top:8px">${missed.slice(0,3).map(s => `<button class="btn sm ghost" data-act="skip" data-id="${s.id}">Tandai skip: ${esc(s.title)}</button>`).join("")}</div></div>` : ""}
   ${homeNext(next)}
   ${homeBody()}
@@ -1175,12 +1175,14 @@ function vHome(){
 }
 
 /* ---------- Home visuals (v4.1): every section leads with a chart; text only labels it ---------- */
+/** Compact chart legend instead of an explanatory caption. */
+const lgd = (a = "Target", b = "Aktual") => `<span class="lgd" aria-hidden="true"><span><i class="lg-t"></i>${a}</span><span><i class="lg-a"></i>${b}</span></span>`;
 let VIZ_ID = 0;
 /** Horizontal bullet bar: filled = actual, track = plan, tick = plan end. */
-function bulletBar(actual, plan, {label = "", unit = "km", fmt = fmtKm} = {}){
+function bulletBar(actual, plan, {label = "", unit = "km", fmt = fmtKm, key = false} = {}){
   const max = Math.max(plan, actual, 0.001), a = Math.min(100, actual / max * 100), p = Math.min(100, plan / max * 100);
   const over = actual > plan && plan > 0;
-  return `<div class="bullet" role="img" aria-label="${esc(label)} ${fmt(actual)} dari ${fmt(plan)} ${unit}">
+  return `<div class="bullet${key ? " key" : ""}" role="img" aria-label="${esc(label)} ${fmt(actual)} dari ${fmt(plan)} ${unit}">
     <div class="bullet-v"><span class="num">${fmt(actual)}</span><span class="mu sm"> / ${fmt(plan)} ${unit}</span>${label ? `<span class="xs mu bullet-l">${esc(label)}</span>` : ""}</div>
     <div class="bullet-t"><i class="bullet-p" style="width:${p.toFixed(1)}%"></i><i class="bullet-a${over ? " over" : ""}" style="width:${a.toFixed(1)}%"></i><b style="left:${p.toFixed(1)}%"></b></div>
   </div>`;
@@ -1212,15 +1214,14 @@ function homeWeek(w, done, before){
   }).join("");
   return `<section class="sec" data-tour="week">
     <div class="sec-h"><h2>Week ${w.n}${before ? ` <span class="sm mu">(mulai ${fmtDay(w.start)})</span>` : ""}</h2><span class="sm mu">${fmtRange(w.start, w.end)}</span></div>
-    <div class="vglass wk-card"><div data-tour="week-stats">${bulletBar(done, w.total, {label:"km minggu ini"})}</div>
+    <div class="vglass wk-card"><div data-tour="week-stats">${bulletBar(done, w.total, {label:"km minggu ini", key:true})}</div>
     <div class="wk-days" role="group" aria-label="Sesi minggu ini">${cols}</div></div>
     <div class="wk-legend xs mu"><span><i class="lg done"></i>Selesai</span><span><i class="lg today"></i>Hari ini</span><span><i class="lg up"></i>Nanti</span><span><i class="lg missed"></i>Kelewat</span></div>
-    <p class="xs mu" style="margin-top:6px">${T(KIND_TERM[w.kind], KIND_LBL[w.kind])}: ${esc(w.focus)}</p>
   </section>`;
 }
 /** Workout berikutnya: distance as the figure, one primary action. */
 function homeNext(next){
-  if(!next) return `<section class="sec" data-tour="next"><div class="sec-h"><h2>Workout berikutnya</h2></div><p class="mu">Semua sesi udah lewat. Selamat, program selesai!</p></section>`;
+  if(!next) return `<section class="sec" data-tour="next"><div class="sec-h"><h2>Workout berikutnya</h2></div><p class="mu">Semua sesi udah lewat. Program selesai. Selamat.</p></section>`;
   return `<section class="sec" data-tour="next">
     <div class="sec-h"><h2>Workout berikutnya</h2><span class="sm mu">${fmtDay(next.date)}${next.time ? ", " + esc(next.time) : ""}</span></div>
     <button class="nextw vglass" data-act="openSess" data-id="${next.id}" style="--c:${tc(next.type)}" aria-label="${esc(next.title)}, ${fmtKm(next.dist)} km, buka detail">
@@ -1228,7 +1229,7 @@ function homeNext(next){
       <span class="nextw-t"><span class="nextw-ty"><i></i>${TYPES[next.type]}${next.night ? " · malam" : ""}</span><b>${esc(next.title)}</b><span class="sm mu nextw-d">${esc(next.desc)}</span></span>
     </button>
     ${next.night ? nightTip() : ""}
-    <div class="btns" style="margin-top:12px"><button class="btn pri" data-act="runStart" data-id="${next.id}" data-tour="timer-btn">${IC.play} Mulai timer</button><button class="btn" data-act="logSess" data-id="${next.id}">Catat</button>
+    <div class="btns" style="margin-top:12px">${typeof quickDoneBtn === "function" ? quickDoneBtn(next, "btn") : ""}<button class="btn pri" data-act="runStart" data-id="${next.id}" data-tour="timer-btn">${IC.play} Mulai timer</button><button class="btn" data-act="logSess" data-id="${next.id}">Catat</button>
       ${["locked","benchmark"].includes(next.type) ? `<button class="btn" data-act="openLocked" data-id="${next.id}">Workout screen</button>` : ""}</div>
   </section>`;
 }
@@ -1237,7 +1238,7 @@ function homeBody(opts = {}){
   const t = todayYmd(), dates = Array.from({length:14}, (_,i) => ymd(addDays(new Date(), i - 13)));
   const by = Object.fromEntries(S.checkins.filter(c => c.date >= dates[0] && c.date <= t).map(c => [c.date, c]));
   const n = Object.keys(by).length;
-  if(!n) return `<section class="sec"><div class="sec-h"><h2>Badan kamu</h2></div><div class="body-empty"><div class="body-ghost" aria-hidden="true">${Array.from({length:14}, () => "<i></i>").join("")}</div><p class="sm mu">Check-in 30 detik tiap hari, lalu tidur, energi, pegal, dan nyeri kamu tampil di sini sebagai grafik 14 hari.</p><button class="btn sm" data-act="nav" data-t="recovery">Check-in sekarang</button></div></section>`;
+  if(!n) return `<section class="sec"><div class="sec-h"><h2>Badan kamu</h2></div><div class="body-empty"><div class="body-ghost" aria-hidden="true">${Array.from({length:14}, () => "<i></i>").join("")}</div><p class="sm mu">Belum ada check-in</p><button class="btn sm" data-act="nav" data-t="recovery">Check-in sekarang</button></div></section>`;
   const rows = [["Tidur","sleep",false],["Energi","energy",false],["Pegal","soreness",true],["Nyeri","pain",true]];
   const today = by[t], rd = today ? readiness(today) : null, col = rd ? {ready:"var(--ok)", easy:"var(--warn)", rest:"var(--bad)"}[rd.st] : "var(--mu2)";
   const cell = (c, k, inv) => { if(!c) return `<i class="bc none"></i>`; const v = inv ? 6 - c[k] : c[k], bad = v <= 2; return `<i class="bc${bad ? " low" : ""}" style="height:${(v / 5 * 100).toFixed(0)}%"></i>`; };
@@ -1251,15 +1252,15 @@ function homeBody(opts = {}){
 /** Progres kamu: each number sits on its own mini chart. */
 function homeProgress(){
   const logs = S.logs;
-  if(!logs.length) return `<section class="sec" data-tour="progress"><div class="sec-h"><h2>Progres kamu</h2></div><p class="mu">Belum ada lari yang dicatat. Grafik di sini muncul sendiri setelah kamu catat lari pertama.</p><div class="btns" style="margin-top:10px"><button class="btn" data-act="newLog">Catat lari</button></div></section>`;
+  if(!logs.length) return `<section class="sec" data-tour="progress"><div class="sec-h"><h2>Progres kamu</h2></div><p class="mu">Belum ada lari</p><div class="btns" style="margin-top:10px"><button class="btn" data-act="newLog">Catat lari</button></div></section>`;
   const ci = curWeekIdx(), weeks = PLANW.slice(Math.max(0, ci - 7), ci + 1), wl = weeks.map(w => logsIn(w.start, w.end));
   const total = sum(logs, l => l.distance), longest = Math.max(...logs.map(l => l.distance));
   const cumW = []; { let s = sum(logs.filter(l => l.date < (weeks[0] || {}).start), l => l.distance); wl.forEach(a => { s += sum(a, l => l.distance); cumW.push(s); }); }
   const paces = [...logs].filter(l => l.distance >= 1 && paceOf(l)).sort((a,b) => a.date.localeCompare(b.date)).map(paceOf), best = paces.length ? Math.min(...paces) : null;
   const bst = badgeStats(), nb = BADGES.filter(x => x.ok(bst)).length;
   const full = weeks.map(w => w.sessions.length && w.sessions.every(s => sState(s) === "done") ? 1 : 0);
-  const tile = (cap, val, unit, chart, act, t) => `<button class="stile vglass" data-act="nav" data-t="${act}"${t ? ` aria-label="${esc(t)}"` : ""}><span class="xs mu stile-c">${cap}</span><span class="num stile-v">${val}<span class="mu"> ${unit}</span></span>${chart}</button>`;
-  return `<section class="sec" data-tour="progress"><div class="sec-h"><h2>Progres kamu</h2><span class="sm mu">8 minggu terakhir</span></div>
+  const tile = (cap, val, unit, chart, act, t) => `<button class="stile vglass" data-act="nav" data-t="${act}"${t ? ` aria-label="${esc(t)}"` : ""}><span class="stile-c">${cap}</span><span class="num stile-v">${val}<span class="mu"> ${unit}</span></span></button>`;   // numbers only: no mini charts on stat tiles
+  return `<section class="sec" data-tour="progress"><div class="sec-h"><h2>Progres kamu</h2></div>
     <div class="stiles">
       ${tile("Total km", fmtKm(total), "km", miniLine(cumW, {area:true}), "log")}
       ${tile("Kali lari", logs.length, "lari", miniBars(wl.map(a => a.length), {hi:wl.length - 1}), "log")}
@@ -1278,7 +1279,7 @@ function homeConsistency(wi){
     const cells = [0,1,2,3,4,5,6].map(i => {
       const dy = ymd(addDays(d0, i)), lg = S.logs.filter(l => l.date === dy), plan = itemsOnDate(dy).filter(s => s.type !== "strength");
       let cls = "", sty = "";
-      if(lg.length) { cls = "run"; sty = `--c:${tc(lg[0].type)}`; }
+      if(lg.length) { cls = "run"; sty = `--o:${(0.35 + 0.65 * Math.min(1, sum(lg, l => l.distance) / 14)).toFixed(2)}`; }
       else if(plan.length && dy < t && !plan.every(s => sState(s) === "skip")) cls = "miss";
       else if(plan.length && dy >= t) cls = "plan";
       return `<i class="hc ${cls}${dy === t ? " now" : ""}" style="${sty}" title="${fmtDay(dy)}${lg.length ? ": " + fmtKm(sum(lg, l => l.distance)) + " km" : plan.length ? ": " + esc(plan[0].title) : ""}"></i>`;
@@ -1288,7 +1289,7 @@ function homeConsistency(wi){
   const ran = weeks.reduce((n, w) => n + new Set(logsIn(w.start, w.end).map(l => l.date)).size, 0);
   return `<section class="sec"><div class="sec-h"><h2>Konsistensi</h2><span class="sm mu">${ran} hari lari · 8 minggu</span></div>
     <button class="heat vglass" data-act="nav" data-t="cal" aria-label="Kalender 8 minggu terakhir: ${ran} hari lari. Buka jadwal">${rows}</button>
-    <div class="wk-legend xs mu"><span><i class="lg hrun"></i>Lari</span><span><i class="lg hmiss"></i>Kelewat</span><span><i class="lg hplan"></i>Rencana</span></div>
+    <div class="wk-legend xs mu"><span><i class="lg hrun"></i>Lari (makin terang, makin jauh)</span><span><i class="lg hmiss"></i>Kelewat</span><span><i class="lg hplan"></i>Rencana</span></div>
   </section>`;
 }
 /** Target bulan ini: two bullet bars, tap for the review. */
@@ -1299,7 +1300,7 @@ function homeBlock(b, bs){
       <span class="sm" style="font-weight:600;display:block;margin-bottom:10px">${BLOCK_INFO[b].goal}</span>
       ${bulletBar(bs.doneRuns, bs.plannedRuns, {label:"sesi lari", unit:"sesi", fmt:v => String(Math.round(v))})}
       ${bulletBar(bs.km, bs.plannedKm, {label:"km"})}
-      <span class="xs mu" style="display:block;margin-top:8px">${BLOCK_INFO[b].label} · ketuk buat review lengkap →</span>
+      <span class="xs mu" style="display:block;margin-top:8px">${BLOCK_INFO[b].label} · Review →</span>
     </button></section>`;
 }
 function logRow(l, maxKm){
@@ -1316,7 +1317,7 @@ function logRow(l, maxKm){
 function vCal(){
   const mode = S.ui.calMode;
   return `${storageNote()}<div class="titlerow"><h1>Jadwal latihan</h1>${helpBtn("cal")}</div>
-  <p class="lead">31 minggu, 3 kali lari seminggu. Senin–Jumat kamu kerja, jadi lari weekday selalu malam habis kerja (🌙). Weekend 2 kali lari. Rabu malam dikosongin.</p>
+  
   <div class="toolbar"><div class="seg" style="width:220px" data-tour="cal-mode"><button class="${mode==='month'?'on':''}" data-act="calMode" data-m="month">Bulan</button><button class="${mode==='week'?'on':''}" data-act="calMode" data-m="week">Per minggu</button></div>
   ${mode === "week" ? `<button class="btn sm ghost" data-act="jumpWeek">Ke minggu ini</button>` : ""}</div>
   <div data-tour="cal">${mode === "month" ? calMonth() : calWeeks()}</div>
@@ -1361,7 +1362,7 @@ function sessBlock(s){
   return `<div style="padding:10px 0 14px;border-bottom:1px solid var(--line)">
     <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">${pill(s.type)}${chip(st)}</div>
     <h3 style="font-size:18px;margin:8px 0 4px">${esc(s.title)}${s.type !== "strength" ? ` <span class="num mu">${fmtKm(s.dist)} km</span>` : ""}</h3>
-    ${s.time ? `<p class="sm" style="margin-bottom:2px">${s.night ? "🌙 Malam habis kerja, " : ""}jam ${esc(s.time)}</p>` : ""}<p class="sm mu">${esc(s.desc)}</p>
+    ${s.time ? `<p class="sm" style="margin-bottom:2px">${s.night ? "Malam habis kerja, " : ""}jam ${esc(s.time)}</p>` : ""}<p class="sm mu">${esc(s.desc)}</p>
     ${s.moved ? `<p class="xs mu" style="margin-top:4px">Dipindah dari ${fmtDay(s.origDate)}.</p>` : ""}
     ${lg ? `<div class="kv" style="margin-top:8px"><span>Rencana → aktual</span><span class="tab">${fmtKm(s.dist)} km → <b>${fmtKm(lg.distance)} km</b></span></div><div class="kv"><span>Waktu / pace</span><span class="tab">${fmtDur(lg.duration)} / ${fmtPace(paceOf(lg))}</span></div>` : ""}
     ${sr ? `<div class="kv" style="margin-top:8px"><span>Dicatat</span><span>${sr.sets} set, ${sr.done.length} gerakan</span></div>` : ""}
@@ -1408,14 +1409,13 @@ function vLog(){
   else ls.sort((a,b) => b.date.localeCompare(a.date));
   const months = [...new Set(S.logs.map(l => l.date.slice(0,7)))].sort().reverse();
   return `${storageNote()}<div class="sec-h" style="margin-bottom:4px;align-items:center"><h1>Log Lari</h1><span class="btns">${helpBtn("log")}<button class="btn pri" data-act="newLog" data-tour="log-new">Catat lari</button></span></div>
-  <p class="lead">Isi manual dari jam atau aplikasi lari kamu, atau import file-nya. App ini nggak bisa rekam GPS sendiri.</p>
+  
   ${logSummary()}
-  <div class="note info" style="margin:12px 0" data-tour="import">
-    <b>Import dari Strava, Huawei, atau jam lari</b>
-    <p class="sm" style="margin-top:4px">Pilih file ${T("GPX / TCX","GPX atau TCX")} (1 lari), atau file <b>activities.csv</b> dari export Strava (banyak lari sekaligus). Lari yang tanggalnya pas sama jadwal otomatis dicocokin.</p>
+  <details class="imp" data-tour="import"><summary>Import dari Strava, Huawei, atau jam lari</summary>
+    <p class="sm mu" style="margin-top:4px">File ${T("GPX / TCX","GPX atau TCX")} (1 lari) atau <b>activities.csv</b> dari export Strava. Lari yang tanggalnya pas sama jadwal dicocokin otomatis.</p>
     <div style="margin-top:8px"><input type="file" id="act-file" accept=".gpx,.tcx,.csv,application/gpx+xml,text/csv,text/xml" multiple aria-label="Pilih file lari"></div>
     <button class="link sm" style="margin-top:8px" data-act="importHelp" data-tour="import-help">Cara ambil file-nya</button>
-  </div>
+  </details>
   <div class="g2" style="margin-top:12px" data-tour="log-filter">
     <div class="field"><label for="f-month">Bulan</label><select id="f-month" data-filter="month"><option value="">Semua</option>${months.map(m => `<option value="${m}" ${f.month===m?'selected':''}>${BULAN_F[+m.slice(5)-1]} ${m.slice(0,4)}</option>`).join("")}</select></div>
     <div class="field"><label for="f-type">Jenis</label><select id="f-type" data-filter="type"><option value="">Semua</option>${RUN_TYPES.map(t => `<option value="${t}" ${f.type===t?'selected':''}>${TYPES[t]}</option>`).join("")}</select></div>
@@ -1426,6 +1426,8 @@ function vLog(){
   ${ls.length ? `<div class="rows" data-tour="log-list">${ls.map(l => logRow(l, Math.max(...ls.map(x => x.distance)))).join("")}</div>` : `<p class="mu" style="padding:20px 0">${S.logs.length ? "Nggak ada lari yang cocok sama filter ini." : "Belum ada lari. Yuk catat sesi pertama kamu."}</p>`}`;
 }
 
+/** Share of km by session type, in neutral steps by rank (the largest share is brightest). */
+const MIX_STEPS = ["var(--tx)", "var(--mu)", "var(--mu2)", "color-mix(in srgb, var(--mu2) 60%, var(--s2))", "color-mix(in srgb, var(--mu2) 35%, var(--s2))", "var(--s2)"];
 /** Aktivitas: totals, 12-week km bars and the session-type mix, all from logged runs. */
 function logSummary(){
   const ls = S.logs; if(!ls.length) return "";
@@ -1435,10 +1437,10 @@ function logSummary(){
   const tot = sum(ls, l => l.distance), mix = Object.entries(by).sort((a,b) => b[1] - a[1]);
   return `<section class="vchart vglass" aria-label="Ringkasan lari">
     <div class="vstat-row"><div class="vstat"><span>Total</span><b>${fmtKm(tot)}<span class="mu" style="font-size:12px"> km</span></b></div><div class="vstat"><span>Lari</span><b>${ls.length}</b></div><div class="vstat"><span>Pace</span><b>${avgPace(ls) ? fmtPace(avgPace(ls), false) : "–"}</b></div></div>
-    <h3>Km per minggu</h3><p class="xs mu">Abu-abu = target, berwarna = aktual</p>${chartBars(wk, {h:120, hi:wk.length - 1})}
+    <h3>Km per minggu</h3>${lgd()}${chartBars(wk, {h:120, hi:wk.length - 1})}
     <h3 style="margin-top:14px">Jenis lari</h3>
-    <div class="mix" role="img" aria-label="${mix.map(([t,v]) => TYPES[t] + " " + Math.round(v / tot * 100) + " persen").join(", ")}">${mix.map(([t,v]) => `<i style="--c:${tc(t)};flex:${v.toFixed(2)}"></i>`).join("")}</div>
-    <div class="mix-legend">${mix.map(([t,v]) => `<span><i style="--c:${tc(t)}"></i>${TYPES[t]} ${Math.round(v / tot * 100)}%</span>`).join("")}</div>
+    <div class="mix" role="img" aria-label="${mix.map(([t,v]) => TYPES[t] + " " + Math.round(v / tot * 100) + " persen").join(", ")}">${mix.map(([t,v], i) => `<i style="--c:${MIX_STEPS[Math.min(i, MIX_STEPS.length - 1)]};flex:${v.toFixed(2)}"></i>`).join("")}</div>
+    <div class="mix-legend">${mix.map(([t,v], i) => `<span><i style="--c:${MIX_STEPS[Math.min(i, MIX_STEPS.length - 1)]}"></i>${TYPES[t]} <b class="num">${Math.round(v / tot * 100)}%</b></span>`).join("")}</div>
   </section>`;
 }
 
@@ -1492,7 +1494,7 @@ function reviewOf(b){
   if(s.pain) need.push(`Ada ${s.pain} check-in dengan nyeri tinggi. Jangan naik beban dulu.`);
   let decision;
   if(!s.ended) decision = `Bulan ini masih jalan sampai ${fmtD(s.z)}. Saran lanjut atau ulang muncul setelah bulannya selesai.`;
-  else if(s.runRate >= 0.75 && s.kmRate >= 0.75 && !s.pain && (s.rec === null || s.rec >= 3)) decision = "Lanjut! Data kamu aman buat naik ke beban bulan depan.";
+  else if(s.runRate >= 0.75 && s.kmRate >= 0.75 && !s.pain && (s.rec === null || s.rec >= 3)) decision = "Lanjut. Data kamu aman buat naik ke beban bulan depan.";
   else decision = "Ulang dulu beban minggu terakhir (atau turunin dikit) sebelum naik. Jangan naik cuma karena kalender bilang begitu.";
   const nextGoal = b < 7 ? BLOCK_INFO[b+1].goal : "Race 21,1 km dengan badan segar.";
   const focus = (s.runRate < 0.75 ? "Fokus lari 3 kali seminggu dulu. " : "") + (s.pain ? "Utamain pulih dari nyeri. " : "") + nextGoal;
@@ -1507,7 +1509,7 @@ function chartBars(items, {h=150, fmt = v => v, hi=-1} = {}){
   items.forEach((it,i) => {
     const x = pl + i*bw, ha = ih*(it.a||0)/max, hb = ih*(it.b||0)/max;
     if(it.a) s += `<rect x="${x+bw*.12}" y="${pt+ih-ha}" width="${bw*.76}" height="${ha}" class="bp"/>`;
-    if(it.b) s += `<rect x="${x+bw*.26}" y="${pt+ih-hb}" width="${bw*.48}" height="${hb}" class="ba" ${i===hi?'stroke="var(--tx)"':''}/>`;
+    if(it.b) s += `<rect x="${x+bw*.26}" y="${pt+ih-hb}" width="${bw*.48}" height="${hb}" rx="2" class="ba${i===hi?' hi':''}"/>`;
     if(i % step === 0) s += `<text x="${x+bw/2}" y="${H-3}" class="ax" text-anchor="middle">${esc(it.l)}</text>`;
   });
   return s + "</svg>";
@@ -1534,7 +1536,7 @@ function vReview(){
   const el = PLANW.map(w => ({l:"W"+w.n, a:0, b:sum(logsIn(w.start,w.end), l => l.elev||0)}));
   const cons = BLOCK_INFO.map((bi,i) => { const x = blockStats(i); return {l:bi.label.slice(0,3), a:x.plannedRuns, b:x.doneRuns}; });
   return `${storageNote()}<div class="titlerow"><h1>Review bulanan</h1>${helpBtn("review")}</div>
-  <p class="lead">Dibuat otomatis dari lari yang kamu catat. Aku nggak ngarang angka. Kalau datanya kurang, aku bilang belum bisa dibandingin.</p>
+  
   <div class="seg" style="margin:14px 0" data-tour="review">${BLOCK_INFO.map((bi,i) => `<button class="${i===b?'on':''}" data-act="revBlock" data-b="${i}">${bi.label.slice(0,3)}</button>`).join("")}</div>
   <h2>Bulan ke-${b+1}: ${BLOCK_INFO[b].label}</h2>
   <p class="sm mu" style="margin:2px 0 8px">Week ${s.ws[0].n}–${s.ws[s.ws.length-1].n}, ${fmtRange(s.a, s.z)}. Target: ${BLOCK_INFO[b].goal}</p>
@@ -1564,11 +1566,11 @@ function vReview(){
     ${[["best","Apa yang paling oke bulan ini?"],["hard","Apa yang paling berat, atau yang bikin jadwal berantakan?"],["rec","Badan cukup pulih sebelum sesi berikutnya?"],["fix","Satu hal yang mau dibenahi bulan depan?"]].map(([k,q]) => `<div class="field"><label for="rv-${k}">${q}</label><textarea id="rv-${k}">${esc(notes[k]||"")}</textarea></div>`).join("")}
     <button class="btn" data-act="saveReview" data-b="${b}">Simpan catatan</button></div>
   <div class="sec" data-tour="rev-charts"><div class="sec-h"><h2>Grafik</h2></div>
-    <div class="vchart vglass"><h3>Km per minggu</h3><p class="xs mu">Abu-abu = target, berwarna = aktual</p>${chartBars(wk, {hi:curWeekIdx()})}</div>
+    <div class="vchart vglass"><h3>Km per minggu</h3>${lgd()}${chartBars(wk, {hi:curWeekIdx()})}</div>
     <div class="vchart vglass"><h3>Pace rata-rata per minggu</h3><p class="xs mu">Makin ke atas = makin cepat (${unitLbl()})</p>${chartLine(pacePts, {fmt: v => fmtPace(v, false)})}</div>
-    <div class="vchart vglass"><h3>Long run Sabtu</h3><p class="xs mu">Abu-abu = rencana, berwarna = aktual (km)</p>${chartBars(lr)}</div>
+    <div class="vchart vglass"><h3>Long run Sabtu</h3>${lgd("Rencana")}${chartBars(lr)}</div>
     <div class="vchart vglass"><h3>Tanjakan per minggu</h3><p class="xs mu">Meter</p>${el.some(x => x.b) ? chartBars(el) : `<p class="sm mu" style="padding:10px 0">Belum ada tanjakan yang dicatat.</p>`}</div>
-    <div class="vchart vglass"><h3>Seberapa rutin, per bulan</h3><p class="xs mu">Abu-abu = sesi direncanakan, berwarna = beres</p>${chartBars(cons)}</div>
+    <div class="vchart vglass"><h3>Seberapa rutin, per bulan</h3>${lgd("Direncanakan", "Beres")}${chartBars(cons)}</div>
   </div>`;
 }
 
@@ -1580,7 +1582,7 @@ function acctBox(){
   if(st === "off") return `<div class="acct" style="align-items:flex-start">${mascot("mascot-inline")}<div class="who"><b>Mode lokal</b><p class="sm mu" style="margin-top:2px">Data tersimpan di perangkat ini aja. Login Google belum disetel di app ini (pengelola app perlu ngisi konfigurasi Firebase, lihat docs/FIREBASE_SETUP.md). Semua fitur latihan tetap jalan.</p></div></div>`;
   if(!u){
     const busy = st === "init" || st === "loading" || st === "signingin";
-    return `<div class="acct" style="align-items:flex-start;flex-wrap:wrap">${mascot("mascot-inline")}<div class="who"><b>Belum masuk</b><p class="sm mu" style="margin-top:2px">Masuk pakai akun Google supaya data ke-sync, aman kalau ganti HP, dan bisa latihan bareng teman. Tanpa masuk, data cuma di perangkat ini.</p>
+    return `<div class="acct" style="align-items:flex-start;flex-wrap:wrap">${mascot("mascot-inline")}<div class="who"><b>Belum masuk</b><p class="sm mu" style="margin-top:2px">Simpan data di akun dan latihan bareng teman</p>
       <p class="xs js-sync" style="margin-top:6px">${syncLine()}</p>
       <div class="acct-actions"><button class="gbtn" data-act="signIn" ${busy ? "disabled" : ""}>${G_LOGO}${st === "signingin" ? "Lagi masuk..." : "Masuk dengan Google"}</button></div>
       ${CLOUD.errDetail ? `<div class="note warn" style="margin-top:10px"><p class="sm">${esc(errText(CLOUD.err))}</p><p class="xs mu" style="margin-top:6px;word-break:break-word">Detail teknis: <code id="err-detail">${esc(CLOUD.errDetail)}</code></p><button class="btn sm" style="margin-top:6px" data-act="copyErr">Salin detail</button></div>` : ""}</div></div>`;
@@ -1732,7 +1734,7 @@ function vLocked(){
     ${c.kind === "timeattack" ? `<p class="sm" style="margin-top:8px">${T("Time Attack")}: <b>${fmtKm(c.taKm)} km</b>${c.taTarget ? `, target <b>${fmtDur(c.taTarget)}</b> (${fmtPace(c.taTarget / c.taKm)})` : ""}</p>` : ""}
     <div data-tour="locked-steps"><h3 style="margin-top:16px">Urutannya</h3>${struct}</div>
     <h3 style="margin-top:16px">Hasil</h3>
-    <p class="sm" style="margin-top:4px">${lg ? (diff !== null ? (Math.abs(diff) <= 10 ? `Pace kejaga! Cuma beda ${Math.round(Math.abs(diff)*U())} detik dari target.` : diff < 0 ? `${Math.round(-diff*U())} detik ${unitLbl()} lebih cepat dari target. Lebih cepat bukan berarti lebih bagus, tujuan sesi ini jaga pace.` : `${Math.round(diff*U())} detik ${unitLbl()} lebih lambat dari target. Nggak apa-apa kalau badan belum siap. Turunin target berikutnya kalau perlu.`) : `Tercatat ${fmtKm(lg.distance)} km, ${fmtDur(lg.duration)}. Set target pace dulu biar bisa dibandingin.`) + (lg.rpe ? ` RPE ${lg.rpe}.` : "") : "Belum ada hasil. Catat setelah sesi beres."}</p>
+    <p class="sm" style="margin-top:4px">${lg ? (diff !== null ? (Math.abs(diff) <= 10 ? `Pace kejaga. Cuma beda ${Math.round(Math.abs(diff)*U())} detik dari target.` : diff < 0 ? `${Math.round(-diff*U())} detik ${unitLbl()} lebih cepat dari target. Lebih cepat bukan berarti lebih bagus, tujuan sesi ini jaga pace.` : `${Math.round(diff*U())} detik ${unitLbl()} lebih lambat dari target. Nggak apa-apa kalau badan belum siap. Turunin target berikutnya kalau perlu.`) : `Tercatat ${fmtKm(lg.distance)} km, ${fmtDur(lg.duration)}. Set target pace dulu biar bisa dibandingin.`) + (lg.rpe ? ` RPE ${lg.rpe}.` : "") : "Belum ada hasil. Catat setelah sesi beres."}</p>
     <div class="btns" style="margin-top:12px" data-tour="locked-actions">
       ${lg ? `<button class="btn" data-act="editLog" data-id="${lg.id}">Edit hasil</button>` : `<button class="btn pri" data-act="runStart" data-id="${s.id}">▶ Mulai timer</button><button class="btn" data-act="logSess" data-id="${s.id}">Catat hasil</button>`}
       <button class="btn" data-act="lockCfg" data-id="${s.id}">Atur target</button>
@@ -1756,7 +1758,7 @@ function vElev(){
   const data = allSessions().filter(s => s.type === "elevation").map(s => ({s, lg:logFor(s.id), tgt:(S.elev[s.id]||{}).target || null}));
   return `${storageNote()}${pageHead("Elevation", `Sebulan sekali, latihan tanjakan (${T("Elevation","elevation")}) gantiin long run Sabtu. Bukan sesi tambahan. Santai aja, jalan cepat di tanjakan boleh, dan jangan balapan di tiap bukit.`)}
   <div class="note" style="margin:12px 0">Pemanasan 10–15 menit, naik tanjakan 4–6 kali @1–3 menit di RPE 5–6, turun pelan dengan langkah pendek, pendinginan 10 menit. Baru mulai? 3–4 kali dulu.</div>
-  <div data-tour="elev-chart"><h3 style="margin-top:14px">Tanjakan: target vs aktual</h3><p class="xs mu">Abu-abu = target, berwarna = aktual (meter)</p>
+  <div data-tour="elev-chart"><h3 style="margin-top:14px">Tanjakan: target vs aktual</h3>${lgd()}
   ${data.some(d => d.tgt || (d.lg && d.lg.elev)) ? chartBars(data.map(d => ({l:"W"+d.s.n, a:d.tgt||0, b:d.lg ? (d.lg.elev||0) : 0}))) : `<p class="sm mu" style="padding:10px 0">Grafik muncul setelah kamu set target atau nyatet tanjakan.</p>`}</div>
   <div class="rows" style="margin-top:12px" data-tour="elev-list">${data.map(({s,lg,tgt}) => `<div style="padding:14px 0;border-bottom:1px solid var(--line)">
     <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><h3>Week ${s.n}: ${esc(s.title)}</h3>${chip(sState(s))}</div>
@@ -2319,7 +2321,7 @@ function runFinish(){
   clearInterval(runTick); lockScreen(false); beep(3, true);
   RUN = null; S.ui.run = null; persist();
   if(s) openLogModal({date:todayYmd(), type:s.type, sessionId:s.id, distance:s.dist, duration:secs > 30 ? secs : null}); else render(true);
-  toast("Mantap! Cek jaraknya, terus simpan.");
+  toast("Mantap. Cek jaraknya, terus simpan.");
 }
 function runOverlay(){
   const s = sessById(RUN.id), st = RUN.steps[RUN.i], nx = RUN.steps[RUN.i+1], el = runActive() - RUN.stepAt, paused = !!RUN.pausedAt;
@@ -2363,7 +2365,7 @@ const BADGES = [
   {id:"bench",ic:"BM",n:"Benchmark",d:"Beresin benchmark pertama",ok:s => s.bench >= 1},
   {id:"str10",ic:"10×",n:"Kuat",d:"10 sesi strength",ok:s => s.str >= 10},
   {id:"ci7",ic:"7×",n:"Rajin check-in",d:"7 kali check-in",ok:s => s.ci >= 7},
-  {id:"hm",ic:"21,1",n:"Half Marathon!",d:"Finish 21,1 km di race day",ok:s => s.race}
+  {id:"hm",ic:"21,1",n:"Half Marathon",d:"Finish 21,1 km di race day",ok:s => s.race}
 ];
 function badgeStats(){
   const ls = S.logs.filter(l => !l.sample), real = id => ls.find(l => l.sessionId === id), ss = allSessions();
@@ -2380,17 +2382,17 @@ function checkBadges(){
   const got = BADGES.filter(b => b.ok(badgeStats())).map(b => b.id);
   if(!Array.isArray(S.badges)){ S.badges = got; return; }
   const nw = got.filter(id => !S.badges.includes(id)); S.badges = got;
-  if(nw.length){ const b = BADGES.find(x => x.id === nw[0]); setTimeout(() => toast(`🏅 Badge baru: ${b.n}!`), 500); }
+  if(nw.length){ const b = BADGES.find(x => x.id === nw[0]); setTimeout(() => toast(`Badge baru: ${b.n}`), 500); }
 }
 function medal(t, ok){ return `<svg viewBox="0 0 48 56" width="44" height="52" aria-hidden="true"><path d="M14 2h8l4 14h-8zM34 2h-8l-4 14h8z" fill="${ok ? 'var(--blue)' : 'var(--s2)'}"/><circle cx="24" cy="34" r="18" fill="${ok ? 'var(--acc)' : 'var(--s2)'}" stroke="${ok ? 'var(--acc-tx)' : 'var(--line)'}" stroke-width="2"/><text x="24" y="38.5" text-anchor="middle" font-size="${t.length > 3 ? 10 : 12.5}" font-weight="800" font-family="Archivo,system-ui,sans-serif" fill="${ok ? '#131517' : 'var(--mu)'}">${esc(t)}</text></svg>`; }
 function badgesSection(){
   const st = badgeStats(), got = BADGES.filter(b => b.ok(st));
   return `<div class="sec" data-tour="goal-badges"><div class="sec-h"><h2>Badge</h2><span class="sm mu">${got.length}/${BADGES.length}</span></div>
-    <p class="sm" style="margin-bottom:12px">🔥 Streak sekarang: <b>${st.streak}</b> minggu lengkap berturut-turut. Terbaik: <b>${st.bestStreak}</b>.</p>
+    <p class="sm" style="margin-bottom:12px">Streak sekarang: <b>${st.streak}</b> minggu lengkap berturut-turut. Terbaik: <b>${st.bestStreak}</b>.</p>
     <div class="badges">${BADGES.map(b => { const ok = b.ok(st); return `<div class="badge ${ok ? 'on' : ''}">${medal(b.ic, ok)}<b>${esc(b.n)}</b><span>${esc(b.d)}</span></div>`; }).join("")}</div>
     <p class="xs mu" style="margin-top:10px">Contoh data nggak dihitung. Minggu lengkap = 3 lari terjadwal beres.</p></div>`;
 }
-function streakLine(){ const st = badgeStats(), n = BADGES.filter(b => b.ok(st)).length; return `<p class="sm" style="margin-top:10px">🔥 Streak: <b>${st.streak} minggu lengkap</b>. <button class="link sm" data-act="nav" data-t="goals">Badge ${n}/${BADGES.length}</button></p>`; }
+function streakLine(){ const st = badgeStats(), n = BADGES.filter(b => b.ok(st)).length; return `<p class="sm" style="margin-top:10px">Streak: <b>${st.streak} minggu lengkap</b>. <button class="link sm" data-act="nav" data-t="goals">Badge ${n}/${BADGES.length}</button></p>`; }
 
 /* ============ Race plan ============ */
 const RP_NOTES = {1:"Mulai pelan. Jangan ikut rombongan yang kecepetan.", 6:"Cari ritme stabil. Minum di pos sesuai kebutuhan.", 11:"Cek kaki, napas, tenaga. Ambil makan/minum yang udah dilatih.", 16:"Jaga effort. Boleh selingi jalan kalau udah pernah dicoba.", 19:"Satu km demi satu km. Tambah effort cuma kalau masih kuat."};
@@ -2439,6 +2441,24 @@ function mShoe(){
 
 
 /* ---------- Dashboard cockpit (v4) ---------- */
+/** The race route: week 1 to race day drawn as a course. Completed weeks are solid dots, you are the accent marker. */
+function raceRoute(cur){
+  const n = PLANW.length, W = 340, H = 76, x0 = 10, x1 = W - 22;
+  const X = i => x0 + i * (x1 - x0) / (n - 1), Y = i => 34 + Math.sin(i * 0.55) * 9 + Math.sin(i * 0.17) * 6;
+  const pts = PLANW.map((_, i) => [X(i), Y(i)]);
+  const path = a => a.map(([x, y], i) => (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ");
+  const ratio = w => Math.min(1, sum(logsIn(w.start, w.end).filter(l => !l.sample), l => l.distance) / w.total);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Rute latihan: minggu ${cur + 1} dari ${n} menuju race day">`;
+  s += `<path d="${path(pts)}" fill="none" stroke="var(--line2)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+  s += `<path d="${path(pts.slice(0, cur + 1))}" fill="none" stroke="var(--tx)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+  PLANW.forEach((w, i) => { if(i >= cur || i === n - 1) return; const r = ratio(w); s += `<circle cx="${X(i).toFixed(1)}" cy="${Y(i).toFixed(1)}" r="${r >= .8 ? 3 : 2.2}" fill="${r >= .8 ? "var(--tx)" : r > 0 ? "var(--mu2)" : "var(--bg)"}" stroke="${r > 0 ? "none" : "var(--mu2)"}" stroke-width="1"/>`; });
+  const [fx, fy] = pts[n - 1];
+  s += `<g transform="translate(${fx.toFixed(1)} ${fy.toFixed(1)})"><line x1="0" y1="0" x2="0" y2="-20" stroke="var(--tx)" stroke-width="1.5"/><rect x="0" y="-20" width="12" height="8" fill="var(--tx)"/><rect x="0" y="-20" width="4" height="4" fill="var(--bg)"/><rect x="8" y="-20" width="4" height="4" fill="var(--bg)"/><rect x="4" y="-16" width="4" height="4" fill="var(--bg)"/><circle r="3.5" fill="var(--tx)"/></g>`;
+  const [cx, cy] = pts[cur];
+  s += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="7" fill="var(--acc)"/><circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="2.6" fill="var(--on-acc)"/>`;
+  [0, 4, 8, 12, 16, 20, 24, 28].forEach((i, b) => { if(i < n) s += `<text x="${X(i).toFixed(1)}" y="${H - 4}" font-size="9" fill="var(--mu2)" text-anchor="${i ? "middle" : "start"}" font-family="Inter,system-ui,sans-serif">${BLOCK_INFO[b].label.slice(0, 3)}</text>`; });
+  return s + `</svg>`;
+}
 function weekVolume(n = 8){
   const ci = curWeekIdx(), from = Math.max(0, ci - n + 1);
   return PLANW.slice(from, ci + 1).map(w => ({l:"W" + w.n, a:w.total, b:+sum(logsIn(w.start, w.end).filter(l => !l.sample), l => l.distance).toFixed(1)}));
@@ -2448,7 +2468,7 @@ function sparkPace(){
   if(pts.length < 3) return `<p class="sm mu">Butuh minimal 3 lari dengan waktu buat grafik pace.</p>`;
   const W = 300, H = 56, lo = Math.min(...pts) - 5, hi = Math.max(...pts) + 5, X = i => 4 + i * (W - 8) / (pts.length - 1), Y = v => 6 + (H - 12) * (v - lo) / (hi - lo);
   const d = pts.map((v,i) => `${i ? "L" : "M"}${X(i).toFixed(1)} ${Y(v).toFixed(1)}`).join(" ");
-  return `<svg class="spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="Pace ${pts.length} lari terakhir, makin atas makin cepat"><defs><linearGradient id="spk" x1="0" x2="1"><stop offset="0" stop-color="#9673FF"/><stop offset="1" stop-color="#79E5DE"/></linearGradient></defs><path d="${d}" fill="none" stroke="url(#spk)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${pts.map((v,i) => i === pts.length - 1 ? `<circle cx="${X(i)}" cy="${Y(v)}" r="3.5" fill="#79E5DE"/>` : "").join("")}</svg><p class="xs mu">Terakhir ${fmtPace(pts[pts.length-1])} · terbaik dari ${pts.length} lari ${fmtPace(Math.min(...pts))}</p>`;
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="Pace ${pts.length} lari terakhir, makin atas makin cepat"><path d="${d}" fill="none" stroke="var(--tx)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>${pts.map((v,i) => i === pts.length - 1 ? `<circle cx="${X(i)}" cy="${Y(v)}" r="3.5" fill="var(--acc)"/>` : "").join("")}</svg><p class="xs mu">Terakhir ${fmtPace(pts[pts.length-1])} · terbaik dari ${pts.length} lari ${fmtPace(Math.min(...pts))}</p>`;
 }
 function todayReadiness(){
   const c = S.checkins.find(x => x.date === todayYmd() && !x.sample);
@@ -2473,22 +2493,16 @@ function cockpit({days, w, wi, done, pct, next, goalSec, hello}){
   const recent = [...S.logs].filter(l => !l.sample).sort((a,b) => b.date.localeCompare(a.date)).slice(0,3);
   return `<div class="cockpit">
   <section class="hero-card glass holo-edge" data-tour="hero" data-reveal>
-    <div class="hero-top">${u ? avatarImg(u.photoURL, u.displayName || u.email) : WRI_BRAND.mark({size:34})}<div class="who"><p class="sm mu">${hello}</p><p class="xs mu">${esc(KIND_LBL[w.kind])} · Week ${w.n}</p></div>${todayReadiness()}${helpBtn("home")}</div>
-    <div class="hero-count"><span class="big num" data-roll="${Math.max(0, days)}">${Math.max(0, days)}</span><span class="cap"><b>${days > 0 ? "hari lagi" : days === 0 ? "Hari ini race day!" : "Race udah lewat"}</b><br><span class="mu">ke ${esc(ev.name)}</span></span></div>
+    <div class="hero-top"><div class="who"><p class="sm mu">Week ${w.n} dari ${PLANW.length} · ${esc(KIND_LBL[w.kind])}</p></div>${todayReadiness()}${helpBtn("home")}</div>
+    <div class="hero-count"><span class="big num" data-roll="${Math.max(0, days)}">${Math.max(0, days)}</span><span class="cap"><b>${days > 0 ? "hari lagi" : days === 0 ? "Race day" : "Race udah lewat"}</b><br><span class="mu">ke ${esc(ev.name)}</span></span></div>
     <div class="meta" style="display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:12px;font-size:14px"><span><b>${fmtDay(ev.eventDate)} ${parseYmd(ev.eventDate).getFullYear()}</b></span><span><b>${fmtKm(ev.distanceKm)} km</b></span>${evGoal ? `<span>Target <b>&lt; ${esc(fmtDur(evGoal))}</b> <span class="mu">(${fmtPace(evGoal/ev.distanceKm)})</span></span>` : ""}</div>
-    <div class="strip" style="margin-top:14px">${weekStrip(wi)}</div>
-    <p class="xs mu" style="margin-top:6px">Bar abu-abu = target km per minggu · bar berwarna = km yang kamu catat</p>
+    <div class="route" style="margin-top:16px">${raceRoute(wi)}</div>
   </section>
-  <section class="card ring-row" data-reveal aria-label="Progres minggu ini">
-    <div class="ring"><svg viewBox="0 0 108 108" aria-hidden="true"><circle class="track" cx="54" cy="54" r="46"/><circle class="val" cx="54" cy="54" r="46" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - pct / 100)).toFixed(1)}"/></svg><div class="rv-num"><b class="tnum" data-roll="${pct}">${pct}</b><span class="xs mu">% km</span></div></div>
-    <div><h3 style="margin:0 0 4px">Minggu ini</h3><p class="num" style="font-size:22px"><span data-roll="${done}" data-fmt="km">${fmtKm(done)}</span> <span class="sm mu">/ ${fmtKm(w.total)} km</span></p><p class="sm mu">${dn} dari ${ses.length} sesi lari selesai</p>
-      <div class="btns" style="margin-top:8px">${next ? `<button class="btn sm pri" data-act="runStart" data-id="${next.id}">${IC.play} Mulai</button><button class="btn sm" data-act="logSess" data-id="${next.id}">Catat</button>` : ""}</div></div>
-  </section>
-  <div class="qa" data-reveal role="group" aria-label="Aksi cepat">
-    <button data-act="newLog">${IC.plus}Catat lari</button><button data-act="nav" data-t="recovery">${IC.heart}Check-in</button><button data-act="nav" data-t="race">${IC.race}Strategi</button><button data-act="nav" data-t="shoes">${IC.shoe}Sepatu</button>
+  <div class="qa qa2" data-reveal role="group" aria-label="Aksi cepat">
+    <button data-act="newLog">${IC.plus}Catat lari</button><button data-act="nav" data-t="recovery">${IC.heart}Check-in</button>
   </div>
-  <section class="card tipcard" data-reveal><div style="flex:1"><h3 style="margin:0 0 4px">Tips hari ini</h3><p class="sm">${esc(tip.t)}</p><p class="xs mu" style="margin-top:4px">${esc(tip.why)}</p></div></section>
-  ${vol.some(x => x.b) ? `<section class="card" data-reveal><h3>Volume mingguan</h3>${chartBars(vol, {h:120, hi:vol.length - 1})}<p class="xs mu">Abu-abu = target, berwarna = aktual (km)</p></section>` : ""}
+  <!--wx-->
+  ${vol.some(x => x.b) ? `<section class="card mainchart" data-reveal><div class="sec-h"><h3>Volume mingguan</h3><span class="sm mu num">${fmtKm(vol[vol.length - 1].b)} / ${fmtKm(vol[vol.length - 1].a)} km</span></div>${chartBars(vol, {h:180, hi:vol.length - 1})}${lgd()}</section>` : ""}
   ${S.logs.filter(l => !l.sample && l.distance >= 1 && paceOf(l)).length >= 3 ? `<section class="card" data-reveal><h3>Tren pace</h3>${sparkPace()}</section>` : ""}
   ${recent.length ? `<section class="card" data-reveal><h3>Aktivitas terakhir</h3><div class="timeline">${recent.map(l => `<button class="tl-item" style="--c:${tc(l.type)};display:block;width:100%;text-align:left;background:none;border:0;color:inherit" data-act="editLog" data-id="${l.id}"><b>${TYPES[l.type]}</b> <span class="num">${fmtKm(l.distance)} km</span> <span class="sm mu">· ${fmtDay(l.date)}${paceOf(l) ? " · " + fmtPace(paceOf(l)) : ""}${l.src ? " · " + esc(l.src) : ""}</span></button>`).join("")}</div></section>` : ""}
   </div>`;
@@ -2508,7 +2522,7 @@ function vGate(){
     <div class="gate-card glass holo-edge">
       ${WRI_BRAND.mark({size:88, liquid:!WRI_MOTION.reduced()})}
       <h1>WeRun<span class="holo-text">It</span></h1>
-      <p class="lead">Teman latihan lari yang paham datamu: rencana latihan, strategi race, sepatu, dan latihan bareng teman.</p>
+      <p class="lead gate-lead">Teman latihan lari yang paham datamu: rencana latihan, strategi race, sepatu, dan latihan bareng teman.</p>
       <button class="gbtn" data-act="signIn" ${busy || offline ? "disabled" : ""}>${G_LOGO}${busy ? "Lagi masuk..." : "Masuk dengan Google"}</button>
       ${CLOUD.err && CLOUD.state === "autherror" ? `<p class="err" style="margin-top:10px">${esc(errText(CLOUD.err))}</p>` : ""}
       ${CLOUD.errDetail ? `<p class="xs mu" style="margin-top:6px;word-break:break-word">Detail teknis: <code id="err-detail">${esc(CLOUD.errDetail)}</code></p><button class="btn sm" style="margin-top:6px" data-act="copyErr">Salin detail</button>` : ""}
@@ -2746,7 +2760,7 @@ const ACT = {
     if(data.sessionId){ const other = S.logs.find(l => l.sessionId === data.sessionId && l.id !== M.editId); if(other){ data.sessionId = null; unlinked = true; } else delete S.status[data.sessionId]; }
     if(M.editId){ const i = S.logs.findIndex(l => l.id === M.editId); if(i >= 0) S.logs[i] = Object.assign({}, S.logs[i], data); }
     else S.logs.push(Object.assign({id:uid()}, data));
-    persist(); M = null; render(true); toast(unlinked ? "Lari tersimpan, tapi nggak disambung ke sesi itu karena sesinya udah punya catatan." : "Lari tersimpan 💪");
+    persist(); M = null; render(true); toast(unlinked ? "Lari tersimpan, tapi nggak disambung ke sesi itu karena sesinya udah punya catatan." : "Lari tersimpan");
   },
   askDelLog:d => { M = {kind:"confirm", title:"Hapus lari ini?", msg:"Catatan ini bakal dihapus dan angka-angka ikut diperbarui.", ok:"doDelLog", okId:d.id, okLabel:"Hapus", danger:true}; render(true); },
   doDelLog:d => { S.logs = S.logs.filter(l => l.id !== d.id); persist(); M = null; render(true); toast("Lari dihapus"); },

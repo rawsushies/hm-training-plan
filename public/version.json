@@ -1,25 +1,25 @@
 {
- "version": "3.15.0",
- "build": "2026-11-07T23:30:36Z",
+ "version": "3.16.0",
+ "build": "2026-11-07T23:54:19Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "Tampilan baru di semua layar: grafik dulu, kartu kaca, warna gradasi",
-  "Beranda, Aktivitas, Check-in, Review, dan Jadwal sekarang dibuka dengan grafik",
-  "Menu jadi ikon yang dikelompokkan",
-  "Tombol utama lebih mudah dibaca di tema gelap; kata-kata di grafik lebih enak dibaca"
+  "Tampilan baru bergaya aplikasi olahraga: grafit, satu warna oranye, angka besar",
+  "Teks dipangkas: tanpa paragraf pembuka dan kartu tips, penjelasan ada di tombol ?",
+  "Beranda: hitung mundur race dengan rute latihan dari minggu 1 sampai garis finish",
+  "Ikon app baru"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "2115fb537c5b9b4db86f54b47e82624b73ae056028e7c96944c601019d4af84d",
-   "s": 36606
+   "h": "894b77d0478c10ff3715786af9d1dbe7b4a28abb04cc6ed2bf020a5728844d21",
+   "s": 46397
   },
   {
    "p": "favicon-32.png",
-   "h": "093f01f9d9f9730008001eb5be589109ffc037654bd375592f3fff54e12cc73d",
-   "s": 1247
+   "h": "ad04fb5359d0c183073bed88996d5614bce4bff081c6d29b161190ddca7e9fa1",
+   "s": 913
   },
   {
    "p": "firebase-config.js",
@@ -28,33 +28,33 @@
   },
   {
    "p": "icon-192.png",
-   "h": "5024289a3c524b3004bde2082637bb13f27625c357aec65f538da6a7d7a2e655",
-   "s": 12903
+   "h": "88cfbc1fe8cbb871b2e68d25ae20ba984e0557ccce39d4d2a905604322c8e3b5",
+   "s": 6963
   },
   {
    "p": "icon-512.png",
-   "h": "f0e7e9d2b0c7e46ddc2e21a1acce828ced716d7dc6413a56fd802bfbd74476cb",
-   "s": 55897
+   "h": "b47546d75a949d79166d0acd30812c52b5ff9dd43ac41ab0c3d4bee3eb90418c",
+   "s": 20094
   },
   {
    "p": "icon-maskable-512.png",
-   "h": "717477f402ff3de3914e13155e35dc04ca48e1b47172e16b63974985e33c501b",
-   "s": 23768
+   "h": "ed67a5ba833dd31432910cf177557126e8522f026677363ba41bf5a5dac793bc",
+   "s": 10060
   },
   {
    "p": "icon.svg",
-   "h": "5db246705670086d18d8f0a7f183e7922feb917958a441e7eb5fba20817e402c",
-   "s": 846
+   "h": "23b79ca743bcf4fdaac6c3bac78c80cb5eacb39baada1a5c3997b7769e28cc55",
+   "s": 679
   },
   {
    "p": "index.html",
-   "h": "61d7f0fc2304895aef23818e7d18508447b23ca10169a949362625c6eb5734ce",
-   "s": 287666
+   "h": "1cb6c1654701cb428e4d2525667756f58bbe0cd5a4799ecc67aaf6ab8ab31897",
+   "s": 287760
   },
   {
    "p": "js/brand.js",
-   "h": "a1ce10dee900c03684fdf3c41408f3b29140c4c1edee394722f25343517e0d25",
-   "s": 3694
+   "h": "bcad6afde01a361852fcdf5f69ae96e63944d11948b0055a455c6ffbb80b6fe6",
+   "s": 3671
   },
   {
    "p": "js/cloud-firebase.js",
@@ -78,7 +78,7 @@
   },
   {
    "p": "js/notify.js",
-   "h": "3501c5eaef0ace451382b5aa37d6341fea9d139d0c5fd323f2bd07ce648bdc3e",
+   "h": "1610ee79bb2df2217b53f020533afd850d8bd8ea65681b20967a99a30340ecf4",
    "s": 6363
   },
   {
@@ -113,8 +113,8 @@
   },
   {
    "p": "js/tutorial.js",
-   "h": "9e6122bffb9037cd909b043f13aab7641601d8f8ee9ffc8a0a10fd7b43320366",
-   "s": 30445
+   "h": "a511e251a7bfa2bf327ae2f5582c3094a85b61d42f0cd060c154c380c31b307f",
+   "s": 30505
   },
   {
    "p": "js/ui-glass.js",
@@ -128,12 +128,12 @@
   },
   {
    "p": "js/version.js",
-   "h": "bf6e801b9245ac1714535c971caad4bb3e15bc8f4ead541f853e619bdd440325",
+   "h": "3e275d1fa9b556b027e20c74a5c1672e78e25bfe7b3f226077bd21c4ca7f2ff1",
    "s": 140
   },
   {
    "p": "js/views-flow.js",
-   "h": "30d2963b7a0f860d65b92d43cb549052f124e67794c9d3124d39c40422b409cf",
+   "h": "394bab98fe724c9e1a022df30f3930be1e39b481817ed1e5b28c335f960ddcfa",
    "s": 5855
   },
   {
@@ -148,18 +148,18 @@
   },
   {
    "p": "js/views-social.js",
-   "h": "188b135de06014b9ecc7e5e38794e5905a6c2e1addc0c472067f23872b385cea",
-   "s": 25903
+   "h": "9d1c31272149f559ebf01f4f3ddc009ae64904fa80d90a8e56de323ed63c9623",
+   "s": 25898
   },
   {
    "p": "js/views-v4.js",
-   "h": "65381a4c66564c1e998a2b723552ed43751bec9bfc6242927891ad2f53978213",
-   "s": 55148
+   "h": "9240cbcd5517029422160a307bad75423f9dbdb643f0f9f33525e50fb3f18d60",
+   "s": 55059
   },
   {
    "p": "js/views-weather.js",
-   "h": "48c8fe896a10672195123b0997e5b582ba7519fbf3427e75141796db2300fa22",
-   "s": 10162
+   "h": "093c7ba079329b266a238916f5105746f8cde6de80c72a6cb61ef69f0be4379f",
+   "s": 10142
   },
   {
    "p": "js/weather.js",
@@ -168,12 +168,12 @@
   },
   {
    "p": "manifest.webmanifest",
-   "h": "3039dda9858b09cc14f7ad794ac075866d3eb82ca055a3e71e28d4ce7fc9720d",
+   "h": "185890681d03da82439eed4df1ef43ede16065db04eeab525624563f9349ba9d",
    "s": 677
   },
   {
    "p": "sw.js",
-   "h": "439736ce5b64fcde627a2fecef185895043121e02398b27dd5ff46025ed3f10f",
+   "h": "704051e9acd88d24b1a6debbb79d48bd812955cad1811bd357b0c2764dec03fb",
    "s": 2615
   },
   {

@@ -211,13 +211,15 @@ function raceTabs(){
 function tabOverview(P){
   const p = P.pred, ev = P.ev;
   return `<div class="card"><h3>Perkiraan finish ${fmtKm(evKm(ev))} km</h3>
-    ${p.seconds ? `<p class="num" style="font-size:38px">${fmtDur(p.seconds)} <span class="sm mu">${fmtPace(p.seconds / P.D)}</span></p>` : `<p class="mu">Belum bisa diperkirakan.</p>`}
+    ${p.seconds ? `<p class="num" style="font-size:56px;line-height:.9">${fmtDur(p.seconds)} <span class="sm mu">${fmtPace(p.seconds / P.D)}</span></p>` : `<p class="mu">Belum bisa diperkirakan.</p>`}
     <p style="margin:6px 0">${confChip(p.confidence)} ${p.source === "target" ? '<span class="chip">pakai target kamu</span>' : ""}</p>
     ${p.sensitivity ? `<p class="xs mu">Rentang (eksponen 1,04–1,08): ${fmtDur(p.sensitivity.low)} – ${fmtDur(p.sensitivity.high)}</p>` : ""}
-    <p class="sm" style="margin-top:8px"><b>Cara hitung:</b> ${esc(p.method)}</p>
+    <details class="method" style="margin-top:8px"><summary class="sm">Cara hitung dan data yang dipakai</summary><div class="bd">
+    <p class="sm" style="margin-top:4px">${esc(p.method)}</p>
     ${p.used.length ? `<div class="scroll"><table class="t" style="margin-top:8px"><tr><th>Data</th><th>Hasil</th><th>Setara</th><th>Bobot</th></tr>${p.used.slice(0, 6).map(u => `<tr><td>${esc(TYPES[u.label] || u.label)} ${u.date ? fmtD(u.date) : ""}</td><td class="tab">${fmtKm(u.km)} km · ${fmtDur(u.sec)}</td><td class="tab">${fmtDur(u.estimate)}</td><td class="tab">${Math.round(u.weight / p.used.reduce((a, x) => a + x.weight, 0) * 100)}%</td></tr>`).join("")}</table></div>` : ""}
     ${p.assumptions.length ? `<p class="sm" style="margin-top:8px"><b>Asumsi:</b></p><ul class="clean sm">${p.assumptions.map(a => `<li>${esc(a)}</li>`).join("")}</ul>` : ""}
     <p class="sm" style="margin-top:6px"><b>Keterbatasan:</b></p><ul class="clean sm">${p.limitations.map(a => `<li>${esc(a)}</li>`).join("")}</ul>
+    </div></details>
     ${p.excluded && p.excluded.length ? `<details style="margin-top:6px"><summary class="sm">${p.excluded.length} catatan nggak dipakai</summary><div class="bd"><ul class="clean xs">${p.excluded.slice(0, 20).map(x => `<li>${fmtD(x.log.date)} ${fmtKm(x.log.distance)} km: ${esc(x.reason)}</li>`).join("")}</ul></div></details>` : ""}
   </div>
   <div class="card" style="margin-top:12px"><h3>Hasil race / tes terbaru (opsional)</h3><p class="xs mu">Isi hasil yang nggak ada di log (misal race tahun lalu). Ini dipakai sebagai sesi usaha.</p>
@@ -243,7 +245,7 @@ function tabSplits(P){
   return `<div class="card"><h3>Split per km</h3><p class="xs mu">Ubah pace satu km: km sesudahnya otomatis disesuaikan supaya total tetap ${fmtDur(P.T)}. Km yang kamu ubah dikunci.</p>
   <div class="scroll"><table class="t splits"><tr><th>KM</th><th>Pace</th><th>Waktu</th><th>Sisa</th><th>Jam</th></tr>${P.rows.map(r => {
     const c = cut.find(x => Math.abs(x.km - r.km) < 0.6), over = c && r.cum > parseDur(c.time);
-    return `<tr class="${r.five ? "five" : ""}"><td>${fmtKm(r.km)}${P.rp.locked.includes(r.i) ? " 🔒" : ""}</td><td><input class="pace-in" type="text" value="${fmtPace(r.pace, false)}" data-live="rcSplit" data-i="${r.i}" aria-label="Pace km ${r.i + 1}"></td><td class="tab"><b>${fmtDur(r.cum)}</b>${c ? `<br><span class="xs ${over ? "err" : "mu"}">cut-off ${esc(c.time)}${over ? " ⚠" : ""}</span>` : ""}</td><td class="tab">${fmtKm(r.remaining)}</td><td class="tab mu">${fmtClock(P.rp.startTime, r.cum)}</td></tr>`; }).join("")}</table></div>
+    return `<tr class="${r.five ? "five" : ""}"><td>${fmtKm(r.km)}${P.rp.locked.includes(r.i) ? " · kunci" : ""}</td><td><input class="pace-in" type="text" value="${fmtPace(r.pace, false)}" data-live="rcSplit" data-i="${r.i}" aria-label="Pace km ${r.i + 1}"></td><td class="tab"><b>${fmtDur(r.cum)}</b>${c ? `<br><span class="xs ${over ? "err" : "mu"}">cut-off ${esc(c.time)}${over ? " · lewat" : ""}</span>` : ""}</td><td class="tab">${fmtKm(r.remaining)}</td><td class="tab mu">${fmtClock(P.rp.startTime, r.cum)}</td></tr>`; }).join("")}</table></div>
   <div class="btns" style="margin-top:8px"><button class="btn sm ghost" data-act="rcSplitReset">Reset split</button><label class="sm mu" style="display:flex;align-items:center;gap:6px">Jam start <input type="time" id="rc-start" value="${esc(P.rp.startTime)}" data-live="rcStart" style="width:auto;min-height:32px"></label></div></div>`;
 }
 function tabElev(P){
@@ -390,15 +392,15 @@ function mSheet(){ return `${mHead("Lembar race day")}${sheetHtml()}<div class="
 function sheetCanvas(){
   const P = racePlanData(), ev = P.ev, W = 1080, rowsH = Math.ceil(P.rows.length / 2) * 46, H = 420 + rowsH;
   const c = document.createElement("canvas"); c.width = W; c.height = H; const g = c.getContext("2d");
-  const grd = g.createLinearGradient(0, 0, W, H); grd.addColorStop(0, "#1C1B2A"); grd.addColorStop(1, "#13131C"); g.fillStyle = grd; g.fillRect(0, 0, W, H);
-  const holo = g.createLinearGradient(60, 0, W - 60, 0); ["#F0EEFF", "#9673FF", "#65A7FF", "#79E5DE", "#F18CD5"].forEach((col, i) => holo.addColorStop(i / 4, col));
+  g.fillStyle = "#141415"; g.fillRect(0, 0, W, H);
+  const holo = "#FF5A1F";
   g.fillStyle = holo; g.fillRect(60, 60, 140, 6);
   g.fillStyle = "#F6F4FF"; g.font = "700 54px 'Space Grotesk', sans-serif"; g.fillText(ev.name.slice(0, 32), 60, 140);
   g.fillStyle = "#A8A5BB"; g.font = "500 30px Inter, sans-serif"; g.fillText(`${fmtD(ev.eventDate)} · ${fmtKm(evKm(ev))} km · start ${P.rp.startTime}`, 60, 190);
   g.fillStyle = "#F6F4FF"; g.font = "700 64px 'Space Grotesk', sans-serif"; g.fillText(`Target ${fmtDur(P.T)}`, 60, 280);
   g.fillStyle = "#B9A4FF"; g.font = "600 30px Inter, sans-serif"; g.fillText(`${RS.STRATS[P.rp.strategy]} · rata-rata ${fmtPace(P.T / P.D)}`, 60, 330);
   g.font = "500 28px Inter, sans-serif";
-  P.rows.forEach((r, i) => { const col = i < Math.ceil(P.rows.length / 2) ? 0 : 1, row = col ? i - Math.ceil(P.rows.length / 2) : i; g.fillStyle = r.five ? "#79E5DE" : "#F6F4FF"; g.fillText(`km ${fmtKm(r.km)}`, 60 + col * 500, 400 + row * 46); g.fillStyle = "#A8A5BB"; g.fillText(`${fmtPace(r.pace, false)}   ${fmtDur(r.cum)}`, 220 + col * 500, 400 + row * 46); });
+  P.rows.forEach((r, i) => { const col = i < Math.ceil(P.rows.length / 2) ? 0 : 1, row = col ? i - Math.ceil(P.rows.length / 2) : i; g.fillStyle = r.five ? "#FF5A1F" : "#EDEDED"; g.fillText(`km ${fmtKm(r.km)}`, 60 + col * 500, 400 + row * 46); g.fillStyle = "#A8A5BB"; g.fillText(`${fmtPace(r.pace, false)}   ${fmtDur(r.cum)}`, 220 + col * 500, 400 + row * 46); });
   g.fillStyle = "#77758A"; g.font = "500 24px Inter, sans-serif"; g.fillText("WeRunIt · perkiraan, bukan jaminan hasil", 60, H - 30);
   return c;
 }

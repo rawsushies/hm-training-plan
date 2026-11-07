@@ -12,13 +12,13 @@
   // the bend, returns along the top straight and drops into the W's cadence peaks.
   const TRACK = "M59 51 H25 a19 19 0 0 1 0 -38 H38 Q46.5 13 44.6 21";
   const CADENCE = "M44.6 21 L38.8 39.5 L32 28 L25.2 39.5 L19.5 26.5";
-  const HOLO = [["0", "#F0EEFF"], ["0.28", "#9673FF"], ["0.52", "#65A7FF"], ["0.74", "#79E5DE"], ["0.9", "#F18CD5"], ["1", "#F0EEFF"]];
+  const HOLO = [["0", "#FF5A1F"], ["1", "#FF5A1F"]];   // flat race orange (unslop: no hue gradient on the mark)
   let n = 0;
 
   /** opts: {size, mode:"holo"|"white"|"black", animated, title, bg} */
   function mark(opts = {}) {
     const id = "wri" + (++n), size = opts.size || 64, mode = opts.mode || "holo";
-    const stroke = mode === "white" ? "#FFFFFF" : mode === "black" ? "#13131C" : `url(#${id}g)`;
+    const stroke = mode === "white" ? "#FFFFFF" : mode === "black" ? "#141415" : `url(#${id}g)`;
     const sw = opts.weight || 6.2;
     const defs = mode === "holo" ? `<defs><linearGradient id="${id}g" x1="6" y1="8" x2="60" y2="56" gradientUnits="userSpaceOnUse">${HOLO.map(([o, c]) => `<stop offset="${o}" stop-color="${c}"/>`).join("")}${opts.animated ? `<animateTransform attributeName="gradientTransform" type="rotate" values="0 32 32;14 32 32;0 32 32" dur="6s" repeatCount="indefinite"/>` : ""}</linearGradient>${opts.liquid ? liquidFilter(id) : ""}</defs>` : "";
     const filt = opts.liquid ? ` filter="url(#${id}liq)"` : "";

@@ -39,7 +39,7 @@ ACT.obDone = () => {
   if(D && D.avail.some(Boolean) && JSON.stringify(D) !== JSON.stringify(WRI_SCHED.cleanSchedule(WRI_SCHED.fromLegacy(S.settings.weekday)))) S.schedule = D;
   S.ui.schedDraft = null; S.profile = Object.assign({}, S.profile, {onboarded:true});
   persist(); M = null; render(false);
-  toast("Siap! Butuh bantuan? Tekan ? di tiap halaman.");
+  toast("Siap. Butuh bantuan? Tekan ? di tiap halaman.");
 };
 
 /* ---------- one-tap done ---------- */
