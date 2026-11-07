@@ -9,6 +9,9 @@ sync with conflict handling, safe migration from v2, private-by-default training
 invite links, a layered tutorial (quick start, 18 feature tours, `?` help on every page) and
 notification-ready preferences.
 
+**Live:** https://we-run-it.web.app · **Android:** see [docs/ANDROID.md](docs/ANDROID.md) ·
+**Shipping changes:** see [docs/UPDATES.md](docs/UPDATES.md) (installed apps update themselves).
+
 ## Run it
 
 ```bash

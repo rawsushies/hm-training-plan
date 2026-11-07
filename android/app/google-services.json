@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "227466072680",
+    "project_id": "we-run-it",
+    "storage_bucket": "we-run-it.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:227466072680:android:be7412f7ff021c0b3361dd",
+        "android_client_info": {
+          "package_name": "com.hmtrainingplan.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "227466072680-jfoehha4lf86ao2hgbdo6cpb3ob6t77d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hmtrainingplan.app",
+            "certificate_hash": "72eeb6915fcdf2f11172a1bda1c0b52e4da10869"
+          }
+        },
+        {
+          "client_id": "227466072680-igv2tsj7smr2v0c341n4rcgaeq30khav.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDY4JF8W8aDH-_Y29Prme_3yojB_n-PJDA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "227466072680-igv2tsj7smr2v0c341n4rcgaeq30khav.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

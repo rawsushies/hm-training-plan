@@ -1,5 +1,10 @@
 # Firebase setup
 
+> **Status (7 Nov 2026):** done for project **`we-run-it`** ("We Run It"): Firestore in
+> `asia-southeast2`, Google sign-in enabled, authorised domains `localhost`, `we-run-it.firebaseapp.com`,
+> `we-run-it.web.app`, web + Android apps registered, rules and hosting deployed to
+> **https://we-run-it.web.app**. The steps below document how, for reference or a new project.
+
 The app works fully **without** Firebase (local mode: data stays on the device). Firebase adds
 Google sign-in, per-account cloud sync across devices, and training groups.
 
