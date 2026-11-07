@@ -1,6 +1,14 @@
 {
- "schema": 3,
- "generated": "2026-11-07T23:18:39.264Z",
+ "schema": 4,
+ "fx": {
+  "date": "2026-11-06",
+  "source": "ECB via frankfurter.app",
+  "rates": {
+   "AUD": 12436,
+   "CAD": 12868
+  }
+ },
+ "generated": "2026-11-07T23:21:06.869Z",
  "retrieved": "2026-11-07",
  "sources": [
   {
@@ -26,7 +34,7 @@
    "use": "tempo",
    "specs": {
     "plate": "plate",
-    "price": 278,
+    "price": 197,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -51,36 +59,6 @@
    "auto": true
   },
   {
-   "id": "li-ning-red-hare-9-ultra",
-   "brand": "Li-Ning",
-   "model": "Red Hare 9 Ultra",
-   "released": "2026-11-03",
-   "approx": true,
-   "use": "tempo",
-   "specs": {
-    "price": 238,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Mens-Li-Ning-Red-Hare-9-Ultra-Champagne-White-Sunset-ARPW007-38.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/mens-li-ning-red-hare-9-ultra-arpw007-38"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/mens-li-ning-red-hare-9-ultra-arpw007-38"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/mens-li-ning-red-hare-9-ultra-arpw007-38"
-    }
-   ],
-   "plus": [],
-   "minus": [],
-   "auto": true
-  },
-  {
    "id": "li-ning-feidian-6-elite",
    "brand": "Li-Ning",
    "model": "Feidian 6 Elite",
@@ -89,7 +67,7 @@
    "use": "race",
    "specs": {
     "plate": "carbon",
-    "price": 297,
+    "price": 211,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -113,6 +91,38 @@
    "minus": [
     "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
    ],
+   "auto": true
+  },
+  {
+   "id": "li-ning-red-hare-9-ultra",
+   "brand": "Li-Ning",
+   "model": "Red Hare 9 Ultra",
+   "released": "2026-11-03",
+   "approx": true,
+   "use": "tempo",
+   "specs": {
+    "price": 169,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Mens-Li-Ning-Red-Hare-9-Ultra-Champagne-White-Sunset-ARPW007-38.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/mens-li-ning-red-hare-9-ultra-arpw007-38"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/mens-li-ning-red-hare-9-ultra-arpw007-38"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/mens-li-ning-red-hare-9-ultra-arpw007-38"
+    }
+   ],
+   "plus": [
+    "Harga di bawah median kategorinya (169 vs 204 AUD)"
+   ],
+   "minus": [],
    "auto": true
   },
   {
@@ -144,9 +154,11 @@
     }
    ],
    "plus": [
-    "Ringan untuk kategorinya (177 g vs median 238 g)"
+    "Ringan untuk kategorinya (177 g vs median 265 g)"
    ],
-   "minus": [],
+   "minus": [
+    "Harga di atas median kategorinya (179 vs 152 AUD)"
+   ],
    "auto": true
   },
   {
@@ -180,13 +192,13 @@
     }
    ],
    "plus": [
-    "Ringan untuk kategorinya (138 g vs median 175 g)",
+    "Ringan untuk kategorinya (138 g vs median 192 g)",
     "Pakai carbon plate untuk race dan sesi cepat"
    ],
    "minus": [
     "Drop rendah (3 mm): butuh adaptasi betis kalau biasa sepatu drop tinggi",
     "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian",
-    "Harga di atas median kategorinya (669 vs 268 AUD)"
+    "Harga di atas median kategorinya (669 vs 239 AUD)"
    ],
    "auto": true
   },
@@ -224,9 +236,110 @@
     "Drop 12 mm, ramah untuk pelari yang mendarat di tumit"
    ],
    "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (355 g vs median 175 g)",
-    "Harga di atas median kategorinya (383 vs 268 AUD)"
+    "Lebih berat dari kebanyakan di kategorinya (355 g vs median 192 g)",
+    "Harga di atas median kategorinya (383 vs 239 AUD)"
    ],
+   "auto": true
+  },
+  {
+   "id": "adidas-adizero-adios-pro-evo-3",
+   "brand": "adidas",
+   "model": "Adizero Adios Pro EVO 3",
+   "released": "2026-10-29",
+   "approx": true,
+   "use": "race",
+   "specs": {
+    "dropMm": 3,
+    "stackMm": 39,
+    "price": 470,
+    "priceCurrency": "CAD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/KH7678_LEAD.png?width=480",
+    "credit": "Vancouver Running Co.",
+    "page": "https://vanrunco.com/products/adidas-adizero-adios-pro-evo-3-unisex-kh7678"
+   },
+   "source": {
+    "label": "Vancouver Running Co.",
+    "url": "https://vanrunco.com/products/adidas-adizero-adios-pro-evo-3-unisex-kh7678"
+   },
+   "sources": [
+    {
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/adidas-adizero-adios-pro-evo-3-unisex-kh7678"
+    }
+   ],
+   "plus": [
+    "Bantalan tebal (stack 39 mm)"
+   ],
+   "minus": [
+    "Drop rendah (3 mm): butuh adaptasi betis kalau biasa sepatu drop tinggi",
+    "Harga di atas median kategorinya (470 vs 239 CAD)"
+   ],
+   "auto": true
+  },
+  {
+   "id": "on-cloudsurfer-2",
+   "brand": "On",
+   "model": "Cloudsurfer 2",
+   "released": "2026-10-29",
+   "approx": true,
+   "use": "daily",
+   "specs": {
+    "weightG": 225,
+    "dropMm": 9,
+    "price": 145,
+    "priceCurrency": "CAD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/lead_f22bd5d4-5ffb-4e42-bd8b-1a35a1688b1b.png?width=480",
+    "credit": "Vancouver Running Co.",
+    "page": "https://vanrunco.com/products/on-cloudsurfer-2-mens-3mf10123205"
+   },
+   "source": {
+    "label": "Vancouver Running Co.",
+    "url": "https://vanrunco.com/products/on-cloudsurfer-2-mens-3mf10123205"
+   },
+   "sources": [
+    {
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/on-cloudsurfer-2-mens-3mf10123205"
+    }
+   ],
+   "plus": [
+    "Ringan untuk kategorinya (225 g vs median 265 g)"
+   ],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "nike-hybrid-rn",
+   "brand": "Nike",
+   "model": "Hybrid RN",
+   "released": "2026-10-29",
+   "approx": true,
+   "use": "daily",
+   "specs": {
+    "price": 162,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Nike-Hybrid-RN-Black_Metallic-Dark-Grey_Anthracite-IO3815-001.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/womens-nike-hybrid-rn-io3815-001"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/womens-nike-hybrid-rn-io3815-600"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/womens-nike-hybrid-rn-io3815-001"
+    }
+   ],
+   "plus": [],
+   "minus": [],
    "auto": true
   },
   {
@@ -238,7 +351,7 @@
    "use": "race",
    "specs": {
     "plate": "carbon",
-    "price": 396,
+    "price": 281,
     "priceCurrency": "CAD",
     "weightG": 168,
     "dropMm": 8,
@@ -264,79 +377,13 @@
     }
    ],
    "plus": [
+    "Ringan untuk kategorinya (168 g vs median 192 g)",
     "Bantalan tebal (stack 39 mm)",
     "Pakai carbon plate untuk race dan sesi cepat"
    ],
    "minus": [
     "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian",
-    "Harga di atas median kategorinya (396 vs 268 CAD)"
-   ],
-   "auto": true
-  },
-  {
-   "id": "nike-hybrid-rn",
-   "brand": "Nike",
-   "model": "Hybrid RN",
-   "released": "2026-10-29",
-   "approx": true,
-   "use": "daily",
-   "specs": {
-    "price": 228,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Nike-Hybrid-RN-Black_Metallic-Dark-Grey_Anthracite-IO3815-001.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/womens-nike-hybrid-rn-io3815-001"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/womens-nike-hybrid-rn-io3815-600"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/womens-nike-hybrid-rn-io3815-001"
-    }
-   ],
-   "plus": [],
-   "minus": [],
-   "auto": true
-  },
-  {
-   "id": "adidas-adizero-adios-pro-evo-3",
-   "brand": "adidas",
-   "model": "Adizero Adios Pro EVO 3",
-   "released": "2026-10-29",
-   "approx": true,
-   "use": "race",
-   "specs": {
-    "dropMm": 3,
-    "stackMm": 39,
-    "price": 650,
-    "priceCurrency": "CAD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/KH7678_LEAD.png?width=480",
-    "credit": "Vancouver Running Co.",
-    "page": "https://vanrunco.com/products/adidas-adizero-adios-pro-evo-3-unisex-kh7678"
-   },
-   "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/adidas-adizero-adios-pro-evo-3-unisex-kh7678"
-   },
-   "sources": [
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/adidas-adizero-adios-pro-evo-3-unisex-kh7678"
-    }
-   ],
-   "plus": [
-    "Bantalan tebal (stack 39 mm)"
-   ],
-   "minus": [
-    "Drop rendah (3 mm): butuh adaptasi betis kalau biasa sepatu drop tinggi",
-    "Harga di atas median kategorinya (650 vs 268 CAD)"
+    "Harga di atas median kategorinya (281 vs 239 CAD)"
    ],
    "auto": true
   },
@@ -351,7 +398,7 @@
     "weightG": 290,
     "dropMm": 6,
     "trail": true,
-    "price": 300,
+    "price": 217,
     "priceCurrency": "CAD"
    },
    "image": {
@@ -371,40 +418,8 @@
    ],
    "plus": [],
    "minus": [
-    "Harga di atas median kategorinya (300 vs 228 CAD)"
+    "Harga di atas median kategorinya (217 vs 169 CAD)"
    ],
-   "auto": true
-  },
-  {
-   "id": "on-cloudsurfer-2",
-   "brand": "On",
-   "model": "Cloudsurfer 2",
-   "released": "2026-10-29",
-   "approx": true,
-   "use": "daily",
-   "specs": {
-    "weightG": 225,
-    "dropMm": 9,
-    "price": 200,
-    "priceCurrency": "CAD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/lead_f22bd5d4-5ffb-4e42-bd8b-1a35a1688b1b.png?width=480",
-    "credit": "Vancouver Running Co.",
-    "page": "https://vanrunco.com/products/on-cloudsurfer-2-mens-3mf10123205"
-   },
-   "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/on-cloudsurfer-2-mens-3mf10123205"
-   },
-   "sources": [
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/on-cloudsurfer-2-mens-3mf10123205"
-    }
-   ],
-   "plus": [],
-   "minus": [],
    "auto": true
   },
   {
@@ -437,123 +452,13 @@
     }
    ],
    "plus": [
-    "Ringan untuk kategorinya (160 g vs median 175 g)",
+    "Ringan untuk kategorinya (160 g vs median 192 g)",
     "Pakai carbon plate untuk race dan sesi cepat"
    ],
    "minus": [
     "Drop rendah (3 mm): butuh adaptasi betis kalau biasa sepatu drop tinggi",
     "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
    ],
-   "auto": true
-  },
-  {
-   "id": "saucony-endorphin-azura-hi-octane",
-   "brand": "Saucony",
-   "model": "Endorphin Azura Hi Octane",
-   "released": "2026-10-27",
-   "approx": true,
-   "use": "tempo",
-   "specs": {
-    "dropMm": 8,
-    "stackMm": 40,
-    "plate": "plate",
-    "price": 190,
-    "priceCurrency": "CAD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/S21070-401LeadCropped-2.png?width=480",
-    "credit": "Vancouver Running Co.",
-    "page": "https://vanrunco.com/products/saucony-endorphin-azura-mens-s21070-401"
-   },
-   "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/saucony-endorphin-azura-mens-s21070-401"
-   },
-   "sources": [
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/saucony-endorphin-azura-mens-s21070-401"
-    }
-   ],
-   "plus": [
-    "Bantalan tebal (stack 40 mm)",
-    "Ada plate untuk dorongan di pace cepat",
-    "Harga di bawah median kategorinya (190 vs 278 CAD)"
-   ],
-   "minus": [],
-   "auto": true
-  },
-  {
-   "id": "salomon-aero-blaze-3",
-   "brand": "Salomon",
-   "model": "Aero Blaze 3",
-   "released": "2026-10-27",
-   "approx": true,
-   "use": "trail",
-   "specs": {
-    "weightG": 230,
-    "dropMm": 8,
-    "trail": true,
-    "price": 135,
-    "priceCurrency": "CAD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/L47975600LeadCropped.png?width=480",
-    "credit": "Vancouver Running Co.",
-    "page": "https://vanrunco.com/products/salomon-aero-blaze-3-men-l47975600"
-   },
-   "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/salomon-aero-blaze-3-men-l47975600"
-   },
-   "sources": [
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/salomon-aero-blaze-3-men-l47975600"
-    }
-   ],
-   "plus": [
-    "Ringan untuk kategorinya (230 g vs median 272 g)",
-    "Harga di bawah median kategorinya (135 vs 228 CAD)"
-   ],
-   "minus": [],
-   "auto": true
-  },
-  {
-   "id": "salomon-aero-glide-3-grvl",
-   "brand": "Salomon",
-   "model": "Aero Glide 3 GRVL",
-   "released": "2026-10-27",
-   "approx": true,
-   "use": "trail",
-   "specs": {
-    "weightG": 235,
-    "dropMm": 8,
-    "stackMm": 33,
-    "trail": true,
-    "price": 126,
-    "priceCurrency": "CAD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/L47870600Lead_0883728d-a739-4fb1-b4e8-251085b189c1.png?width=480",
-    "credit": "Vancouver Running Co.",
-    "page": "https://vanrunco.com/products/salomon-aero-glide-3-grvl-womens-l47870600"
-   },
-   "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/salomon-aero-glide-3-grvl-womens-l47870600"
-   },
-   "sources": [
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/salomon-aero-glide-3-grvl-womens-l47870600"
-    }
-   ],
-   "plus": [
-    "Ringan untuk kategorinya (235 g vs median 272 g)",
-    "Harga di bawah median kategorinya (126 vs 228 CAD)"
-   ],
-   "minus": [],
    "auto": true
   },
   {
@@ -569,7 +474,7 @@
     "stackMm": 33.5,
     "waterproof": true,
     "trail": true,
-    "price": 210,
+    "price": 152,
     "priceCurrency": "CAD"
    },
    "image": {
@@ -641,7 +546,7 @@
    "use": "race",
    "specs": {
     "plate": "carbon",
-    "price": 258,
+    "price": 183,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -660,7 +565,8 @@
     }
    ],
    "plus": [
-    "Pakai carbon plate untuk race dan sesi cepat"
+    "Pakai carbon plate untuk race dan sesi cepat",
+    "Harga di bawah median kategorinya (183 vs 239 AUD)"
    ],
    "minus": [
     "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
@@ -678,7 +584,7 @@
     "weightG": 275,
     "dropMm": 4,
     "trail": true,
-    "price": 170,
+    "price": 123,
     "priceCurrency": "CAD",
     "stackMm": 28
    },
@@ -698,45 +604,12 @@
     }
    ],
    "plus": [
-    "Harga di bawah median kategorinya (170 vs 228 CAD)"
+    "Harga di bawah median kategorinya (123 vs 169 CAD)"
    ],
    "minus": [
     "Bantalan tipis (stack 28 mm), kurang empuk untuk long run",
     "Drop rendah (4 mm): butuh adaptasi betis kalau biasa sepatu drop tinggi"
    ],
-   "auto": true
-  },
-  {
-   "id": "asics-fuji-lite-6",
-   "brand": "ASICS",
-   "model": "Fuji Lite 6",
-   "released": "2026-10-15",
-   "approx": true,
-   "use": "trail",
-   "specs": {
-    "trail": true,
-    "price": 102,
-    "priceCurrency": "CAD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/leadfuji_353940a5-7e0e-40ec-af52-e51b12a0f914.png?width=480",
-    "credit": "Vancouver Running Co.",
-    "page": "https://vanrunco.com/products/asics-fuji-lite-6-mens-1011c086-600"
-   },
-   "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/asics-fuji-lite-6-womens-1012b865-700"
-   },
-   "sources": [
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/asics-fuji-lite-6-mens-1011c086-600"
-    }
-   ],
-   "plus": [
-    "Harga di bawah median kategorinya (102 vs 228 CAD)"
-   ],
-   "minus": [],
    "auto": true
   },
   {
@@ -749,7 +622,7 @@
    "specs": {
     "dropMm": 6,
     "stackMm": 38,
-    "price": 210,
+    "price": 152,
     "priceCurrency": "CAD"
    },
    "image": {
@@ -768,8 +641,40 @@
     }
    ],
    "plus": [
-    "Bantalan tebal (stack 38 mm)",
-    "Harga di bawah median kategorinya (210 vs 258 CAD)"
+    "Bantalan tebal (stack 38 mm)"
+   ],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "asics-fuji-lite-6",
+   "brand": "ASICS",
+   "model": "Fuji Lite 6",
+   "released": "2026-10-15",
+   "approx": true,
+   "use": "trail",
+   "specs": {
+    "trail": true,
+    "price": 74,
+    "priceCurrency": "CAD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/leadfuji_353940a5-7e0e-40ec-af52-e51b12a0f914.png?width=480",
+    "credit": "Vancouver Running Co.",
+    "page": "https://vanrunco.com/products/asics-fuji-lite-6-mens-1011c086-600"
+   },
+   "source": {
+    "label": "Vancouver Running Co.",
+    "url": "https://vanrunco.com/products/asics-fuji-lite-6-womens-1012b865-700"
+   },
+   "sources": [
+    {
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/asics-fuji-lite-6-mens-1011c086-600"
+    }
+   ],
+   "plus": [
+    "Harga di bawah median kategorinya (74 vs 169 CAD)"
    ],
    "minus": [],
    "auto": true
@@ -786,7 +691,7 @@
     "dropMm": 6,
     "stackMm": 39,
     "waterproof": true,
-    "price": 240,
+    "price": 174,
     "priceCurrency": "CAD"
    },
    "image": {
@@ -809,7 +714,6 @@
     "Tahan air (Gore-Tex/waterproof)"
    ],
    "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (283 g vs median 244 g)",
     "Versi tahan air biasanya lebih panas di cuaca tropis"
    ],
    "auto": true
@@ -823,7 +727,7 @@
    "use": "race",
    "specs": {
     "plate": "carbon",
-    "price": 416,
+    "price": 295,
     "priceCurrency": "AUD",
     "weightG": 135,
     "dropMm": 3,
@@ -849,78 +753,15 @@
     }
    ],
    "plus": [
-    "Ringan untuk kategorinya (135 g vs median 175 g)",
+    "Ringan untuk kategorinya (135 g vs median 192 g)",
     "Bantalan tebal (stack 38 mm)",
     "Pakai carbon plate untuk race dan sesi cepat"
    ],
    "minus": [
     "Drop rendah (3 mm): butuh adaptasi betis kalau biasa sepatu drop tinggi",
     "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian",
-    "Harga di atas median kategorinya (416 vs 268 AUD)"
+    "Harga di atas median kategorinya (295 vs 239 AUD)"
    ],
-   "auto": true
-  },
-  {
-   "id": "asics-gt-2000-15-lite-show",
-   "brand": "ASICS",
-   "model": "GT-2000 15 Lite-Show",
-   "released": "2026-10-07",
-   "approx": true,
-   "use": "long",
-   "specs": {
-    "stability": true,
-    "price": 248,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Mens-ASICS-GT-2000-15-Lite-Show-Lite-Show_Orange-Glow-1011C314-400.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/mens-asics-gt-2000-15-lite-show-1011c314-400"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/mens-asics-gt-2000-15-lite-show-1011c314-400"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/mens-asics-gt-2000-15-lite-show-1011c314-400"
-    }
-   ],
-   "plus": [
-    "Disebut sebagai sepatu stability/support"
-   ],
-   "minus": [],
-   "auto": true
-  },
-  {
-   "id": "asics-novablast-6-lite-show",
-   "brand": "ASICS",
-   "model": "Novablast 6 Lite-Show",
-   "released": "2026-10-07",
-   "approx": true,
-   "use": "long",
-   "specs": {
-    "price": 268,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Mens-ASICS-Novablast-6-Lite-Show-Lite-Show_Orange-Glow-1011C318-400.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/mens-asics-novablast-6-lite-show-1011c318-400"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/mens-asics-novablast-6-lite-show-1011c318-400"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/mens-asics-novablast-6-lite-show-1011c318-400"
-    }
-   ],
-   "plus": [],
-   "minus": [],
    "auto": true
   },
   {
@@ -935,7 +776,7 @@
     "dropMm": 4,
     "stackMm": 32,
     "waterproof": true,
-    "price": 200,
+    "price": 145,
     "priceCurrency": "CAD"
    },
    "image": {
@@ -957,7 +798,6 @@
     "Tahan air (Gore-Tex/waterproof)"
    ],
    "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (274 g vs median 238 g)",
     "Drop rendah (4 mm): butuh adaptasi betis kalau biasa sepatu drop tinggi",
     "Versi tahan air biasanya lebih panas di cuaca tropis"
    ],
@@ -976,7 +816,7 @@
     "stackMm": 29,
     "waterproof": true,
     "trail": true,
-    "price": 215,
+    "price": 156,
     "priceCurrency": "CAD"
    },
    "image": {
@@ -1004,183 +844,6 @@
    "auto": true
   },
   {
-   "id": "saucony-endorphin-elite-3-daikanyama",
-   "brand": "Saucony",
-   "model": "Endorphin Elite 3 Daikanyama",
-   "released": "2026-10-06",
-   "approx": true,
-   "use": "race",
-   "specs": {
-    "weightG": 207,
-    "dropMm": 8,
-    "plate": "carbon",
-    "price": 370,
-    "priceCurrency": "CAD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/spacecowboyspeed5-lead_2.png?width=480",
-    "credit": "Vancouver Running Co.",
-    "page": "https://vanrunco.com/products/saucony-endorphin-elite-3-unisex-s100981-1026"
-   },
-   "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/saucony-endorphin-elite-3-unisex-s100981-1026"
-   },
-   "sources": [
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/saucony-endorphin-elite-3-unisex-s100981-1026"
-    }
-   ],
-   "plus": [
-    "Pakai carbon plate untuk race dan sesi cepat"
-   ],
-   "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (207 g vs median 175 g)",
-    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian",
-    "Harga di atas median kategorinya (370 vs 268 CAD)"
-   ],
-   "auto": true
-  },
-  {
-   "id": "saucony-endorphin-speed-5-daikanyama",
-   "brand": "Saucony",
-   "model": "Endorphin Speed 5 Daikanyama",
-   "released": "2026-10-06",
-   "approx": true,
-   "use": "tempo",
-   "specs": {
-    "weightG": 238,
-    "dropMm": 8,
-    "plate": "plate",
-    "price": 161,
-    "priceCurrency": "CAD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/spacecowboyspeed5-lead.png?width=480",
-    "credit": "Vancouver Running Co.",
-    "page": "https://vanrunco.com/products/saucony-endorphin-speed-5-mens-s101368-1008"
-   },
-   "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/saucony-endorphin-speed-5-mens-s101368-1008"
-   },
-   "sources": [
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/saucony-endorphin-speed-5-mens-s101368-1008"
-    }
-   ],
-   "plus": [
-    "Ada plate untuk dorongan di pace cepat",
-    "Harga di bawah median kategorinya (161 vs 278 CAD)"
-   ],
-   "minus": [],
-   "auto": true
-  },
-  {
-   "id": "saucony-endorphin-azura-space-cowboy",
-   "brand": "Saucony",
-   "model": "Endorphin Azura Space Cowboy",
-   "released": "2026-10-06",
-   "approx": true,
-   "use": "tempo",
-   "specs": {
-    "dropMm": 8,
-    "stackMm": 40,
-    "plate": "plate",
-    "price": 190,
-    "priceCurrency": "CAD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/S100997-1019-lead-2_0724710a-9f5e-4537-992e-5b6230cb5852.png?width=480",
-    "credit": "Vancouver Running Co.",
-    "page": "https://vanrunco.com/products/saucony-endorphin-azura-mens-s101329-1014"
-   },
-   "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/saucony-endorphin-azura-mens-s101329-1014"
-   },
-   "sources": [
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/saucony-endorphin-azura-mens-s101329-1014"
-    }
-   ],
-   "plus": [
-    "Bantalan tebal (stack 40 mm)",
-    "Ada plate untuk dorongan di pace cepat",
-    "Harga di bawah median kategorinya (190 vs 278 CAD)"
-   ],
-   "minus": [],
-   "auto": true
-  },
-  {
-   "id": "mizuno-neo-vista-3-tsukiakari",
-   "brand": "Mizuno",
-   "model": "Neo Vista 3 Tsukiakari",
-   "released": "2026-09-25",
-   "approx": true,
-   "use": "tempo",
-   "specs": {
-    "plate": "plate",
-    "price": 317,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Unisex-Mizuno-Neo-Vista-3-Tsukiakari-Lilac-Hint_Vulcan_Moonlit-Ocean-J1GS2610-99.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/unisex-mizuno-neo-vista-3-tsukiakari-j1gs2610-99"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/unisex-mizuno-neo-vista-3-tsukiakari-j1gs2610-99"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/unisex-mizuno-neo-vista-3-tsukiakari-j1gs2610-99"
-    }
-   ],
-   "plus": [
-    "Ada plate untuk dorongan di pace cepat"
-   ],
-   "minus": [],
-   "auto": true
-  },
-  {
-   "id": "mizuno-neo-zen-2-tsukiakari",
-   "brand": "Mizuno",
-   "model": "Neo Zen 2 Tsukiakari",
-   "released": "2026-09-25",
-   "approx": true,
-   "use": "long",
-   "specs": {
-    "price": 159,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Unisex-Mizuno-Neo-Zen-2-Tsukiakari-Lilac-Hint_White_Moonlit-Ocean-J1GS2611-99.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/unisex-mizuno-neo-zen-2-tsukiakari-j1gs2611-99"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/unisex-mizuno-neo-zen-2-tsukiakari-j1gs2611-99"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/unisex-mizuno-neo-zen-2-tsukiakari-j1gs2611-99"
-    }
-   ],
-   "plus": [
-    "Harga di bawah median kategorinya (159 vs 258 AUD)"
-   ],
-   "minus": [],
-   "auto": true
-  },
-  {
    "id": "mizuno-sky-prime",
    "brand": "Mizuno",
    "model": "Sky Prime",
@@ -1189,7 +852,7 @@
    "use": "tempo",
    "specs": {
     "plate": "plate",
-    "price": 297,
+    "price": 211,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -1214,113 +877,6 @@
    "auto": true
   },
   {
-   "id": "mizuno-hyperwarp-pro-tsukiakari",
-   "brand": "Mizuno",
-   "model": "Hyperwarp Pro Tsukiakari",
-   "released": "2026-09-25",
-   "approx": true,
-   "use": "race",
-   "specs": {
-    "plate": "carbon",
-    "price": 208,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Unisex-Mizuno-Hyperwarp-Pro-Tsukiakari-Vulcan_White_Moonlit-J1GC2689-99.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-pro-tsukiakari-j1gc2689-99"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-pro-tsukiakari-j1gc2689-99"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-pro-tsukiakari-j1gc2689-99"
-    }
-   ],
-   "plus": [
-    "Pakai carbon plate untuk race dan sesi cepat",
-    "Harga di bawah median kategorinya (208 vs 268 AUD)"
-   ],
-   "minus": [
-    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
-   ],
-   "auto": true
-  },
-  {
-   "id": "mizuno-hyperwarp-elite-tsukiakari",
-   "brand": "Mizuno",
-   "model": "Hyperwarp Elite Tsukiakari",
-   "released": "2026-09-25",
-   "approx": true,
-   "use": "race",
-   "specs": {
-    "weightG": 165,
-    "plate": "carbon",
-    "price": 238,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Unisex-Mizuno-Hyperwarp-Elite-Tsukiakari-Vulcan_White_Moonlit-Ocean-J1GC2688-99.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-elite-tsukiakari-j1gc2688-99"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-elite-tsukiakari-j1gc2688-99"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-elite-tsukiakari-j1gc2688-99"
-    }
-   ],
-   "plus": [
-    "Pakai carbon plate untuk race dan sesi cepat"
-   ],
-   "minus": [
-    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
-   ],
-   "auto": true
-  },
-  {
-   "id": "mizuno-hyperwarp-pure-tsukiakari",
-   "brand": "Mizuno",
-   "model": "Hyperwarp Pure Tsukiakari",
-   "released": "2026-09-25",
-   "approx": true,
-   "use": "race",
-   "specs": {
-    "plate": "carbon",
-    "price": 268,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Unisex-Mizuno-Hyperwarp-Pure-Tsukiakari-Vulcan_White_Moonlit-Ocean-J1GC2687-99.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-pure-tsukiakari-j1gc2687-99"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-pure-tsukiakari-j1gc2687-99"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-pure-tsukiakari-j1gc2687-99"
-    }
-   ],
-   "plus": [
-    "Pakai carbon plate untuk race dan sesi cepat"
-   ],
-   "minus": [
-    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
-   ],
-   "auto": true
-  },
-  {
    "id": "diadora-corsa",
    "brand": "Diadora",
    "model": "Corsa",
@@ -1332,7 +888,7 @@
     "dropMm": 8,
     "stackMm": 39,
     "plate": "carbon",
-    "price": 190,
+    "price": 138,
     "priceCurrency": "CAD"
    },
    "image": {
@@ -1353,43 +909,11 @@
    "plus": [
     "Bantalan tebal (stack 39 mm)",
     "Pakai carbon plate untuk race dan sesi cepat",
-    "Harga di bawah median kategorinya (190 vs 268 CAD)"
+    "Harga di bawah median kategorinya (138 vs 239 CAD)"
    ],
    "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (230 g vs median 175 g)",
+    "Lebih berat dari kebanyakan di kategorinya (230 g vs median 192 g)",
     "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
-   ],
-   "auto": true
-  },
-  {
-   "id": "adidas-hyperboost-edge-h-koumori",
-   "brand": "adidas",
-   "model": "Hyperboost Edge H.Koumori",
-   "released": "2026-09-24",
-   "approx": true,
-   "use": "daily",
-   "specs": {
-    "price": 260,
-    "priceCurrency": "CAD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/KH5376-lead-2.png?width=480",
-    "credit": "Vancouver Running Co.",
-    "page": "https://vanrunco.com/products/adidas-hyperboost-edge-h-koumori-mens-kh5376"
-   },
-   "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/adidas-hyperboost-edge-h-koumori-mens-kh5376"
-   },
-   "sources": [
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/adidas-hyperboost-edge-h-koumori-mens-kh5376"
-    }
-   ],
-   "plus": [],
-   "minus": [
-    "Harga di atas median kategorinya (260 vs 200 CAD)"
    ],
    "auto": true
   },
@@ -1403,7 +927,7 @@
    "specs": {
     "stackMm": 38,
     "plate": "plate",
-    "price": 297,
+    "price": 211,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -1438,7 +962,7 @@
    "specs": {
     "weightG": 293,
     "trail": true,
-    "price": 219,
+    "price": 155,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -1490,7 +1014,8 @@
    ],
    "plus": [],
    "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (330 g vs median 238 g)"
+    "Lebih berat dari kebanyakan di kategorinya (330 g vs median 265 g)",
+    "Harga di atas median kategorinya (185 vs 152 AUD)"
    ],
    "auto": true
   },
@@ -1503,7 +1028,7 @@
    "use": "race",
    "specs": {
     "plate": "carbon",
-    "price": 377,
+    "price": 267,
     "priceCurrency": "CAD",
     "weightG": 175,
     "dropMm": 4,
@@ -1533,113 +1058,12 @@
     }
    ],
    "plus": [
+    "Ringan untuk kategorinya (175 g vs median 192 g)",
     "Bantalan tebal (stack 39 mm)",
     "Pakai carbon plate untuk race dan sesi cepat"
    ],
    "minus": [
     "Drop rendah (4 mm): butuh adaptasi betis kalau biasa sepatu drop tinggi",
-    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian",
-    "Harga di atas median kategorinya (377 vs 268 CAD)"
-   ],
-   "auto": true
-  },
-  {
-   "id": "adidas-adizero-evo-sl-atr-by-ut",
-   "brand": "adidas",
-   "model": "Adizero Evo SL ATR by UT",
-   "released": "2026-09-21",
-   "approx": true,
-   "use": "trail",
-   "specs": {
-    "trail": true,
-    "price": 172,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0524/9024/0175/files/adidas-up-there-up-there-athletics-adizero-evo-sl-atr-wild-moss-grey-strata-green-kz8562-1.jpg?width=480",
-    "credit": "Up There Athletics",
-    "page": "https://upthereathletics.com/products/adizero-evo-sl-atr-by-ut-x-uta-wild-moss"
-   },
-   "source": {
-    "label": "Up There Athletics",
-    "url": "https://upthereathletics.com/products/adizero-evo-sl-atr-by-ut-x-uta-wild-moss"
-   },
-   "sources": [
-    {
-     "label": "Up There Athletics",
-     "url": "https://upthereathletics.com/products/adizero-evo-sl-atr-by-ut-x-uta-wild-moss"
-    }
-   ],
-   "plus": [
-    "Harga di bawah median kategorinya (172 vs 228 AUD)"
-   ],
-   "minus": [],
-   "auto": true
-  },
-  {
-   "id": "adidas-adizero-evo-sl-woven-hermanos-koumori",
-   "brand": "adidas",
-   "model": "Adizero EVO SL Woven Hermanos Koumori",
-   "released": "2026-09-15",
-   "approx": true,
-   "use": "tempo",
-   "specs": {
-    "price": 248,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-adidas-Adizero-EVO-SL-Woven-Hermanos-Koumori-Charcoal_Grey_Clean-Sky-KK2052.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/womens-adidas-adizero-evo-sl-woven-hermanos-koumori-kk2052"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/womens-adidas-adizero-evo-sl-woven-hermanos-koumori-kk2052"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/womens-adidas-adizero-evo-sl-woven-hermanos-koumori-kk2052"
-    }
-   ],
-   "plus": [],
-   "minus": [],
-   "auto": true
-  },
-  {
-   "id": "new-balance-fuelcell-supercomp-elite-v6-nyc",
-   "brand": "New Balance",
-   "model": "FuelCell SuperComp Elite v6 NYC",
-   "released": "2026-09-13",
-   "approx": true,
-   "use": "race",
-   "specs": {
-    "weightG": 154,
-    "dropMm": 8,
-    "plate": "carbon",
-    "price": 242,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0524/9024/0175/files/new-balance-running-mens-and-womens-fuelcell-supercomp-elite-v6-nyc-satsuma-orange-new-balance-mrcecl7rz-1.jpg?width=480",
-    "credit": "Up There Athletics",
-    "page": "https://upthereathletics.com/products/new-balance-womens-fuelcell-supercomp-elite-v6-nyc-satsuma-orange"
-   },
-   "source": {
-    "label": "Up There Athletics",
-    "url": "https://upthereathletics.com/products/new-balance-womens-fuelcell-supercomp-elite-v6-nyc-satsuma-orange"
-   },
-   "sources": [
-    {
-     "label": "Up There Athletics",
-     "url": "https://upthereathletics.com/products/new-balance-womens-fuelcell-supercomp-elite-v6-nyc-satsuma-orange"
-    }
-   ],
-   "plus": [
-    "Ringan untuk kategorinya (154 g vs median 175 g)",
-    "Pakai carbon plate untuk race dan sesi cepat"
-   ],
-   "minus": [
     "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
    ],
    "auto": true
@@ -1656,7 +1080,7 @@
     "dropMm": 8,
     "stackMm": 23,
     "waterproof": true,
-    "price": 210,
+    "price": 152,
     "priceCurrency": "CAD"
    },
    "image": {
@@ -1678,86 +1102,8 @@
     "Tahan air (Gore-Tex/waterproof)"
    ],
    "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (325 g vs median 238 g)",
+    "Lebih berat dari kebanyakan di kategorinya (325 g vs median 265 g)",
     "Bantalan tipis (stack 23 mm), kurang empuk untuk long run",
-    "Versi tahan air biasanya lebih panas di cuaca tropis"
-   ],
-   "auto": true
-  },
-  {
-   "id": "brooks-ghost",
-   "brand": "Brooks",
-   "model": "Ghost",
-   "released": "2026-09-10",
-   "approx": true,
-   "use": "trail",
-   "specs": {
-    "weightG": 300.5,
-    "dropMm": 8,
-    "trail": true,
-    "price": 185,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0524/9024/0175/files/brooks-running-alex-zono-ghost-trail-simmental-brown-alpine-sky-1.jpg?width=480",
-    "credit": "Up There Athletics",
-    "page": "https://upthereathletics.com/products/brooks-ghost-trail-x-alex-zono-simmental-brown-alpine-sky"
-   },
-   "source": {
-    "label": "Up There Athletics",
-    "url": "https://upthereathletics.com/products/brooks-ghost-trail-x-alex-zono-simmental-brown-alpine-sky"
-   },
-   "sources": [
-    {
-     "label": "Up There Athletics",
-     "url": "https://upthereathletics.com/products/brooks-ghost-trail-x-alex-zono-simmental-brown-alpine-sky"
-    }
-   ],
-   "plus": [
-    "Harga di bawah median kategorinya (185 vs 228 AUD)"
-   ],
-   "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (300.5 g vs median 272 g)"
-   ],
-   "auto": true
-  },
-  {
-   "id": "salomon-aero-blaze-4-grvl",
-   "brand": "Salomon",
-   "model": "Aero Blaze 4 GRVL",
-   "released": "2026-09-10",
-   "approx": true,
-   "use": "trail",
-   "specs": {
-    "weightG": 223,
-    "dropMm": 8,
-    "stackMm": 36,
-    "waterproof": true,
-    "trail": true,
-    "price": 180,
-    "priceCurrency": "CAD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/L45401900-l_1bcedbbe-7aca-4db0-aeeb-9b350332c627.png?width=480",
-    "credit": "Vancouver Running Co.",
-    "page": "https://vanrunco.com/products/salomon-aero-blaze-4-grvl-womens-l45401900"
-   },
-   "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/salomon-aero-blaze-4-grvl-womens-l45401900"
-   },
-   "sources": [
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/salomon-aero-blaze-4-grvl-womens-l45401900"
-    }
-   ],
-   "plus": [
-    "Ringan untuk kategorinya (223 g vs median 272 g)",
-    "Tahan air (Gore-Tex/waterproof)",
-    "Harga di bawah median kategorinya (180 vs 228 CAD)"
-   ],
-   "minus": [
     "Versi tahan air biasanya lebih panas di cuaca tropis"
    ],
    "auto": true
@@ -1772,7 +1118,7 @@
    "specs": {
     "waterproof": true,
     "trail": true,
-    "price": 258,
+    "price": 183,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -1834,9 +1180,8 @@
     }
    ],
    "plus": [
-    "Ringan untuk kategorinya (204 g vs median 272 g)",
-    "Tahan air (Gore-Tex/waterproof)",
-    "Harga di bawah median kategorinya (147 vs 228 CAD)"
+    "Ringan untuk kategorinya (204 g vs median 275 g)",
+    "Tahan air (Gore-Tex/waterproof)"
    ],
    "minus": [
     "Versi tahan air biasanya lebih panas di cuaca tropis"
@@ -1878,41 +1223,9 @@
     "Pakai carbon plate untuk race dan sesi cepat"
    ],
    "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (192 g vs median 175 g)",
     "Drop rendah (4 mm): butuh adaptasi betis kalau biasa sepatu drop tinggi",
     "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
    ],
-   "auto": true
-  },
-  {
-   "id": "nike-radical-airflow-after-dark-tour",
-   "brand": "Nike",
-   "model": "Radical AirFlow After Dark Tour",
-   "released": "2026-09-08",
-   "approx": true,
-   "use": "trail",
-   "specs": {
-    "trail": true,
-    "price": 198,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Nike-Radical-AirFlow-After-Dark-Tour-Hyper-Pink_Reflective-Silver_Black-IX3515-645.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/womens-nike-radical-airflow-after-dark-tour-ix3515-645"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/womens-nike-radical-airflow-after-dark-tour-ix3515-645"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/womens-nike-radical-airflow-after-dark-tour-ix3515-645"
-    }
-   ],
-   "plus": [],
-   "minus": [],
    "auto": true
   },
   {
@@ -1923,7 +1236,7 @@
    "approx": true,
    "use": "daily",
    "specs": {
-    "price": 149,
+    "price": 106,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -1942,7 +1255,40 @@
     }
    ],
    "plus": [
-    "Harga di bawah median kategorinya (149 vs 200 AUD)"
+    "Harga di bawah median kategorinya (106 vs 152 AUD)"
+   ],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "nike-radical-airflow-after-dark-tour",
+   "brand": "Nike",
+   "model": "Radical AirFlow After Dark Tour",
+   "released": "2026-09-08",
+   "approx": true,
+   "use": "trail",
+   "specs": {
+    "trail": true,
+    "price": 141,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Nike-Radical-AirFlow-After-Dark-Tour-Hyper-Pink_Reflective-Silver_Black-IX3515-645.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/womens-nike-radical-airflow-after-dark-tour-ix3515-645"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/womens-nike-radical-airflow-after-dark-tour-ix3515-645"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/womens-nike-radical-airflow-after-dark-tour-ix3515-645"
+    }
+   ],
+   "plus": [
+    "Harga di bawah median kategorinya (141 vs 169 AUD)"
    ],
    "minus": [],
    "auto": true
@@ -1956,7 +1302,7 @@
    "use": "trail",
    "specs": {
     "trail": true,
-    "price": 181,
+    "price": 128,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -1975,7 +1321,7 @@
     }
    ],
    "plus": [
-    "Harga di bawah median kategorinya (181 vs 228 AUD)"
+    "Harga di bawah median kategorinya (128 vs 169 AUD)"
    ],
    "minus": [],
    "auto": true
@@ -1989,7 +1335,7 @@
    "use": "long",
    "specs": {
     "waterproof": true,
-    "price": 297,
+    "price": 211,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -2012,109 +1358,7 @@
    ],
    "minus": [
     "Versi tahan air biasanya lebih panas di cuaca tropis",
-    "Harga di atas median kategorinya (297 vs 258 AUD)"
-   ],
-   "auto": true
-  },
-  {
-   "id": "brooks-ghost-amp",
-   "brand": "Brooks",
-   "model": "Ghost AMP",
-   "released": "2026-09-03",
-   "approx": true,
-   "use": "daily",
-   "specs": {
-    "price": 268,
-    "priceCurrency": "AUD",
-    "weightG": 218,
-    "dropMm": 6
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Brooks-Ghost-AMP-Peach_Peach_White-120486_1B_612.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/womens-brooks-ghost-amp-120486_1b_612"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/mens-brooks-ghost-amp-110497_1d_414"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/womens-brooks-ghost-amp-120486_1b_612"
-    },
-    {
-     "label": "Up There Athletics",
-     "url": "https://upthereathletics.com/products/brooks-womens-ghost-amp-peach-peach-white"
-    }
-   ],
-   "plus": [
-    "Ringan untuk kategorinya (218 g vs median 238 g)"
-   ],
-   "minus": [
-    "Harga di atas median kategorinya (268 vs 200 AUD)"
-   ],
-   "auto": true
-  },
-  {
-   "id": "nike-vomero-plus-keely-hodgkinson",
-   "brand": "Nike",
-   "model": "Vomero Plus Keely Hodgkinson",
-   "released": "2026-09-03",
-   "approx": true,
-   "use": "long",
-   "specs": {
-    "price": 268,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Nike-Vomero-Plus-Keely-Hodgkinson-Pitch-Blue_Black_Blur_Blackened-Blue-IR7193-400.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/womens-nike-vomero-plus-keely-hodgkinson-ir7193-400"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/womens-nike-vomero-plus-keely-hodgkinson-ir7193-400"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/womens-nike-vomero-plus-keely-hodgkinson-ir7193-400"
-    }
-   ],
-   "plus": [],
-   "minus": [],
-   "auto": true
-  },
-  {
-   "id": "nike-vomero-renegade",
-   "brand": "Nike",
-   "model": "Vomero Renegade",
-   "released": "2026-09-03",
-   "approx": true,
-   "use": "long",
-   "specs": {
-    "price": 347,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Unisex-Nike-Vomero-Premium-Renegade-1.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/unisex-nike-vomero-premium-renegade-iq7314-200"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/unisex-nike-vomero-premium-renegade-iq7314-200"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/unisex-nike-vomero-premium-renegade-iq7314-200"
-    }
-   ],
-   "plus": [],
-   "minus": [
-    "Harga di atas median kategorinya (347 vs 258 AUD)"
+    "Harga di atas median kategorinya (211 vs 176 AUD)"
    ],
    "auto": true
   },
@@ -2129,7 +1373,7 @@
     "weightG": 298,
     "dropMm": 10,
     "trail": true,
-    "price": 238,
+    "price": 169,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -2151,7 +1395,7 @@
     "Drop 10 mm, ramah untuk pelari yang mendarat di tumit"
    ],
    "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (298 g vs median 272 g)"
+    "Lebih berat dari kebanyakan di kategorinya (298 g vs median 275 g)"
    ],
    "auto": true
   },
@@ -2166,7 +1410,7 @@
     "weightG": 258,
     "dropMm": 10,
     "trail": true,
-    "price": 228,
+    "price": 162,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -2191,6 +1435,45 @@
    "auto": true
   },
   {
+   "id": "brooks-ghost",
+   "brand": "Brooks",
+   "model": "Ghost",
+   "released": "2026-09-03",
+   "approx": true,
+   "use": "trail",
+   "specs": {
+    "weightG": 300.5,
+    "dropMm": 8,
+    "trail": true,
+    "price": 185,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0524/9024/0175/files/brooks-running-alex-zono-ghost-trail-simmental-brown-alpine-sky-1.jpg?width=480",
+    "credit": "Up There Athletics",
+    "page": "https://upthereathletics.com/products/brooks-ghost-trail-x-alex-zono-simmental-brown-alpine-sky"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/mens-brooks-ghost-amp-110497_1d_414"
+   },
+   "sources": [
+    {
+     "label": "Up There Athletics",
+     "url": "https://upthereathletics.com/products/brooks-ghost-trail-x-alex-zono-simmental-brown-alpine-sky"
+    },
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/womens-brooks-ghost-amp-120486_1b_612"
+    }
+   ],
+   "plus": [],
+   "minus": [
+    "Lebih berat dari kebanyakan di kategorinya (300.5 g vs median 275 g)"
+   ],
+   "auto": true
+  },
+  {
    "id": "adidas-hyperboost-atr",
    "brand": "adidas",
    "model": "Hyperboost ATR",
@@ -2199,7 +1482,7 @@
    "use": "trail",
    "specs": {
     "trail": true,
-    "price": 297,
+    "price": 211,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -2219,7 +1502,7 @@
    ],
    "plus": [],
    "minus": [
-    "Harga di atas median kategorinya (297 vs 228 AUD)"
+    "Harga di atas median kategorinya (211 vs 169 AUD)"
    ],
    "auto": true
   },
@@ -2232,7 +1515,7 @@
    "use": "race",
    "specs": {
     "plate": "carbon",
-    "price": 337,
+    "price": 239,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -2254,8 +1537,7 @@
     "Pakai carbon plate untuk race dan sesi cepat"
    ],
    "minus": [
-    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian",
-    "Harga di atas median kategorinya (337 vs 268 AUD)"
+    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
    ],
    "auto": true
   },
@@ -2292,46 +1574,43 @@
     "Pakai carbon plate untuk race dan sesi cepat"
    ],
    "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (198 g vs median 175 g)",
     "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
    ],
    "auto": true
   },
   {
-   "id": "nike-vaporfly-4-keely-hodgkinson",
-   "brand": "Nike",
-   "model": "Vaporfly 4 Keely Hodgkinson",
-   "released": "2026-08-28",
+   "id": "hoka-mach",
+   "brand": "HOKA",
+   "model": "Mach",
+   "released": "2026-08-27",
    "approx": true,
    "use": "race",
    "specs": {
-    "stackMm": 35,
-    "plate": "carbon",
-    "price": 220,
-    "priceCurrency": "AUD"
+    "dropMm": 5,
+    "plate": "plate",
+    "price": 181,
+    "priceCurrency": "CAD"
    },
    "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Nike-Vaporfly-4-Keely-Hodgkinson-Pencil-Point_Black_Blue-Eclipse-Blur-IR7194-001.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/womens-nike-vaporfly-4-keely-hodgkinson-ir7194-001"
+    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/1168721-GBLV_1.png?width=480",
+    "credit": "Vancouver Running Co.",
+    "page": "https://vanrunco.com/products/hoka-mach-x-3-womens-1168721-gblv"
    },
    "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/womens-nike-vaporfly-4-keely-hodgkinson-ir7194-001"
+    "label": "Vancouver Running Co.",
+    "url": "https://vanrunco.com/products/hoka-mach-x-3-womens-1168721-bnnn"
    },
    "sources": [
     {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/womens-nike-vaporfly-4-keely-hodgkinson-ir7194-001"
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/hoka-mach-x-3-womens-1168721-gblv"
     }
    ],
    "plus": [
-    "Pakai carbon plate untuk race dan sesi cepat",
-    "Harga di bawah median kategorinya (220 vs 268 AUD)"
+    "Ada plate untuk dorongan di pace cepat",
+    "Harga di bawah median kategorinya (181 vs 239 CAD)"
    ],
-   "minus": [
-    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
-   ],
+   "minus": [],
    "auto": true
   },
   {
@@ -2364,124 +1643,11 @@
     }
    ],
    "plus": [
-    "Harga di bawah median kategorinya (160 vs 200 AUD)"
+    "Ringan untuk kategorinya (238 g vs median 265 g)"
    ],
    "minus": [
     "Bantalan tipis (stack 22 mm), kurang empuk untuk long run",
     "Drop rendah (0 mm): butuh adaptasi betis kalau biasa sepatu drop tinggi"
-   ],
-   "auto": true
-  },
-  {
-   "id": "hoka-mach",
-   "brand": "HOKA",
-   "model": "Mach",
-   "released": "2026-08-27",
-   "approx": true,
-   "use": "race",
-   "specs": {
-    "dropMm": 5,
-    "plate": "plate",
-    "price": 250,
-    "priceCurrency": "CAD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/1168721-GBLV_1.png?width=480",
-    "credit": "Vancouver Running Co.",
-    "page": "https://vanrunco.com/products/hoka-mach-x-3-womens-1168721-gblv"
-   },
-   "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/hoka-mach-x-3-womens-1168721-bnnn"
-   },
-   "sources": [
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/hoka-mach-x-3-womens-1168721-gblv"
-    }
-   ],
-   "plus": [
-    "Ada plate untuk dorongan di pace cepat"
-   ],
-   "minus": [],
-   "auto": true
-  },
-  {
-   "id": "nike-pegasus-plus-2",
-   "brand": "Nike",
-   "model": "Pegasus Plus 2",
-   "released": "2026-08-26",
-   "approx": true,
-   "use": "daily",
-   "specs": {
-    "price": 258,
-    "priceCurrency": "AUD",
-    "weightG": 265,
-    "dropMm": 10
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Nike-Pegasus-Plus-2-Fennel_Gridiron_Lemon-Venom-IM2543-310.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/womens-nike-pegasus-plus-2-im2543-310"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/mens-nike-pegasus-plus-2-im2541-600"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/womens-nike-pegasus-plus-2-im2543-310"
-    },
-    {
-     "label": "Up There Athletics",
-     "url": "https://upthereathletics.com/products/nike-mens-pegasus-plus-2-rsg-stealth-purple-dynasty-volt"
-    }
-   ],
-   "plus": [
-    "Drop 10 mm, ramah untuk pelari yang mendarat di tumit"
-   ],
-   "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (265 g vs median 238 g)",
-    "Harga di atas median kategorinya (258 vs 200 AUD)"
-   ],
-   "auto": true
-  },
-  {
-   "id": "nike-alphafly-next-3-glam",
-   "brand": "Nike",
-   "model": "Alphafly Next% 3 GLAM",
-   "released": "2026-08-26",
-   "approx": true,
-   "use": "race",
-   "specs": {
-    "weightG": 174,
-    "dropMm": 8,
-    "plate": "carbon",
-    "price": 153,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0524/9024/0175/files/nike-running-mens-and-womens-air-zoom-alphafly-next-3-glam-orange-pulse-black-purple-dynasty-io9573-800-1_252bc5f7-2cd7-4a60-8224-4d041103c747.jpg?width=480",
-    "credit": "Up There Athletics",
-    "page": "https://upthereathletics.com/products/nike-womens-air-zoom-alphafly-next-3-glam-orange-pulse-black-purple-dynasty"
-   },
-   "source": {
-    "label": "Up There Athletics",
-    "url": "https://upthereathletics.com/products/nike-womens-air-zoom-alphafly-next-3-glam-orange-pulse-black-purple-dynasty"
-   },
-   "sources": [
-    {
-     "label": "Up There Athletics",
-     "url": "https://upthereathletics.com/products/nike-womens-air-zoom-alphafly-next-3-glam-orange-pulse-black-purple-dynasty"
-    }
-   ],
-   "plus": [
-    "Pakai carbon plate untuk race dan sesi cepat",
-    "Harga di bawah median kategorinya (153 vs 268 AUD)"
-   ],
-   "minus": [
-    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
    ],
    "auto": true
   },
@@ -2512,9 +1678,49 @@
     }
    ],
    "plus": [
-    "Harga di bawah median kategorinya (96 vs 200 AUD)"
+    "Harga di bawah median kategorinya (96 vs 152 AUD)"
    ],
    "minus": [],
+   "auto": true
+  },
+  {
+   "id": "nike-pegasus-plus-2",
+   "brand": "Nike",
+   "model": "Pegasus Plus 2",
+   "released": "2026-08-26",
+   "approx": true,
+   "use": "daily",
+   "specs": {
+    "price": 183,
+    "priceCurrency": "AUD",
+    "weightG": 265,
+    "dropMm": 10
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Nike-Pegasus-Plus-2-Fennel_Gridiron_Lemon-Venom-IM2543-310.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/womens-nike-pegasus-plus-2-im2543-310"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/mens-nike-pegasus-plus-2-im2541-600"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/womens-nike-pegasus-plus-2-im2543-310"
+    },
+    {
+     "label": "Up There Athletics",
+     "url": "https://upthereathletics.com/products/nike-mens-pegasus-plus-2-rsg-stealth-purple-dynasty-volt"
+    }
+   ],
+   "plus": [
+    "Drop 10 mm, ramah untuk pelari yang mendarat di tumit"
+   ],
+   "minus": [
+    "Harga di atas median kategorinya (183 vs 152 AUD)"
+   ],
    "auto": true
   },
   {
@@ -2526,8 +1732,10 @@
    "use": "tempo",
    "specs": {
     "plate": "plate",
-    "price": 294,
-    "priceCurrency": "AUD"
+    "price": 204,
+    "priceCurrency": "AUD",
+    "weightG": 212,
+    "dropMm": 8
    },
    "image": {
     "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-ASICS-Sonicblast-2-Tenka-Sun-Coral_White-1012C071-700.jpg?width=480",
@@ -2542,77 +1750,15 @@
     {
      "label": "Pace Athletic",
      "url": "https://www.paceathletic.com/products/womens-asics-sonicblast-2-tenka-1012c071-700"
-    }
-   ],
-   "plus": [
-    "Ada plate untuk dorongan di pace cepat"
-   ],
-   "minus": [],
-   "auto": true
-  },
-  {
-   "id": "asics-sonicblast-2-white-sun-coral",
-   "brand": "ASICS",
-   "model": "Sonicblast 2 -White/Sun Coral",
-   "released": "2026-08-24",
-   "approx": true,
-   "use": "daily",
-   "specs": {
-    "weightG": 212,
-    "dropMm": 8,
-    "price": 204,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0524/9024/0175/files/asics-running-asics-womens-sonicblast-2-white-sun-coral-1012C009-100-1.jpg?width=480",
-    "credit": "Up There Athletics",
-    "page": "https://upthereathletics.com/products/asics-womens-sonicblast-2-white-sun-coral"
-   },
-   "source": {
-    "label": "Up There Athletics",
-    "url": "https://upthereathletics.com/products/asics-womens-sonicblast-2-white-sun-coral"
-   },
-   "sources": [
+    },
     {
      "label": "Up There Athletics",
      "url": "https://upthereathletics.com/products/asics-womens-sonicblast-2-white-sun-coral"
     }
    ],
    "plus": [
-    "Ringan untuk kategorinya (212 g vs median 238 g)"
+    "Ada plate untuk dorongan di pace cepat"
    ],
-   "minus": [],
-   "auto": true
-  },
-  {
-   "id": "asics-sonicblast-2-white-stadium-orange",
-   "brand": "ASICS",
-   "model": "Sonicblast 2 -White/Stadium Orange",
-   "released": "2026-08-24",
-   "approx": true,
-   "use": "daily",
-   "specs": {
-    "weightG": 242,
-    "dropMm": 8,
-    "price": 204,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0524/9024/0175/files/asics-running-asics-mens-sonicblast-2-white-stadium-orange-1011C244-100-1.jpg?width=480",
-    "credit": "Up There Athletics",
-    "page": "https://upthereathletics.com/products/asics-mens-sonicblast-2-white-stadium-orange"
-   },
-   "source": {
-    "label": "Up There Athletics",
-    "url": "https://upthereathletics.com/products/asics-mens-sonicblast-2-white-stadium-orange"
-   },
-   "sources": [
-    {
-     "label": "Up There Athletics",
-     "url": "https://upthereathletics.com/products/asics-mens-sonicblast-2-white-stadium-orange"
-    }
-   ],
-   "plus": [],
    "minus": [],
    "auto": true
   },
@@ -2624,7 +1770,7 @@
    "approx": true,
    "use": "daily",
    "specs": {
-    "price": 149,
+    "price": 106,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -2643,7 +1789,7 @@
     }
    ],
    "plus": [
-    "Harga di bawah median kategorinya (149 vs 200 AUD)"
+    "Harga di bawah median kategorinya (106 vs 152 AUD)"
    ],
    "minus": [],
    "auto": true
@@ -2658,7 +1804,7 @@
    "specs": {
     "plate": "carbon",
     "trail": true,
-    "price": 396,
+    "price": 281,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -2681,7 +1827,7 @@
    ],
    "minus": [
     "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian",
-    "Harga di atas median kategorinya (396 vs 228 AUD)"
+    "Harga di atas median kategorinya (281 vs 169 AUD)"
    ],
    "auto": true
   },
@@ -2694,7 +1840,7 @@
    "use": "trail",
    "specs": {
     "trail": true,
-    "price": 297,
+    "price": 211,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -2714,7 +1860,7 @@
    ],
    "plus": [],
    "minus": [
-    "Harga di atas median kategorinya (297 vs 228 AUD)"
+    "Harga di atas median kategorinya (211 vs 169 AUD)"
    ],
    "auto": true
   },
@@ -2727,7 +1873,7 @@
    "use": "long",
    "specs": {
     "stability": true,
-    "price": 248,
+    "price": 176,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -2761,7 +1907,7 @@
    "specs": {
     "stability": true,
     "trail": true,
-    "price": 288,
+    "price": 204,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -2783,7 +1929,7 @@
     "Disebut sebagai sepatu stability/support"
    ],
    "minus": [
-    "Harga di atas median kategorinya (288 vs 228 AUD)"
+    "Harga di atas median kategorinya (204 vs 169 AUD)"
    ],
    "auto": true
   },
@@ -2796,7 +1942,7 @@
    "use": "race",
    "specs": {
     "plate": "carbon",
-    "price": 377,
+    "price": 267,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -2818,8 +1964,7 @@
     "Pakai carbon plate untuk race dan sesi cepat"
    ],
    "minus": [
-    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian",
-    "Harga di atas median kategorinya (377 vs 268 AUD)"
+    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
    ],
    "auto": true
   },
@@ -2831,7 +1976,7 @@
    "approx": true,
    "use": "daily",
    "specs": {
-    "price": 194,
+    "price": 138,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -2854,45 +1999,6 @@
    "auto": true
   },
   {
-   "id": "on-cloudrunner-3-max",
-   "brand": "On",
-   "model": "Cloudrunner 3 Max",
-   "released": "2026-08-06",
-   "approx": true,
-   "use": "daily",
-   "specs": {
-    "weightG": 330,
-    "dropMm": 8,
-    "price": 185,
-    "priceCurrency": "CAD",
-    "stackMm": 31
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0524/9024/0175/files/on-running-mens-cloudrunner-3-max-whire-verdite-1.jpg?width=480",
-    "credit": "Up There Athletics",
-    "page": "https://upthereathletics.com/products/on-running-mens-cloudrunner-3-max-white-verdite"
-   },
-   "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/on-cloudrunner-3-max-womens-3wg30165363"
-   },
-   "sources": [
-    {
-     "label": "Up There Athletics",
-     "url": "https://upthereathletics.com/products/on-running-mens-cloudrunner-3-max-white-verdite"
-    },
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/on-cloudrunner-3-max-mens-3mg30205249"
-    }
-   ],
-   "plus": [],
-   "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (330 g vs median 238 g)"
-   ],
-   "auto": true
-  },
-  {
    "id": "adidas-terrex-agravic-sl",
    "brand": "adidas",
    "model": "Terrex Agravic SL",
@@ -2901,7 +2007,7 @@
    "use": "trail",
    "specs": {
     "trail": true,
-    "price": 268,
+    "price": 190,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -2920,9 +2026,7 @@
     }
    ],
    "plus": [],
-   "minus": [
-    "Harga di atas median kategorinya (268 vs 228 AUD)"
-   ],
+   "minus": [],
    "auto": true
   },
   {
@@ -2960,8 +2064,7 @@
     }
    ],
    "plus": [
-    "Ringan untuk kategorinya (241 g vs median 272 g)",
-    "Harga di bawah median kategorinya (172 vs 228 CAD)"
+    "Ringan untuk kategorinya (241 g vs median 275 g)"
    ],
    "minus": [],
    "auto": true
@@ -2978,7 +2081,7 @@
     "dropMm": 6,
     "stackMm": 31,
     "trail": true,
-    "price": 240,
+    "price": 174,
     "priceCurrency": "CAD"
    },
    "image": {
@@ -3001,82 +2104,6 @@
    "auto": true
   },
   {
-   "id": "nike-pegasus-turbo-next-nature",
-   "brand": "Nike",
-   "model": "Pegasus Turbo Next Nature",
-   "released": "2026-08-04",
-   "approx": true,
-   "use": "long",
-   "specs": {
-    "weightG": 244,
-    "dropMm": 8,
-    "price": 238,
-    "priceCurrency": "CAD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/products/Turbo-Next-Nature-SE-1.png?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/mens-nike-pegasus-turbo-next-nature-se-black-fuchsia-dream-noir"
-   },
-   "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/nike-pegasus-turbo-next-nature-se-womens-fj2975-001"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/mens-nike-pegasus-turbo-next-nature-se-black-fuchsia-dream-noir"
-    },
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/nike-pegasus-turbo-next-nature-se-womens-fj2975-001"
-    }
-   ],
-   "plus": [],
-   "minus": [],
-   "auto": true
-  },
-  {
-   "id": "nike-pegasus-42-keely-hodgkinson",
-   "brand": "Nike",
-   "model": "Pegasus 42 Keely Hodgkinson",
-   "released": "2026-08-04",
-   "approx": true,
-   "use": "trail",
-   "specs": {
-    "trail": true,
-    "price": 238,
-    "priceCurrency": "CAD",
-    "weightG": 243,
-    "dropMm": 10
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Nike-Pegasus-42-Keely-Hodgkinson-Black_Blur_Pitch-Blue_Blackened-Blue-IR7192-001.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/womens-nike-pegasus-42-keely-hodgkinson-ir7192-001"
-   },
-   "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/nike-pegasus-42-keely-hodgkinson-ir7192-001"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/womens-nike-pegasus-42-keely-hodgkinson-ir7192-001"
-    },
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/nike-pegasus-42-keely-hodgkinson-ir7192-001"
-    }
-   ],
-   "plus": [
-    "Ringan untuk kategorinya (243 g vs median 272 g)",
-    "Drop 10 mm, ramah untuk pelari yang mendarat di tumit"
-   ],
-   "minus": [],
-   "auto": true
-  },
-  {
    "id": "salomon-aero-blaze-4",
    "brand": "Salomon",
    "model": "Aero Blaze 4",
@@ -3088,8 +2115,9 @@
     "dropMm": 8,
     "stackMm": 36,
     "trail": true,
-    "price": 180,
-    "priceCurrency": "CAD"
+    "price": 130,
+    "priceCurrency": "CAD",
+    "waterproof": true
    },
    "image": {
     "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/L45397900.png?width=480",
@@ -3107,42 +2135,13 @@
     }
    ],
    "plus": [
-    "Ringan untuk kategorinya (204 g vs median 272 g)",
-    "Harga di bawah median kategorinya (180 vs 228 CAD)"
+    "Ringan untuk kategorinya (204 g vs median 275 g)",
+    "Tahan air (Gore-Tex/waterproof)",
+    "Harga di bawah median kategorinya (130 vs 169 CAD)"
    ],
-   "minus": [],
-   "auto": true
-  },
-  {
-   "id": "saucony-ride-18",
-   "brand": "Saucony",
-   "model": "Ride 18",
-   "released": "2026-08-04",
-   "approx": true,
-   "use": "daily",
-   "specs": {
-    "weightG": 227,
-    "dropMm": 8,
-    "price": 180,
-    "priceCurrency": "CAD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/lead_49f6102d-8e3b-484e-a28f-ecfa584a7ba2.png?width=480",
-    "credit": "Vancouver Running Co.",
-    "page": "https://vanrunco.com/products/saucony-ride-18-womens-s11000-100"
-   },
-   "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/saucony-ride-18-womens-s11000-100"
-   },
-   "sources": [
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/saucony-ride-18-womens-s11000-100"
-    }
+   "minus": [
+    "Versi tahan air biasanya lebih panas di cuaca tropis"
    ],
-   "plus": [],
-   "minus": [],
    "auto": true
   },
   {
@@ -3155,7 +2154,7 @@
    "specs": {
     "plate": "plate",
     "trail": true,
-    "price": 194,
+    "price": 138,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -3174,83 +2173,44 @@
     }
    ],
    "plus": [
-    "Ada plate untuk dorongan di pace cepat"
+    "Ada plate untuk dorongan di pace cepat",
+    "Harga di bawah median kategorinya (138 vs 169 AUD)"
    ],
    "minus": [],
    "auto": true
   },
   {
-   "id": "altra-olympus-275-hilo",
-   "brand": "Altra",
-   "model": "Olympus 275 HiLo",
+   "id": "saucony-hurricane-26",
+   "brand": "Saucony",
+   "model": "Hurricane 26",
    "released": "2026-07-31",
    "approx": true,
-   "use": "trail",
+   "use": "long",
    "specs": {
-    "trail": true,
-    "price": 327,
-    "priceCurrency": "CAD",
-    "weightG": 298,
-    "dropMm": 0,
-    "stackMm": 33
+    "dropMm": 6,
+    "stackMm": 41,
+    "price": 159,
+    "priceCurrency": "CAD"
    },
    "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Mens-Altra-Olympus-275-HiLo-Vaporous-Grey_Fiery-Coral-AL0A85WT-73V.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/mens-altra-olympus-275-hilo-al0a85wt-73v"
+    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/S101106-1016-lead.png?width=480",
+    "credit": "Vancouver Running Co.",
+    "page": "https://vanrunco.com/products/saucony-hurricane-26-womens-s101106-1016"
    },
    "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/mens-altra-olympus-275-hilo-al0a85wt-97n"
+    "label": "Vancouver Running Co.",
+    "url": "https://vanrunco.com/products/saucony-hurricane-26-mens-s101098-1024"
    },
    "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/mens-altra-olympus-275-hilo-al0a85wt-73v"
-    },
     {
      "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/altra-olympus-275-hilo-mens-al0a85wt-89t"
+     "url": "https://vanrunco.com/products/saucony-hurricane-26-womens-s101106-1016"
     }
    ],
-   "plus": [],
-   "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (298 g vs median 272 g)",
-    "Drop rendah (0 mm): butuh adaptasi betis kalau biasa sepatu drop tinggi",
-    "Harga di atas median kategorinya (327 vs 228 CAD)"
+   "plus": [
+    "Bantalan tebal (stack 41 mm)"
    ],
-   "auto": true
-  },
-  {
-   "id": "altra-escalante-5",
-   "brand": "Altra",
-   "model": "Escalante 5",
-   "released": "2026-07-31",
-   "approx": true,
-   "use": "daily",
-   "specs": {
-    "price": 248,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Altra-Escalante-5-White_White_White-AL0A85TM-96V.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/womens-altra-escalante-5-al0a85tm-96v"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/womens-altra-escalante-5-al0a85tm-96v"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/womens-altra-escalante-5-al0a85tm-96v"
-    }
-   ],
-   "plus": [],
-   "minus": [
-    "Harga di atas median kategorinya (248 vs 200 AUD)"
-   ],
+   "minus": [],
    "auto": true
   },
   {
@@ -3282,45 +2242,12 @@
     }
    ],
    "plus": [
-    "Ringan untuk kategorinya (158 g vs median 175 g)"
+    "Ringan untuk kategorinya (158 g vs median 192 g)"
    ],
    "minus": [
-    "Drop rendah (4 mm): butuh adaptasi betis kalau biasa sepatu drop tinggi"
+    "Drop rendah (4 mm): butuh adaptasi betis kalau biasa sepatu drop tinggi",
+    "Harga di atas median kategorinya (281 vs 239 AUD)"
    ],
-   "auto": true
-  },
-  {
-   "id": "saucony-hurricane-26",
-   "brand": "Saucony",
-   "model": "Hurricane 26",
-   "released": "2026-07-31",
-   "approx": true,
-   "use": "long",
-   "specs": {
-    "dropMm": 6,
-    "stackMm": 41,
-    "price": 220,
-    "priceCurrency": "CAD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/S101106-1016-lead.png?width=480",
-    "credit": "Vancouver Running Co.",
-    "page": "https://vanrunco.com/products/saucony-hurricane-26-womens-s101106-1016"
-   },
-   "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/saucony-hurricane-26-mens-s101098-1024"
-   },
-   "sources": [
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/saucony-hurricane-26-womens-s101106-1016"
-    }
-   ],
-   "plus": [
-    "Bantalan tebal (stack 41 mm)"
-   ],
-   "minus": [],
    "auto": true
   },
   {
@@ -3334,7 +2261,7 @@
     "weightG": 129,
     "dropMm": 8,
     "stackMm": 20.5,
-    "price": 280,
+    "price": 203,
     "priceCurrency": "CAD"
    },
    "image": {
@@ -3353,11 +2280,11 @@
     }
    ],
    "plus": [
-    "Ringan untuk kategorinya (129 g vs median 238 g)"
+    "Ringan untuk kategorinya (129 g vs median 265 g)"
    ],
    "minus": [
     "Bantalan tipis (stack 20.5 mm), kurang empuk untuk long run",
-    "Harga di atas median kategorinya (280 vs 200 CAD)"
+    "Harga di atas median kategorinya (203 vs 152 CAD)"
    ],
    "auto": true
   },
@@ -3373,7 +2300,7 @@
     "dropMm": 10,
     "stackMm": 39,
     "plate": "carbon",
-    "price": 220,
+    "price": 159,
     "priceCurrency": "CAD"
    },
    "image": {
@@ -3397,76 +2324,40 @@
     "Pakai carbon plate untuk race dan sesi cepat"
    ],
    "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (250 g vs median 175 g)",
+    "Lebih berat dari kebanyakan di kategorinya (250 g vs median 192 g)",
     "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
    ],
    "auto": true
   },
   {
-   "id": "asics-blazeblast",
-   "brand": "ASICS",
-   "model": "Blazeblast",
-   "released": "2026-07-30",
+   "id": "altra-escalante-5",
+   "brand": "Altra",
+   "model": "Escalante 5",
+   "released": "2026-07-31",
    "approx": true,
-   "use": "trail",
+   "use": "daily",
    "specs": {
-    "trail": true,
-    "price": 258,
+    "price": 176,
     "priceCurrency": "AUD"
    },
    "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-ASICS-Blazeblast-Dark-Aubergine_Rose-Dust-1012C037-500.jpg?width=480",
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Altra-Escalante-5-White_White_White-AL0A85TM-96V.jpg?width=480",
     "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/womens-asics-blazeblast-1012c037-500"
+    "page": "https://www.paceathletic.com/products/womens-altra-escalante-5-al0a85tm-96v"
    },
    "source": {
     "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/womens-asics-blazeblast-1012c037-500"
+    "url": "https://www.paceathletic.com/products/womens-altra-escalante-5-al0a85tm-96v"
    },
    "sources": [
     {
      "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/womens-asics-blazeblast-1012c037-500"
+     "url": "https://www.paceathletic.com/products/womens-altra-escalante-5-al0a85tm-96v"
     }
    ],
    "plus": [],
-   "minus": [],
-   "auto": true
-  },
-  {
-   "id": "asics-metafuji-trail-2",
-   "brand": "ASICS",
-   "model": "Metafuji Trail 2",
-   "released": "2026-07-30",
-   "approx": true,
-   "use": "trail",
-   "specs": {
-    "plate": "carbon",
-    "trail": true,
-    "price": 396,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Unisex-ASICS-Metafuji-Trail-2-Illuminate-Yellow_Dark-Aubergine-1013A178-750.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/unisex-asics-metafuji-trail-2-1013a178-750"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/unisex-asics-metafuji-trail-2-1013a178-750"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/unisex-asics-metafuji-trail-2-1013a178-750"
-    }
-   ],
-   "plus": [
-    "Pakai carbon plate untuk race dan sesi cepat"
-   ],
    "minus": [
-    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian",
-    "Harga di atas median kategorinya (396 vs 228 AUD)"
+    "Harga di atas median kategorinya (176 vs 152 AUD)"
    ],
    "auto": true
   },
@@ -3504,51 +2395,80 @@
     }
    ],
    "plus": [
-    "Ringan untuk kategorinya (191 g vs median 238 g)",
+    "Ringan untuk kategorinya (191 g vs median 265 g)",
     "Bantalan tebal (stack 39 mm)"
    ],
    "minus": [
     "Drop rendah (4 mm): butuh adaptasi betis kalau biasa sepatu drop tinggi",
-    "Harga di atas median kategorinya (242 vs 200 CAD)"
+    "Harga di atas median kategorinya (242 vs 152 CAD)"
    ],
    "auto": true
   },
   {
-   "id": "on-cloudboom-strike-2-ls",
-   "brand": "On",
-   "model": "Cloudboom Strike 2 LS",
+   "id": "asics-blazeblast",
+   "brand": "ASICS",
+   "model": "Blazeblast",
    "released": "2026-07-30",
    "approx": true,
-   "use": "long",
+   "use": "trail",
    "specs": {
-    "weightG": 158,
-    "dropMm": 4,
-    "stackMm": 39,
-    "price": 400,
-    "priceCurrency": "CAD"
+    "trail": true,
+    "price": 183,
+    "priceCurrency": "AUD"
    },
    "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/3UG30025363-lead_da966db6-5413-41fd-9b68-ed255399a9fb.png?width=480",
-    "credit": "Vancouver Running Co.",
-    "page": "https://vanrunco.com/products/on-cloudboom-strike-2-ls-unisex-3ug30025363"
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-ASICS-Blazeblast-Dark-Aubergine_Rose-Dust-1012C037-500.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/womens-asics-blazeblast-1012c037-500"
    },
    "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/on-cloudboom-strike-2-ls-unisex-3ug30022929"
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/womens-asics-blazeblast-1012c037-500"
    },
    "sources": [
     {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/on-cloudboom-strike-2-ls-unisex-3ug30025363"
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/womens-asics-blazeblast-1012c037-500"
+    }
+   ],
+   "plus": [],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "asics-metafuji-trail-2",
+   "brand": "ASICS",
+   "model": "Metafuji Trail 2",
+   "released": "2026-07-30",
+   "approx": true,
+   "use": "trail",
+   "specs": {
+    "plate": "carbon",
+    "trail": true,
+    "price": 281,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Unisex-ASICS-Metafuji-Trail-2-Illuminate-Yellow_Dark-Aubergine-1013A178-750.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/unisex-asics-metafuji-trail-2-1013a178-750"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/unisex-asics-metafuji-trail-2-1013a178-750"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/unisex-asics-metafuji-trail-2-1013a178-750"
     }
    ],
    "plus": [
-    "Ringan untuk kategorinya (158 g vs median 244 g)",
-    "Bantalan tebal (stack 39 mm)"
+    "Pakai carbon plate untuk race dan sesi cepat"
    ],
    "minus": [
-    "Drop rendah (4 mm): butuh adaptasi betis kalau biasa sepatu drop tinggi",
-    "Harga di atas median kategorinya (400 vs 258 CAD)"
+    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian",
+    "Harga di atas median kategorinya (281 vs 169 AUD)"
    ],
    "auto": true
   },
@@ -3561,7 +2481,7 @@
    "use": "trail",
    "specs": {
     "trail": true,
-    "price": 167,
+    "price": 118,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -3580,9 +2500,49 @@
     }
    ],
    "plus": [
-    "Harga di bawah median kategorinya (167 vs 228 AUD)"
+    "Harga di bawah median kategorinya (118 vs 169 AUD)"
    ],
    "minus": [],
+   "auto": true
+  },
+  {
+   "id": "brooks-hyperion-max-4",
+   "brand": "Brooks",
+   "model": "Hyperion Max 4",
+   "released": "2026-07-28",
+   "approx": true,
+   "use": "tempo",
+   "specs": {
+    "plate": "plate",
+    "price": 225,
+    "priceCurrency": "AUD",
+    "weightG": 286
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Mens-Brooks-Hyperion-Max-4-Grey_Black_Purple-Hebe-110498_1D_059.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/mens-brooks-hyperion-max-4-110498_1d_059"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/mens-brooks-hyperion-max-4-110498_1d_879"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/mens-brooks-hyperion-max-4-110498_1d_059"
+    },
+    {
+     "label": "Up There Athletics",
+     "url": "https://upthereathletics.com/products/brooks-mens-hyperion-max-4-white-cyber-yellow-black"
+    }
+   ],
+   "plus": [
+    "Ada plate untuk dorongan di pace cepat"
+   ],
+   "minus": [
+    "Lebih berat dari kebanyakan di kategorinya (286 g vs median 220 g)"
+   ],
    "auto": true
   },
   {
@@ -3594,7 +2554,7 @@
    "use": "race",
    "specs": {
     "plate": "carbon",
-    "price": 367,
+    "price": 260,
     "priceCurrency": "AUD",
     "weightG": 192,
     "dropMm": 7
@@ -3622,49 +2582,7 @@
     "Pakai carbon plate untuk race dan sesi cepat"
    ],
    "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (192 g vs median 175 g)",
-    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian",
-    "Harga di atas median kategorinya (367 vs 268 AUD)"
-   ],
-   "auto": true
-  },
-  {
-   "id": "brooks-hyperion-max-4",
-   "brand": "Brooks",
-   "model": "Hyperion Max 4",
-   "released": "2026-07-28",
-   "approx": true,
-   "use": "tempo",
-   "specs": {
-    "plate": "plate",
-    "price": 317,
-    "priceCurrency": "AUD",
-    "weightG": 286
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Mens-Brooks-Hyperion-Max-4-Grey_Black_Purple-Hebe-110498_1D_059.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/mens-brooks-hyperion-max-4-110498_1d_059"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/mens-brooks-hyperion-max-4-110498_1d_879"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/mens-brooks-hyperion-max-4-110498_1d_059"
-    },
-    {
-     "label": "Up There Athletics",
-     "url": "https://upthereathletics.com/products/brooks-mens-hyperion-max-4-white-cyber-yellow-black"
-    }
-   ],
-   "plus": [
-    "Ada plate untuk dorongan di pace cepat"
-   ],
-   "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (286 g vs median 238 g)"
+    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
    ],
    "auto": true
   },
@@ -3703,8 +2621,7 @@
     }
    ],
    "plus": [
-    "Ringan untuk kategorinya (238 g vs median 272 g)",
-    "Harga di bawah median kategorinya (172 vs 228 CAD)"
+    "Ringan untuk kategorinya (238 g vs median 275 g)"
    ],
    "minus": [
     "Bantalan tipis (stack 28 mm), kurang empuk untuk long run",
@@ -3721,7 +2638,7 @@
    "use": "race",
    "specs": {
     "plate": "carbon",
-    "price": 377,
+    "price": 267,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -3743,8 +2660,7 @@
     "Pakai carbon plate untuk race dan sesi cepat"
    ],
    "minus": [
-    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian",
-    "Harga di atas median kategorinya (377 vs 268 AUD)"
+    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
    ],
    "auto": true
   },
@@ -3757,7 +2673,7 @@
    "use": "race",
    "specs": {
     "plate": "carbon",
-    "price": 297,
+    "price": 211,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -3784,149 +2700,6 @@
    "auto": true
   },
   {
-   "id": "puma-deviate-nitro-4-hyrox",
-   "brand": "PUMA",
-   "model": "Deviate NITRO 4 HYROX",
-   "released": "2026-07-21",
-   "approx": true,
-   "use": "race",
-   "specs": {
-    "plate": "carbon",
-    "price": 268,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Mens-PUMA-Deviate-NITRO-4-HYROX-Intense-Mint_Light-Lavender-314155-01.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/mens-puma-deviate-nitro-4-hyrox-314155-01"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/mens-puma-deviate-nitro-4-hyrox-314155-01"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/mens-puma-deviate-nitro-4-hyrox-314155-01"
-    }
-   ],
-   "plus": [
-    "Pakai carbon plate untuk race dan sesi cepat"
-   ],
-   "minus": [
-    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
-   ],
-   "auto": true
-  },
-  {
-   "id": "puma-deviate-nitro-elite-4-hyrox",
-   "brand": "PUMA",
-   "model": "Deviate NITRO Elite 4 HYROX",
-   "released": "2026-07-20",
-   "approx": true,
-   "use": "trail",
-   "specs": {
-    "plate": "carbon",
-    "trail": true,
-    "price": 347,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Mens-PUMA-Deviate-NITRO-Elite-4-HYROX-Intense-Mint_Light-Lavender-314156-01.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/mens-puma-deviate-nitro-elite-4-hyrox-314156-01"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/mens-puma-deviate-nitro-elite-4-hyrox-314156-01"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/mens-puma-deviate-nitro-elite-4-hyrox-314156-01"
-    }
-   ],
-   "plus": [
-    "Pakai carbon plate untuk race dan sesi cepat"
-   ],
-   "minus": [
-    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian",
-    "Harga di atas median kategorinya (347 vs 228 AUD)"
-   ],
-   "auto": true
-  },
-  {
-   "id": "mizuno-hyperwarp-pure",
-   "brand": "Mizuno",
-   "model": "Hyperwarp Pure",
-   "released": "2026-07-20",
-   "approx": true,
-   "use": "race",
-   "specs": {
-    "plate": "carbon",
-    "price": 268,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Unisex-Mizuno-Hyperwarp-Pure-Lava-Orange_Black_Lightning-Yellow-J1GC2670-81.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-pure-j1gc2670-81"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-pure-j1gc2670-81"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-pure-j1gc2670-81"
-    }
-   ],
-   "plus": [
-    "Pakai carbon plate untuk race dan sesi cepat"
-   ],
-   "minus": [
-    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
-   ],
-   "auto": true
-  },
-  {
-   "id": "mizuno-hyperwarp-elite",
-   "brand": "Mizuno",
-   "model": "Hyperwarp Elite",
-   "released": "2026-07-20",
-   "approx": true,
-   "use": "race",
-   "specs": {
-    "weightG": 165,
-    "plate": "carbon",
-    "price": 238,
-    "priceCurrency": "AUD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Unisex-Mizuno-Hyperwarp-Elite-Lava-Orange_Black_Lightning-Yellow-J1GC2671-81.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-elite-j1gc2671-81"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-elite-j1gc2671-81"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-elite-j1gc2671-81"
-    }
-   ],
-   "plus": [
-    "Pakai carbon plate untuk race dan sesi cepat"
-   ],
-   "minus": [
-    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
-   ],
-   "auto": true
-  },
-  {
    "id": "mizuno-hyperwarp-pro",
    "brand": "Mizuno",
    "model": "Hyperwarp Pro",
@@ -3935,7 +2708,7 @@
    "use": "race",
    "specs": {
     "plate": "carbon",
-    "price": 208,
+    "price": 148,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -3955,7 +2728,81 @@
    ],
    "plus": [
     "Pakai carbon plate untuk race dan sesi cepat",
-    "Harga di bawah median kategorinya (208 vs 268 AUD)"
+    "Harga di bawah median kategorinya (148 vs 239 AUD)"
+   ],
+   "minus": [
+    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
+   ],
+   "auto": true
+  },
+  {
+   "id": "mizuno-hyperwarp-pure",
+   "brand": "Mizuno",
+   "model": "Hyperwarp Pure",
+   "released": "2026-07-20",
+   "approx": true,
+   "use": "race",
+   "specs": {
+    "plate": "carbon",
+    "price": 190,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Unisex-Mizuno-Hyperwarp-Pure-Lava-Orange_Black_Lightning-Yellow-J1GC2670-81.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-pure-j1gc2670-81"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-pure-j1gc2670-81"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-pure-j1gc2670-81"
+    }
+   ],
+   "plus": [
+    "Pakai carbon plate untuk race dan sesi cepat",
+    "Harga di bawah median kategorinya (190 vs 239 AUD)"
+   ],
+   "minus": [
+    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
+   ],
+   "auto": true
+  },
+  {
+   "id": "mizuno-hyperwarp-elite",
+   "brand": "Mizuno",
+   "model": "Hyperwarp Elite",
+   "released": "2026-07-20",
+   "approx": true,
+   "use": "race",
+   "specs": {
+    "weightG": 165,
+    "plate": "carbon",
+    "price": 169,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Unisex-Mizuno-Hyperwarp-Elite-Lava-Orange_Black_Lightning-Yellow-J1GC2671-81.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-elite-j1gc2671-81"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-elite-j1gc2671-81"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/unisex-mizuno-hyperwarp-elite-j1gc2671-81"
+    }
+   ],
+   "plus": [
+    "Ringan untuk kategorinya (165 g vs median 192 g)",
+    "Pakai carbon plate untuk race dan sesi cepat",
+    "Harga di bawah median kategorinya (169 vs 239 AUD)"
    ],
    "minus": [
     "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
@@ -3972,7 +2819,7 @@
    "specs": {
     "dropMm": 12,
     "stability": true,
-    "price": 248,
+    "price": 176,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -4005,7 +2852,7 @@
    "approx": true,
    "use": "long",
    "specs": {
-    "price": 258,
+    "price": 113,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -4023,43 +2870,8 @@
      "url": "https://www.paceathletic.com/products/unisex-mizuno-neo-zen-2-j1gc2628-32"
     }
    ],
-   "plus": [],
-   "minus": [],
-   "auto": true
-  },
-  {
-   "id": "saucony-endorphin-azura-nyc",
-   "brand": "Saucony",
-   "model": "Endorphin Azura NYC",
-   "released": "2026-07-15",
-   "approx": true,
-   "use": "tempo",
-   "specs": {
-    "dropMm": 8,
-    "stackMm": 40,
-    "plate": "plate",
-    "price": 190,
-    "priceCurrency": "CAD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/S101348-1038-2_9333d682-8bbe-4bc6-8d16-018e039a6b9b.png?width=480",
-    "credit": "Vancouver Running Co.",
-    "page": "https://vanrunco.com/products/saucony-endorphin-azura-nyc-womens-s101348-1038"
-   },
-   "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/saucony-endorphin-azura-nyc-womens-s101348-1038"
-   },
-   "sources": [
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/saucony-endorphin-azura-nyc-womens-s101348-1038"
-    }
-   ],
    "plus": [
-    "Bantalan tebal (stack 40 mm)",
-    "Ada plate untuk dorongan di pace cepat",
-    "Harga di bawah median kategorinya (190 vs 278 CAD)"
+    "Harga di bawah median kategorinya (113 vs 176 AUD)"
    ],
    "minus": [],
    "auto": true
@@ -4073,7 +2885,7 @@
    "use": "long",
    "specs": {
     "dropMm": 10,
-    "price": 278,
+    "price": 197,
     "priceCurrency": "CAD",
     "stackMm": 43
    },
@@ -4104,90 +2916,6 @@
    "auto": true
   },
   {
-   "id": "on-cloudmonster-3-hyper-ls",
-   "brand": "On",
-   "model": "Cloudmonster 3 Hyper LS",
-   "released": "2026-07-13",
-   "approx": true,
-   "use": "tempo",
-   "specs": {
-    "weightG": 205,
-    "dropMm": 6,
-    "stackMm": 46,
-    "plate": "plate",
-    "price": 360,
-    "priceCurrency": "CAD"
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/3UG10015162-lead.png?width=480",
-    "credit": "Vancouver Running Co.",
-    "page": "https://vanrunco.com/products/on-cloudmonster-3-hyper-ls-unisex-3ug10015162"
-   },
-   "source": {
-    "label": "Vancouver Running Co.",
-    "url": "https://vanrunco.com/products/on-cloudmonster-3-hyper-ls-unisex-3ug10015162"
-   },
-   "sources": [
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/on-cloudmonster-3-hyper-ls-unisex-3ug10015162"
-    }
-   ],
-   "plus": [
-    "Ringan untuk kategorinya (205 g vs median 238 g)",
-    "Bantalan tebal (stack 46 mm)",
-    "Ada plate untuk dorongan di pace cepat"
-   ],
-   "minus": [
-    "Harga di atas median kategorinya (360 vs 278 CAD)"
-   ],
-   "auto": true
-  },
-  {
-   "id": "puma-magmax-nitro-2",
-   "brand": "PUMA",
-   "model": "MagMax Nitro 2",
-   "released": "2026-07-10",
-   "approx": true,
-   "use": "long",
-   "specs": {
-    "price": 194,
-    "priceCurrency": "CAD",
-    "weightG": 225,
-    "dropMm": 8,
-    "stackMm": 46
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Mens-PUMA-MagMax-2-Creme-Mint-Gray-312125_31-1.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/mens-puma-magmax-nitro-2-312125-31"
-   },
-   "source": {
-    "label": "Up There Athletics",
-    "url": "https://upthereathletics.com/products/puma-womens-magmax-nitro-2-light-lavender-inky-depths"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/mens-puma-magmax-nitro-2-312125-31"
-    },
-    {
-     "label": "Up There Athletics",
-     "url": "https://upthereathletics.com/products/puma-womens-magmax-nitro-2-light-lavender-inky-depths"
-    },
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/puma-magmax-nitro-2-womens-31212617"
-    }
-   ],
-   "plus": [
-    "Bantalan tebal (stack 46 mm)",
-    "Harga di bawah median kategorinya (194 vs 258 CAD)"
-   ],
-   "minus": [],
-   "auto": true
-  },
-  {
    "id": "hoka-clifton-pro",
    "brand": "HOKA",
    "model": "Clifton Pro",
@@ -4195,7 +2923,7 @@
    "approx": true,
    "use": "long",
    "specs": {
-    "price": 288,
+    "price": 204,
     "priceCurrency": "CAD",
     "weightG": 242,
     "dropMm": 8,
@@ -4225,9 +2953,12 @@
     }
    ],
    "plus": [
+    "Ringan untuk kategorinya (242 g vs median 283 g)",
     "Bantalan tebal (stack 42 mm)"
    ],
-   "minus": [],
+   "minus": [
+    "Harga di atas median kategorinya (204 vs 176 CAD)"
+   ],
    "auto": true
   },
   {
@@ -4239,7 +2970,7 @@
    "use": "trail",
    "specs": {
     "trail": true,
-    "price": 268,
+    "price": 190,
     "priceCurrency": "AUD",
     "weightG": 327,
     "dropMm": 0,
@@ -4266,51 +2997,9 @@
    ],
    "plus": [],
    "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (327 g vs median 272 g)",
+    "Lebih berat dari kebanyakan di kategorinya (327 g vs median 275 g)",
     "Bantalan tipis (stack 25 mm), kurang empuk untuk long run",
     "Drop rendah (0 mm): butuh adaptasi betis kalau biasa sepatu drop tinggi"
-   ],
-   "auto": true
-  },
-  {
-   "id": "altra-experience-wild-3",
-   "brand": "Altra",
-   "model": "Experience Wild 3+",
-   "released": "2026-07-07",
-   "approx": true,
-   "use": "trail",
-   "specs": {
-    "trail": true,
-    "price": 278,
-    "priceCurrency": "CAD",
-    "weightG": 323,
-    "dropMm": 4,
-    "stackMm": 28
-   },
-   "image": {
-    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Altra-Experience-Wild-3_-Grey-Pearl-AL0A85UZ-90E.jpg?width=480",
-    "credit": "Pace Athletic",
-    "page": "https://www.paceathletic.com/products/womens-altra-experience-wild-3-al0a85uz-90e"
-   },
-   "source": {
-    "label": "Pace Athletic",
-    "url": "https://www.paceathletic.com/products/mens-altra-experience-wild-3-al0a85v0-013"
-   },
-   "sources": [
-    {
-     "label": "Pace Athletic",
-     "url": "https://www.paceathletic.com/products/womens-altra-experience-wild-3-al0a85uz-90e"
-    },
-    {
-     "label": "Vancouver Running Co.",
-     "url": "https://vanrunco.com/products/altra-experience-wild-3-mens-al0a85v0-90a"
-    }
-   ],
-   "plus": [],
-   "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (323 g vs median 272 g)",
-    "Bantalan tipis (stack 28 mm), kurang empuk untuk long run",
-    "Drop rendah (4 mm): butuh adaptasi betis kalau biasa sepatu drop tinggi"
    ],
    "auto": true
   },
@@ -4322,7 +3011,7 @@
    "approx": true,
    "use": "long",
    "specs": {
-    "price": 278,
+    "price": 197,
     "priceCurrency": "CAD",
     "weightG": 283,
     "dropMm": 8,
@@ -4354,8 +3043,47 @@
    "plus": [
     "Bantalan tebal (stack 38 mm)"
    ],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "on-cloudrunner-3",
+   "brand": "On",
+   "model": "Cloudrunner 3",
+   "released": "2026-07-07",
+   "approx": true,
+   "use": "daily",
+   "specs": {
+    "weightG": 311,
+    "dropMm": 8,
+    "price": 103,
+    "priceCurrency": "CAD",
+    "stackMm": 31
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/mcloudrunnerleadcropped.png?width=480",
+    "credit": "Vancouver Running Co.",
+    "page": "https://vanrunco.com/products/on-cloudrunner-3-mens-3mg10074351"
+   },
+   "source": {
+    "label": "Vancouver Running Co.",
+    "url": "https://vanrunco.com/products/on-cloudrunner-3-mens-3mg10070849"
+   },
+   "sources": [
+    {
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/on-cloudrunner-3-mens-3mg10074351"
+    },
+    {
+     "label": "Up There Athletics",
+     "url": "https://upthereathletics.com/products/on-running-mens-cloudrunner-3-max-white-verdite"
+    }
+   ],
+   "plus": [
+    "Harga di bawah median kategorinya (103 vs 152 CAD)"
+   ],
    "minus": [
-    "Lebih berat dari kebanyakan di kategorinya (283 g vs median 244 g)"
+    "Lebih berat dari kebanyakan di kategorinya (311 g vs median 265 g)"
    ],
    "auto": true
   },
@@ -4368,7 +3096,7 @@
    "use": "trail",
    "specs": {
     "trail": true,
-    "price": 228,
+    "price": 162,
     "priceCurrency": "AUD"
    },
    "image": {
@@ -4387,6 +3115,1354 @@
     }
    ],
    "plus": [],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "altra-experience-wild-3",
+   "brand": "Altra",
+   "model": "Experience Wild 3+",
+   "released": "2026-07-07",
+   "approx": true,
+   "use": "trail",
+   "specs": {
+    "trail": true,
+    "price": 197,
+    "priceCurrency": "CAD",
+    "weightG": 323,
+    "dropMm": 4,
+    "stackMm": 28
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Altra-Experience-Wild-3_-Grey-Pearl-AL0A85UZ-90E.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/womens-altra-experience-wild-3-al0a85uz-90e"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/mens-altra-experience-wild-3-al0a85v0-013"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/womens-altra-experience-wild-3-al0a85uz-90e"
+    },
+    {
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/altra-experience-wild-3-mens-al0a85v0-90a"
+    }
+   ],
+   "plus": [],
+   "minus": [
+    "Lebih berat dari kebanyakan di kategorinya (323 g vs median 275 g)",
+    "Bantalan tipis (stack 28 mm), kurang empuk untuk long run",
+    "Drop rendah (4 mm): butuh adaptasi betis kalau biasa sepatu drop tinggi"
+   ],
+   "auto": true
+  },
+  {
+   "id": "puma-berserker-nitro-elite-2",
+   "brand": "PUMA",
+   "model": "Berserker NITRO Elite 2",
+   "released": "2026-07-06",
+   "approx": true,
+   "use": "race",
+   "specs": {
+    "weightG": 159,
+    "stackMm": 20,
+    "plate": "carbon",
+    "price": 319,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0524/9024/0175/files/puma-running-berserker-nitro-elite-2-poison-pink-sun-stream-puma-black-314254-01-1.jpg?width=480",
+    "credit": "Up There Athletics",
+    "page": "https://upthereathletics.com/products/puma-berserker-nitro-elite-2-poison-pink-sun-stream-puma-black"
+   },
+   "source": {
+    "label": "Up There Athletics",
+    "url": "https://upthereathletics.com/products/puma-berserker-nitro-elite-2-poison-pink-sun-stream-puma-black"
+   },
+   "sources": [
+    {
+     "label": "Up There Athletics",
+     "url": "https://upthereathletics.com/products/puma-berserker-nitro-elite-2-poison-pink-sun-stream-puma-black"
+    }
+   ],
+   "plus": [
+    "Ringan untuk kategorinya (159 g vs median 192 g)",
+    "Pakai carbon plate untuk race dan sesi cepat"
+   ],
+   "minus": [
+    "Bantalan tipis (stack 20 mm), kurang empuk untuk long run",
+    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian",
+    "Harga di atas median kategorinya (319 vs 239 AUD)"
+   ],
+   "auto": true
+  },
+  {
+   "id": "asics-novablast-6",
+   "brand": "ASICS",
+   "model": "Novablast 6",
+   "released": "2026-07-02",
+   "approx": true,
+   "use": "long",
+   "specs": {
+    "price": 171,
+    "priceCurrency": "CAD",
+    "weightG": 215,
+    "dropMm": 8,
+    "stackMm": 41.5
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Mens-ASICS-Novablast-6-Tenka-EnergyOrange_White-1011C313-800.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/mens-asics-novablast-6-tenka-1011c313-800"
+   },
+   "source": {
+    "label": "Vancouver Running Co.",
+    "url": "https://vanrunco.com/products/asics-novablast-6-mens-1011c243-700"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/mens-asics-novablast-6-tenka-1011c313-800"
+    },
+    {
+     "label": "Up There Athletics",
+     "url": "https://upthereathletics.com/products/asics-womens-novablast-6-rose-dust-illuminate-yellow"
+    },
+    {
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/asics-novablast-6-womens-1012c008-250"
+    }
+   ],
+   "plus": [
+    "Ringan untuk kategorinya (215 g vs median 283 g)",
+    "Bantalan tebal (stack 41.5 mm)"
+   ],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "asics-magic-speed-5",
+   "brand": "ASICS",
+   "model": "Magic Speed 5",
+   "released": "2026-06-30",
+   "approx": true,
+   "use": "race",
+   "specs": {
+    "plate": "carbon",
+    "price": 128,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Unisex-ASICS-Magic-Speed-5-White_Pure-Silver-1013A183-101.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/unisex-asics-magic-speed-5-1013a183-101"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/unisex-asics-magic-speed-5-1013a183-101"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/unisex-asics-magic-speed-5-1013a183-101"
+    }
+   ],
+   "plus": [
+    "Pakai carbon plate untuk race dan sesi cepat",
+    "Harga di bawah median kategorinya (128 vs 239 AUD)"
+   ],
+   "minus": [
+    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
+   ],
+   "auto": true
+  },
+  {
+   "id": "hoka-challenger-8",
+   "brand": "HOKA",
+   "model": "Challenger 8",
+   "released": "2026-06-24",
+   "approx": true,
+   "use": "trail",
+   "specs": {
+    "weightG": 232,
+    "dropMm": 7,
+    "stackMm": 44,
+    "trail": true,
+    "price": 100,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0524/9024/0175/files/hoka-running-womens-challenger-8-stucco-asphalt-grey-1168717-SPHL-1.jpg?width=480",
+    "credit": "Up There Athletics",
+    "page": "https://upthereathletics.com/products/hoka-womens-challenger-8-stucco-asphalt-grey"
+   },
+   "source": {
+    "label": "Up There Athletics",
+    "url": "https://upthereathletics.com/products/hoka-womens-challenger-8-stucco-asphalt-grey"
+   },
+   "sources": [
+    {
+     "label": "Up There Athletics",
+     "url": "https://upthereathletics.com/products/hoka-womens-challenger-8-stucco-asphalt-grey"
+    }
+   ],
+   "plus": [
+    "Ringan untuk kategorinya (232 g vs median 275 g)",
+    "Bantalan tebal (stack 44 mm)",
+    "Harga di bawah median kategorinya (100 vs 169 AUD)"
+   ],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "on-running-t",
+   "brand": "On",
+   "model": "Running-T",
+   "released": "2026-06-24",
+   "approx": true,
+   "use": "daily",
+   "specs": {
+    "price": 102,
+    "priceCurrency": "CAD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/15_559c05c6-4e58-436c-aa48-0c6a7ed0edbf.png?width=480",
+    "credit": "Vancouver Running Co.",
+    "page": "https://vanrunco.com/products/on-running-t-paf-unisex-1ug10084873"
+   },
+   "source": {
+    "label": "Vancouver Running Co.",
+    "url": "https://vanrunco.com/products/on-running-t-paf-unisex-1ug10084873"
+   },
+   "sources": [
+    {
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/on-running-t-paf-unisex-1ug10084873"
+    }
+   ],
+   "plus": [
+    "Harga di bawah median kategorinya (102 vs 152 CAD)"
+   ],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "asics-metaspeed-edge-tokyo",
+   "brand": "ASICS",
+   "model": "Metaspeed Edge Tokyo",
+   "released": "2026-06-24",
+   "approx": true,
+   "use": "race",
+   "specs": {
+    "plate": "carbon",
+    "price": 281,
+    "priceCurrency": "CAD",
+    "weightG": 185,
+    "dropMm": 5,
+    "stackMm": 39.5
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Unisex-ASICS-Metaspeed-Edge-Tokyo-White_Flash-Coral-1013A163-102.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/unisex-asics-metaspeed-edge-tokyo-1013a163-102"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/unisex-asics-metaspeed-edge-tokyo-1013a163-400"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/unisex-asics-metaspeed-edge-tokyo-1013a163-102"
+    },
+    {
+     "label": "Up There Athletics",
+     "url": "https://upthereathletics.com/products/asics-metaspeed-edge-tokyo-aquarium-white"
+    },
+    {
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/asics-metaspeed-edge-tokyo-unisex-1013a163-400"
+    }
+   ],
+   "plus": [
+    "Bantalan tebal (stack 39.5 mm)",
+    "Pakai carbon plate untuk race dan sesi cepat"
+   ],
+   "minus": [
+    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian",
+    "Harga di atas median kategorinya (281 vs 239 CAD)"
+   ],
+   "auto": true
+  },
+  {
+   "id": "saucony-endorphin-elite-3",
+   "brand": "Saucony",
+   "model": "Endorphin Elite 3",
+   "released": "2026-06-23",
+   "approx": true,
+   "use": "race",
+   "specs": {
+    "plate": "carbon",
+    "price": 268,
+    "priceCurrency": "CAD",
+    "weightG": 204,
+    "dropMm": 8
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Unisex-Saucony-Endorphin-Elite-3-Black_Laser-S100981-1022.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/unisex-saucony-endorphin-elite-3-s100981-1022"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/unisex-saucony-endorphin-elite-3-s100981-1021"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/unisex-saucony-endorphin-elite-3-s100981-1022"
+    },
+    {
+     "label": "Up There Athletics",
+     "url": "https://upthereathletics.com/products/saucony-endorphin-elite-3-white-multi"
+    },
+    {
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/saucony-endorphin-elite-3-unisex-s100981-1026"
+    }
+   ],
+   "plus": [
+    "Pakai carbon plate untuk race dan sesi cepat"
+   ],
+   "minus": [
+    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
+   ],
+   "auto": true
+  },
+  {
+   "id": "mizuno-wave-rider-30",
+   "brand": "Mizuno",
+   "model": "Wave Rider 30",
+   "released": "2026-06-23",
+   "approx": true,
+   "use": "long",
+   "specs": {
+    "price": 183,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Mens-Mizuno-Wave-Rider-30-White_White-J1GM2620-60.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/mens-mizuno-wave-rider-30-j1gm2620-60"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/unisex-mizuno-wave-rider-30"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/mens-mizuno-wave-rider-30-j1gm2620-60"
+    }
+   ],
+   "plus": [],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "saucony-endorphin-elite-2",
+   "brand": "Saucony",
+   "model": "Endorphin Elite 2",
+   "released": "2026-06-11",
+   "approx": true,
+   "use": "race",
+   "specs": {
+    "plate": "carbon",
+    "price": 148,
+    "priceCurrency": "CAD",
+    "weightG": 199,
+    "dropMm": 8,
+    "stackMm": 39.5
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Unisex-Saucony-Endorphin-Elite-2-Lapis-Citron-S30994-285.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/unisex-saucony-endorphin-elite-2-s30994-285"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/unisex-saucony-endorphin-elite-2-s30994-285"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/unisex-saucony-endorphin-elite-2-s30994-285"
+    },
+    {
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/saucony-endorphin-elite-2-unisex-s30994-95"
+    }
+   ],
+   "plus": [
+    "Bantalan tebal (stack 39.5 mm)",
+    "Pakai carbon plate untuk race dan sesi cepat",
+    "Harga di bawah median kategorinya (148 vs 239 CAD)"
+   ],
+   "minus": [
+    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
+   ],
+   "auto": true
+  },
+  {
+   "id": "on-running-cloudmonster-2",
+   "brand": "On",
+   "model": "Running Cloudmonster 2",
+   "released": "2026-06-11",
+   "approx": true,
+   "use": "tempo",
+   "specs": {
+    "plate": "plate",
+    "price": 79,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Mens-On-Running-Cloudmonster-2-Ivory_Silver-3ME10122906.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/mens-on-running-cloudmonster-2-3me10122906"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/mens-on-running-cloudmonster-2-3me10122906"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/mens-on-running-cloudmonster-2-3me10122906"
+    }
+   ],
+   "plus": [
+    "Ada plate untuk dorongan di pace cepat",
+    "Harga di bawah median kategorinya (79 vs 204 AUD)"
+   ],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "on-running-cloudboom-strike",
+   "brand": "On",
+   "model": "Running Cloudboom Strike",
+   "released": "2026-06-11",
+   "approx": true,
+   "use": "race",
+   "specs": {
+    "plate": "carbon",
+    "price": 187,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-On-Running-Cloudboom-Strike-Sunstone_White-3WE30474836.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/womens-on-running-cloudboom-strike-3we30474836"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/mens-on-running-cloudboom-strike-horizon"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/womens-on-running-cloudboom-strike-3we30474836"
+    }
+   ],
+   "plus": [
+    "Pakai carbon plate untuk race dan sesi cepat",
+    "Harga di bawah median kategorinya (187 vs 239 AUD)"
+   ],
+   "minus": [
+    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
+   ],
+   "auto": true
+  },
+  {
+   "id": "brooks-glycerin-22",
+   "brand": "Brooks",
+   "model": "Glycerin 22",
+   "released": "2026-06-11",
+   "approx": true,
+   "use": "long",
+   "specs": {
+    "price": 118,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Glycerin-22-AmparoBlue_HyperIris_Yellow-120434_1B_440.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/womens-brooks-glycerin-22"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/womens-brooks-glycerin-22"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/womens-brooks-glycerin-22"
+    }
+   ],
+   "plus": [
+    "Harga di bawah median kategorinya (118 vs 176 AUD)"
+   ],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "brooks-hyperion-max-3",
+   "brand": "Brooks",
+   "model": "Hyperion Max 3",
+   "released": "2026-06-11",
+   "approx": true,
+   "use": "tempo",
+   "specs": {
+    "plate": "plate",
+    "price": 135,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Brooks-Hyperion-Max-3-Coconut_FieryCoral_Atomizer-120455_1B_659.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/womens-brooks-hyperion-max-3"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/womens-brooks-hyperion-max-3"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/womens-brooks-hyperion-max-3"
+    }
+   ],
+   "plus": [
+    "Ada plate untuk dorongan di pace cepat",
+    "Harga di bawah median kategorinya (135 vs 204 AUD)"
+   ],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "brooks-glycerin-gts-22",
+   "brand": "Brooks",
+   "model": "Glycerin GTS 22",
+   "released": "2026-06-11",
+   "approx": true,
+   "use": "long",
+   "specs": {
+    "stability": true,
+    "price": 122,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Brooks-Glycerin-GTS-22-BlueRibbon_Peacoat_Dianthus-120435_1B_429.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/womens-brooks-glycerin-gts-22"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/womens-brooks-glycerin-gts-22"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/womens-brooks-glycerin-gts-22"
+    }
+   ],
+   "plus": [
+    "Disebut sebagai sepatu stability/support",
+    "Harga di bawah median kategorinya (122 vs 176 AUD)"
+   ],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "mizuno-wave-sky-9",
+   "brand": "Mizuno",
+   "model": "Wave Sky 9",
+   "released": "2026-06-11",
+   "approx": true,
+   "use": "long",
+   "specs": {
+    "price": 138,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Mens-Mizuno-Wave-Sky-9-Dark-Slate_White_Beechnut-J1GC2502-63.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/men-mizuno-wave-sky-9-j1gc2502-63"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/womens-mizuno-wave-sky-9"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/men-mizuno-wave-sky-9-j1gc2502-63"
+    }
+   ],
+   "plus": [
+    "Harga di bawah median kategorinya (138 vs 176 AUD)"
+   ],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "hoka-bondi-sr",
+   "brand": "HOKA",
+   "model": "Bondi SR",
+   "released": "2026-06-10",
+   "approx": true,
+   "use": "long",
+   "specs": {
+    "price": 204,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-HOKA-Bondi-SR-Black_Black-1110521-BBLC.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/womens-hoka-bondi-sr"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/womens-hoka-bondi-sr"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/womens-hoka-bondi-sr"
+    }
+   ],
+   "plus": [],
+   "minus": [
+    "Harga di atas median kategorinya (204 vs 176 AUD)"
+   ],
+   "auto": true
+  },
+  {
+   "id": "brooks-glycerin-max-2",
+   "brand": "Brooks",
+   "model": "Glycerin Max 2",
+   "released": "2026-06-10",
+   "approx": true,
+   "use": "long",
+   "specs": {
+    "price": 232,
+    "priceCurrency": "AUD",
+    "weightG": 320,
+    "dropMm": 6
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Brooks-Glycerin-Max-2-Nantucket-Breeze_Chrome-120468_1B_497.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/womens-brooks-glycerin-max-2-120468_1b_497"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/mens-brooks-glycerin-max-2-110479_1d_186"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/womens-brooks-glycerin-max-2-120468_1b_497"
+    },
+    {
+     "label": "Up There Athletics",
+     "url": "https://upthereathletics.com/products/brooks-mens-glycerin-max-2-bright-white-black-nightlife"
+    }
+   ],
+   "plus": [],
+   "minus": [
+    "Lebih berat dari kebanyakan di kategorinya (320 g vs median 283 g)",
+    "Harga di atas median kategorinya (232 vs 176 AUD)"
+   ],
+   "auto": true
+  },
+  {
+   "id": "brooks-glycerin-gts-23",
+   "brand": "Brooks",
+   "model": "Glycerin GTS 23",
+   "released": "2026-06-09",
+   "approx": true,
+   "use": "long",
+   "specs": {
+    "dropMm": 10,
+    "stability": true,
+    "price": 211,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Brooks-Glycerin-GTS-23-White_Harbour-Mist_Metal-120492_1B_133.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/womens-brooks-glycerin-gts-23-120492_1b_133"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/womens-brooks-glycerin-gts-23-wide-120492_1d_020"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/womens-brooks-glycerin-gts-23-120492_1b_133"
+    }
+   ],
+   "plus": [
+    "Drop 10 mm, ramah untuk pelari yang mendarat di tumit",
+    "Disebut sebagai sepatu stability/support"
+   ],
+   "minus": [
+    "Harga di atas median kategorinya (211 vs 176 AUD)"
+   ],
+   "auto": true
+  },
+  {
+   "id": "puma-deviate-pure-nitro",
+   "brand": "PUMA",
+   "model": "Deviate Pure NITRO",
+   "released": "2026-06-05",
+   "approx": true,
+   "use": "race",
+   "specs": {
+    "weightG": 220,
+    "plate": "carbon",
+    "price": 169,
+    "priceCurrency": "CAD",
+    "dropMm": 8,
+    "stackMm": 38
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-PUMA-Deviate-Pure-NITRO-PUMA-White-313905-01.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/womens-puma-deviate-pure-nitro-313905-01"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/womens-puma-deviate-pure-nitro-313905-05"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/womens-puma-deviate-pure-nitro-313905-01"
+    },
+    {
+     "label": "Up There Athletics",
+     "url": "https://upthereathletics.com/products/puma-womens-deviate-pure-nitro-light-lavender-ultra-red-inky-depths"
+    },
+    {
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/puma-deviate-pure-nitro-mens-313904-06"
+    }
+   ],
+   "plus": [
+    "Bantalan tebal (stack 38 mm)",
+    "Pakai carbon plate untuk race dan sesi cepat",
+    "Harga di bawah median kategorinya (169 vs 239 CAD)"
+   ],
+   "minus": [
+    "Lebih berat dari kebanyakan di kategorinya (220 g vs median 192 g)",
+    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
+   ],
+   "auto": true
+  },
+  {
+   "id": "puma-fast-fwd-nitro-elite-2",
+   "brand": "PUMA",
+   "model": "Fast-FWD NITRO Elite 2",
+   "released": "2026-06-04",
+   "approx": true,
+   "use": "race",
+   "specs": {
+    "dropMm": 8,
+    "price": 211,
+    "priceCurrency": "CAD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0524/9024/0175/files/puma-running-mens-fast-fwd-nitro-elite-2-light-lavender-ultra-red-puma-313692-02-1_3a133826-be6a-48c1-8d1f-c9908ce73682.jpg?width=480",
+    "credit": "Up There Athletics",
+    "page": "https://upthereathletics.com/products/puma-mens-fast-fwd-nitro-elite-2-light-lavender-ultra-red"
+   },
+   "source": {
+    "label": "Vancouver Running Co.",
+    "url": "https://vanrunco.com/products/puma-fast-fwd-nitro-elite-2-womens-31369302"
+   },
+   "sources": [
+    {
+     "label": "Up There Athletics",
+     "url": "https://upthereathletics.com/products/puma-mens-fast-fwd-nitro-elite-2-light-lavender-ultra-red"
+    },
+    {
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/puma-fast-fwd-nitro-elite-2-womens-31369302"
+    }
+   ],
+   "plus": [],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "diadora-atomo-star",
+   "brand": "Diadora",
+   "model": "Atomo Star",
+   "released": "2026-05-29",
+   "approx": true,
+   "use": "long",
+   "specs": {
+    "weightG": 275,
+    "dropMm": 6,
+    "stackMm": 40,
+    "price": 208,
+    "priceCurrency": "CAD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/lead_7ca8329a-949c-414d-af54-950e9686e852.png?width=480",
+    "credit": "Vancouver Running Co.",
+    "page": "https://vanrunco.com/products/diadora-atomo-star-unisex-101-181473-c0219"
+   },
+   "source": {
+    "label": "Vancouver Running Co.",
+    "url": "https://vanrunco.com/products/diadora-atomo-star-unisex-101-181473-c0348"
+   },
+   "sources": [
+    {
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/diadora-atomo-star-unisex-101-181473-c0219"
+    }
+   ],
+   "plus": [
+    "Bantalan tebal (stack 40 mm)"
+   ],
+   "minus": [
+    "Harga di atas median kategorinya (208 vs 176 CAD)"
+   ],
+   "auto": true
+  },
+  {
+   "id": "diadora-mythos-blushield-vigore-v",
+   "brand": "Diadora",
+   "model": "Mythos Blushield Vigore V",
+   "released": "2026-05-29",
+   "approx": true,
+   "use": "daily",
+   "specs": {
+    "dropMm": 10,
+    "price": 129,
+    "priceCurrency": "CAD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/101.182720_C0381_2.png?width=480",
+    "credit": "Vancouver Running Co.",
+    "page": "https://vanrunco.com/products/diadora-mythos-blushield-vigore-v-mens-101-182723-d0565"
+   },
+   "source": {
+    "label": "Vancouver Running Co.",
+    "url": "https://vanrunco.com/products/diadora-mythos-blushield-vigore-v-mens-101-182723-c0362"
+   },
+   "sources": [
+    {
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/diadora-mythos-blushield-vigore-v-mens-101-182723-d0565"
+    }
+   ],
+   "plus": [
+    "Drop 10 mm, ramah untuk pelari yang mendarat di tumit",
+    "Harga di bawah median kategorinya (129 vs 152 CAD)"
+   ],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "saucony-endorphin-pro-5",
+   "brand": "Saucony",
+   "model": "Endorphin Pro 5",
+   "released": "2026-05-20",
+   "approx": true,
+   "use": "race",
+   "specs": {
+    "plate": "carbon",
+    "price": 246,
+    "priceCurrency": "CAD",
+    "dropMm": 8,
+    "stackMm": 39.5
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Mens-Saucony-Endorphin-Pro-5-White_Laser-S101360-1029.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/mens-saucony-endorphin-pro-5-s101360-1029"
+   },
+   "source": {
+    "label": "Vancouver Running Co.",
+    "url": "https://vanrunco.com/products/saucony-endorphin-pro-5-womens-s101308-1006"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/mens-saucony-endorphin-pro-5-s101360-1029"
+    },
+    {
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/saucony-endorphin-pro-5-mens-s21064-101"
+    }
+   ],
+   "plus": [
+    "Bantalan tebal (stack 39.5 mm)",
+    "Pakai carbon plate untuk race dan sesi cepat"
+   ],
+   "minus": [
+    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
+   ],
+   "auto": true
+  },
+  {
+   "id": "saucony-endorphin-speed-3",
+   "brand": "Saucony",
+   "model": "Endorphin Speed 3",
+   "released": "2026-05-19",
+   "approx": true,
+   "use": "race",
+   "specs": {
+    "weightG": 229,
+    "dropMm": 8,
+    "plate": "plate",
+    "price": 36,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/products/s1_01ff0023-e39c-48ed-a82e-4c47c53ed3d2.png?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/womens-saucony-endorphin-speed-3-new-york-marathon"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/womens-saucony-endorphin-speed-3-new-york-marathon"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/womens-saucony-endorphin-speed-3-new-york-marathon"
+    }
+   ],
+   "plus": [
+    "Ada plate untuk dorongan di pace cepat",
+    "Harga di bawah median kategorinya (36 vs 239 AUD)"
+   ],
+   "minus": [
+    "Lebih berat dari kebanyakan di kategorinya (229 g vs median 192 g)"
+   ],
+   "auto": true
+  },
+  {
+   "id": "nike-rival-waffle-7",
+   "brand": "Nike",
+   "model": "Rival Waffle 7",
+   "released": "2026-05-19",
+   "approx": true,
+   "use": "trail",
+   "specs": {
+    "trail": true,
+    "price": 85,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Unisex-Nike-Zoom-Rival-Waffle-7-Citron-Pulse_Indigo-Burst_Blue-Void-II7400-800.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/unisex-nike-zoom-rival-waffle-7-ii7400-800"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/unisex-nike-zoom-rival-waffle-7-ii7400-800"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/unisex-nike-zoom-rival-waffle-7-ii7400-800"
+    }
+   ],
+   "plus": [
+    "Harga di bawah median kategorinya (85 vs 169 AUD)"
+   ],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "mizuno-neo-vista-3",
+   "brand": "Mizuno",
+   "model": "Neo Vista 3",
+   "released": "2026-05-19",
+   "approx": true,
+   "use": "tempo",
+   "specs": {
+    "plate": "plate",
+    "price": 225,
+    "priceCurrency": "AUD",
+    "weightG": 220,
+    "dropMm": 8
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Unisex-Mizuno-Neo-Vista-3-Black_Black_White-J1GU2610-81.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/unisex-mizuno-neo-vista-3-j1gu2610-81"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/mens-mizuno-neo-vista-3-j1gm2610-51"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/unisex-mizuno-neo-vista-3-j1gu2610-81"
+    },
+    {
+     "label": "Up There Athletics",
+     "url": "https://upthereathletics.com/products/mizuno-womens-neo-vista-3-white-flamingo-coral-lime-pulp"
+    }
+   ],
+   "plus": [
+    "Ada plate untuk dorongan di pace cepat"
+   ],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "asics-megablast",
+   "brand": "ASICS",
+   "model": "Megablast",
+   "released": "2026-05-15",
+   "approx": true,
+   "use": "tempo",
+   "specs": {
+    "price": 234,
+    "priceCurrency": "CAD",
+    "weightG": 230,
+    "dropMm": 8,
+    "stackMm": 46
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Unisex-ASICS-Megablast-Tenka-Orange-Glow_White-1013A199-800.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/unisex-asics-megablast-tenka-1013a199-800"
+   },
+   "source": {
+    "label": "Vancouver Running Co.",
+    "url": "https://vanrunco.com/products/asics-megablast-unisex-1013a170-100"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/unisex-asics-megablast-tenka-1013a199-800"
+    },
+    {
+     "label": "Up There Athletics",
+     "url": "https://upthereathletics.com/products/asics-megablast-white-orange-glow"
+    },
+    {
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/asics-megablast-unisex-1013a170-1"
+    }
+   ],
+   "plus": [
+    "Bantalan tebal (stack 46 mm)"
+   ],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "hoka-skyward",
+   "brand": "HOKA",
+   "model": "Skyward",
+   "released": "2026-05-06",
+   "approx": true,
+   "use": "race",
+   "specs": {
+    "dropMm": 5,
+    "plate": "carbon",
+    "price": 203,
+    "priceCurrency": "CAD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/wskywardx2leadcropped.png?width=480",
+    "credit": "Vancouver Running Co.",
+    "page": "https://vanrunco.com/products/hoka-skyward-x-2-womens-1171926-lrmt"
+   },
+   "source": {
+    "label": "Vancouver Running Co.",
+    "url": "https://vanrunco.com/products/hoka-skyward-x-2-womens-1171926-lrmt"
+   },
+   "sources": [
+    {
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/hoka-skyward-x-2-womens-1171926-lrmt"
+    }
+   ],
+   "plus": [
+    "Pakai carbon plate untuk race dan sesi cepat",
+    "Harga di bawah median kategorinya (203 vs 239 CAD)"
+   ],
+   "minus": [
+    "Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"
+   ],
+   "auto": true
+  },
+  {
+   "id": "saucony-xodus-ultra-4",
+   "brand": "Saucony",
+   "model": "Xodus Ultra 4",
+   "released": "2026-05-06",
+   "approx": true,
+   "use": "trail",
+   "specs": {
+    "weightG": 309,
+    "dropMm": 6,
+    "stackMm": 36,
+    "trail": true,
+    "price": 114,
+    "priceCurrency": "CAD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0741/1015/files/S21032-150leadcropped.png?width=480",
+    "credit": "Vancouver Running Co.",
+    "page": "https://vanrunco.com/products/saucony-xodus-ultra-4-mens-s21032-150"
+   },
+   "source": {
+    "label": "Vancouver Running Co.",
+    "url": "https://vanrunco.com/products/saucony-xodus-ultra-4-womens-s11032-150"
+   },
+   "sources": [
+    {
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/saucony-xodus-ultra-4-mens-s21032-150"
+    }
+   ],
+   "plus": [
+    "Harga di bawah median kategorinya (114 vs 169 CAD)"
+   ],
+   "minus": [
+    "Lebih berat dari kebanyakan di kategorinya (309 g vs median 275 g)"
+   ],
+   "auto": true
+  },
+  {
+   "id": "on-running-cloudhorizon-2-waterproof",
+   "brand": "On",
+   "model": "Running Cloudhorizon 2 Waterproof",
+   "released": "2026-05-04",
+   "approx": true,
+   "use": "trail",
+   "specs": {
+    "waterproof": true,
+    "trail": true,
+    "price": 218,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-On-Running-Cloudhorizon-2-Waterproof-Black_Black-3WG10201043.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/womens-on-running-cloudhorizon-2-waterproof-3wg10201043"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/womens-on-running-cloudhorizon-2-waterproof-3wg10201043"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/womens-on-running-cloudhorizon-2-waterproof-3wg10201043"
+    }
+   ],
+   "plus": [
+    "Tahan air (Gore-Tex/waterproof)"
+   ],
+   "minus": [
+    "Versi tahan air biasanya lebih panas di cuaca tropis",
+    "Harga di atas median kategorinya (218 vs 169 AUD)"
+   ],
+   "auto": true
+  },
+  {
+   "id": "on-running-ultra-quiver",
+   "brand": "On",
+   "model": "Running Ultra Quiver",
+   "released": "2026-05-01",
+   "approx": true,
+   "use": "trail",
+   "specs": {
+    "trail": true,
+    "price": 43,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/On-Running-Ultra-Quiver-Black-2UF30110553.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/on-running-ultra-quiver"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/on-running-ultra-quiver"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/on-running-ultra-quiver"
+    }
+   ],
+   "plus": [
+    "Harga di bawah median kategorinya (43 vs 169 AUD)"
+   ],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "on-running-solar-arm-sleeves",
+   "brand": "On",
+   "model": "Running Solar Arm Sleeves",
+   "released": "2026-05-01",
+   "approx": true,
+   "use": "daily",
+   "specs": {
+    "price": 67,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/On-Running-Solar-Arm-Sleeves-White-2UG10290069.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/on-running-solar-arm-sleeves"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/on-running-solar-arm-sleeves"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/on-running-solar-arm-sleeves"
+    }
+   ],
+   "plus": [
+    "Harga di bawah median kategorinya (67 vs 152 AUD)"
+   ],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "asics-gt-2000-14-atc",
+   "brand": "ASICS",
+   "model": "GT-2000 14 ATC",
+   "released": "2026-05-01",
+   "approx": true,
+   "use": "long",
+   "specs": {
+    "stability": true,
+    "price": 101,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Mens-ASICS-GT-2000-14-ATC-Piedmont-Grey_Pure-Silver-1011C220-020.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/mens-asics-gt-2000-14-atc"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/mens-asics-gt-2000-14-atc"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/mens-asics-gt-2000-14-atc"
+    }
+   ],
+   "plus": [
+    "Disebut sebagai sepatu stability/support",
+    "Harga di bawah median kategorinya (101 vs 176 AUD)"
+   ],
+   "minus": [],
+   "auto": true
+  },
+  {
+   "id": "brooks-adrenaline-gts-25",
+   "brand": "Brooks",
+   "model": "Adrenaline GTS 25",
+   "released": "2026-05-01",
+   "approx": true,
+   "use": "daily",
+   "specs": {
+    "stability": true,
+    "price": 190,
+    "priceCurrency": "AUD"
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-Brooks-Adrenaline-GTS-25-Black_White-120443_1B_090.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/womens-brooks-adrenaline-gts-27"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/mens-brooks-adrenaline-gts-25-110454_1d_151"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/womens-brooks-adrenaline-gts-27"
+    }
+   ],
+   "plus": [
+    "Disebut sebagai sepatu stability/support"
+   ],
+   "minus": [
+    "Harga di atas median kategorinya (190 vs 152 AUD)"
+   ],
+   "auto": true
+  },
+  {
+   "id": "adidas-hyperboost-edge",
+   "brand": "adidas",
+   "model": "Hyperboost Edge",
+   "released": "2026-04-30",
+   "approx": true,
+   "use": "tempo",
+   "specs": {
+    "plate": "plate",
+    "price": 188,
+    "priceCurrency": "CAD",
+    "weightG": 215,
+    "dropMm": 6
+   },
+   "image": {
+    "url": "https://cdn.shopify.com/s/files/1/0288/5962/files/Womens-adidas-Hyperboost-Edge-x-Hermanos-Koumori-Charcoal_Grey_Alumina-KH5379.jpg?width=480",
+    "credit": "Pace Athletic",
+    "page": "https://www.paceathletic.com/products/womens-adidas-hyperboost-edge-x-hermanos-koumori-kh5379"
+   },
+   "source": {
+    "label": "Pace Athletic",
+    "url": "https://www.paceathletic.com/products/womens-adidas-hyperboost-edge-ki1914"
+   },
+   "sources": [
+    {
+     "label": "Pace Athletic",
+     "url": "https://www.paceathletic.com/products/womens-adidas-hyperboost-edge-x-hermanos-koumori-kh5379"
+    },
+    {
+     "label": "Up There Athletics",
+     "url": "https://upthereathletics.com/products/adidas-womens-hyperboost-edge-x-hermanos-koumori-charcoal-night-grey-alumina"
+    },
+    {
+     "label": "Vancouver Running Co.",
+     "url": "https://vanrunco.com/products/adidas-hyperboost-edge-womens-ki1916"
+    }
+   ],
+   "plus": [
+    "Ada plate untuk dorongan di pace cepat"
+   ],
    "minus": [],
    "auto": true
   }
