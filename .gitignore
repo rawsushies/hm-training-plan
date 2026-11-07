@@ -6,3 +6,4 @@ ui-debug.log*
 .env
 test-results/
 test/artifacts/
+.firebase/
