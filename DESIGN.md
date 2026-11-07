@@ -1,10 +1,10 @@
 ---
+version: alpha
 name: WeRunIt
-version: 1.0.0
 description: >
   Visual-first race-progress monitor. One glance tells you where you stand on the road to your race
   (default: BTN JAKIM Half Marathon, 13 Juni 2027); one tap tells you more. Dark-first, glass surfaces,
-  holographic accent, sprung motion.
+  holographic accent, quick and physical motion.
 colors:
   # Surfaces (dark is the primary theme)
   bg: "#13131C"
@@ -12,25 +12,25 @@ colors:
   surface-2: "#262539"
   glass: "rgba(235,235,255,0.07)"
   glass-border: "rgba(235,235,255,0.15)"
-  line: "rgba(235,235,255,0.11)"
+  border: "rgba(235,235,255,0.11)"
   # Text
   text: "#F6F4FF"
   text-muted: "#A8A5BB"
   text-faint: "#77758A"
   # Brand
-  accent: "#9673FF"
-  accent-text: "#B9A4FF"
-  on-accent: "#FFFFFF"
+  primary: "#9673FF"
+  primary-text: "#B9A4FF"
+  on-primary: "#FFFFFF"
   blue: "#65A7FF"
   cyan: "#79E5DE"
   pink: "#F18CD5"
   silver: "#F0EEFF"
-  # Readiness states (the only colours allowed to carry meaning on the hero)
-  state-ready: "#7BE38A"      # go: on plan, recovered
-  state-steady: "#79E5DE"     # normal range
-  state-caution: "#FFB86B"    # behind plan, low recovery
-  state-alert: "#FF7A85"      # missed key session, injury flag
-  state-idle: "#4A4860"       # no data / rest
+  # Readiness states (the only colours that carry meaning on the hero)
+  state-ready: "#7BE38A"
+  state-steady: "#79E5DE"
+  state-caution: "#FFB86B"
+  state-alert: "#FF7A85"
+  state-idle: "#4A4860"
   # Session types (calendar, log, charts)
   session-easy: "#65A7FF"
   session-long: "#9673FF"
@@ -41,70 +41,174 @@ colors:
   session-race: "#F0EEFF"
   session-strength: "#4FD1C5"
   session-rest: "#4A4860"
-gradients:
-  holo: "linear-gradient(115deg,#F0EEFF 0%,#9673FF 26%,#65A7FF 48%,#79E5DE 70%,#F18CD5 88%,#FFE2C6 100%)"
-  ring-progress: "conic: #9673FF → #65A7FF → #79E5DE"
-  ring-recovery: "conic: #3FB950 → #7BE38A → #D7F25C"
-  ring-effort: "conic: #FFB86B → #F18CD5 (hatched below target)"
-  ring-sleep: "conic: #5B4BFF → #9673FF → #B7C7FF"
-  hero-glow: "radial-gradient(closest-side, rgba(150,115,255,0.22), transparent)"
-  ambient-mesh: "3–4 blurred blobs from the brand set on bg, 6–10% opacity, 2% grain"
 typography:
-  display: { family: "Space Grotesk", fallback: "Inter, system-ui, sans-serif" }
-  body: { family: "Inter", fallback: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif" }
-  numeric: { family: "Space Grotesk", features: "tnum, ss01" }
-  scale:
-    hero-number: { size: 84px, weight: 700, line: 0.82, tracking: -0.05em }
-    ring-number: { size: 28px, weight: 700, line: 1, tracking: -0.03em }
-    stat-number: { size: 34px, weight: 700, line: 1, tracking: -0.03em }
-    h1: { size: 28px, weight: 700, line: 1.1, tracking: -0.02em }
-    h2: { size: 20px, weight: 650, line: 1.2, tracking: -0.01em }
-    h3: { size: 16px, weight: 650, line: 1.25, tracking: -0.01em }
-    body: { size: 15px, weight: 400, line: 1.5 }
-    meta: { size: 13px, weight: 500, line: 1.45 }
-    caption: { size: 12px, weight: 600, line: 1.4, tracking: 0.06em, case: uppercase }
-spacing:
-  base: 4px
-  scale: [4, 8, 12, 16, 20, 24, 32, 40, 56]
-  gutter: 16px
-  card-padding: 18px
-  section-gap: 32px
+  display-hero:
+    fontFamily: Space Grotesk
+    fontSize: 84px
+    fontWeight: 700
+    lineHeight: 0.82
+    letterSpacing: -0.05em
+  ring-number:
+    fontFamily: Space Grotesk
+    fontSize: 28px
+    fontWeight: 700
+    lineHeight: 1
+    letterSpacing: -0.03em
+  stat-number:
+    fontFamily: Space Grotesk
+    fontSize: 34px
+    fontWeight: 700
+    lineHeight: 1
+    letterSpacing: -0.03em
+  h1:
+    fontFamily: Space Grotesk
+    fontSize: 28px
+    fontWeight: 700
+    lineHeight: 1.1
+    letterSpacing: -0.02em
+  h2:
+    fontFamily: Space Grotesk
+    fontSize: 20px
+    fontWeight: 650
+    lineHeight: 1.2
+  h3:
+    fontFamily: Space Grotesk
+    fontSize: 16px
+    fontWeight: 650
+    lineHeight: 1.25
+  body-md:
+    fontFamily: Inter
+    fontSize: 15px
+    fontWeight: 400
+    lineHeight: 1.5
+  meta:
+    fontFamily: Inter
+    fontSize: 13px
+    fontWeight: 500
+    lineHeight: 1.45
+  label-caps:
+    fontFamily: Inter
+    fontSize: 12px
+    fontWeight: 600
+    lineHeight: 1.4
+    letterSpacing: 0.06em
 rounded:
   sm: 11px
   md: 16px
   lg: 22px
   pill: 999px
-elevation:
-  card: "surface-1 + 1px line border, no shadow"
-  glass: "glass fill + glass-border + backdrop-filter: blur(20px) saturate(140%)"
-  floating: "0 12px 40px rgba(5,4,20,0.45)"
-motion:
-  spring-lead: { omega: 19, zeta: 0.55 }
-  spring-trail: { omega: 11, zeta: 0.72 }
-  ease-out: "cubic-bezier(.2,.9,.3,1)"
-  ease-overshoot: "cubic-bezier(.2,.9,.3,1.15)"
-  ease-press: "cubic-bezier(.3,1.6,.5,1)"
-  ease-draw: "cubic-bezier(.6,0,.2,1)"
-  duration: { press: 120ms, micro: 180ms, ui: 300ms, reveal: 600ms, ring-fill: 900ms, number-roll: 700ms }
-  stagger: 50ms
+spacing:
+  xs: 4px
+  sm: 8px
+  md: 12px
+  lg: 16px
+  xl: 24px
+  2xl: 32px
+  3xl: 56px
 components:
-  tap-target-min: 48px
-  dock-height: 64px
-  ring-size: { hero: 168px, trio: 108px, mini: 44px }
+  card:
+    backgroundColor: "{colors.surface-1}"
+    textColor: "{colors.text}"
+    rounded: "{rounded.lg}"
+    padding: 18px
+  glass-surface:
+    backgroundColor: "{colors.glass}"
+    textColor: "{colors.text}"
+    rounded: "{rounded.lg}"
+    padding: 16px
+  dock:
+    backgroundColor: "{colors.glass}"
+    textColor: "{colors.text-muted}"
+    rounded: "{rounded.pill}"
+    padding: 4px
+  button-primary:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.on-primary}"
+    typography: "{typography.h3}"
+    rounded: "{rounded.md}"
+    padding: "14px 20px"
+  fab:
+    backgroundColor: "{colors.glass}"
+    textColor: "{colors.text}"
+    rounded: "{rounded.pill}"
+    size: 56px
+  chip-session:
+    backgroundColor: "{colors.surface-2}"
+    textColor: "{colors.text}"
+    typography: "{typography.meta}"
+    rounded: "{rounded.pill}"
+    padding: "8px 14px"
+  tile-metric:
+    backgroundColor: "{colors.surface-1}"
+    textColor: "{colors.text}"
+    typography: "{typography.stat-number}"
+    rounded: "{rounded.lg}"
+    padding: 16px
+  sheet:
+    backgroundColor: "{colors.glass}"
+    textColor: "{colors.text}"
+    rounded: "{rounded.lg}"
+    padding: "8px 18px 24px"
+# --- WeRunIt extensions (not part of the base DESIGN.md spec) ---
+gradients:
+  holo: "linear-gradient(115deg,#F0EEFF 0%,#9673FF 26%,#65A7FF 48%,#79E5DE 70%,#F18CD5 88%,#FFE2C6 100%)"
+  ring-progress: "conic, in oklab: #9673FF → #65A7FF → #79E5DE"
+  ring-recovery: "conic, in oklab: #3FB950 → #7BE38A → #D7F25C"
+  ring-effort: "conic, in oklab: #FFB86B → #F18CD5 (hatched below target)"
+  ring-sleep: "conic, in oklab: #5B4BFF → #9673FF → #B7C7FF"
+  screen-tint: "radial-gradient(125% 125% at 50% 0%, #13131C 40%, <state colour at 18%> 100%)"
+  hero-glow: "radial-gradient(closest-side, <state colour at 36%>, <state at 15%> 35%, <state at 4%> 70%, transparent)"
+  grain: "SVG feTurbulence noise, 4–6% opacity, overlay blend"
+motion:
+  # Durations: open/enter uses the named token, close/exit uses the next step down.
+  duration-instant: 100ms
+  duration-quick: 150ms
+  duration-base: 250ms
+  duration-moderate: 350ms
+  duration-slow: 500ms
+  duration-fill: 900ms
+  duration-reel: 1400ms
+  # Easings
+  ease-out: "cubic-bezier(0.22, 1, 0.36, 1)"
+  ease-out-expo: "cubic-bezier(0.16, 1, 0.3, 1)"
+  ease-sheet: "cubic-bezier(0.32, 0.72, 0, 1)"
+  ease-in-out: "cubic-bezier(0.65, 0, 0.35, 1)"
+  ease-pop-soft: "cubic-bezier(0.34, 1.35, 0.64, 1)"
+  ease-pop: "cubic-bezier(0.34, 1.45, 0.64, 1)"
+  ease-pop-strong: "cubic-bezier(0.34, 1.96, 0.64, 1)"
+  # Springs, as WRI_MOTION.springF(omega, zeta)
+  spring-pill-lead: { omega: 19, zeta: 0.55 }
+  spring-pill-trail: { omega: 11, zeta: 0.72 }
+  spring-morph: { omega: 14.1, zeta: 0.85 }
+  spring-panel: { omega: 17.3, zeta: 0.87 }
+  spring-digit: { omega: 30.6, zeta: 0.98 }
+  # Distances and depth
+  distance-sm: 8px
+  distance-md: 12px
+  distance-lg: 16px
+  scale-enter: 0.96
+  scale-press: 0.96
+  blur-enter: 2px
+  blur-max: 8px
+  stagger-text: 40ms
+  stagger-list: 50ms
+  stagger-digit: 70ms
 ---
 
 # WeRunIt Design Bible
 
-## 1. What we are building
+## Overview
 
 WeRunIt is a **race-progress monitor**, not a training spreadsheet. A runner opens it, sees in under two seconds
-whether they are on track for their race, and closes it. Everything else (logging, plans, shoes, friends) is
-one tap behind that answer.
+whether they are on track for their race, and closes it. Everything else (logging, plans, shoes, friends) is one tap
+behind that answer.
 
 - **Primary race:** BTN JAKIM Half Marathon, 13 Juni 2027 (21.0975 km). Any race event works the same way.
-- **Primary question the app answers:** "Am I ready, and what do I do today?"
-- **Interaction promise:** *One tap to know. One tap to act.* No form-filling to see your status, no buttons whose
-  purpose needs a label to explain.
+- **The question the app answers:** "Am I ready, and what do I do today?"
+- **Interaction promise:** *One tap to know. One tap to act.* No form-filling to see your status, and no button whose
+  purpose needs a label to explain it.
+- **Feel:** a calm, dark instrument panel that comes alive under your thumb. Glass that floats, numbers that pop in,
+  rings that fill.
 - **Language:** UI copy is Bahasa Indonesia, casual and warm (Kiki's voice). This document is in English.
 
 ### The one-tap rule
@@ -118,39 +222,37 @@ one tap behind that answer.
 If a common task needs three taps, the design is wrong. If a screen needs a button to explain another button,
 the design is wrong.
 
-## 2. Principles
+### Principles
 
 1. **Visual before verbal.** A ring, a dot or a line says it first; the number confirms; text explains only if asked.
-   Every card leads with a visual (reference: the Effort / Récupération / Sommeil ring trio).
 2. **The whole card is the button.** Cards, rings and chart tiles are tap targets. No "Lihat detail" links, no
    chevron-only hit areas. An arrow glyph (→) in the top-right only signals "this opens".
 3. **One primary action per screen.** It lives in the floating `+` (or the hero's single CTA). Secondary actions live
    inside sheets, never on the surface.
-4. **Colour means state.** Brand colours decorate; state colours (ready / steady / caution / alert / idle) carry
-   meaning. Never use red or amber for decoration.
-5. **Compare to *you*.** Every metric shows today against your own 30-day range (reference: "Today vs. 30 day range"),
-   with a plain label: `normal`, `lebih rendah`, `lebih tinggi`.
-6. **Calm by default, alive on touch.** Surfaces are still at rest; motion happens in response to the user or to data
-   arriving. No looping decoration on data screens (the brand mark and onboarding are the exceptions).
+4. **Colour means state.** Brand colours decorate; state colours carry meaning. Never use red or amber for decoration.
+5. **Compare to *you*.** Every metric shows today against your own 30-day range, labelled `normal`, `lebih rendah`
+   or `lebih tinggi`.
+6. **Calm at rest, alive on touch.** Motion answers the user or new data. No looping decoration on data screens.
 7. **Offline is normal.** Show the last known state with a quiet timestamp ("Diperbarui 08:06"), never an error wall.
 
-## 3. Colour
+## Colors
 
-Dark is the primary theme. Light theme exists (tokens in `public/css/werunit.css`, `[data-theme="light"]`) and must
-keep the same hierarchy, but every new screen is designed dark first.
+Use the token role (`{colors.primary}`), never the hex literal, when building components. Dark is the primary theme;
+the light theme lives in `public/css/werunit.css` under `[data-theme="light"]` and keeps the same hierarchy.
 
 ### Layers
 
 ```
-bg (#13131C)            app background, plus optional ambient mesh
+bg (#13131C)            app background, with the screen tint
 └ surface-1 (#1C1B2A)   cards
   └ surface-2 (#262539) ring tracks, inset wells, chart backgrounds
-glass                   anything floating over content: dock, sheets, segmented pills, toasts
+glass                   anything floating over content: dock, sheets, segmented pills, toasts, the + button
 ```
 
 ### State colours
 
-Use exactly one state colour per hero. The ring gradient, the status dot and the coaching headline share it.
+Use exactly one state colour per hero. The ring gradient, the hero glow, the status dot and the coaching headline
+share it.
 
 | State | Token | When | Example copy |
 | --- | --- | --- | --- |
@@ -160,183 +262,268 @@ Use exactly one state colour per hero. The ring gradient, the status dot and the
 | Alert | `state-alert` | Pain flag, ≥ 2 key sessions missed, race-week risk | "Ada nyeri? Istirahat dan cek lagi besok." |
 | Idle | `state-idle` | No data yet, rest day | "Hari istirahat. Nikmati." |
 
-### Gradients
+### Gradients and texture
 
-- **Holo** (`gradients.holo`) is the brand foil. Use it on the logo, the "It" of the wordmark, the race-progress ring
-  and the active dock icon. Nowhere else.
-- **Ring gradients** run along the stroke (conic), light at the head, so the ring reads as moving forward.
-- **Ambient mesh** (reference: the green glow behind the 73 % "Moderate Readiness" hero): a large, soft blob of the
-  current state colour behind the hero at 15–25 % opacity, with 2 % grain to prevent banding. It shifts colour when
-  the state changes (600 ms cross-fade). Only the hero gets it.
+Techniques taken from patterncraft (radial glows, fade-masked grids), feralui (pinned mesh spots, oklab blending,
+noise) and neat (animated gradient fields with grain, vignette and bloom):
+
+- **Holo** (`gradients.holo`) is the brand foil: the logo, the "It" of the wordmark, the race-progress ring and the
+  active dock icon. Nowhere else.
+- **Screen tint** (`gradients.screen-tint`): a 125 % radial glow from the top centre, `bg` until 40 %, fading into the
+  current state colour at about 18 % strength. It tells you the day's verdict before you read anything (reference: the
+  green readiness screen). It cross-fades in `duration-slow` when the state changes.
+- **Hero glow** (`gradients.hero-glow`): a multi-stop `closest-side` radial glow behind the hero number. Use three or
+  four stops (36 % → 15 % → 4 % → 0) so the falloff looks like light, not a disc.
+- **Ring gradients** are conic, interpolated `in oklab` so the mid-tones stay bright, light at the head so the ring
+  reads as moving forward.
+- **Grain** (`gradients.grain`): 4–6 % noise over any large gradient to stop banding on OLED screens.
+- **Empty chart wells:** a faint 22 px dot grid (`radial-gradient(border 1px, transparent 1.25px)`), masked to fade at
+  the edges. It shows "data goes here" without looking broken.
+- **Living gradient** (neat-style animated field, 16 fps, film grain, vignette): only on the onboarding hero, the
+  race-day screen and the finish celebration. Never on data screens. Pause it when the tab is hidden or the battery is
+  low, and replace it with the static screen tint under reduced motion.
 - Never place a gradient behind body text. Text sits on solid or glass surfaces.
 
 ### Contrast
 
 Body text ≥ 4.5:1 on its surface; numbers and labels ≥ 3:1. `text-faint` is for timestamps and axis ticks only.
-State is never shown by colour alone: pair it with a label word or an icon.
+State is never shown by colour alone: pair it with a word or an icon.
 
-## 4. Typography
+## Typography
 
 Two families: **Space Grotesk** for display and all numbers, **Inter** for reading.
 
-- **Numbers are the heroes.** Big, tight, tabular (`font-variant-numeric: tabular-nums`). Units are set at 45–55 % of
-  the number's size, same baseline, muted colour: `76`<sub>%</sub>, `64`<sub>bpm</sub>, `5:42`<sub>/km</sub>.
-- **Hierarchy per card:** caption (what it is) → number (the value) → meta (comparison or timestamp). At most three
-  type sizes inside one card.
-- **Captions** are uppercase, 12 px, tracked 0.06 em, `text-muted` (reference: "COACHING", "7-DAY OVERVIEW").
-- **Coaching text** is body size, max two sentences on the surface; the full insight opens in a sheet
-  (reference: "View insights →").
-- Headline style: `Hari ini, 7 November` with a ▾ that opens a date picker. The date *is* the control.
+- **Numbers are the heroes.** Big, tight and tabular (`font-variant-numeric: tabular-nums`) so digits don't jump
+  while they animate. Units are set at 45–55 % of the number's size, on the same baseline, in a muted colour:
+  `76`<sub>%</sub>, `64`<sub>bpm</sub>, `5:42`<sub>/km</sub>.
+- **Hierarchy per card:** `label-caps` (what it is) → number (the value) → `meta` (comparison or timestamp). At most
+  three type sizes in one card.
+- **Coaching text** is `body-md`, at most two sentences on the surface; the full insight opens in a sheet.
+- Headline pattern: `Hari ini, 7 November ▾`. The date *is* the control.
 
-## 5. Layout
+## Layout
 
 - Mobile-first, single column, 16 px gutters, 4 px grid. Max content width 520 px; on desktop centre it and keep the
   side nav (`nav.side`).
 - **Vertical rhythm:** 12 px between cards in a group, 32 px between sections. Section titles are `h2`.
-- **Thumb zone:** primary actions in the bottom third. Nothing important in the top 15 % except the date and avatar.
-- **Bottom safe area:** content scrolls under the dock; add `padding-bottom: calc(64px + 24px + env(safe-area-inset-bottom))`.
+- **Thumb zone:** primary actions in the bottom third. Only the date and avatar in the top 15 %.
+- **Bottom safe area:** content scrolls under the dock:
+  `padding-bottom: calc(64px + 24px + env(safe-area-inset-bottom))`. A progressive blur (stacked blur layers with
+  gradient masks) fades content as it passes under the dock.
 
 ### Home screen order (fixed)
 
 1. Top bar: date headline with ▾ (left), avatar (right). No other buttons.
 2. **Readiness hero:** race countdown + readiness %, state glow, one coaching sentence, today's session chip.
-3. **Ring trio:** Beban (effort) · Pemulihan (recovery) · Tidur (sleep). Tap a ring for its sheet.
-4. **Race progress strip:** weeks done / weeks total, km this block vs plan (line chart: plan in grey, actual in
-   accent, like the "Résumé d'activité" chart).
-5. **Today vs 30-day tiles:** RHR, HRV, pace, consistency. 2-column grid of compact tiles.
-6. Weather tip card (existing Open-Meteo card) when relevant to today's session.
+3. **Ring trio:** Beban (effort) · Pemulihan (recovery) · Tidur (sleep). Tap a ring to open its sheet.
+4. **Race progress strip:** weeks done / weeks total, km this block vs plan (plan line grey, actual line in primary).
+5. **Today vs 30-day tiles:** RHR, HRV, pace, consistency, in a 2-column grid.
+6. Weather tip card (existing Open-Meteo card) when it matters for today's session.
 
 Nothing else on home. Shoes, friends, plans and settings live in Menu.
 
-## 6. Surfaces, shape and depth
+## Elevation & Depth
 
-- Cards: `surface-1`, radius `lg` (22 px), 1 px `line` border, 18 px padding, no drop shadow.
-- Glass (dock, sheets, segmented pills, the `+` button): `glass` fill, `glass-border`, `backdrop-filter: blur(20px)
-  saturate(140%)`, `floating` shadow. Glass only for things that float over content.
-- Pills (chips, segmented controls, dock): radius `pill`.
+Depth comes from tonal layers and glass, not drop shadows.
+
+- Cards: `surface-1` with a 1 px `border`. No shadow.
+- Glass (dock, sheets, segmented pills, the `+`, toasts): `glass` fill, `glass-border`,
+  `backdrop-filter: blur(20px) saturate(140%)`, shadow `0 12px 40px rgba(5,4,20,0.45)`, and a 135° highlight
+  (`rgba(255,255,255,0.14)` → transparent at 42 %) on the top edge so it catches light.
+- Stacks (toasts, banners): items behind the front one scale down 6 % per level, fade 40 % per level and peek 12 px.
 - Inset wells (ring tracks, chart areas): `surface-2`.
-- Dividers inside a card are 1 px `line` and only between peer columns (reference: Haut | Bas | Moyenne).
 
-## 7. Motion
+## Shapes
 
-Motion explains cause and effect: what you touched, where it went, what changed. The engine is in
-`public/js/motion.js` (`WRI_MOTION`); use it, don't write ad-hoc keyframes.
+- `rounded.lg` (22 px): cards, sheets (top corners), hero.
+- `rounded.md` (16 px): buttons, inner tiles.
+- `rounded.sm` (11 px): small chips inside cards, tooltips.
+- `rounded.pill`: chips, segmented controls, dock, the `+`.
+- Rings use round line caps; chart lines use round joins.
 
-| Moment | Spec |
-| --- | --- |
-| Press | scale 0.96, 120 ms, `ease-press`; release springs back |
-| Tab / segment change | `GlassPill`: leading end spring ω 19 ζ 0.55, trailing end ω 11 ζ 0.72; stretch and frost scale with speed |
-| Card → sheet | Shared-element: the tapped card's ring/number morphs into the sheet header; sheet rises with `ease-out` 300 ms; background dims to 40 % |
-| Sheet dismiss | Drag down past 25 % or flick > 800 px/s; reverse the morph |
-| Data arrives | Rings fill 0 → value in 900 ms `ease-out`; numbers roll (`rollNumber`) 700 ms; sparklines draw left→right 600 ms `ease-draw` |
-| Screen entrance | Cards reveal with 8 px rise + fade, 600 ms `ease-overshoot`, 50 ms stagger, max 6 items |
-| State change | Hero glow cross-fades 600 ms; the ring re-colours along its stroke |
-| Milestone (PB, week complete, race day) | One celebratory beat: holo shimmer sweep across the hero, 1.2 s, once |
+## Components
 
-Rules:
+### Readiness hero
+Large ring (168 px) or a `display-hero` number, with the state glow behind it. Top to bottom: `label-caps`
+(`KESIAPAN`), number, state word (`Siap`, `Normal`, `Pelan dulu`), one coaching sentence, today's session chip. Tap
+anywhere to open the readiness sheet, which explains what fed the score in plain words.
 
-- **Reduced motion** (`prefers-reduced-motion` or `data-motion="reduced"`): no springs, no stretch, no rolls; fades
-  ≤ 150 ms, rings render at their final value. Already handled by `WRI_MOTION.reduced()`; every new animation must check it.
-- Animate `transform` and `opacity` only. Blur only on the glass pill, capped at 8 px.
-- No animation longer than 1.2 s, except the boot mark draw (1.1 s + wordmark rise).
-- Never animate while the user is reading a number they just opened: the roll finishes before the sheet settles.
+### Race countdown chip
+`H-218 · BTN JAKIM HM` with a 44 px holo progress ring. Tap to open the race sheet (plan, target pace, race-day tips).
+Switching race happens inside that sheet, not on home.
 
-## 8. Data visualisation
+### Ring trio
+Three 108 px rings in equal columns separated by 1 px dividers, with a label under each. Tap a ring to open its sheet.
+
+### Metric tile (`tile-metric`)
+`label-caps` + value + comparison (`normal` ✓ / `lebih rendah` ↓ / `lebih tinggi` ↑) and a range dot strip. The
+whole tile is tappable, with an → in the top-right corner.
+
+### Session chip (`chip-session`)
+Pill with a session-type colour dot, name and duration: `● Tempo · 45 mnt`. Tap to open the session sheet, which has
+one primary action: **Mulai** (start timer) or **Catat** (log).
+
+### Floating `+` (`fab`)
+56 px glass circle to the right of the dock. Tap to open an action sheet with at most four large options: Catat lari,
+Mulai sesi, Check-in harian, Impor file. This is the only "create" entry point in the app.
+
+### Dock (`dock`)
+Glass pill, 64 px tall, five items (icon + short label): Beranda · Latihan · Aktivitas · Race · Menu (`NAV_MAIN` in
+`public/index.html`). The active item sits on the sprung glass pill with a holo icon. No badge counts, only a dot.
+
+### Sheet (`sheet`)
+Bottom sheet, glass, grab handle, opens to 60 % height and drags to full. Its header repeats the visual you tapped
+(shared element). At most one primary button, full width at the bottom.
+
+### Segmented control
+Glass pill (`seg-glass`, `js/ui-glass.js`) for 2–4 options such as `7H / 30H / Blok`. Never more than four segments.
+
+### Delta chip
+Small pill with an arrow and a percentage. Green tint when the change is good for the runner, red tint when bad, grey
+when flat (`→ 0.0 %`). What counts as "good" depends on the metric (a lower RHR is good).
+
+### Toast
+Glass, bottom, above the dock, one line, auto-dismiss after 3 s. Used for "Tersimpan", `Urungkan` and sync notes.
+Never for errors that need a decision.
+
+## Motion
+
+Motion explains cause and effect: what you touched, where it went, what changed. Every value comes from the motion
+tokens in the front matter. A hard-coded `0.3s` or `transition: all` is a bug.
+
+The token scale and recipes follow transitions.dev, a library of production UI transitions. Springs follow
+motion-primitives, converted to the app's own spring engine (`WRI_MOTION.springF(omega, zeta)` in
+`public/js/motion.js`). The sheet curve comes from ui-layouts.
+
+### Rules
+
+1. **Name the properties.** Animate `transform`, `opacity` and (sparingly) `filter`. Never `transition: all`, never
+   width, height, top or left (the one exception is the glass pill's width, which the spring engine drives).
+2. **Exits are faster than entrances.** Close in the next duration step down: open `duration-base` → close
+   `duration-quick`; open `duration-moderate` → close `duration-base`.
+3. **Small distances.** Elements travel 8–16 px (`distance-sm` to `distance-lg`), never across the screen. Scale
+   from `scale-enter` (0.96), never from 0. The exception is a sheet, which slides up from below the screen edge.
+4. **Blur on the way in.** Entering text, digits and icons start at `blur-enter` (2–3 px) and sharpen as they land.
+   This is what makes an entrance feel optical rather than mechanical. Never above `blur-max` (8 px).
+5. **Overshoot is earned.** The `ease-pop*` curves are for things that *arrive* or *succeed*: digits, check marks,
+   toggles, celebration. Navigation, sheets and layout changes use `ease-out` or a spring with no visible bounce.
+6. **Stagger, then stop.** 40 ms between text lines, 50 ms between list items, 70 ms between digits. Stagger at most
+   six items; the rest appear with the sixth.
+7. **Interruptible.** A new tap retargets a running animation from where it is (springs do this naturally; CSS
+   transitions must not use keyframes for state changes).
+8. **Reduced motion is part of every recipe.** Under `prefers-reduced-motion: reduce` or `data-motion="reduced"`
+   (`WRI_MOTION.reduced()`): no movement, no scale, no blur, no springs. Allow opacity fades of at most
+   `duration-quick`. Rings and numbers render at their final value at once.
+9. **Nothing over 1.4 s** (`duration-reel`), except the boot mark draw and the living gradient.
+
+### Easing guide
+
+| Token | Curve | Use for |
+| --- | --- | --- |
+| `ease-out` | `cubic-bezier(0.22, 1, 0.36, 1)` | Default for anything entering, moving or resizing: modals, tabs, cards, toasts, accordions |
+| `ease-out-expo` | `cubic-bezier(0.16, 1, 0.3, 1)` | Long fills that should start fast and settle slowly: rings, chart lines, counter reels |
+| `ease-sheet` | `cubic-bezier(0.32, 0.72, 0, 1)` | Bottom sheets and the action sheet (the iOS drawer curve) |
+| `ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)` | Loops only: shimmer, skeleton pulse, living gradient |
+| `ease-pop-soft` | `cubic-bezier(0.34, 1.35, 0.64, 1)` | Toggles, check-mark bob, chips settling |
+| `ease-pop` | `cubic-bezier(0.34, 1.45, 0.64, 1)` | Digits popping in, badges appearing |
+| `ease-pop-strong` | `cubic-bezier(0.34, 1.96, 0.64, 1)` | Milestone moments only (PB, week complete, finish) |
+
+### Springs
+
+| Token | ω, ζ | From | Use for |
+| --- | --- | --- | --- |
+| `spring-pill-lead` / `spring-pill-trail` | 19, 0.55 / 11, 0.72 | WeRunIt `GlassPill` | Dock and segmented-control indicator: leading edge fast and springy, trailing edge lazy, so the pill stretches |
+| `spring-morph` | 14.1, 0.85 | motion-primitives morphing dialog (stiffness 200, damping 24) | Card → sheet shared-element morph |
+| `spring-panel` | 17.3, 0.87 | motion-primitives transition panel (stiffness 300, damping 30) | Content swapping inside a sheet (7H ↔ 30H) |
+| `spring-digit` | 30.6, 0.98 | motion-primitives sliding number (stiffness 280, damping 18, mass 0.3) | Live-changing digits: timer, pace, heart rate |
+
+Conversion: ω = √(stiffness / mass), ζ = damping / (2 · √(stiffness · mass)).
+
+### Recipes for WeRunIt moments
+
+| Moment | Recipe (source) | Spec |
+| --- | --- | --- |
+| **Press** any card, chip or button | — | scale `scale-press` in `duration-instant` `ease-out`; release springs back in `duration-base` `ease-pop-soft` |
+| **Dock / segment change** | Tabs sliding (transitions.dev) with WeRunIt's glass pill | `GlassPill` springs; labels cross-fade colour in `duration-base` `ease-out`; light haptic tick |
+| **Card → sheet** | Morphing dialog (motion-primitives) | The tapped ring or number morphs into the sheet header with `spring-morph`; the sheet rises from below the screen in `duration-moderate` `ease-sheet`; backdrop fades to 40 % black in `duration-base` |
+| **Sheet dismiss** | — | Drag past 25 % or flick faster than 800 px/s; reverse the morph; close in `duration-base` `ease-sheet` |
+| **Action sheet from `+`** | Modal open/close (transitions.dev) | The `+` rotates 45° into ✕ (`duration-base` `ease-out`); options rise 12 px with 2 px blur, 50 ms stagger |
+| **Hero number on open** | Number pop-in (transitions.dev) | Each digit rises 8 px from 2 px blur and 0 opacity, `duration-slow` `ease-pop`, 70 ms stagger left to right |
+| **Live numbers** (timer, pace, HR) | Sliding number (motion-primitives) | Only the changed digit rolls vertically with `spring-digit`; tabular figures so nothing shifts |
+| **Weekly km / totals counting up** | Spinning counter (transitions.dev) | Digit reels spin 0 → value in `duration-reel` `ease-out-expo` with 3 px motion blur, 90 ms stagger from the right |
+| **Rings fill** | — | 0 → value in `duration-fill` `ease-out-expo`; the number pops in when the ring passes 60 % |
+| **Chart lines draw** | — | Stroke draws left → right in `duration-fill` `ease-out-expo`; the end dot pops in with `ease-pop` |
+| **Screen entrance** | Texts reveal (transitions.dev) | Cards rise 12 px from 3 px blur, `duration-slow` `ease-out`, 50 ms stagger, max six |
+| **Page change** (Latihan → Race) | Page side-by-side (transitions.dev) | Outgoing page shifts 8 px away and fades in `duration-base`; incoming shifts 8 px in from the travel direction with 3 px blur |
+| **Card grows** (expanding a week) | Card resize / accordion (transitions.dev) | Height and content in `duration-moderate` `ease-out`; the chevron rotates in `duration-base` |
+| **Loading** | Skeleton loader and reveal (transitions.dev) | One pulse at 50–100 % opacity over 1000 ms `ease-in-out`, then content reveals from 2 px blur in 400 ms. Show the skeleton only if loading takes longer than 300 ms |
+| **Saved / logged** | Success check (transitions.dev) | Check rotates in from 80°, rises 40 px, sharpens from 10 px blur; path draws after 80 ms; all `duration-slow`, bob on `ease-pop-soft` |
+| **Toggle** | Toggle (transitions.dev) | Knob travels in `duration-moderate` `ease-pop-soft` with 1 px overshoot |
+| **Toast** | Toast open/close (transitions.dev) | Rises 16 px from scale 0.97 and 2 px blur in `duration-moderate`; leaves in `duration-base`; stacks per Elevation & Depth |
+| **Icon changes** (play ↔ pause) | Icon swap (transitions.dev) | Outgoing scales to 0.25 and blurs out, incoming scales up from 0.25 with 2 px blur, `duration-base` |
+| **Invalid input** | Error state shake (transitions.dev) | 6 px shake (80 ms, then 60 ms), 4 px overshoot; the error text stays 3 s, then reverts in 280 ms |
+| **State changes** (Normal → Siap) | — | Screen tint and hero glow cross-fade in `duration-slow`; the ring re-colours along its stroke |
+| **Milestone** (PB, week complete, race day, finish) | Like button particles + confetti burst (transitions.dev) | Hero scales 1 → 1.04 → 1 on `ease-pop-strong` (350 ms); 8–12 particles in holo colours travel 20 px over 600 ms; one holo shimmer sweep across the hero. Once per event, never repeated |
+
+### Loops (the only ones allowed)
+
+- **Shimmer** on "Menyinkronkan…" text: a 200 % wide gradient sweep, 1.4 s linear, only while the work is happening.
+- **Skeleton pulse:** one pulse, then hold (see Loading).
+- **Brand mark** on boot and onboarding (`brand.js`, liquid settle, 1.6 s).
+- **Living gradient** on onboarding, race day and the finish screen.
+
+## Data visualisation
 
 Every chart answers one question, stated in its caption.
 
 | Viz | Use for | Rules |
 | --- | --- | --- |
-| **Ring gauge** | A 0–100 % score (readiness, recovery, effort, sleep, race progress) | 9 px stroke (trio) / 12 px (hero), round caps, gradient head, `surface-2` track. Target zone shown as a faint arc on the track (reference: "Target Strain 26–58 %"). Below-target effort uses a hatched fill. |
-| **Range dot strip** | Today vs 30-day range (RHR, HRV, sleep) | Hatched band = normal range; grey dots = past days; one large dot = today in the metric's colour (reference: "Today vs. 30 day range" cards). |
-| **Cumulative line** | Plan vs actual volume toward race day | Plan line grey 1.5 px; actual line accent 2 px with small hollow dots per run; end dot enlarged and glowing; area fill 8 % below actual. |
-| **Training-load line** | Acute:chronic ratio | Zones as stacked bands (Detraining / Optimal / Risiko sedang / Risiko tinggi); a tooltip chip on scrub shows value + date (reference: "1.39 · Nov 7"). |
-| **Activity heatmap** | Consistency over the block | Week rows × day columns, rounded bars; colour by session count or session type; today outlined (reference: monthly activity calendar). |
-| **Sparkline tile** | Period-over-period trends | Label top-left, value top-right, delta chip below (↑ 4.1 % on green-tint, ↓ 2.2 % on red-tint only when worse is bad). |
-| **Consistency ticks** | Sleep / wake times | Time label above a short coloured tick, hatched band for the usual window. |
+| **Ring gauge** | 0–100 % scores (readiness, recovery, effort, sleep, race progress) | 9 px stroke (trio) / 12 px (hero), round caps, gradient head, `surface-2` track. Target zone as a faint arc on the track (reference: "Target Strain 26–58 %"). Effort below target uses a hatched fill. |
+| **Range dot strip** | Today vs 30-day range (RHR, HRV, sleep) | Hatched band = normal range; grey dots = past days; one large dot = today, in the metric's colour. |
+| **Cumulative line** | Plan vs actual volume toward race day | Plan line grey 1.5 px; actual line primary 2 px with small hollow dots per run; end dot enlarged and glowing; 8 % area fill under actual. |
+| **Training-load line** | Acute:chronic ratio | Zone bands (Detraining / Optimal / Risiko sedang / Risiko tinggi); a value chip appears on scrub (reference: "1.39 · Nov 7"). |
+| **Activity heatmap** | Consistency over the block | Week rows × day columns, rounded bars; colour by session count or type; today outlined. |
+| **Sparkline tile** | Period-over-period trends | Label top-left, value top-right, delta chip below. |
+| **Consistency ticks** | Sleep and wake times | Time label above a short coloured tick; hatched band for the usual window. |
 
-- Scrubbing a chart (press and drag) shows a value chip; lifting hides it. No zoom buttons.
-- Axis labels in `text-faint` 11 px; at most 3 x-axis labels (start, middle, today).
-- Empty data: draw the track/axes in `state-idle` and say what unlocks it: "Lari 3x lagi untuk lihat tren."
+- Press and drag on a chart to scrub; a value chip follows the finger and hides on lift. No zoom buttons.
+- Axis labels in `text-faint` 11 px; at most three x-axis labels (start, middle, today).
+- Empty data: dot-grid well, track drawn in `state-idle`, and one line saying what unlocks it:
+  "Lari 3x lagi untuk lihat tren."
 
-## 9. Components
+## Interaction rules (less hassle)
 
-### Readiness hero
-Large ring (168 px) or giant number (`hero-number`) with the state glow behind it. Contents, top to bottom:
-caption (`KESIAPAN`), number, state word (`Siap`, `Normal`, `Pelan dulu`), one-sentence coaching, today's session
-chip. Tap anywhere → readiness sheet (what fed the score, explained in plain words).
-
-### Race countdown chip
-`H-218 · BTN JAKIM HM` with a mini holo progress ring (44 px). Tap → race sheet (plan, target pace, race-day tips).
-Switching race happens inside that sheet, not on home.
-
-### Ring trio
-Three equal columns separated by 1 px dividers. Label under each ring. Tap → that metric's sheet. The values come
-in with the data-arrives motion.
-
-### Metric tile
-Caption + value + comparison label (`normal` ✓ / `lebih rendah` ↓ / `lebih tinggi` ↑) and a range dot strip.
-Whole tile is tappable, with an → in the top-right corner.
-
-### Session chip
-Pill with session-type colour dot, name and duration: `● Tempo · 45 mnt`. Tap → session sheet with the single
-primary action **Mulai** (start timer) or **Catat** (log).
-
-### Floating `+` (primary action)
-56 px glass circle to the right of the dock. Tap → action sheet with at most 4 large options: Catat lari, Mulai sesi,
-Check-in harian, Impor file. This is the only "create" entry point in the app.
-
-### Dock
-Glass pill, 64 px tall, 4–5 items (icon + short label): Beranda · Latihan · Aktivitas · Race · Menu
-(`NAV_MAIN` in `public/index.html`). Active item sits on the sprung glass pill with a holo icon. No badge
-counts other than a single dot.
-
-### Sheet
-Bottom sheet, glass, radius 22 px on top corners, grab handle, opens to 60 % height and drags to full. Header repeats
-the tapped visual (shared element). Max one primary button, full-width at the bottom.
-
-### Segmented control
-Glass pill (`seg-glass`, `js/ui-glass.js`) for 2–4 options such as `7H / 30H / Blok`. Never more than 4 segments.
-
-### Delta chip
-Small pill with arrow and percent. Green tint when the change is good for the runner, red tint when bad, neutral grey
-when flat (`→ 0.0 %`). "Good" depends on the metric (lower RHR is good).
-
-### Toast
-Glass, bottom, above the dock, auto-dismiss 3 s, single line. Used for "Tersimpan" and sync notes. Never for errors
-that need a decision.
-
-## 10. Interaction rules (less hassle)
-
-- **No visible edit/delete buttons on lists.** Swipe left to reveal Hapus; long-press for the context menu.
+- **No visible edit or delete buttons on lists.** Swipe left to reveal Hapus; long-press for the context menu.
 - **No confirm dialogs for reversible actions.** Do it, then offer `Urungkan` in the toast for 5 s.
-- **Prefill everything.** Log run prefills today, last distance, last shoe. Health Connect / file import fills the rest.
-- **Smart defaults over settings.** A setting is added only after the default has proven wrong for real users.
+- **Prefill everything.** Logging a run prefills today, the last distance and the last shoe. Health Connect and file
+  import fill the rest.
+- **Smart defaults over settings.** Add a setting only after the default has proven wrong for real users.
 - **Gestures are shortcuts, never the only path.** Every swipe action is also in the long-press menu and the sheet.
-- **Icons need labels in the dock and action sheet.** Icon-only buttons are allowed only for universal glyphs
-  (close ✕, back ‹, info ⓘ, add +) and must have an `aria-label`.
-- **Tap targets ≥ 48 × 48 px**, with ≥ 8 px between neighbouring targets.
-- **Haptics (Android/Capacitor):** light tick on tab change and toggle; success pattern on session complete; none on scroll.
+- **Labels in the dock and action sheet.** Icon-only buttons are allowed only for universal glyphs (✕, ‹, ⓘ, +) and
+  need an `aria-label`.
+- **Tap targets ≥ 48 × 48 px**, with ≥ 8 px between neighbours.
+- **Haptics (Android, Capacitor):** light tick on tab change and toggle; success pattern on saving and finishing a
+  session; nothing on scroll.
 
-## 11. Voice and copy
+## Voice and copy
 
 - Bahasa Indonesia, casual, second person (`kamu`), short. Kiki is a supportive running buddy, not a drill sergeant.
 - Lead with the verdict, then the reason: "Pelan dulu. HRV-mu turun 12 % dari biasanya."
 - Numbers over adjectives: "Kurang 6 km dari rencana minggu ini", not "Volume agak kurang".
 - Buttons are verbs: `Mulai`, `Catat`, `Simpan`, `Urungkan`. Never `OK` or `Submit`.
 - Empty states say what to do next, in one line.
-- Health claims stay modest: "kelihatannya", "biasanya". Pain and injury copy always suggests rest and, if it
+- Keep health claims modest ("kelihatannya", "biasanya"). Pain and injury copy always suggests rest and, if it
   persists, a professional.
 
-## 12. Accessibility
+## Accessibility
 
 - Every ring and chart has a text equivalent in its `aria-label`: "Pemulihan 76 persen, normal".
-- Focus ring: 2 px `accent-text`, offset −6 px inside pills (existing `.dock button:focus-visible`).
-- Support 200 % text zoom without truncating numbers; hero number scales down before it wraps.
-- Respect reduced motion (Section 7) and the light theme.
-- State is never colour-only (Section 3).
+- Animated numbers announce only their final value (`aria-live="polite"` on the container, digits `aria-hidden`).
+- Focus ring: 2 px `primary-text`, offset −6 px inside pills (existing `.dock button:focus-visible`).
+- 200 % text zoom must not truncate numbers; the hero number scales down before it wraps.
+- Reduced motion per the Motion rules; the light theme keeps every state readable.
 
-## 13. Do and don't
+## Do's and Don'ts
 
 | Do | Don't |
 | --- | --- |
@@ -345,30 +532,45 @@ that need a decision.
 | Use a single `+` for creating anything | Scatter add buttons across screens |
 | Compare against the runner's own 30-day range | Show raw numbers with no context |
 | Use state colour on the hero only when it means something | Paint decoration red, amber or green |
-| Keep holo for brand moments and race progress | Use holo gradient on body cards or text blocks |
-| Spring motion that follows the finger | Looping animations on data screens |
+| Keep holo for brand moments and race progress | Use the holo gradient on body cards or text |
+| Use motion tokens and name the animated properties | Write `transition: all 0.3s` |
+| Close faster than you open | Make the user wait for an exit animation |
+| Save overshoot for arrivals and success | Bounce navigation, sheets or layout |
 | Show last-known data offline with a timestamp | Block the screen with a sync error |
 
-## 14. Reference map
+## References
 
-What we took from each reference image the team supplied:
+### Supplied screenshots
 
 | Reference | Borrowed |
 | --- | --- |
 | French dark dashboard (Accueil / Activité) | Date-as-headline with ▾, ring trio with labels, coaching card, stress gauge, monthly activity heatmap, cumulative plan-vs-actual line, glass dock + detached `+` |
-| Light "Your dashboard" web view | Today-vs-30-day range dot strips, normal/lower labels, sleep/wake consistency ticks, sparkline tiles with delta chips |
-| Strain / Recovery / Sleep detail screens | Detail-sheet anatomy: big ring → two stat tiles → insight card → "View insights →", target zone on the ring, per-metric ambient tint |
-| Green readiness concept | Full-bleed state glow behind the hero number, training-load zone chart with scrub tooltip, 7-day line with value labels on points, compact glass dock |
+| Light "Your dashboard" web view | Today-vs-30-day range dot strips, normal/lower labels, sleep and wake consistency ticks, sparkline tiles with delta chips |
+| Strain / Recovery / Sleep detail screens | Sheet anatomy: big ring → two stat tiles → insight card → "View insights →", target zone on the ring, per-metric tint |
+| Green readiness concept | Full-screen state tint behind the hero number, training-load zone chart with scrub chip, 7-day line with labelled points, compact glass dock |
 
-The web references listed in the brief (transitions.dev, beautifului.dev, motion-primitives.com, ui-layouts.com,
-patterncraft.store, feralui.dev/gradients, neat.rebase.pro, designmd.co, context.dev and design.dev DESIGN.md
-generators) could not be reached when this file was written. Review Section 7 (motion) and the gradient tokens
-against them once they are reachable, and update this file.
+### Websites (read 7 November 2026)
 
-## 15. Source of truth
+| Site | Used for |
+| --- | --- |
+| transitions.dev | Motion token scale, default `ease-out`, pop curves, the recipe values in the Motion table, rules (name properties, faster exits, reduced-motion guard per recipe) |
+| motion-primitives.com | Spring values (morphing dialog, transition panel, sliding number), progressive blur under the dock, number-effect patterns |
+| ui-layouts.com | `ease-sheet` drawer curve (0.32, 0.72, 0, 1) at 500 ms |
+| beautifului.dev | Shimmer text (1.4 s linear, 200 % gradient), 22 px dot grid for empty wells, the `cubic-bezier(0.23, 1, 0.32, 1)` family confirming the ease-out choice |
+| patterncraft.store | 125 % radial screen tint, corner glows, edge-faded grids |
+| feralui.dev/gradients | Mesh built from pinned radial spots, oklab interpolation, 6 % noise finish, multi-stop light falloff |
+| neat.rebase.pro | Living gradient (low-fps animated field with grain, vignette and bloom) for onboarding, race day and finish |
+| design.dev DESIGN.md generator | File format: `version`, token groups, `{token.path}` references in components, prose section names |
+| context.dev DESIGN.md generator | Purpose of the file: palette, type scale, components and visual rules an agent can follow |
+| designmd.co | Not read: the site returned 403 Forbidden to automated access |
 
-- Tokens in code: `public/css/werunit.css` (`:root` and `[data-theme="light"]`). When a token here changes, change it
-  there in the same commit.
+## Source of truth
+
+- Tokens in code: `public/css/werunit.css` (`:root` and `[data-theme="light"]`). When a token here changes, change
+  it there in the same commit.
 - Motion engine: `public/js/motion.js`. Glass controls: `public/js/ui-glass.js`. Brand mark: `public/js/brand.js`.
-- New tokens introduced by this document and not yet in CSS: `state-*`, ring gradients, `ambient-mesh`, the
-  `hero-number`/`ring-number`/`stat-number` type roles, and the 48 px tap-target minimum.
+- **Not yet in code:** the `state-*` colours, ring gradients, screen tint, grain, the `display-hero` / `ring-number`
+  / `stat-number` roles, the 48 px tap-target minimum, and the whole motion token scale. Current CSS still uses
+  ad-hoc curves that should move to tokens: `.btn` press `cubic-bezier(.3,1.6,.5,1)` 180 ms → `ease-pop-soft`;
+  ring fill `cubic-bezier(.2,.9,.3,1)` 0.9 s → `ease-out-expo` + `duration-fill`; `.rv` reveal
+  `cubic-bezier(.2,.9,.3,1.15)` → `ease-out` + `duration-slow` with blur.
