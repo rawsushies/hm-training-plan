@@ -1,0 +1,16 @@
+{
+  "appId": "com.hmtrainingplan.app",
+  "appName": "HM Training Plan",
+  "webDir": "public",
+  "appendUserAgent": "HMTPNative/1",
+  "android": {
+    "allowMixedContent": false,
+    "webContentsDebuggingEnabled": false
+  },
+  "plugins": {
+    "FirebaseAuthentication": {
+      "skipNativeAuth": true,
+      "providers": ["google.com"]
+    }
+  }
+}

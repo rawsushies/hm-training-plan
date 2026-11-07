@@ -15,6 +15,11 @@ const PATH_RE = /^(runs|strength|checkins|shoes|reviews|plan)\/[A-Za-z0-9_-]{1,6
 const chunk = (a, n) => { const o = []; for (let i = 0; i < a.length; i += n) o.push(a.slice(i, i + n)); return o; };
 const rand = bytes => { const b = crypto.getRandomValues(new Uint8Array(bytes)); return btoa(String.fromCharCode(...b)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); };
 const userOf = u => u ? { uid: u.uid, displayName: u.displayName || "", email: u.email || "", photoURL: u.photoURL || "" } : null;
+const nativeAuth = () => {
+  const C = globalThis.Capacitor;
+  if (!(C && C.isNativePlatform && C.isNativePlatform())) return null;
+  return C.Plugins.FirebaseAuthentication || C.registerPlugin("FirebaseAuthentication");
+};
 const safePhoto = u => /^https:\/\/[^"<> ]+$/.test(u || "") && u.length <= 600 ? u : "";
 
 export async function createCloud(config, opts = {}) {
@@ -31,7 +36,7 @@ export async function createCloud(config, opts = {}) {
 
   // Finish a redirect sign-in if one was in flight (popup-blocked fallback).
   let redirectError = null;
-  try { await A.getRedirectResult(auth); } catch (e) { redirectError = e; }
+  if (!nativeAuth()) { try { await A.getRedirectResult(auth); } catch (e) { redirectError = e; } }
 
   const userRef = uid => F.doc(db, "users", uid);
   const recRef = (uid, key) => { if (!PATH_RE.test(key)) throw new Error("bad key " + key); const [c, id] = key.split("/"); return F.doc(db, "users", uid, c, id); };
@@ -45,6 +50,18 @@ export async function createCloud(config, opts = {}) {
 
     /* ---------- Auth ---------- */
     async signInGoogle({ selectAccount = false, forceRedirect = false } = {}) {
+      // Android app: Google blocks OAuth inside embedded WebViews, so use the native account picker
+      // (@capacitor-firebase/authentication, skipNativeAuth) and hand the ID token to the JS SDK.
+      const nat = nativeAuth();
+      if (nat) {
+        if (selectAccount) await nat.signOut().catch(() => {});
+        let res;
+        try { res = await nat.signInWithGoogle({ skipNativeAuth: true }); }
+        catch (e) { const m = String((e && (e.message || e.code)) || ""); throw Object.assign(new Error(m), { code: /cancel/i.test(m) ? "auth/user-cancelled" : /network/i.test(m) ? "auth/network-request-failed" : "auth/internal-error" }); }
+        const tok = res && res.credential && res.credential.idToken;
+        if (!tok) throw Object.assign(new Error("no id token"), { code: "auth/internal-error" });
+        return userOf((await A.signInWithCredential(auth, A.GoogleAuthProvider.credential(tok))).user);
+      }
       provider.setCustomParameters(selectAccount ? { prompt: "select_account" } : {});
       if (forceRedirect) { await A.signInWithRedirect(auth, provider); return null; }
       try { return userOf((await A.signInWithPopup(auth, provider)).user); }
@@ -60,7 +77,7 @@ export async function createCloud(config, opts = {}) {
     async signInWithGoogleIdToken(idToken) {
       return userOf((await A.signInWithCredential(auth, A.GoogleAuthProvider.credential(idToken))).user);
     },
-    async signOut() { await A.signOut(auth); },
+    async signOut() { const nat = nativeAuth(); if (nat) await nat.signOut().catch(() => {}); await A.signOut(auth); },
 
     /* ---------- Private records ---------- */
     async getUserDoc(uid) { const s = await F.getDoc(userRef(uid)); return s.exists() ? s.data() : null; },

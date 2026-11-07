@@ -242,17 +242,22 @@ ol.steps li{margin:4px 0}
 .mig-opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:12px;margin-bottom:8px}
 .mig-opt b{display:block;margin-bottom:2px}
 .mig-opt.rec{border-color:var(--acc)}
+.upd{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:10px 12px;border-radius:8px;background:var(--acc);color:var(--on-acc);margin-bottom:14px;font-size:14px}
+.upd .btn{background:var(--on-acc);color:var(--acc);border-color:var(--on-acc)}
+.upd .btn.ghost{background:none;color:var(--on-acc)}
 .banner{display:flex;gap:12px;align-items:center;padding:10px 12px;border:1px solid var(--acc);border-radius:8px;background:var(--s1);margin-bottom:14px}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <div id="toast" role="status" aria-live="polite"></div>
+<script src="js/version.js"></script>
 <script src="firebase-config.js"></script>
 <script src="js/logic.js"></script>
 <script src="js/sync.js"></script>
 <script src="js/tutorial.js"></script>
 <script src="js/notify.js"></script>
+<script src="js/updater.js"></script>
 <script>
 "use strict";
 /* ============ Local storage adapter (account-scoped, v3) ============
@@ -553,6 +558,7 @@ function switchToAnon(){
   render(false);
 }
 function startSync(u, meta, seedRecs){
+  if(HMTPUpdate.mustUpdate){ CLOUD.state = "needupdate"; LS.set(KEYS.sync(u.uid), Object.assign({}, meta, {initialized:true})); return; }
   SYNC = new HMTPSync.SyncEngine({
     cloud:CLOUD.api, uid:u.uid, device:DEVICE.deviceId, meta,
     saveMeta:m => LS.set(KEYS.sync(u.uid), Object.assign({}, m, {initialized:true})),
@@ -680,6 +686,7 @@ function syncState(){
   if(st === "signingin") return {d:"busy", t:"Lagi masuk pakai Google..."};
   if(st === "migrate") return {d:"warn", t:"Pilih dulu data mana yang dipakai"};
   if(st === "firstwait") return {d:"warn", t:"Butuh internet buat masuk pertama kali di perangkat ini"};
+  if(st === "needupdate") return {d:"warn", t:"Sync dijeda: perbarui app dulu (Menu → Tentang & update). Data aman di perangkat ini"};
   if(st === "syncing") return {d:"busy", t:p ? `Lagi sync (${p} perubahan)...` : "Lagi sync..."};
   if(st === "synced") return {d:"on", t:`Ke-sync${last ? ", terakhir " + last : ""}`};
   if(st === "offline") return {d:"warn", t:`Offline${p ? `, ${p} perubahan nunggu dikirim` : ""}. Data aman di perangkat ini`};
@@ -871,7 +878,7 @@ function mascot(cls = "mascot"){
   </svg>`;
 }
 const NAV_MAIN = [["home","Home"],["cal","Jadwal"],["log","Log Lari"],["review","Review"],["more","Menu"]];
-const NAV_MORE = [["bareng","Bareng teman"],["race","Race plan"],["shoes","Sepatu"],["locked","Locked-in"],["elev","Elevation"],["strength","Strength"],["recovery","Check-in harian"],["goals","Goals"],["guide","Panduan latihan"],["kamus","Kamus istilah"],["pace","Pace calculator"],["settings","Settings"],["notif","Notifikasi"],["data","Data & backup"],["tutorials","Tutorial & bantuan"]];
+const NAV_MORE = [["bareng","Bareng teman"],["race","Race plan"],["shoes","Sepatu"],["locked","Locked-in"],["elev","Elevation"],["strength","Strength"],["recovery","Check-in harian"],["goals","Goals"],["guide","Panduan latihan"],["kamus","Kamus istilah"],["pace","Pace calculator"],["settings","Settings"],["notif","Notifikasi"],["data","Data & backup"],["tutorials","Tutorial & bantuan"],["about","Tentang & update"]];
 
 /* ============ Tutorial v3 (content in js/tutorial.js) ============
  * Progress (which tours are done) is stored in S.tutorial, which syncs with the account. The step a
@@ -948,7 +955,7 @@ function render(keep){
   const y = window.scrollY;
   applyTheme(); PLANW = buildPlan();
   const tab = S.ui.tab;
-  const views = {home:vHome,cal:vCal,log:vLog,review:vReview,more:vMore,bareng:vBareng,locked:vLocked,elev:vElev,strength:vStrength,recovery:vRecovery,goals:vGoals,guide:vGuide,kamus:vKamus,pace:vPace,settings:vSettings,data:vData,race:vRace,shoes:vShoes,notif:vNotif,tutorials:vTutorials};
+  const views = {home:vHome,cal:vCal,log:vLog,review:vReview,more:vMore,bareng:vBareng,locked:vLocked,elev:vElev,strength:vStrength,recovery:vRecovery,goals:vGoals,guide:vGuide,kamus:vKamus,pace:vPace,settings:vSettings,data:vData,race:vRace,shoes:vShoes,notif:vNotif,tutorials:vTutorials,about:vAbout};
   const mainTab = NAV_MAIN.some(x => x[0] === tab) ? tab : "more";
   document.getElementById("app").innerHTML = `
   <div class="shell ${!RUN && S.ui.tut && !M ? "touring" : ""}">
@@ -960,7 +967,7 @@ function render(keep){
       ${NAV_MORE.map(([k,l]) => `<button class="${tab===k?'on':''}" data-act="nav" data-t="${k}">${l}</button>`).join("")}
 
     </nav>
-    <main>${(views[tab] || vHome)()}</main>
+    <main>${updateBanner()}${(views[tab] || vHome)()}</main>
   </div>
   <nav class="tabbar" aria-label="Navigasi utama">
     ${NAV_MAIN.map(([k,l]) => `<button class="${mainTab===k?'on':''}" data-act="nav" data-t="${k}" aria-label="${l}">${IC[k]}<span>${l}</span></button>`).join("")}
@@ -2196,6 +2203,46 @@ function mShoe(){
   <div class="field"><label for="sh-lim">Batas km (perkiraan)</label><input type="number" id="sh-lim" value="${x.limit}" min="100" max="2000"></div><div id="sh-err"></div><button class="btn pri" data-act="saveShoe">Simpan</button>`;
 }
 
+
+/* ============ In-app updates (js/updater.js) ============ */
+const UPD_TXT = {checking:"Lagi ngecek update...", uptodate:"Udah versi terbaru", downloading:"Lagi download versi baru...", ready:"Versi baru siap dipasang", available:"Versi baru tersedia", "native-required":"Perlu install APK baru", error:"Gagal ngecek update", idle:"Belum dicek"};
+const canApplyUpdate = () => !RUN && !M && !(document.activeElement && /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName));
+function initUpdates(){
+  const last = DEVICE.lastVersion, cur = HMTPUpdate.current;
+  if(last && last !== cur.version + "+" + cur.build && HMTPUpdate.cmpVer(cur.version, "0.0.1") > 0) setTimeout(() => toast(`App diperbarui ke versi ${cur.version} ✓`), 800);
+  DEVICE.lastVersion = cur.version + "+" + cur.build; saveDevice();
+  HMTPUpdate.onChange(u => {
+    if(u.mustUpdate && SYNC){ stopSync(); CLOUD.state = "needupdate"; }
+    document.querySelectorAll(".js-upd").forEach(el => { el.outerHTML = updateBanner(); });
+    if(S.ui.tab === "about") rerenderSoft();
+  });
+  HMTPUpdate.init({canApplyNow:canApplyUpdate, sw:!EMU}).catch(() => {});
+}
+function updateBanner(){
+  const u = HMTPUpdate;
+  if(u.state === "ready") return `<div class="upd js-upd" role="status"><span><b>Versi baru ${esc((u.latest && u.latest.version) || "")} siap.</b> Data kamu aman, cuma tampilan yang dimuat ulang.</span><span class="btns"><button class="btn sm" data-act="updApply">Perbarui sekarang</button><button class="btn sm ghost" data-act="nav" data-t="about">Lihat</button></span></div>`;
+  if(u.state === "native-required") return `<div class="upd js-upd" role="status"><span><b>Ada versi APK baru.</b> Perlu install ulang sekali buat fitur baru.</span><span class="btns"><button class="btn sm" data-act="updApk">Download APK</button></span></div>`;
+  if(u.mustUpdate) return `<div class="upd js-upd" role="status"><span><b>Perbarui app dulu.</b> Sync dijeda supaya data tetap aman.</span><span class="btns"><button class="btn sm" data-act="updCheck">Cek update</button></span></div>`;
+  return `<span class="js-upd" hidden></span>`;
+}
+function vAbout(){
+  const u = HMTPUpdate, L = u.latest, cur = u.current;
+  const mode = {sw:"Web / PWA (update lewat service worker)", native:`Aplikasi Android (live update, native level ${u.nativeLevel})`, none:"Mode pengembangan (tanpa service worker)"}[u.mode] || u.mode;
+  return `${pageHead("Tentang & update", "App ini bisa diperbarui otomatis tanpa install ulang. Data latihan kamu nggak ikut berubah.")}
+  <div class="sec" style="margin-top:8px">
+    <div class="kv"><span>Versi yang jalan</span><b>${esc(cur.version)}</b></div>
+    <div class="kv"><span>Build</span><span class="tab">${esc(cur.build || "–")}</span></div>
+    <div class="kv"><span>Jenis</span><span>${esc(mode)}</span></div>
+    <div class="kv"><span>Status update</span><span>${esc(UPD_TXT[u.state] || u.state)}${u.state === "downloading" && u.progress ? ` (${u.progress}%)` : ""}${u.state === "error" ? ` (${esc(u.err === "offline" ? "offline" : u.err)})` : ""}</span></div>
+    <div class="kv"><span>Versi terbaru</span><span>${L ? esc(L.version) : "–"}</span></div>
+    <div class="kv"><span>Terakhir dicek</span><span>${fmtTime(u.lastCheck)}</span></div>
+    <div class="btns" style="margin-top:12px"><button class="btn" data-act="updCheck">Cek update sekarang</button>${u.state === "ready" ? `<button class="btn pri" data-act="updApply">Perbarui sekarang</button>` : ""}${u.state === "native-required" ? `<button class="btn pri" data-act="updApk">Download APK baru</button>` : ""}</div>
+    <label class="toggle" style="margin-top:12px"><span><b>Update otomatis</b><br><span class="xs mu">Versi baru dipasang sendiri pas app lagi di latar belakang atau pas dibuka lagi. Nggak pernah di tengah timer atau pas kamu ngisi form.</span></span><input type="checkbox" data-act="updAuto" ${u.auto ? "checked" : ""}></label>
+  </div>
+  ${L && L.notes && L.notes.length ? `<div class="sec"><h2>Yang baru di ${esc(L.version)}</h2><ul class="clean sm">${L.notes.map(n => `<li>${esc(n)}</li>`).join("")}</ul></div>` : ""}
+  <div class="sec"><h3>Gimana cara kerjanya?</h3><p class="sm mu" style="margin-top:4px">App ngecek versi baru tiap dibuka dan tiap jam. ${u.mode === "native" ? "File versi baru didownload, dicek keasliannya (hash SHA-256), lalu dipakai. Kalau versi baru gagal jalan, app balik otomatis ke versi sebelumnya." : "Versi baru didownload di latar belakang, lalu dipasang pas kamu tap “Perbarui” atau otomatis."} Perubahan besar di bagian Android (misalnya izin baru) tetap butuh install APK baru, dan app bakal ngasih tahu.</p></div>`;
+}
+
 /* ============ Actions ============ */
 let DL = null;
 function openLogModal(pre){ M = {kind:"log", editId:pre.id || null, data:Object.assign({date:todayYmd(), type:"easy", sessionId:null, distance:null, duration:null}, pre)}; render(true); }
@@ -2242,6 +2289,11 @@ const ACT = {
   nav:d => { S.ui.tab = d.t; M = null; persist(); render(false); },
   closeM:() => { if(M && M.kind === "migrate"){ ACT.migCancel(); return; } if(M && M.kind === "join"){ ACT.joinCancel(); return; } M = null; render(true); },
   term:d => { M = {kind:"term", k:d.k}; render(true); },
+  /* ---- updates ---- */
+  updCheck:() => { HMTPUpdate.check(true); toast("Lagi ngecek update..."); },
+  updApply:() => { if(RUN){ toast("Selesaiin timer dulu, baru perbarui."); return; } Storage.save(S); HMTPUpdate.apply(false); },
+  updAuto:() => { HMTPUpdate.auto = !HMTPUpdate.auto; render(true); toast(HMTPUpdate.auto ? "Update otomatis nyala" : "Update otomatis mati. Kamu bakal dikasih tahu kalau ada versi baru."); },
+  updApk:() => { const url = (HMTPUpdate.latest && HMTPUpdate.latest.apkUrl) || ""; if(/^https:\/\//.test(url)) window.open(url, "_blank", "noopener"); },
   /* ---- tutorial & help ---- */
   help:d => { M = {kind:"help", k:d.k}; render(true); },
   tutStart:d => tutStart(d.id),
@@ -2530,7 +2582,7 @@ maybeStartTutorial();
 render(false);
 if(!Array.isArray(S.badges)){ checkBadges(); Storage.save(S); }
 initCloud();
-if("serviceWorker" in navigator && /^https:|^http:\/\/(localhost|127\.0\.0\.1)/.test(location.href) && !EMU) navigator.serviceWorker.register("sw.js").catch(() => {});
+initUpdates();
 </script>
 </body>
 </html>

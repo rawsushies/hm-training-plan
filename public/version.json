@@ -1,0 +1,98 @@
+{
+ "version": "3.1.0",
+ "build": "2026-11-07T04:37:04Z",
+ "minApp": "3.0.0",
+ "minNative": 1,
+ "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
+ "notes": [
+  "Update otomatis di dalam app (web & Android)",
+  "Versi Android (APK) dengan login Google native"
+ ],
+ "files": [
+  {
+   "p": "firebase-config.js",
+   "h": "3a7bd490f704213c40d443ef7444f2f896a36e3e49a8dbb12cc62e7c1f0a92cc",
+   "s": 624
+  },
+  {
+   "p": "icon-192.png",
+   "h": "d46aae877e39136b25a6e4bc819b9cf7e178b4fd6a463925ac74e912506b6665",
+   "s": 6796
+  },
+  {
+   "p": "icon-512.png",
+   "h": "9257ec4d86b885135fce04bce218c13e6d331d8a443521c0e9bc7e1e06e2c259",
+   "s": 18741
+  },
+  {
+   "p": "icon.svg",
+   "h": "50609761faf288d32cd939447c9856d6609c05f40751578140b7d2c750ed900b",
+   "s": 450
+  },
+  {
+   "p": "index.html",
+   "h": "c6ff4198f67a008385dba939915193cb7130ec0a83d6f85040cd0faad04ac522",
+   "s": 250623
+  },
+  {
+   "p": "js/cloud-firebase.js",
+   "h": "0f87d2b6ba86e7ecf02cd5ff458d35f8218488f21699134c68601bff3fee9b87",
+   "s": 13796
+  },
+  {
+   "p": "js/logic.js",
+   "h": "5b1c00535eeff72033dde37ed645684808d89a39098dc0c4736f6533aa70a231",
+   "s": 31196
+  },
+  {
+   "p": "js/notify.js",
+   "h": "a3f8e27764da39dd6a65c3ade4e2e4c6d4f3edffcfcc9b7719ace34a85d65fc3",
+   "s": 2153
+  },
+  {
+   "p": "js/sync.js",
+   "h": "bcdbd2d631446ade0c9c55b4abda98832e9dab603b71d4d84bfcfadcaa70ce40",
+   "s": 8584
+  },
+  {
+   "p": "js/tutorial.js",
+   "h": "a286283c258d7c1737fba841b365d20d3c465042837df7c49d5c22f20049dfb7",
+   "s": 30056
+  },
+  {
+   "p": "js/updater.js",
+   "h": "3ff086a0ae9d0585b69f76bc4da478fd4bd150f488ccea9fed02e3db3483330b",
+   "s": 11541
+  },
+  {
+   "p": "js/version.js",
+   "h": "3b781aec92f6ba4ff97ed1caf19cfb78f6dd97b41a0eabac418efc8340044fab",
+   "s": 139
+  },
+  {
+   "p": "manifest.webmanifest",
+   "h": "496f8628d7af650a03221f815b55a064f0c76ae8a4fa02b62e217f87b1773f32",
+   "s": 442
+  },
+  {
+   "p": "sw.js",
+   "h": "eddf70890706e0b2b6f0062d639c6d3fc45b9430ffffd1ec128d677eae461dc8",
+   "s": 2235
+  },
+  {
+   "p": "vendor/firebase/12.19.0/firebase-app.js",
+   "h": "39691e000b96df9124bcce7d77afb38121501c624774473be0766094ac3b5476",
+   "s": 106435
+  },
+  {
+   "p": "vendor/firebase/12.19.0/firebase-auth.js",
+   "h": "ed36687bda5ba3337dc7af5451f72cf53cac044139cc255ad8c31cc1e52492b2",
+   "s": 157030
+  },
+  {
+   "p": "vendor/firebase/12.19.0/firebase-firestore.js",
+   "h": "331014a4ad65d4e8255738c8ce33e81480d1274e37ea7ac2239d847fdd01469f",
+   "s": 684895
+  }
+ ]
+}

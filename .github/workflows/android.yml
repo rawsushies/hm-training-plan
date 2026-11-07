@@ -1,0 +1,77 @@
+name: Android APK
+
+# Builds the Android app (Capacitor) from the same files that are deployed to Firebase Hosting.
+# Run it from the Actions tab ("Run workflow"), or push a tag like v3.1.0 to also publish a GitHub Release.
+# Signing: add these repository secrets (Settings → Secrets and variables → Actions):
+#   ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS, ANDROID_KEY_PASSWORD
+# Without them the APK is signed with a throwaway debug key (fine for testing, but Google sign-in
+# only works with the key whose SHA fingerprints are registered in Firebase, and Android won't let
+# you install an APK over one signed with a different key).
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish as a GitHub Release (downloadable APK link)"
+        type: boolean
+        default: true
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 21 }
+      - name: Install
+        run: npm ci
+      - name: Unit tests
+        run: npm test
+      - name: Versions
+        id: v
+        run: |
+          echo "name=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+          echo "code=$((1000 + GITHUB_RUN_NUMBER))" >> "$GITHUB_OUTPUT"
+      - name: Signing key (from secrets, if present)
+        env:
+          KS: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KS" ]; then echo "$KS" | base64 -d > "$RUNNER_TEMP/release.jks"; echo "ANDROID_KEYSTORE_FILE=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"; echo "Signing with release key";
+          else echo "::warning::No signing secrets: APK is signed with a temporary debug key (Google sign-in will not work)."; fi
+      - name: Copy web app into Android project
+        run: npx cap sync android
+      - name: Build APK
+        working-directory: android
+        env:
+          VERSION_NAME: ${{ steps.v.outputs.name }}
+          VERSION_CODE: ${{ steps.v.outputs.code }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon assembleRelease
+          mkdir -p ../dist
+          cp app/build/outputs/apk/release/app-release.apk "../dist/hm-training-plan-${VERSION_NAME}.apk"
+          sha256sum ../dist/*.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hm-training-plan-apk
+          path: dist/*.apk
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v') || inputs.publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION_NAME: ${{ steps.v.outputs.name }}
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          case "$TAG" in v*) ;; *) TAG="apk-${VERSION_NAME}-${GITHUB_RUN_NUMBER}";; esac
+          gh release create "$TAG" dist/*.apk --target "$GITHUB_SHA" --title "HM Training Plan ${VERSION_NAME} (APK)" \
+            --notes "Android APK ${VERSION_NAME}. Install on your phone (allow 'install unknown apps'). Content and UI updates arrive inside the app automatically; this APK only needs reinstalling when the app says so." --latest
