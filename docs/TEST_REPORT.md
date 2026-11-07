@@ -6,9 +6,21 @@ firebase-tools 15.35 with the **real** Auth and Firestore emulators, OpenJDK 21.
 
 | Suite | Command | Result |
 |---|---|---|
-| Unit | `npm test` | **19 / 19 pass** |
-| Security rules | `npm run test:rules` | **15 / 15 pass** |
-| End-to-end + regression | `npm run test:e2e` | **18 / 18 pass** |
+| Unit | `npm test` | **63 / 63 pass** (v4) |
+| Security rules | `npm run test:rules` | **21 / 21 pass** (v4) |
+| End-to-end + regression | `npm run test:e2e` | **46 / 46 pass** (v4) |
+| Android | `./gradlew assembleRelease` | builds; signed with the existing key |
+
+## v4 additions
+
+- Unit: motion (spring, pill geometry, seamless demo loop), schedule, race, social, notify (adapter vs a fake plugin), weather
+  (parsing, freshness, tips), shoes + integrations (dedupe, honest statuses), v4 migration round-trip, syntax of every script.
+- Rules: friends (invites, requests, friendships, blocks, shares whitelist, goals), share listener before the first write,
+  server-only data + import inbox.
+- e2e: brand/gate/boot, flexible training + race, friends end to end, notifications and Health Connect via Capacitor's
+  real Android bridge with fake native plugins, weather with mocked Open-Meteo responses, shoes, integrations.
+- Not verified here: notification delivery, Health Connect and location on a real phone; the live Open-Meteo forecast;
+  production deploys. See [V4.md](V4.md).
 
 ## Unit (`test/unit/`, no network)
 

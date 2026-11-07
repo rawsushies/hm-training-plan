@@ -34,6 +34,7 @@ async function androidPage() {
   await d.ctx.addInitScript({ content: `window.Capacitor = { DEBUG: false, isLoggingEnabled: false, Plugins: {} };\n${BRIDGE}\n${pluginJS()}` });
   await d.page.goto(H.appUrl());
   await H.waitFor(d.page, () => window.__hmtpTest);
+  await H.ready(d.page);
   await d.page.evaluate(() => document.querySelector('[data-act="tutClose"]')?.click());
   return d;
 }

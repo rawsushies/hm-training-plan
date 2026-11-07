@@ -8,10 +8,10 @@
   const QUICK = {
     id: "quick", title: "Mulai cepat", mins: 1,
     steps: [
-      { tab: "home", sel: null, t: "Halo! Aku Kiki 👋", b: "Aku temen lari kamu. App ini nyimpen rencana latihan half marathon 31 minggu kamu, nyatet lari, dan ngerangkum progres. Yuk kenalan 6 langkah aja." },
+      { tab: "home", sel: null, t: "Halo! Aku Kiki 👋", b: "Selamat datang di WeRunIt! Aku temen lari kamu di sini. WeRunIt nyimpen rencana latihan 31 minggu kamu, nyatet lari, dan ngerangkum progres. Yuk kenalan 6 langkah aja." },
       { tab: "home", sel: "hero", t: "Dashboard: hitung mundur", b: "Angka besar = sisa hari ke race. Batang di bawahnya = target km tiap minggu dari minggu 1 sampai 31. Bagian hijau = km yang udah kamu catat." },
       { tab: "home", sel: "week", t: "Minggu ini", b: "Target km minggu ini, yang udah kamu lari, sisanya, dan 3 sesi lari minggu ini. Label “Selesai”, “Kelewat”, “Skip”, atau “Nanti” nunjukin status tiap sesi. Tap sesi buat lihat detailnya." },
-      { tab: "home", sel: "next", t: "Workout berikutnya", b: "Ini sesi terdekat yang belum beres. “▶ Mulai timer” buka timer yang mandu tiap bagian (pemanasan, interval, pendinginan). Pas tap “Selesai”, form catatan lari kebuka dengan waktu yang udah keisi." },
+      { tab: "home", sel: "next", t: "Workout berikutnya", b: "Ini sesi terdekat yang belum beres. Tombol “Mulai” di kartu “Minggu ini” juga langsung buka timernya. “▶ Mulai timer” buka timer yang mandu tiap bagian (pemanasan, interval, pendinginan). Pas tap “Selesai”, form catatan lari kebuka dengan waktu yang udah keisi." },
       { tab: "log", sel: "log-new", t: "Catat lari", b: "Udah lari pakai jam atau aplikasi lain? Tap “Catat lari”, isi tanggal, jarak, dan waktu. Pace dihitung otomatis. Bisa juga import file GPX/TCX atau CSV Strava di kotak bawahnya." },
       { tab: "more", sel: "tut-hub", t: "Butuh bantuan?", b: "Di Menu → “Tutorial & bantuan” ada tur lengkap per fitur. Tiap halaman juga punya tombol “?” di pojok kanan atas buat penjelasan singkat fitur itu. Kata bergaris titik-titik bisa di-tap buat lihat artinya. Selamat latihan!" }
     ]
@@ -116,8 +116,8 @@
     account: { title: "Akun & teman", steps: [
       { tab: "more", sel: "acct", t: "Masuk dengan Google", b: "Tap “Masuk dengan Google”. Setelah masuk, data kamu ke-sync ke akun kamu dan bisa dibuka di perangkat lain. Tanpa masuk, app tetap jalan penuh, data cuma di perangkat ini." },
       { tab: "more", sel: "acct", t: "Sync & ganti akun", b: "Statusnya kelihatan di sini: ke-sync, lagi sync, offline (perubahan disimpan dan dikirim nanti), atau gagal. “Ganti akun” keluar dulu lalu pilih akun lain; tiap akun punya data sendiri yang terpisah di perangkat ini." },
-      { tab: "bareng", sel: "groups", t: "Grup latihan", b: "Bikin grup, lalu “Bikin link undangan”. Link berlaku 7 hari dan cuma bisa dipakai satu orang. Teman buka link, masuk pakai Google-nya sendiri, lalu gabung." },
-      { tab: "bareng", sel: "share-toggle", t: "Privat vs dibagikan", b: "Default privat. Kalau kamu nyalain berbagi, anggota grup cuma bisa lihat ringkasan: total km, km minggu ini, jumlah lari, terjauh, pace tercepat, minggu lengkap, dan tanggal lari terakhir. Log, catatan, check-in, nyeri, dan review nggak pernah dibagikan." }
+      { tab: "bareng", sel: "groups", t: "Tambah teman", b: "Buat link undangan dan kirim ke temanmu. Link berlaku 7 hari dan sekali pakai. Temanmu mengirim permintaan, kamu yang menerima atau menolak." },
+      { tab: "bareng", sel: "share-toggle", t: "Privat per teman", b: "Defaultnya nggak ada yang dibagikan. Untuk tiap teman kamu bisa menyalakan: jarak mingguan, sesi selesai, personal best, aktivitas tertentu, jadwal, dan HR di pace tertentu. Catatan, check-in, nyeri, rute, dan lokasi nggak pernah dibagikan." }
     ] },
     settings: { title: "Settings", steps: [
       { tab: "settings", sel: "st-days", t: "Hari & jam latihan", b: "Pilih hari lari weekday (Senin, Selasa, Kamis, atau Jumat; Rabu dikosongin) dan jam lari weekday/weekend. Strength ikut dijadwalkan di hari kerja lain." },
@@ -125,10 +125,10 @@
       { tab: "settings", sel: "st-goal", t: "Target & satuan", b: "Target finish dipakai di dashboard dan race plan. Satuan pace bisa per km atau per mile. Target km/minggu cuma dipakai buat goal; jadwal tetap ikut PDF." },
       { tab: "settings", sel: "st-theme", t: "Tampilan", b: "Gelap, terang, atau ikut pengaturan HP." }
     ] },
-    notif: { title: "Notifikasi (segera hadir)", steps: [
-      { tab: "notif", sel: null, t: "Belum aktif", b: "Versi web ini belum ngirim notifikasi apa pun. Halaman ini nyimpen pilihan kamu buat aplikasi Android nanti." },
-      { tab: "notif", sel: "notif-prefs", t: "Pilihan per kategori", b: "Pengingat workout, tips latihan, rekap mingguan, dan review bulanan bisa dinyalain/dimatiin sendiri-sendiri, plus waktu pengingat dan jam tenang." },
-      { tab: "notif", sel: "notif-preview", t: "Pratinjau", b: "Contoh pengingat 7 hari ke depan yang dibuat dari jadwal asli kamu. Belum ada yang dikirim." }
+    notif: { title: "Notifikasi", steps: [
+      { tab: "notif", sel: null, t: "Di aplikasi Android", b: "Pengingat dikirim oleh aplikasi Android lewat sistem Android, jadi tetap muncul walau app ditutup. Versi web cuma menyimpan pilihan dan nggak pernah minta izin." },
+      { tab: "notif", sel: "notif-prefs", t: "Pilihan per kategori", b: "Workout, hitung mundur race, pengingat minum, tips, rekap mingguan, dan review bulanan bisa dinyalakan sendiri-sendiri, plus waktu pengingat dan jam tenang. Izin baru diminta setelah kamu menyalakan dan menyimpan." },
+      { tab: "notif", sel: "notif-preview", t: "Pratinjau", b: "Pengingat 7 hari ke depan yang dibuat dari jadwal asli kamu." }
     ] }
   };
   const ORDER = ["dashboard", "calendar", "log", "import", "timer", "locked", "elev", "strength", "recovery", "review", "race", "shoes", "goals", "pace", "data", "account", "settings", "notif"];
@@ -154,7 +154,7 @@
     data: { tour: "data", title: "Data & backup", what: "Status sync, export/import, backup otomatis, konflik.", why: "Biar data kamu aman dan bisa dipindah.", how: ["Export JSON berkala.", "Import pakai “Gabungkan” biar nggak ada yang hilang.", "Pulihkan dari backup otomatis kalau perlu."], ex: "Pindah dari versi lama: export JSON di app lama → import di sini → Gabungkan.", warn: "Reset dan “Ganti semua” juga berlaku di akun yang ke-sync." },
     guide: { tour: null, title: "Panduan latihan", what: "Ringkasan panduan latihan dari PDF.", why: "Referensi cepat soal jenis lari, pemulihan, minum, dan race day.", how: ["Buka bagian yang mau dibaca."], ex: "", warn: "" },
     kamus: { tour: null, title: "Kamus istilah", what: "Arti istilah lari yang dipakai di app.", why: "Biar semua istilah gampang dipahami.", how: ["Scroll atau tap kata bergaris titik di halaman lain."], ex: "", warn: "" },
-    notif: { tour: "notif", title: "Notifikasi", what: "Pengaturan notifikasi buat aplikasi Android nanti.", why: "Supaya pilihan kamu udah siap waktu fiturnya hadir.", how: ["Atur kategori, waktu, dan jam tenang.", "Lihat pratinjau dari jadwal asli."], ex: "", warn: "Versi web ini belum ngirim notifikasi apa pun." },
+    notif: { tour: "notif", title: "Notifikasi", what: "Pengingat latihan, race, dan minum dari jadwal kamu, di aplikasi Android.", why: "Biar nggak lupa sesi dan persiapan race, tanpa harus buka app.", how: ["Nyalakan notifikasi dan pilih kategorinya.", "Atur waktu dan jam tenang, lalu simpan (Android minta izin sekali).", "Cek pratinjau 7 hari ke depan."], ex: "Long run Minggu 06:00 → pengingat Sabtu malam dan 1 jam sebelumnya.", warn: "Versi web nggak mengirim notifikasi. Android bisa menggeser waktunya beberapa menit untuk hemat baterai." },
     about: { tour: null, title: "Tentang & update", what: "Versi app yang lagi jalan dan update otomatis.", why: "Supaya perbaikan dan fitur baru sampai ke kamu tanpa install ulang.", how: ["Biarkan “Update otomatis” nyala.", "Atau tap “Cek update sekarang”, lalu “Perbarui sekarang”."], ex: "Ada versi baru → banner hijau muncul → tap “Perbarui sekarang” → app dimuat ulang dengan versi baru, data tetap.", warn: "Update nggak pernah dipasang di tengah timer. Perubahan di bagian Android tertentu tetap butuh install APK baru." },
     tutorials: { tour: "quick", title: "Tutorial", what: "Semua tur: mulai cepat dan tur per fitur.", why: "Belajar satu fitur tanpa harus ngulang semuanya.", how: ["Pilih tur, ikuti langkahnya, tutup kapan aja."], ex: "", warn: "" }
   };

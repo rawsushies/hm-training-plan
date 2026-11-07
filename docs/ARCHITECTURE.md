@@ -1,4 +1,6 @@
-# Architecture (v3)
+# Architecture (v3 core)
+
+> v4 builds on this core; new modules, data and status are in [V4.md](V4.md). Section 7 (groups) is retired. Friends replace it ([FRIENDS.md](FRIENDS.md)).
 
 ## 1. Overview
 
@@ -149,7 +151,7 @@ sync, server counts are compared with local counts before the anonymous source i
 `js/notify.js` defines the adapter contract. The web build uses `NullNotifier` (unsupported). Preferences
 live in `settings.notif` (per account, synced). `HMTP.buildReminders()` turns the real schedule plus
 preferences into a deterministic reminder list. The Notifikasi page shows it as a preview only. See
-`docs/NOTIFICATION_ROADMAP.md`.
+`docs/NOTIFICATIONS.md`.
 
 ## 9. Known limitations
 

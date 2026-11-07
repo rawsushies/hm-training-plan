@@ -164,3 +164,27 @@ test("updater version comparison", async () => {
   assert.ok(U.isNewer({ version: "3.1.0", build: "2026-11-08T00:00:00Z" }, { version: "3.1.0", build: "2026-11-07T00:00:00Z" }));
   assert.ok(!U.isNewer({ version: "3.0.9", build: "2027-01-01T00:00:00Z" }, { version: "3.1.0", build: "2026-01-01T00:00:00Z" }));
 });
+
+test("v4 upgrade does not change any existing v3 record (no re-upload churn)", () => {
+  const v3 = defaults(); v3.logs = [run("a")]; v3.checkins = [ci("2026-11-10")];
+  const before = H.stateToRecords(v3), after = H.stateToRecords(H.sanitizeState(JSON.parse(JSON.stringify(v3)), defaults));
+  assert.deepEqual(Object.keys(after).sort(), Object.keys(before).sort(), "no new records appear for a v3 user");
+  for (const k of Object.keys(before)) assert.equal(H.hashOf(after[k]), H.hashOf(before[k]), k);
+});
+
+test("v4 records round-trip and are validated", () => {
+  const S = defaults();
+  S.schedule = { v: 1, avail: [true, false, true, false, false, true, true], long: 5, quality: 2, recovery: 6, strength: [0], freq: 3 };
+  S.events = { "bali-10k": { id: "bali-10k", name: "Bali 10K", eventDate: "2027-03-07", distanceKm: 10, eventStatus: "confirmed", aidStations: [{ km: 5, label: "Air" }] } };
+  S.settings.activeEvent = "bali-10k";
+  S.profile = { massKg: 62, hrMax: 192, onboarded: true };
+  S.racePrefs = Object.assign(H.cleanRacePrefs({ strategy: "negative", carbs: 25 }), { touched: true });
+  S.planMap = { weeks: [...Array.from({ length: 33 }, (_, i) => Math.min(31, i + 1)).slice(0, 32), 31], eventId: "bali-10k" };
+  const clean = H.sanitizeState(S, defaults), r = H.stateToRecords(clean);
+  assert.ok(r["plan/schedule"] && r["plan/event_bali-10k"] && r["plan/profile"] && r["plan/race"]);
+  const back = H.recordsToState(r, clean, defaults);
+  assert.equal(back.events["bali-10k"].distanceKm, 10); assert.equal(back.settings.activeEvent, "bali-10k");
+  assert.equal(back.schedule.quality, 2); assert.equal(back.profile.hrMax, 192); assert.equal(back.racePrefs.strategy, "negative");
+  assert.equal(H.sanitizeState({ profile: { hrMax: 999 }, racePrefs: { strategy: "<x>" }, planMap: { weeks: [1, 2, 99] } }, defaults).profile.hrMax, null);
+  assert.equal(H.sanitizeState({ planMap: { weeks: [1, 2, 3] } }, defaults).planMap, null, "plan map must end in race week");
+});
