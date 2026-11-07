@@ -21,6 +21,11 @@ test("feed parsing: brands, shoe filter, model names without gender/width/colour
   assert.equal(modelName("Women's Novablast 6 (D Wide) - Pink", "ASICS"), "Novablast 6");
   assert.equal(modelName("Alphafly 3 Men's Road Racing Shoes", "Nike"), "Alphafly 3");
   assert.equal(modelName("Pegasus Trail 5", "Nike"), "Pegasus Trail 5");
+  assert.equal(modelName("Men's ASICS Novablast 6 Tenka", "ASICS"), "Novablast 6");
+  assert.equal(modelName("Air Zoom Pegasus 42 RSG", "Nike"), "Pegasus 42");
+  assert.equal(modelName("Adizero Adios Pro Evo 2 x Satisfy", "adidas"), "Adizero Adios Pro Evo 2");
+  assert.equal(modelName("Speedgoat 7 GTX", "HOKA"), "Speedgoat 7 GTX");
+  assert.equal(isRunningShoe({ title: "Nike ACG Radical AirFlow Long-Sleeve Running Top", product_type: "Footwear", tags: [] }), false);
 });
 
 test("specs only from stated text; missing stays null", () => {

@@ -42,12 +42,14 @@ async function feed(src) {
 }
 
 const [prevPath, outPath] = process.argv.slice(2);
-const prev = prevPath && existsSync(prevPath) ? JSON.parse(readFileSync(prevPath, "utf8")) : null;
+const SCHEMA = 2;                                   // bump when normalization changes: older data is rebuilt, not merged
+let prev = prevPath && existsSync(prevPath) ? JSON.parse(readFileSync(prevPath, "utf8")) : null;
+if (prev && prev.schema !== SCHEMA) { console.log(`previous catalogue schema ${prev.schema} → rebuilding`); prev = null; }
 const feeds = [];
 for (const s of SOURCES) { try { const f = await feed(s); if (f) feeds.push(f); } catch (e) { console.log(`skip ${s.label}: ${e.message}`); } await sleep(1500); }
 if (!feeds.length) { console.log("no feed reachable; keeping previous catalogue"); process.exit(prev ? 0 : 1); }
 const fresh = derivePlusMinus(buildModels(feeds, today));
-const cat = { schema: 1, generated: new Date().toISOString(), retrieved: today, sources: feeds.map(f => ({ label: f.label, url: f.base })), models: merge(prev, fresh, { today }) };
+const cat = { schema: SCHEMA, generated: new Date().toISOString(), retrieved: today, sources: feeds.map(f => ({ label: f.label, url: f.base })), models: merge(prev, fresh, { today }) };
 derivePlusMinus(cat.models);                       // re-derive on the merged set so medians cover everything
 validate(cat, today);
 writeFileSync(outPath, JSON.stringify(cat, null, 1));

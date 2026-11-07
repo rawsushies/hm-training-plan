@@ -10,7 +10,7 @@ export function brandOf(vendor) {
   return BRAND_KEY[k] || null;
 }
 
-const NOT_SHOE = /\b(shirt|tee|singlet|short|shorts|tight|tights|sock|socks|jacket|vest|bra|hat|cap|visor|beanie|glove|bottle|flask|gel|chew|belt|pack|bag|insole|lace|laces|sandal|slide|hoodie|pant|pants|legging|crew|half.?zip|watch|headband|sunglass|gift card)\b/i;
+const NOT_SHOE = /\b(top|long-sleeve|sleeve|tank|jersey|anorak|windbreaker|pullover|parka|skirt|dress|brief|underwear|shirt|tee|singlet|short|shorts|tight|tights|sock|socks|jacket|vest|bra|hat|cap|visor|beanie|glove|bottle|flask|gel|chew|belt|pack|bag|insole|lace|laces|sandal|slide|hoodie|pant|pants|legging|crew|half.?zip|watch|headband|sunglass|gift card)\b/i;
 const IS_SHOE = /\b(shoe|shoes|footwear|running|runner|trainer|racer|spike)\b/i;
 export function isRunningShoe(p) {
   const text = [p.title, p.product_type, ...(Array.isArray(p.tags) ? p.tags : String(p.tags || "").split(","))].join(" ");
@@ -24,8 +24,11 @@ export function modelName(title, brand) {
   let t = String(title || "");
   t = t.replace(/\s[-–|]\s.*$/, "");                                            // colourway after a dash
   t = t.replace(/\([^)]*\)/g, " ");
+  t = t.replace(/\s+x\s+.+$/i, "");                                            // collaborations ("x Satisfy")
+  t = t.replace(/\b(men'?s|women'?s|womens|mens|unisex|kids'?|junior|youth|w|m)\b\.?/gi, " ").replace(/\s{2,}/g, " ").trim();
   if (brand) t = t.replace(new RegExp("^\\s*" + brand.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\s+", "i"), "");
-  t = t.replace(/\b(men'?s|women'?s|womens|mens|unisex|kids'?|junior|youth|w|m)\b\.?/gi, " ");
+  t = t.replace(/^(nike|air zoom|zoom)\s+(?=\S)/i, m => /air zoom|zoom/i.test(m) && brand === "Nike" ? "" : m);   // "Air Zoom Pegasus 42" = "Pegasus 42"
+  t = t.replace(/\b(tenka|rsg|laced|prm|premium|limited edition|limited|special edition|se|pas normal studios|pns)\b/gi, " ");   // editions/colour packs
   t = t.replace(/\b(2e|4e|d|b|extra wide|wide|narrow|running shoes?|road running shoes?|shoes?|sneakers?)\b/gi, " ");
   t = t.replace(/\s{2,}/g, " ").trim();
   while (/\s(road|racing|race|running|performance|trail|sneaker)$/i.test(t)) t = t.replace(/\s(road|racing|race|running|performance|trail|sneaker)$/i, "").trim();   // trailing descriptors only ("Pegasus Trail 5" keeps Trail)
@@ -47,9 +50,10 @@ export function parseSpecs(p) {
   if (dropMm !== null && dropMm > 16) dropMm = null;
   let stackMm = num(/(?:heel stack|stack height|stack)[^0-9]{0,20}(\d{2}(?:[.,]\d)?)\s*mm/i);
   if (stackMm !== null && (stackMm < 15 || stackMm > 60)) stackMm = null;
-  const plate = /\bcarbon(?:[- ]fib(?:er|re))?\s*(?:plate|plated)|\bcarbitex|\bflyplate|\benergyrods?\b|\bcarbon plated\b/i.test(t) ? "carbon"
+  const plate = /\bcarbon(?:[- ]fib(?:er|re))?\s*(?:plate|plated)|\bcarbitex|\bflyplate|\benergy ?rods?\b|\bcarbon plated\b/i.test(t) ? "carbon"
     : /\b(?:nylon|pebax|tpu|composite)\s*plate\b|\bplated\b/i.test(t) ? "plate" : null;
-  const stability = /\b(stability|support shoe|guiderails?|medial post|overpronat)/i.test(t);
+  const tagList = (Array.isArray(p.tags) ? p.tags : String(p.tags || "").split(",")).map(x => String(x).trim().toLowerCase());
+  const stability = tagList.includes("stability") || /\b(stability (?:running )?shoe|support shoe|guiderails?|medial post|for overpronat)/i.test(t);
   const waterproof = /\b(gtx|gore-?tex|waterproof)\b/i.test(t);
   const trail = /\btrail\b|\blugs?\b|vibram|megagrip|contagrip/i.test(t);
   const prices = (p.variants || []).map(v => parseFloat(v.price)).filter(v => v > 0);
@@ -59,7 +63,7 @@ export function parseSpecs(p) {
 export function useOf(p, specs) {
   const t = [p.title, p.product_type, ...(Array.isArray(p.tags) ? p.tags : [])].join(" ");
   if (specs.trail || /\btrail\b/i.test(t)) return "trail";
-  if (specs.plate === "carbon" || /\b(racing|racer|race day|marathon racing|super ?shoe)\b/i.test(t)) return "race";
+  if (specs.plate === "carbon" || /\b(racing|racer|race day|marathon racing|super ?shoe|alphafly|vaporfly|adios pro|metaspeed|endorphin pro|endorphin elite|rocket ?x|deviate nitro elite|fast-r|hyperwarp|sc elite|cielo x|feidian)\b/i.test(t)) return "race";
   if (/\b(tempo|uptempo|speed|fast|performance training)\b/i.test(t) || specs.plate === "plate") return "tempo";
   if (/\b(max(?:imum)? cushion|maximal|long run|plush)\b/i.test(t) || (specs.stackMm && specs.stackMm >= 38)) return "long";
   return "daily";
