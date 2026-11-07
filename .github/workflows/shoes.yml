@@ -1,0 +1,39 @@
+name: Shoe catalogue
+
+# Weekly: rebuild the shoe catalogue from public retailer product feeds and publish it to the `data-shoes`
+# branch. The app reads that file directly (raw.githubusercontent.com), so no app release or deploy is needed.
+on:
+  schedule:
+    - cron: "17 2 * * 1"        # Mondays 02:17 UTC (09:17 WIB)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency: shoes-catalogue
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Previous catalogue
+        run: |
+          git fetch origin data-shoes:data-shoes 2>/dev/null && git show data-shoes:shoes.json > "$RUNNER_TEMP/prev.json" || echo "no previous catalogue"
+      - name: Build + validate
+        run: node scripts/shoes/update.mjs "$RUNNER_TEMP/prev.json" "$RUNNER_TEMP/shoes.json"
+      - name: Publish to data-shoes (only when changed)
+        run: |
+          cd "$RUNNER_TEMP" && rm -rf pub && mkdir pub && cd pub
+          git init -q && git checkout -q -b data-shoes
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git fetch -q origin data-shoes && git reset -q --soft FETCH_HEAD || true
+          cp "$RUNNER_TEMP/shoes.json" shoes.json
+          printf '# Shoe catalogue data\nGenerated weekly by .github/workflows/shoes.yml. Do not edit by hand.\n' > README.md
+          git add shoes.json README.md
+          if git diff --cached --quiet; then echo "no changes"; exit 0; fi
+          git -c user.name="werunit-catalog-bot" -c user.email="actions@users.noreply.github.com" commit -q -m "Shoe catalogue $(date -u +%F)"
+          git push -q origin data-shoes
