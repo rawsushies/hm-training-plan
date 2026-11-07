@@ -9,7 +9,8 @@
   const SCHEMA = 3;
   const RUN_TYPES = ["easy", "long", "recovery", "locked", "elevation", "benchmark", "race", "other"];
   const ID_RE = /^[A-Za-z0-9_-]{1,40}$/;
-  const SID_RE = /^w([1-9]|[12][0-9]|3[01])-(wd|sat|sun|sA|sB)$/;
+  // Calendar week 1–60 (a replanned season can be longer than 31 weeks); "ex" = optional 4th run (frequency 4).
+  const SID_RE = /^w([1-9]|[1-5][0-9]|60)-(wd|sat|sun|sA|sB|ex)$/;
   const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
   const TIME_RE = /^\d{2}:\d{2}$/;
   const validDate = s => typeof s === "string" && DATE_RE.test(s) && !isNaN(new Date(s + "T00:00:00").getTime());
@@ -135,6 +136,7 @@
     for (const k of ["wdTime", "wkTime"]) if (TIME_RE.test(s[k] || "")) o[k] = s[k];
     o.defaultShoe = ID_RE.test(s.defaultShoe || "") ? s.defaultShoe : null;
     o.notif = cleanNotif(s.notif);
+    if (ID_RE.test(s.activeEvent || "")) o.activeEvent = s.activeEvent; else delete o.activeEvent;   // absent for v3 users: no settings churn on upgrade
     return o;
   }
   function cleanGoals(g, defGoals) {
@@ -155,10 +157,42 @@
     return o;
   }
 
+  /* ---- v4 records ---- */
+  function cleanProfile(p) {
+    const o = { massKg: null, heightCm: null, age: null, hrMax: null, sweatRate: null, onboarded: false };
+    if (!isObj(p)) return o;
+    o.massKg = finite(p.massKg, 25, 250); o.heightCm = finite(p.heightCm, 100, 250); o.age = finite(p.age, 10, 100);
+    o.hrMax = finite(p.hrMax, 120, 230); o.sweatRate = finite(p.sweatRate, 0.1, 4); o.onboarded = !!p.onboarded;
+    return o;
+  }
+  const RACE_TABS = ["overview", "pace", "splits", "elev", "hydration", "fuel", "hr", "stations", "checklist"];
+  function cleanRacePrefs(r) {
+    const o = { strategy: "conservative", startDelta: 15, splitPct: 2, custom: null, locked: [], tabs: RACE_TABS.slice(), hidden: [], carbs: null, product: "", gph: null, recent: [], tempC: null, humidity: null, startTime: "05:00", exp: 1.06 };
+    if (!isObj(r)) return o;
+    if (["even", "conservative", "negative", "positive", "elevation", "custom"].includes(r.strategy)) o.strategy = r.strategy;
+    o.startDelta = finite(r.startDelta, 0, 60) ?? 15; o.splitPct = finite(r.splitPct, 0, 8) ?? 2;
+    if (Array.isArray(r.custom) && r.custom.length <= 60 && r.custom.every(x => finite(x, 120, 1800) !== null)) o.custom = r.custom.map(Number);
+    if (Array.isArray(r.locked)) o.locked = r.locked.filter(x => Number.isInteger(x) && x >= 0 && x < 60).slice(0, 60);
+    if (Array.isArray(r.tabs)) { const t = r.tabs.filter(x => RACE_TABS.includes(x)); o.tabs = [...new Set([...t, ...RACE_TABS])]; }
+    if (Array.isArray(r.hidden)) o.hidden = r.hidden.filter(x => RACE_TABS.includes(x) && x !== "overview");
+    o.carbs = finite(r.carbs, 5, 120); o.product = str(r.product, 60); o.gph = finite(r.gph, 0, 120);
+    if (Array.isArray(r.recent)) o.recent = r.recent.filter(x => isObj(x) && finite(x.km, 1, 100) !== null && finite(x.sec, 300, 100000) !== null).slice(0, 10).map(x => ({ km: +x.km, sec: Math.round(+x.sec), date: validDate(x.date) ? x.date : "", label: str(x.label, 40) }));
+    o.tempC = finite(r.tempC, -20, 50); o.humidity = finite(r.humidity, 0, 100);
+    if (TIME_RE.test(r.startTime || "")) o.startTime = r.startTime;
+    o.exp = finite(r.exp, 1.0, 1.15) ?? 1.06;
+    if (r.touched) o.touched = true;      // local flag: only saved once the user changed something
+    return o;
+  }
+  function cleanPlanMap(m) {
+    if (!isObj(m) || !Array.isArray(m.weeks) || m.weeks.length < 2 || m.weeks.length > 60) return null;
+    if (!m.weeks.every(t => Number.isInteger(t) && t >= 1 && t <= 31) || m.weeks[m.weeks.length - 1] !== 31) return null;
+    return { weeks: m.weeks.slice(), eventId: ID_RE.test(m.eventId || "") ? m.eventId : null, at: str(m.at, 30), note: str(m.note, 600) };
+  }
+
   /** Validates and normalises any saved state. `defaults()` builds a fresh default state. */
   function sanitizeState(saved, defaults) {
     const d = defaults();
-    if (!isObj(saved)) return d;
+    if (!isObj(saved)) saved = {};          // fresh start: still fill every field (v4 records included)
     const s = d;
     s.settings = cleanSettings(saved.settings, d.settings);
     s.goals = cleanGoals(saved.goals, d.goals);
@@ -175,6 +209,12 @@
     s.shoes = uniq((Array.isArray(saved.shoes) ? saved.shoes : []).map(cleanShoe), "id");
     if (Array.isArray(saved.badges)) s.badges = saved.badges.filter(x => typeof x === "string" && ID_RE.test(x));
     s.tutorial = cleanTutorial(saved.tutorial);
+    const SC = G.WRI_SCHED;
+    s.schedule = SC ? SC.cleanSchedule(saved.schedule) : null;
+    s.events = SC ? cleanMap(saved.events, ID_RE, SC.cleanEvent) : {};
+    s.profile = cleanProfile(saved.profile);
+    s.racePrefs = cleanRacePrefs(saved.racePrefs);
+    s.planMap = cleanPlanMap(saved.planMap);
     s.updatedAt = finite(saved.updatedAt, 0, 1e15) || 0;
     if (isObj(saved.ui)) {
       // UI state is device-local and never synced; keep only harmless known shapes.
@@ -218,7 +258,9 @@
    * (relative to users/{uid}). Each record syncs on its own, so two devices adding runs
    * never overwrite each other. */
   const PLAN_SINGLE = ["settings", "goals", "raceCheck", "tutorial"];
-  const PLAN_MAPS = { ovr: "overrides", status: "status", locked: "locked", elev: "elev" };
+  const PLAN_MAPS = { ovr: "overrides", status: "status", locked: "locked", elev: "elev", event: "events" };
+  // v4 single records (absent = not set; v3 users have none, which means "keep the v3 behaviour")
+  const PLAN_V4 = { schedule: "schedule", profile: "profile", race: "racePrefs", planmap: "planMap" };
   const COLLS = ["runs", "strength", "checkins", "shoes", "reviews", "plan"];
 
   function syncedSettings(st) { const o = clone(st); return o; }
@@ -234,13 +276,15 @@
     r["plan/goals"] = S.goals;
     r["plan/raceCheck"] = S.raceCheck || {};
     r["plan/tutorial"] = S.tutorial || cleanTutorial(null);
+    for (const [doc, field] of Object.entries(PLAN_V4)) if (S[field] && (field !== "profile" || Object.values(S.profile).some(v => v !== null && v !== false)) && (field !== "racePrefs" || S.racePrefs.touched)) r["plan/" + doc] = field === "racePrefs" ? Object.assign({}, S.racePrefs, { touched: undefined }) : S[field];
     for (const [pre, field] of Object.entries(PLAN_MAPS)) for (const [k, v] of Object.entries(S[field] || {})) r[`plan/${pre}_${k}`] = v;
     return r;
   }
   /** Applies a full set of records onto a state (non-record fields such as ui are kept). */
   function recordsToState(recs, S, defaults) {
     const raw = { settings: recs["plan/settings"], goals: recs["plan/goals"], raceCheck: recs["plan/raceCheck"], tutorial: recs["plan/tutorial"],
-      overrides: {}, status: {}, locked: {}, elev: {}, reviews: {}, logs: [], strength: [], checkins: [], shoes: [] };
+      schedule: recs["plan/schedule"], profile: recs["plan/profile"], racePrefs: recs["plan/race"], planMap: recs["plan/planmap"],
+      overrides: {}, status: {}, locked: {}, elev: {}, events: {}, reviews: {}, logs: [], strength: [], checkins: [], shoes: [] };
     // keep existing array order where possible (stable rendering), append new ones
     const order = { runs: S.logs.map(x => x.id), strength: S.strength.map(x => x.id), checkins: S.checkins.map(x => x.date), shoes: S.shoes.map(x => x.id) };
     const buckets = { runs: [], strength: [], checkins: [], shoes: [] };
@@ -258,6 +302,7 @@
     raw.checkins = sortBy("checkins", buckets.checkins); raw.shoes = sortBy("shoes", buckets.shoes);
     raw.badges = S.badges; raw.ui = S.ui; raw.updatedAt = S.updatedAt;
     const out = sanitizeState(raw, defaults);
+    if (recs["plan/race"]) out.racePrefs.touched = true;
     out.ui = S.ui; // ui is trusted (device-local, already sanitized at load)
     return out;
   }
@@ -288,7 +333,7 @@
     }
     return { value: out, conflicts };
   }
-  const MERGE3_KEYS = new Set(["plan/settings", "plan/goals", "plan/tutorial", "plan/raceCheck"]);
+  const MERGE3_KEYS = new Set(["plan/settings", "plan/goals", "plan/tutorial", "plan/raceCheck", "plan/schedule", "plan/profile", "plan/race"]);
 
   /**
    * Decide what to do when pushing a dirty record finds the server copy changed since our base.
@@ -378,7 +423,9 @@
       if (changed) rep.reviews.combined++;
     }
     // plan maps: union, primary wins per key
-    for (const f of ["overrides", "status", "locked", "elev"]) for (const [k, v] of Object.entries(B[f])) if (!(k in A[f])) { A[f][k] = clone(v); rep.plan.added++; }
+    for (const f of ["overrides", "status", "locked", "elev", "events"]) for (const [k, v] of Object.entries(B[f] || {})) { A[f] = A[f] || {}; if (!(k in A[f])) { A[f][k] = clone(v); rep.plan.added++; } }
+    for (const f of ["schedule", "planMap"]) if (!A[f] && B[f]) A[f] = clone(B[f]);
+    for (const k of Object.keys(A.profile || {})) if ((A.profile[k] === null || A.profile[k] === false) && B.profile && B.profile[k] !== null && B.profile[k] !== undefined) A.profile[k] = B.profile[k];
     for (const [k, v] of Object.entries(B.raceCheck)) if (v) A.raceCheck[k] = true;
     for (const [k, v] of Object.entries(B.tutorial.tours)) if (v) A.tutorial.tours[k] = true;
     A.tutorial.quick = A.tutorial.quick || B.tutorial.quick;
@@ -513,6 +560,6 @@
 
   const API = { SCHEMA, RUN_TYPES, ID_RE, SID_RE, UID_RE, KEYS, COLLS, stableStringify, hashOf, clone, sanitizeState, cleanLog, cleanCheckin,
     stateToRecords, recordsToState, computeDirty, merge3, resolveConflict, mergeStates, sameRun, countState, hasRealData, verifyBackup,
-    migrateLegacyStorage, safeParse, tutorialStartMode, defaultNotif, cleanNotif, buildReminders, inQuiet, MERGE3_KEYS };
+    migrateLegacyStorage, safeParse, tutorialStartMode, defaultNotif, cleanNotif, buildReminders, inQuiet, MERGE3_KEYS, cleanProfile, cleanRacePrefs, cleanPlanMap, RACE_TABS };
   G.HMTP = API;
 })(typeof globalThis !== "undefined" ? globalThis : this);

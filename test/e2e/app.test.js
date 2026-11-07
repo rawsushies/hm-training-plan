@@ -190,6 +190,8 @@ test("tutorial: new user gets quick start; completion is per account and synced;
   await d.page.goto(H.appUrl());
   await H.waitFor(d.page, () => window.__hmtpTest);
   await H.ready(d.page);
+  await H.finishOnboarding(d.page);
+  await d.page.waitForSelector("#tour");
   assert.ok(await d.page.isVisible("#tour"));
   assert.match(await d.page.textContent("#tour"), /Langkah 1 dari 6/);
   await H.signIn(d.page, "dina"); await H.waitSynced(d.page);
@@ -219,6 +221,7 @@ test("mobile + desktop layouts: no horizontal overflow, tour bubble does not cov
     const { page } = await H.device({ viewport: vp, cloud: false });
     await page.goto(H.appUrl().replace("?emulator=1", ""));
     await H.ready(page);
+    await H.finishOnboarding(page);
     await page.waitForSelector("#tour");
     for (const t of ["home", "cal", "log", "review", "more", "bareng", "data", "notif", "tutorials", "settings"]) {
       await H.act(page, "nav", { t });
@@ -240,6 +243,7 @@ test("local-only mode (no Firebase config) works fully and is labelled honestly"
   await ctx.addInitScript(() => { window.__permAsked = 0; if (window.Notification) Notification.requestPermission = () => { window.__permAsked++; return Promise.resolve("default"); }; });
   await page.goto(H.appUrl().replace("?emulator=1", ""));
   await H.ready(page);
+  await H.finishOnboarding(page);
   await page.evaluate(() => document.querySelector('[data-act="tutClose"]').click());
   await H.logRun(page, { date: "2026-11-10", km: 5, dur: "35:00" });
   await H.act(page, "nav", { t: "more" });

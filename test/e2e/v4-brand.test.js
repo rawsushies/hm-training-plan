@@ -41,7 +41,9 @@ test("gate: a new signed-out user must sign in before the tutorial; then the qui
   assert.equal(await page.$(".gate [data-act='gateLocal']"), null, "new online users get no anonymous bypass");
   assert.ok(await page.evaluate(() => document.getElementById("dock").hidden), "no app navigation behind the gate");
   await H.signIn(page, "nina");
-  await H.waitFor(page, () => window.__hmtpTest.uid() && document.querySelector("#tour"));
+  await H.waitFor(page, () => window.__hmtpTest.uid() && typeof M !== "undefined" && M && M.kind === "onboard");   // onboarding first, then the tutorial
+  await H.finishOnboarding(page);
+  await H.waitFor(page, () => document.querySelector("#tour"));
   assert.match(await page.textContent("#tour"), /Langkah 1 dari/);
   assert.equal(await page.evaluate(() => document.getElementById("dock").hidden), false);
 });
@@ -51,6 +53,7 @@ test("gate: offline, or with existing device data, the user can continue without
   await off.page.goto(H.appUrl()); await booted(off.page);
   await off.ctx.setOffline(true); await off.page.evaluate(() => render(false));
   await off.page.click(".gate [data-act='gateLocal']");
+  await H.finishOnboarding(off.page);
   await off.page.waitForSelector("#tour");
   assert.equal(await off.page.$(".gate"), null);
   await off.ctx.setOffline(false);
@@ -65,7 +68,7 @@ test("gate: offline, or with existing device data, the user can continue without
 
 test("dock: the glass pill moves only on a real tab tap, stretches in flight, settles; every page reachable", async () => {
   const { page } = await H.device({ cloud: false });
-  await page.goto(H.appUrl().replace("?emulator=1", "")); await booted(page);
+  await page.goto(H.appUrl().replace("?emulator=1", "")); await H.ready(page); await H.finishOnboarding(page);
   await page.evaluate(() => document.querySelector('[data-act="tutClose"]')?.click());
   const pill = () => page.evaluate(() => { const e = document.querySelector("#dock .glass-pill"); return { t: e.style.transform, w: parseFloat(e.style.width), blur: parseFloat(e.style.getPropertyValue("--blur")) }; });
   const a = await pill(); await page.waitForTimeout(1500);
@@ -89,7 +92,7 @@ test("dock: the glass pill moves only on a real tab tap, stretches in flight, se
 test("reduced motion: pill snaps, content is visible without animation", async () => {
   const { page, ctx } = await H.device({ cloud: false });
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto(H.appUrl().replace("?emulator=1", "")); await booted(page);
+  await page.goto(H.appUrl().replace("?emulator=1", "")); await H.ready(page); await H.finishOnboarding(page);
   await page.evaluate(() => document.querySelector('[data-act="tutClose"]')?.click());
   await page.click('#dock [data-t="log"]');
   await page.waitForTimeout(16);

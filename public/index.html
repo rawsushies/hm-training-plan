@@ -266,6 +266,8 @@ ol.steps li{margin:4px 0}
 <script src="js/version.js"></script>
 <script src="js/brand.js"></script>
 <script src="js/motion.js"></script>
+<script src="js/schedule.js"></script>
+<script src="js/race.js"></script>
 <script>document.getElementById("boot-mark").innerHTML = WRI_BRAND.mark({size:96, cls:"wri-mark", liquid:!WRI_MOTION.reduced()});</script>
 <script src="firebase-config.js"></script>
 <script src="js/logic.js"></script>
@@ -789,7 +791,8 @@ async function readClaudeLegacy(){
 /* ============ Build plan ============ */
 let PLANW = [];
 function lockedCfg(sid, n, type){
-  const base = type === "benchmark" ? {kind:"benchmark",name:"Benchmark",benchKm:S.settings.benchKm,rpe:"7–8"} : Object.assign({rpe:S.settings.lockedRpe}, LOCKED_DEFAULT[n] || {kind:"interval",name:"Locked-in",reps:3,work:5,rest:2});
+  const tn = S.planMap && S.planMap.weeks[n-1] ? S.planMap.weeks[n-1] : n;     // calendar week → plan week (identical without a replan)
+  const base = type === "benchmark" ? {kind:"benchmark",name:"Benchmark",benchKm:S.settings.benchKm,rpe:"7–8"} : Object.assign({rpe:S.settings.lockedRpe}, LOCKED_DEFAULT[tn] || {kind:"interval",name:"Locked-in",reps:3,work:5,rest:2});
   return Object.assign({targetPace:null,targetDur:null,taKm:3,taTarget:null}, base, S.locked[sid]||{});
 }
 function lockedDesc(c){
@@ -799,39 +802,68 @@ function lockedDesc(c){
   if(c.kind === "pace") return "Pemanasan 10–15 menit, lalu jaga satu pace yang udah disepakati di bagian inti. Pendinginan 5–10 menit.";
   return `10 menit santai + ${c.reps} × ${c.work} menit di RPE ${c.rpe} (diselingi ${c.rest} menit jogging santai) + pendinginan 5–10 menit.`;
 }
+/** The active race event. Without a saved event, the v3 target (settings.raceDate/goalTime) is the event. */
+function activeEvent(){
+  const id = S.settings.activeEvent;
+  return (id && S.events && S.events[id]) || WRI_SCHED.defaultEvent(S.settings);
+}
 function buildPlan(){
   const st = parseYmd(S.settings.startDate), off = S.settings.weekday;
-  return PLAN.map((p,i) => {
-    const n = i+1, ws = addDays(st, i*7), we = addDays(ws, 6), kind = weekKind(n);
-    const [dwd, dsat, dsun, focus] = p;
+  const map = S.planMap ? S.planMap.weeks : PLAN.map((_,i) => i+1);       // calendar week → plan (template) week
+  const sched = S.schedule, ev = activeEvent(), HMKM = Math.abs(ev.distanceKm - 21.0975) < 0.05;
+  const fac = WRI_SCHED.distanceFactor(ev.distanceKm).f, today = todayYmd();
+  return map.map((tn, i) => {
+    const n = i+1, p = PLAN[tn-1], ws = addDays(st, i*7), we = addDays(ws, 6), kind = weekKind(tn);
+    const started = ymd(we) < today;
+    const scale = d => (fac === 1 || started) ? d : Math.round(d * fac * 10) / 10;   // only future weeks adapt to another distance
+    let [dwd, dsat, dsun, focus] = p;
+    if(kind !== "race"){ dwd = scale(dwd); dsat = scale(dsat); dsun = scale(dsun); }
+    // Days: v3 mapping unless the runner set availability (then the schedule engine places the sessions).
+    let days = {wd:off, sat:5, sun:6}, strDays = STR_DAYS[off], unplaced = [], notes = [];
+    if(sched){
+      const a = WRI_SCHED.assignWeek(sched, {kinds:{wd:(kind === "locked" || kind === "benchmark") ? "quality" : "easy", sat:kind === "race" ? "easy" : "long", sun:kind === "race" ? "race" : "recovery"}, raceWeek:kind === "race", includeExtra:tn < 28});
+      days = Object.assign({wd:off, sat:5, sun:6}, a.days); unplaced = a.unplaced; notes = a.notes;
+      strDays = Object.entries(a.strength).map(([k,d]) => [d, k]);
+      if(sched.freq === 4 && tn < 28 && a.days.ex !== undefined) days.ex = a.days.ex;
+    }
+    const isWkday = d => d <= 4;
     const mk = (slot, dayOff, type, title, dist, desc) => {
       const id = `w${n}-${slot}`, o = S.overrides[id] || {};
-      return {id, n, slot, type, title:o.title || title, dist:(o.dist ?? dist), date:o.date || ymd(addDays(ws, dayOff)), origDate:ymd(addDays(ws, dayOff)), desc:o.desc || desc, moved:!!o.date, time:slot === "wd" ? S.settings.wdTime : S.settings.wkTime, night:slot === "wd"};
+      const night = sched ? isWkday(dayOff) : slot === "wd";
+      return {id, n, tn, slot, type, title:o.title || title, pdist:dist, dist:(o.dist ?? dist), date:o.date || ymd(addDays(ws, dayOff)), origDate:ymd(addDays(ws, dayOff)), desc:o.desc || desc, moved:!!o.date, time:night ? S.settings.wdTime : S.settings.wkTime, night, unplaced:unplaced.includes(slot)};
     };
     let wd, sat, sun;
     if(kind === "locked" || kind === "benchmark"){
       const c = lockedCfg(`w${n}-wd`, n, kind);
-      wd = mk("wd", off, kind, kind === "benchmark" ? `Benchmark ${fmtKm(c.benchKm)}K` : (c.name || "Locked-in"), dwd, lockedDesc(c));
-    } else if(kind === "taper1") wd = mk("wd", off, "easy", "Easy + pace touch", dwd, "Lari santai, selipin beberapa menit di pace race. Tanpa time attack.");
-    else if(kind === "taper3") wd = mk("wd", off, "easy", "Easy + pace touch", dwd, "Lari santai dengan sedikit pace race. Tanpa tes.");
-    else if(kind === "race") wd = mk("wd", off, "easy", "Easy shakeout", dwd, "3 km santai aja. Jaga kaki tetap segar.");
-    else wd = mk("wd", off, "easy", "Easy Run", dwd, kind === "taper2" ? "Santai dan segar. RPE 3–4." : "RPE 3–4. Masih bisa ngobrol kalimat penuh.");
-    if(kind === "elevation") sat = mk("sat", 5, "elevation", n === 3 || n === 27 ? "Elevation ringan" : "Elevation", dsat,
-      (n === 3 ? "Belum biasa tanjakan? Mulai 3–4 kali naik aja. " : "") + "Gantiin long run Sabtu. Pemanasan 10–15 menit, naik tanjakan 4–6 kali @1–3 menit di RPE 5–6 (jalan cepat boleh), turun pelan, pendinginan 10 menit.");
-    else if(kind === "race") sat = mk("sat", 5, "easy", "Shakeout", dsat, "3 km super santai. Siapin perlengkapan race dan BIB.");
-    else sat = mk("sat", 5, "long", n === 25 ? "Peak Long Run" : "Long Run", dsat,
-      "RPE 3–4. Mulai pelan dan jaga stabil." + (dsat >= 14 ? " Kalau lewat 90 menit, latihan makan/minum di jalan." : "") + (n === 25 ? " 18 km cuma kalau progres dan pemulihan sebelumnya aman." : ""));
-    if(kind === "race") sun = mk("sun", 6, "race", "Race day: BTN JAKIM Half Marathon", dsun, "21,1 km. Mulai pelan, cari ritme yang stabil, fokus satu km demi satu km.");
-    else sun = mk("sun", 6, "recovery", "Recovery Run", dsun, kind === "elevation" ? "Lebih pendek, atau ganti jalan 20–30 menit kalau kaki masih pegal habis elevation." : "RPE 2–3, santai banget. Kaki masih berat? Jalan santai juga oke.");
+      wd = mk("wd", days.wd, kind, kind === "benchmark" ? `Benchmark ${fmtKm(c.benchKm)}K` : (c.name || "Locked-in"), dwd, lockedDesc(c));
+    } else if(kind === "taper1") wd = mk("wd", days.wd, "easy", "Easy + pace touch", dwd, "Lari santai, selipin beberapa menit di pace race. Tanpa time attack.");
+    else if(kind === "taper3") wd = mk("wd", days.wd, "easy", "Easy + pace touch", dwd, "Lari santai dengan sedikit pace race. Tanpa tes.");
+    else if(kind === "race") wd = mk("wd", days.wd, "easy", "Easy shakeout", dwd, "3 km santai aja. Jaga kaki tetap segar.");
+    else wd = mk("wd", days.wd, "easy", "Easy Run", dwd, kind === "taper2" ? "Santai dan segar. RPE 3–4." : "RPE 3–4. Masih bisa ngobrol kalimat penuh.");
+    if(kind === "elevation") sat = mk("sat", days.sat, "elevation", tn === 3 || tn === 27 ? "Elevation ringan" : "Elevation", dsat,
+      (tn === 3 ? "Belum biasa tanjakan? Mulai 3–4 kali naik aja. " : "") + "Gantiin long run Sabtu. Pemanasan 10–15 menit, naik tanjakan 4–6 kali @1–3 menit di RPE 5–6 (jalan cepat boleh), turun pelan, pendinginan 10 menit.");
+    else if(kind === "race") sat = mk("sat", days.sat, "easy", "Shakeout", dsat, "3 km super santai. Siapin perlengkapan race dan BIB.");
+    else sat = mk("sat", days.sat, "long", tn === 25 ? "Peak Long Run" : "Long Run", dsat,
+      "RPE 3–4. Mulai pelan dan jaga stabil." + (dsat >= 14 ? " Kalau lewat 90 menit, latihan makan/minum di jalan." : "") + (tn === 25 ? " 18 km cuma kalau progres dan pemulihan sebelumnya aman." : ""));
+    if(kind === "race"){
+      // race day: the event's own date when it falls in race week, its name and its distance
+      const evOff = Math.round((parseYmd(ev.eventDate) - ws) / DAY), raceOff = evOff >= 0 && evOff <= 6 ? evOff : days.sun;
+      const raceKm = HMKM ? dsun : Math.round(ev.distanceKm * 10) / 10;
+      sun = mk("sun", raceOff, "race", `Race day: ${ev.name}`, raceKm, `${fmtKm(raceKm)} km. Mulai pelan, cari ritme yang stabil, fokus satu km demi satu km.`);
+    }
+    else sun = mk("sun", days.sun, "recovery", "Recovery Run", dsun, kind === "elevation" ? "Lebih pendek, atau ganti jalan 20–30 menit kalau kaki masih pegal habis elevation." : "RPE 2–3, santai banget. Kaki masih berat? Jalan santai juga oke.");
     const strength = [];
-    STR_DAYS[off].forEach(([d,k]) => {
-      if(n >= 29 && k === "A") return;
+    strDays.forEach(([d,k]) => {
+      if(tn >= 29 && k === "A") return;
       const id = `w${n}-s${k}`, o = S.overrides[id] || {};
-      strength.push({id, n, slot:"s"+k, type:"strength", kind:k, time:S.settings.wdTime, night:true, title:`Strength ${k}`, date:o.date || ymd(addDays(ws, d)), origDate:ymd(addDays(ws,d)), dist:0,
-        desc: k === "A" ? "Kaki dan keseimbangan, sekitar 15–25 menit." : (n >= 29 ? "Versi ringan menjelang race, cukup buat pemanasan otot." : "Perut, pinggul, dan betis. Lebih ringan dari A."), moved:!!o.date});
+      strength.push({id, n, tn, slot:"s"+k, type:"strength", kind:k, time:S.settings.wdTime, night:true, title:`Strength ${k}`, date:o.date || ymd(addDays(ws, d)), origDate:ymd(addDays(ws,d)), dist:0,
+        desc: k === "A" ? "Kaki dan keseimbangan, sekitar 15–25 menit." : (tn >= 29 ? "Versi ringan menjelang race, cukup buat pemanasan otot." : "Perut, pinggul, dan betis. Lebih ringan dari A."), moved:!!o.date});
     });
-    const sessions = [wd, sat, sun];
-    return {n, start:ymd(ws), end:ymd(we), total:+(dwd+dsat+dsun).toFixed(1), planned:+sum(sessions, s => s.dist).toFixed(1), kind, focus, objective:KIND_OBJ[kind], sessions, strength, block:Math.min(7, Math.floor(i/4))};
+    let sessions = [wd, sat, sun];
+    if(sched && sched.freq === 2 && kind !== "race") sessions = [wd, sat];                       // explicit choice: recovery run not prescribed
+    if(sched && sched.freq === 4 && days.ex !== undefined) sessions.push(mk("ex", days.ex, "easy", "Easy run tambahan", Math.min(dsun || 3, 5), "Lari santai pendek tambahan (frekuensi 4). RPE 3. Lewati kalau badan capek."));
+    const total = sched ? +sum(sessions, s => s.pdist).toFixed(1) : +(dwd+dsat+dsun).toFixed(1);   // prescribed (not user-edited) weekly target
+    return {n, tn, start:ymd(ws), end:ymd(we), total, planned:+sum(sessions, s => s.dist).toFixed(1), kind, focus, objective:KIND_OBJ[kind], sessions, strength, block:Math.min(7, Math.floor(i/4)), notes};
   });
 }
 const allSessions = () => PLANW.flatMap(w => w.sessions);
@@ -983,7 +1015,7 @@ function render(keep){
   const y = window.scrollY;
   applyTheme(); PLANW = buildPlan();
   const tab = S.ui.tab;
-  const views = {home:vHome,cal:vCal,log:vLog,review:vReview,more:vMore,bareng:vBareng,locked:vLocked,elev:vElev,strength:vStrength,recovery:vRecovery,goals:vGoals,guide:vGuide,kamus:vKamus,pace:vPace,settings:vSettings,data:vData,race:vRace,shoes:vShoes,notif:vNotif,tutorials:vTutorials,about:vAbout};
+  const views = {home:vHome,cal:vCal,log:vLog,review:vReview,more:vMore,bareng:vBareng,locked:vLocked,elev:vElev,strength:vStrength,recovery:vRecovery,goals:vGoals,guide:vGuide,kamus:vKamus,pace:vPace,settings:vSettings,data:vData,race:vRace,shoes:vShoes,notif:vNotif,tutorials:vTutorials,about:vAbout,jadwal:vSchedule};
   const mainTab = dockTab(tab);
   if(gateActive()){ document.getElementById("app").innerHTML = vGate() + (M ? modal() : ""); setDock(null); return; }
   document.getElementById("app").innerHTML = `
@@ -1073,7 +1105,7 @@ function restText(dow){
   return "Kerja seperti biasa. Malamnya istirahat, atau stretching ringan.";
 }
 function todayCard(){
-  const t = todayYmd(); if(!PLANW.length || t < PLANW[0].start || t > PLANW[30].end) return "";
+  const t = todayYmd(); if(!PLANW.length || t < PLANW[0].start || t > PLANW[PLANW.length-1].end) return "";
   const its = itemsOnDate(t), dow = new Date().getDay(), w = PLANW[curWeekIdx()];
   const body = its.length ? its.map(s => `<button class="row" data-act="openSess" data-id="${s.id}"><span class="stripe" style="--c:${tc(s.type)}"></span><span class="grow"><b>${s.night ? "Malam ini" : "Hari ini"}${s.time ? ", " + esc(s.time) : ""}: ${esc(s.title)}</b><br><span class="sm mu">${s.type === "strength" ? "Sekitar 15–25 menit, habis kerja" : fmtKm(s.dist) + " km, " + TYPES[s.type]}</span></span><span class="r">${chip(sState(s))}</span></button>`).join("")
     : `<p class="mu" style="padding:8px 0">${restText(dow)}</p>`;
@@ -1194,14 +1226,14 @@ function vCal(){
 }
 function calMonthKey(){
   if(S.ui.calMonth) return S.ui.calMonth;
-  const t = todayYmd(); const d = t < PLANW[0].start ? PLANW[0].start : t > PLANW[30].end ? PLANW[30].end : t;
+  const t = todayYmd(); const d = t < PLANW[0].start ? PLANW[0].start : t > PLANW[PLANW.length-1].end ? PLANW[PLANW.length-1].end : t;
   return d.slice(0,7);
 }
 function calMonth(){
   const key = calMonthKey(), [y,m] = key.split("-").map(Number);
   const first = new Date(y, m-1, 1), startOff = (first.getDay()+6)%7, daysIn = new Date(y, m, 0).getDate();
   const sel = S.ui.selDate || (todayYmd().slice(0,7) === key ? todayYmd() : (key === PLANW[0].start.slice(0,7) ? PLANW[0].start : ymd(first)));
-  const pStart = PLANW[0].start, pEnd = PLANW[30].end, t = todayYmd();
+  const pStart = PLANW[0].start, pEnd = PLANW[PLANW.length-1].end, t = todayYmd();
   let cells = ["Sen","Sel","Rab","Kam","Jum","Sab","Min"].map(h => `<div class="hd">${h}</div>`).join("");
   for(let i = 0; i < startOff; i++) cells += `<div></div>`;
   for(let d = 1; d <= daysIn; d++){
@@ -1218,7 +1250,7 @@ function calMonth(){
 function dayDetail(d){
   const its = itemsOnDate(d), dow = parseYmd(d).getDay(), wk = PLANW.find(w => d >= w.start && d <= w.end);
   const h = `<div class="sec-h"><h2>${fmtDay(d)}</h2>${wk ? `<span class="sm mu">Week ${wk.n}</span>` : ""}</div>`;
-  if(!wk) return h + `<p class="mu">Di luar masa latihan (${fmtD(PLANW[0].start)} – ${fmtD(PLANW[30].end)}).</p>`;
+  if(!wk) return h + `<p class="mu">Di luar masa latihan (${fmtD(PLANW[0].start)} – ${fmtD(PLANW[PLANW.length-1].end)}).</p>`;
   if(!its.length) return h + `<div>${pill("rest")}</div><p class="mu" style="margin-top:6px">${restText(dow)}</p>`;
   return h + its.map(sessBlock).join("");
 }
@@ -1293,7 +1325,7 @@ function vLog(){
 
 /* ---------- Review ---------- */
 function blockStats(b){
-  const ws = PLANW.slice(b*4, b === 7 ? 31 : b*4+4), a = ws[0].start, z = ws[ws.length-1].end, t = todayYmd();
+  const ws = PLANW.slice(b*4, b === 7 ? PLANW.length : b*4+4), a = ws[0].start, z = ws[ws.length-1].end, t = todayYmd();
   const ls = logsIn(a, z), sess = ws.flatMap(w => w.sessions), strs = ws.flatMap(w => w.strength);
   const doneRuns = sess.filter(s => logFor(s.id)).length, plannedRuns = sess.length, plannedKm = sum(ws, w => w.total), km = sum(ls, l => l.distance);
   const bench = ls.filter(l => l.type === "benchmark" && paceOf(l)), cis = S.checkins.filter(c => c.date >= a && c.date <= z);
@@ -1758,6 +1790,7 @@ function vSettings(){
   <div style="margin-top:14px">
   <div data-tour="st-days"><div class="field"><label for="st-wd">Hari lari weekday (malam, habis kerja)</label><select id="st-wd">${WEEKDAYS.map(w => `<option value="${w.v}" ${s.weekday===w.v?'selected':''}>${w.l}</option>`).join("")}<option disabled>Rabu (malamnya dikosongin)</option></select>
     <span class="hint">Default Selasa, biar kaki sempat pulih sebelum long run Sabtu. Jumat sebaiknya jangan buat sesi berat, karena besoknya long run. Strength juga dijadwalkan malam di hari kerja lain.</span></div>
+  <p class="sm" style="margin:-4px 0 12px">Mau pilih hari sendiri (misal lari Senin, Rabu, Sabtu)? <button class="link sm" data-act="nav" data-t="jadwal">Atur ketersediaan hari</button></p>
   <div class="g2"><div class="field"><label for="st-wdt">Jam lari weekday</label><input type="time" id="st-wdt" value="${esc(s.wdTime)}"><span class="hint">Setelah pulang kerja.</span></div>
   <div class="field"><label for="st-wkt">Jam lari weekend</label><input type="time" id="st-wkt" value="${esc(s.wkTime)}"></div></div></div>
   <div class="g2" data-tour="st-dates"><div class="field"><label for="st-start">Mulai latihan</label><input type="date" id="st-start" value="${s.startDate}"><span class="hint">Otomatis digeser ke hari Senin. Mengubahnya menggeser semua tanggal sesi; catatan lari tetap nempel ke sesinya.</span></div>
@@ -1902,7 +1935,7 @@ async function handleActivityFiles(files){
     }catch(e){ errs.push(typeof e === "string" ? e : `${f.name} gagal dibaca.`); }
   }
   if(!items.length){ toast(errs[0] || "Nggak ada lari yang ketemu di file itu."); return; }
-  const used = new Set(S.logs.map(l => l.sessionId).filter(Boolean)), pStart = PLANW[0].start, pEnd = PLANW[30].end;
+  const used = new Set(S.logs.map(l => l.sessionId).filter(Boolean)), pStart = PLANW[0].start, pEnd = PLANW[PLANW.length-1].end;
   items.sort((a,b) => a.date.localeCompare(b.date)).forEach(it => {
     it.dup = S.logs.some(l => (it.extId && l.extId === it.extId) || (l.date === it.date && Math.abs(l.distance - it.distance) < 0.15)) || items.some(o => o !== it && o.id && o.extId && o.extId === it.extId);
     const s = allSessions().find(x => x.date === it.date && !used.has(x.id));
@@ -1986,7 +2019,7 @@ function mResched(){
 function reschedMsg(id, d){
   const s = sessById(id); if(!validYmd(d)) return `<p class="err">Pilih tanggal yang bener.</p>`;
   if(parseYmd(d).getDay() === 3) return `<p class="err">Rabu malam dikosongin, pilih hari lain ya.</p>`;
-  if(d < PLANW[0].start || d > PLANW[30].end) return `<p class="err">Tanggalnya di luar masa latihan.</p>`;
+  if(d < PLANW[0].start || d > PLANW[PLANW.length-1].end) return `<p class="err">Tanggalnya di luar masa latihan.</p>`;
   if(s.type === "strength") return "";
   const near = allSessions().filter(x => x.id !== s.id && Math.abs(parseYmd(x.date) - parseYmd(d)) <= DAY), same = near.filter(x => x.date === d);
   if(same.length) return `<div class="note warn">Hari itu udah ada ${esc(same[0].title)}. Jangan numpuk dua lari di satu hari.</div>`;
@@ -2608,7 +2641,7 @@ const ACT = {
     if(errs.length){ document.getElementById("lc-err").innerHTML = `<p class="err">${errs.join("<br>")}</p>`; return; }
     if(c.reps) c.reps = Math.round(c.reps);
     S.locked[M.id] = Object.assign({}, S.locked[M.id], c);
-    const o = S.overrides[M.id] = Object.assign({}, S.overrides[M.id]); delete o.title; delete o.desc; if(Math.round(di*10)/10 !== PLAN[s.n-1][0]) o.dist = Math.round(di*10)/10; else delete o.dist;
+    const o = S.overrides[M.id] = Object.assign({}, S.overrides[M.id]); delete o.title; delete o.desc; if(Math.round(di*10)/10 !== PLAN[(s.tn || s.n)-1][0]) o.dist = Math.round(di*10)/10; else delete o.dist;
     persist(); M = null; render(true); toast("Target tersimpan");
   },
   resetLockCfg:() => { delete S.locked[M.id]; persist(); M = null; render(true); toast("Balik ke default"); },
@@ -2622,7 +2655,7 @@ const ACT = {
   strK:d => { const D = strDraft(); if(D.kind !== d.k){ S.ui.strK = d.k; S.ui.strDraft = {kind:d.k, sets:D.sets, done:[], date:D.date, sessionId:null}; } render(true); },
   strSets:d => { strDraft().sets = Number(d.v); render(true); },
   strTick:d => { const D = strDraft(); D.done = D.done.includes(d.k) ? D.done.filter(x => x !== d.k) : [...D.done, d.k]; const el = document.getElementById("str-date"); if(el) D.date = el.value || D.date; render(true); },
-  startStr:d => { const s = sessById(d.id); S.ui.strK = s.kind; S.ui.strDraft = {kind:s.kind, sets:s.n >= 29 ? 1 : 2, done:[], date:s.date, sessionId:s.id}; S.ui.tab = "strength"; M = null; persist(); render(false); },
+  startStr:d => { const s = sessById(d.id); S.ui.strK = s.kind; S.ui.strDraft = {kind:s.kind, sets:(s.tn || s.n) >= 29 ? 1 : 2, done:[], date:s.date, sessionId:s.id}; S.ui.tab = "strength"; M = null; persist(); render(false); },
   strSave:() => {
     const D = strDraft(), date = document.getElementById("str-date").value;
     if(!validYmd(date)){ toast("Tanggalnya belum bener"); return; }
@@ -2659,6 +2692,12 @@ const ACT = {
     Object.assign(S.settings, {wdTime:okT(g("st-wdt")) ? g("st-wdt") : S.settings.wdTime, wkTime:okT(g("st-wkt")) ? g("st-wkt") : S.settings.wkTime, weekday:wd, startDate:start, raceDate:race, goalTime:fmtDur(gt), unit:g("st-unit"), peakLow:pl, peakHigh:ph, lockedRpe:g("st-rpe") || "6–7", benchKm:bk, theme:g("st-theme")});
     const vol = S.goals.items.find(x => x.id === "volume"); if(vol) vol.target = pl;
     if(changedWd) Object.keys(S.overrides).forEach(k => { if(/-wd$|-s[AB]$/.test(k) && S.overrides[k]) delete S.overrides[k].date; });
+    if(changedWd && S.schedule){   // keep a custom schedule consistent with the weekday chosen here
+      const sc = Object.assign({}, S.schedule, {avail:S.schedule.avail.slice()}), old = sc.quality;
+      sc.avail[wd] = true; sc.quality = wd;
+      if(old !== null && old !== wd && old !== sc.long && old !== sc.recovery && !sc.strength.includes(old)) sc.avail[old] = false;
+      S.schedule = WRI_SCHED.cleanSchedule(sc);
+    }
     persist(); render(true);
     const raceSun = ymd(addDays(parseYmd(start), 30*7+6));
     toast(raceSun !== race ? `Tersimpan. Catatan: hari terakhir jadwal jatuh di ${fmtD(raceSun)}.` : changedWd ? "Tersimpan. Jadwal ikut geser ke hari yang baru." : "Settings tersimpan");
@@ -2739,12 +2778,17 @@ function applyLocalConflict(c){
   const ui = S.ui; S = HMTP.recordsToState(recs, S, defaults); S.ui = ui; persist();
 }
 
-if(S.ui.run && Array.isArray(S.ui.run.steps)){ RUN = S.ui.run; startTicker(); }
-render(false);
-if(!Array.isArray(S.badges)){ checkBadges(); Storage.save(S); }
-initCloud();
-initUpdates();
-bootSequence();
+/** Startup (called by the last script tag, after js/views-v4.js has added the v4 views). */
+function startApp(){
+  if(S.ui.run && Array.isArray(S.ui.run.steps)){ RUN = S.ui.run; startTicker(); }
+  render(false);
+  if(!Array.isArray(S.badges)){ checkBadges(); Storage.save(S); }
+  initCloud();
+  initUpdates();
+  bootSequence();
+}
 </script>
+<script src="js/views-v4.js"></script>
+<script>startApp();</script>
 </body>
 </html>

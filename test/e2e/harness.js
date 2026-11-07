@@ -46,11 +46,19 @@ export async function open(page, extra = "") {
   await page.waitForFunction(() => window.__hmtpTest || (window.HMTP && document.querySelector("main")), null, { timeout: 15000 });
   await page.waitForFunction(() => window.__hmtpTest, null, { timeout: 15000 });
   await ready(page);
+  await finishOnboarding(page);
   await page.evaluate(() => { if (document.querySelector("#tour")) document.querySelector('[data-act="tutClose"]').click(); });
 }
 /** Wait until the v4 boot screen has finished and is gone (it covers the app while it runs). */
 export async function ready(page) {
   await page.waitForFunction(() => window.__bootDone && !document.getElementById("boot"), null, { timeout: 15000 });
+}
+/** Complete the v4 onboarding sheet the way a user would (skip optional profile, keep default days). */
+export async function finishOnboarding(page) {
+  if (await page.evaluate(() => typeof M !== "undefined" && !!M && M.kind === "onboard")) {
+    if (await page.$('[data-act="obNext"][data-skip="1"]')) await page.click('[data-act="obNext"][data-skip="1"]');
+    await page.click('[data-act="obDone"]');
+  }
 }
 export const user = (n) => ({ sub: `sub-${n}`, email: `${n}@example.com`, email_verified: true, name: n[0].toUpperCase() + n.slice(1), picture: "https://example.com/" + n + ".png" });
 export async function signIn(page, n) {

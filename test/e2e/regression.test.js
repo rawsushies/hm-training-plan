@@ -13,6 +13,7 @@ async function fresh(viewport) {
   const d = await H.device({ cloud: false, viewport });
   await d.page.goto(local());
   await H.ready(d.page);
+  await H.finishOnboarding(d.page);
   await d.page.evaluate(() => document.querySelector('[data-act="tutClose"]')?.click());
   return d;
 }

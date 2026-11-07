@@ -1,3 +1,4 @@
+import "../../public/js/schedule.js";
 import "../../public/js/logic.js";
 import "../../public/js/sync.js";
 export const H = globalThis.HMTP;

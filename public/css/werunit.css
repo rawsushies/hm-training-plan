@@ -158,3 +158,25 @@ main{padding-bottom:132px}
 :root[data-motion="reduced"] .holo-text{animation:none}
 :root[data-motion="reduced"] .rv{opacity:1;transform:none}
 .dock[hidden]{display:none}
+/* schedule preview */
+.wk-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.wk-day{display:flex;flex-direction:column;gap:3px;min-width:0}
+.wk-chip{display:block;font-size:10.5px;font-weight:600;padding:3px 4px;border-radius:7px;background:color-mix(in srgb,var(--c) 22%,transparent);color:var(--tx);border-left:3px solid var(--c);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wk-chip.rest{--c:var(--c-rest);color:var(--mu)}
+/* race tabs (scrollable, frosted pill) */
+.rtabs-wrap{display:flex;gap:8px;align-items:center}
+.rtabs{position:relative;flex:1;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;border-radius:999px;padding:4px;height:46px;align-items:center}
+.rtabs::-webkit-scrollbar{display:none}
+.rtabs button{position:relative;z-index:2;flex:none;background:none;border:0;color:var(--mu);font-weight:600;font-size:13px;padding:0 14px;height:36px;border-radius:999px;white-space:nowrap}
+.rtabs button.on{color:var(--tx)}
+.rtabs .glass-pill{z-index:1}
+table.splits tr.five td{background:color-mix(in srgb,var(--acc) 10%,transparent)}
+.pace-in{width:76px!important;min-height:32px!important;padding:4px 8px!important;font-variant-numeric:tabular-nums}
+.race-sheet table.t td,.race-sheet table.t th{padding:4px 6px}
+@media print{
+  :root.printing-sheet body>*:not(#app){display:none!important}
+  :root.printing-sheet #app>*:not(.sheet){display:none!important}
+  :root.printing-sheet .sheet{position:static;transform:none;max-height:none;box-shadow:none;border:0;background:#fff;color:#000}
+  :root.printing-sheet .sheet .btns,:root.printing-sheet .sheet .x,:root.printing-sheet .sheet-bg{display:none!important}
+  :root.printing-sheet body{background:#fff}
+}
