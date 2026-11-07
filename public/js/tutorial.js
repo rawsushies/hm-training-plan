@@ -9,8 +9,8 @@
     id: "quick", title: "Mulai cepat", mins: 1,
     steps: [
       { tab: "home", sel: null, t: "Halo! Aku Kiki 👋", b: "Selamat datang di WeRunIt! Aku temen lari kamu di sini. WeRunIt nyimpen rencana latihan 31 minggu kamu, nyatet lari, dan ngerangkum progres. Yuk kenalan 6 langkah aja." },
-      { tab: "home", sel: "hero", t: "Dashboard: hitung mundur", b: "Angka besar = sisa hari ke race. Batang di bawahnya = target km tiap minggu dari minggu 1 sampai 31. Bagian hijau = km yang udah kamu catat." },
-      { tab: "home", sel: "week", t: "Minggu ini", b: "Batang = km yang udah kamu lari dibanding target minggu ini. Di bawahnya 7 hari: tiap bulatan satu sesi, warnanya jenis sesi. Penuh = selesai, bercincin = hari ini, garis putus merah = kelewat. Tap bulatan buat lihat detailnya." },
+      { tab: "home", sel: "hero", t: "Dashboard: hitung mundur", b: "Angka besar = sisa hari ke race. Bar di bawahnya = target km tiap minggu dari minggu 1 sampai 31. Bagian berwarna = km yang udah kamu catat." },
+      { tab: "home", sel: "week", t: "Minggu ini", b: "Bar ini = km yang udah kamu lari dibanding target minggu ini. Di bawahnya 7 hari: tiap bulatan satu sesi, warnanya jenis sesi. Penuh = selesai, bercincin = hari ini, garis putus merah = kelewat. Tap bulatan buat lihat detailnya." },
       { tab: "home", sel: "next", t: "Workout berikutnya", b: "Ini sesi terdekat yang belum beres; angka besar = jaraknya. Ketuk kartunya buat detail. “Mulai timer” buka timer yang mandu tiap bagian (pemanasan, interval, pendinginan). Pas tap “Selesai”, form catatan lari kebuka dengan waktu yang udah keisi." },
       { tab: "log", sel: "log-new", t: "Catat lari", b: "Udah lari pakai jam atau aplikasi lain? Tap “Catat lari”, isi tanggal, jarak, dan waktu. Pace dihitung otomatis. Bisa juga import file GPX/TCX atau CSV Strava di kotak bawahnya." },
       { tab: "more", sel: "tut-hub", t: "Butuh bantuan?", b: "Di Menu → “Tutorial & bantuan” ada tur lengkap per fitur. Tiap halaman juga punya tombol “?” di pojok kanan atas buat penjelasan singkat fitur itu. Kata bergaris titik-titik bisa di-tap buat lihat artinya. Selamat latihan!" }
@@ -19,12 +19,12 @@
   const T = {
     dashboard: { title: "Dashboard", steps: [
       { tab: "home", sel: "hero", t: "Hitung mundur race", b: "Sisa hari ke tanggal race di Settings. Di bawahnya: tanggal, jarak 21,1 km, dan target finish kamu plus pace rata-rata yang dibutuhin." },
-      { tab: "home", sel: "hero", t: "Grafik 31 minggu", b: "Tiap batang abu-abu = target km satu minggu (dari jadwal). Isian hijau = km yang udah kamu catat di minggu itu. Batang bergaris tepi = minggu ini." },
-      { tab: "home", sel: "week-stats", t: "Target vs aktual minggu ini", b: "Isian batang = km dari log di tanggal minggu ini (termasuk lari di luar jadwal). Garis tegak = target minggu ini. Kalau isian lewat garis, kamu udah melebihi target." },
+      { tab: "home", sel: "hero", t: "Grafik 31 minggu", b: "Tiap bar abu-abu = target km satu minggu (dari jadwal). Isian berwarna = km yang udah kamu catat di minggu itu. Bar yang bergaris tepi = minggu ini." },
+      { tab: "home", sel: "week-stats", t: "Target vs aktual minggu ini", b: "Isian bar = km dari log di tanggal minggu ini (termasuk lari di luar jadwal). Garis tegak = target minggu ini. Kalau isian lewat garis, kamu udah melebihi target." },
       { tab: "home", sel: "week", t: "Sesi terencana vs selesai", b: "Tiap bulatan = sesi terencana; angka di bawahnya km aktual kalau udah dicatat, atau km rencana. Sesi yang lewat tanpa catatan bergaris putus merah; nggak usah dikejar, lanjut aja ke sesi berikutnya." },
       { tab: "home", sel: "next", t: "Workout berikutnya", b: "Sesi terdekat yang belum selesai atau di-skip. Angka besar = jarak, ketuk kartunya buat detail lengkap. Dari sini bisa langsung mulai timer atau catat." },
       { tab: "home", sel: "progress", t: "Progres kamu", b: "Tiap kotak = satu angka dari semua lari yang kamu catat, dengan grafik kecil 8 minggu terakhir: total km, jumlah lari, lari terjauh, pace tercepat (lari ≥1 km), tanjakan, dan streak minggu lengkap. Nggak ada angka karangan." },
-      { tab: "home", sel: "month", t: "Target bulan ini", b: "Program dibagi 8 blok ±4 minggu. Dua batang: sesi lari yang beres dan km aktual, dibanding rencana blok ini. Ketuk kartunya buat review lengkap." }
+      { tab: "home", sel: "month", t: "Target bulan ini", b: "Program dibagi 8 blok ±4 minggu. Dua bar: sesi lari yang beres dan km aktual, dibanding rencana blok ini. Ketuk kartunya buat review lengkap." }
     ] },
     calendar: { title: "Jadwal latihan", steps: [
       { tab: "cal", sel: "cal-mode", t: "Tampilan bulan atau per minggu", b: "“Bulan” nampilin kalender. “Per minggu” nampilin 31 minggu berurutan dengan target, km aktual, dan semua sesi (termasuk strength)." },
@@ -65,7 +65,7 @@
       { tab: "elev", sel: null, t: "Tujuannya", b: "Sebulan sekali sesi tanjakan gantiin long run Sabtu (bukan tambahan). Melatih kaki dan napas di tanjakan dengan effort stabil." },
       { tab: "elev", sel: "elev-list", t: "Target naik", b: "“Set target naik” = target total meter tanjakan (elevation gain) buat sesi itu. Sesuaikan sama rute yang ada." },
       { tab: "elev", sel: "elev-list", t: "Mencatat sesi", b: "“Catat sesi” buka form catatan lari. Isi kolom Tanjakan (m) dari jam/aplikasi, plus catatan rute. File GPX/TCX yang di-import juga ngisi tanjakan otomatis." },
-      { tab: "elev", sel: "elev-chart", t: "Target vs aktual", b: "Grafik abu = target, hijau = aktual per sesi elevation. Total tanjakan semua lari juga ada di Home dan di grafik Review. Jarak sesi elevation biasanya lebih pendek dari long run karena effort-nya lebih berat." }
+      { tab: "elev", sel: "elev-chart", t: "Target vs aktual", b: "Grafik: abu-abu = target, berwarna = aktual per sesi elevation. Total tanjakan semua lari juga ada di Home dan di grafik Review. Jarak sesi elevation biasanya lebih pendek dari long run karena effort-nya lebih berat." }
     ] },
     strength: { title: "Strength", steps: [
       { tab: "strength", sel: "str-kind", t: "Strength A dan B", b: "A = kaki dan keseimbangan (±15–25 menit). B = perut, pinggul, dan betis, lebih ringan. Semua cuma pakai berat badan." },
@@ -155,7 +155,7 @@
     guide: { tour: null, title: "Panduan latihan", what: "Ringkasan panduan latihan dari PDF.", why: "Referensi cepat soal jenis lari, pemulihan, minum, dan race day.", how: ["Buka bagian yang mau dibaca."], ex: "", warn: "" },
     kamus: { tour: null, title: "Kamus istilah", what: "Arti istilah lari yang dipakai di app.", why: "Biar semua istilah gampang dipahami.", how: ["Scroll atau tap kata bergaris titik di halaman lain."], ex: "", warn: "" },
     notif: { tour: "notif", title: "Notifikasi", what: "Pengingat latihan, race, dan minum dari jadwal kamu, di aplikasi Android.", why: "Biar nggak lupa sesi dan persiapan race, tanpa harus buka app.", how: ["Nyalakan notifikasi dan pilih kategorinya.", "Atur waktu dan jam tenang, lalu simpan (Android minta izin sekali).", "Cek pratinjau 7 hari ke depan."], ex: "Long run Minggu 06:00 → pengingat Sabtu malam dan 1 jam sebelumnya.", warn: "Versi web nggak mengirim notifikasi. Android bisa menggeser waktunya beberapa menit untuk hemat baterai." },
-    about: { tour: null, title: "Tentang & update", what: "Versi app yang lagi jalan dan update otomatis.", why: "Supaya perbaikan dan fitur baru sampai ke kamu tanpa install ulang.", how: ["Biarkan “Update otomatis” nyala.", "Atau tap “Cek update sekarang”, lalu “Perbarui sekarang”."], ex: "Ada versi baru → banner hijau muncul → tap “Perbarui sekarang” → app dimuat ulang dengan versi baru, data tetap.", warn: "Update nggak pernah dipasang di tengah timer. Perubahan di bagian Android tertentu tetap butuh install APK baru." },
+    about: { tour: null, title: "Tentang & update", what: "Versi app yang lagi jalan dan update otomatis.", why: "Supaya perbaikan dan fitur baru sampai ke kamu tanpa install ulang.", how: ["Biarkan “Update otomatis” nyala.", "Atau tap “Cek update sekarang”, lalu “Perbarui sekarang”."], ex: "Ada versi baru → banner muncul di atas → tap “Perbarui sekarang” → app dimuat ulang dengan versi baru, data tetap.", warn: "Update nggak pernah dipasang di tengah timer. Perubahan di bagian Android tertentu tetap butuh install APK baru." },
     tutorials: { tour: "quick", title: "Tutorial", what: "Semua tur: mulai cepat dan tur per fitur.", why: "Belajar satu fitur tanpa harus ngulang semuanya.", how: ["Pilih tur, ikuti langkahnya, tutup kapan aja."], ex: "", warn: "" }
   };
   G.HMTP_TUT = { QUICK, TOURS: T, ORDER, HELP, VERSION: 3 };

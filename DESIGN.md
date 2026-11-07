@@ -334,6 +334,20 @@ Every block below leads with a chart. Built in `vHome()` (`public/index.html`).
 
 Shoes, friends, plans and settings live in Menu.
 
+### Other screens
+
+Shared primitives carry the system everywhere: lists (`.rows`), tables (`.t-wrap`), the account box and chart panels
+(`.vchart`, `.vglass`) are glass; stat grids (`.stats`) are separate glass tiles; notes are tinted panels with no side
+rail; inputs are 44px with a `primary` focus ring. The chart-first screens:
+
+| Screen | Leads with |
+| --- | --- |
+| Latihan (`calMonth`) | Bullet bars for the month's km and sessions; calendar days you ran fill with that run's session colour |
+| Aktivitas (`logSummary`, `logRow`) | Totals tiles, 12-week km bars, the session-type mix bar; each log row carries a distance bar in its type colour |
+| Check-in (`vRecovery`) | The 14-day check-in rows, a readiness ring in the result, and six mini bars per history entry |
+| Review (`vReview`) | Bullet bars for km, sessions, longest run and strength against the block plan; stat tiles for pace, benchmark, elevation and check-in score; every chart in its own glass panel |
+| Menu (`vMore`) | Grouped icon tiles (Latihan, Badan & progres, Belajar, Akun & data) instead of a text list |
+
 ## Elevation & Depth
 
 Depth comes from tonal layers and glass, not drop shadows.
@@ -545,6 +559,10 @@ Charts sit on frosted glass and their marks glow softly, so the data is the brig
 - Lead with the verdict, then the reason: "Pelan dulu. HRV-mu turun 12 % dari biasanya."
 - Numbers over adjectives: "Kurang 6 km dari rencana minggu ini", not "Volume agak kurang".
 - Buttons are verbs: `Mulai`, `Catat`, `Simpan`, `Urungkan`. Never `OK` or `Submit`.
+- Chart words: say **bar** for a bar (never the literal "batang"), **garis** for a line and **titik** for a dot. Describe
+  marks by role, not by a colour that can change: "abu-abu = target, berwarna = aktual", never "hijau = aktual".
+- Prefer the words runners already use: km, pace, long run, easy run, RPE. Keep English running terms when they are
+  what people say; translate the rest into casual Indonesian.
 - Empty states say what to do next, in one line.
 - Keep health claims modest ("kelihatannya", "biasanya"). Pain and injury copy always suggests rest and, if it
   persists, a professional.

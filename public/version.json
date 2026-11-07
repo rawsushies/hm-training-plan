@@ -1,19 +1,20 @@
 {
- "version": "3.12.0",
- "build": "2026-11-07T23:01:12Z",
+ "version": "3.13.0",
+ "build": "2026-11-07T23:13:09Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "Beranda baru: grafik minggu ini, badan kamu, progres, dan konsistensi",
-  "Kartu grafik bergaya kaca dengan warna gradasi",
-  "Tombol utama lebih mudah dibaca di tema gelap"
+  "Tampilan baru di semua layar: grafik dulu, kartu kaca, warna gradasi",
+  "Aktivitas, Check-in, Review, dan Jadwal sekarang dibuka dengan grafik",
+  "Menu jadi ikon yang dikelompokkan",
+  "Kata-kata di grafik lebih enak dibaca"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "90e00477d57b14bccbe20f80df7156fb5ea904c21a98e0b3d861a930b3406bb3",
-   "s": 26183
+   "h": "d4a1ffbfa0385b392b782ac1d2239bfe22dce705e115aa7981671a37b3502576",
+   "s": 35418
   },
   {
    "p": "favicon-32.png",
@@ -47,8 +48,8 @@
   },
   {
    "p": "index.html",
-   "h": "a293a9633f48f3258718acf158672f03290330f43182fcf5642f42a84d8e9394",
-   "s": 280966
+   "h": "5f6699bc9a7de305044c62c802f919fc3659b449bab4d27acf7b681bf770a78c",
+   "s": 287541
   },
   {
    "p": "js/brand.js",
@@ -107,8 +108,8 @@
   },
   {
    "p": "js/tutorial.js",
-   "h": "38ead6e676a112c19f45f01ad7d798670656b08529d476bf155f68ce2a5ec33e",
-   "s": 30438
+   "h": "9e6122bffb9037cd909b043f13aab7641601d8f8ee9ffc8a0a10fd7b43320366",
+   "s": 30445
   },
   {
    "p": "js/ui-glass.js",
@@ -122,7 +123,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "9387de0b6ff2c0969334c37a0483360e7f64464bd2052d8f7166d4b4da9066aa",
+   "h": "dbce10dcb39a276637342466f35b2fb36c66d06e4f32adf6ec3fc158caf174ac",
    "s": 140
   },
   {
@@ -162,7 +163,7 @@
   },
   {
    "p": "sw.js",
-   "h": "8c6e00b6491d884644195ceca94fd6e43c89d840782482922490458b6243a8fd",
+   "h": "f1bfb927ddffa51d7a11a41fcef2b4aaa7c5aa5802928caf942a835a2f086eca",
    "s": 2573
   },
   {
