@@ -251,6 +251,7 @@ ol.steps li{margin:4px 0}
 <body>
 <div id="app"></div>
 <div id="toast" role="status" aria-live="polite"></div>
+<script src="vendor/capacitor/8.5.3/capacitor.js"></script>
 <script src="js/version.js"></script>
 <script src="firebase-config.js"></script>
 <script src="js/logic.js"></script>
@@ -520,7 +521,10 @@ const ERR_TXT = {
   "permission-denied":"Server menolak akses. Coba keluar lalu masuk lagi.", "unauthenticated":"Sesi login habis. Masuk lagi ya.",
   "unavailable":"Server nggak kejangkau. Data kamu aman di perangkat ini dan dikirim nanti.", "timeout":"Server kelamaan jawab. Data kamu aman di perangkat ini.",
   "deadline-exceeded":"Server kelamaan jawab. Data kamu aman di perangkat ini.", "resource-exhausted":"Kuota server lagi penuh. Coba lagi nanti, data aman di perangkat ini.",
-  "load":"Modul sync gagal dimuat. Cek koneksi internet.", "loop":"Sebagian perubahan belum berhasil dikirim. Dicoba lagi otomatis."
+  "load":"Modul sync gagal dimuat. Cek koneksi internet.",
+  "auth/android-config":"Login Google di aplikasi Android ditolak Google karena pengaturan aplikasi belum cocok (sidik jari SHA / OAuth). Kirim detail di bawah ke pengelola app.",
+  "auth/no-google-account":"Belum ada akun Google di HP ini. Tambahkan dulu di Pengaturan HP → Akun, lalu coba lagi.",
+  "auth/native-failed":"Login Google di HP gagal. Kirim detail di bawah ke pengelola app.", "loop":"Sebagian perubahan belum berhasil dikirim. Dicoba lagi otomatis."
 };
 const errText = code => ERR_TXT[code] || "Ada masalah. Data kamu tetap aman di perangkat ini.";
 
@@ -664,9 +668,9 @@ function mergeIntoCurrent(src, label){
 async function signIn(selectAccount){
   if(!CLOUD.api){ toast(CLOUD.state === "off" ? "Sync belum disetel di app ini." : errText(CLOUD.err || "load")); return; }
   if(!isOnline()){ toast(errText("auth/network-request-failed")); return; }
-  CLOUD.state = "signingin"; CLOUD.err = ""; rerenderSoft();
+  CLOUD.state = "signingin"; CLOUD.err = ""; CLOUD.errDetail = ""; rerenderSoft();
   try{ await CLOUD.api.signInGoogle({selectAccount}); }
-  catch(e){ CLOUD.err = (e && e.code) || "unknown"; CLOUD.state = CLOUD.user ? CLOUD.state : (/cancel|closed/.test(CLOUD.err) ? "signedout" : "autherror"); toast(errText(CLOUD.err)); rerenderSoft(); }
+  catch(e){ CLOUD.err = (e && e.code) || "unknown"; CLOUD.errDetail = /cancel|closed/.test(CLOUD.err) ? "" : ((e && e.detail) || (e && e.message ? String(e.message).slice(0, 400) : "")); CLOUD.state = CLOUD.user ? CLOUD.state : (/cancel|closed/.test(CLOUD.err) ? "signedout" : "autherror"); toast(errText(CLOUD.err)); rerenderSoft(); }
 }
 async function signOutFlow(forget, thenSwitch){
   if(SYNC){ try{ await withTimeout(SYNC.flush(), 8000); }catch(e){} }
@@ -1377,7 +1381,8 @@ function acctBox(){
     const busy = st === "init" || st === "loading" || st === "signingin";
     return `<div class="acct" style="align-items:flex-start;flex-wrap:wrap">${mascot("mascot-inline")}<div class="who"><b>Belum masuk</b><p class="sm mu" style="margin-top:2px">Masuk pakai akun Google supaya data ke-sync, aman kalau ganti HP, dan bisa latihan bareng teman. Tanpa masuk, data cuma di perangkat ini.</p>
       <p class="xs js-sync" style="margin-top:6px">${syncLine()}</p>
-      <div class="acct-actions"><button class="gbtn" data-act="signIn" ${busy ? "disabled" : ""}>${G_LOGO}${st === "signingin" ? "Lagi masuk..." : "Masuk dengan Google"}</button></div></div></div>`;
+      <div class="acct-actions"><button class="gbtn" data-act="signIn" ${busy ? "disabled" : ""}>${G_LOGO}${st === "signingin" ? "Lagi masuk..." : "Masuk dengan Google"}</button></div>
+      ${CLOUD.errDetail ? `<div class="note warn" style="margin-top:10px"><p class="sm">${esc(errText(CLOUD.err))}</p><p class="xs mu" style="margin-top:6px;word-break:break-word">Detail teknis: <code id="err-detail">${esc(CLOUD.errDetail)}</code></p><button class="btn sm" style="margin-top:6px" data-act="copyErr">Salin detail</button></div>` : ""}</div></div>`;
   }
   const pending = SYNC ? SYNC.pendingCount() : 0;
   return `<div class="acct" style="align-items:flex-start;flex-wrap:wrap">${avatarImg(u.photoURL, u.displayName || u.email)}<div class="who"><b>${esc(u.displayName || "Akun Google")}</b><p class="sm mu em">${esc(u.email)}</p>
@@ -2289,6 +2294,7 @@ const ACT = {
   nav:d => { S.ui.tab = d.t; M = null; persist(); render(false); },
   closeM:() => { if(M && M.kind === "migrate"){ ACT.migCancel(); return; } if(M && M.kind === "join"){ ACT.joinCancel(); return; } M = null; render(true); },
   term:d => { M = {kind:"term", k:d.k}; render(true); },
+  copyErr:() => { const t = (document.getElementById("err-detail") || {}).textContent || ""; const done = () => toast("Detail tersalin"); try{ navigator.clipboard.writeText(t).then(done, done); }catch(e){ done(); } },
   /* ---- updates ---- */
   updCheck:() => { HMTPUpdate.check(true); toast("Lagi ngecek update..."); },
   updApply:() => { if(RUN){ toast("Selesaiin timer dulu, baru perbarui."); return; } Storage.save(S); HMTPUpdate.apply(false); },

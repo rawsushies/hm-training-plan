@@ -1,13 +1,11 @@
 {
- "version": "3.1.0",
- "build": "2026-11-07T04:42:37Z",
+ "version": "3.1.1",
+ "build": "2026-11-07T05:10:50Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "Update otomatis di dalam app (web & Android)",
-  "Versi Android (APK) dengan login Google native",
-  "Sync akun Google aktif"
+  "Login Google di aplikasi Android: coba cara kedua otomatis, pesan error lebih jelas"
  ],
  "files": [
   {
@@ -32,13 +30,13 @@
   },
   {
    "p": "index.html",
-   "h": "c6ff4198f67a008385dba939915193cb7130ec0a83d6f85040cd0faad04ac522",
-   "s": 250623
+   "h": "895bea682056534fd6eed68623f54c7302fc340d761a580d862e23e3e561167e",
+   "s": 251802
   },
   {
    "p": "js/cloud-firebase.js",
-   "h": "0f87d2b6ba86e7ecf02cd5ff458d35f8218488f21699134c68601bff3fee9b87",
-   "s": 13796
+   "h": "2b3928c9899fcacf9568df4ad17560857ed1b95299643953bf1bdda97ab1c21d",
+   "s": 15323
   },
   {
    "p": "js/logic.js",
@@ -67,7 +65,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "a207c73e7906e1e3731bfb8431f1928dfcc90cf91ad3a1e4501be6d93cace5b7",
+   "h": "2fca81dacba2c714bae88d54c1cf590c60107f555e2b488324637f2595e4a75e",
    "s": 139
   },
   {
@@ -77,8 +75,13 @@
   },
   {
    "p": "sw.js",
-   "h": "fd1df6c6bea430fe11e078e93d75a04fe7e779849de36e5584c16fa36da584e5",
-   "s": 2235
+   "h": "cc8918e4c4b8d32defdbc51bdcdbfedb918ca5e2e1a7b3b839751b7f54041e1b",
+   "s": 2274
+  },
+  {
+   "p": "vendor/capacitor/8.5.3/capacitor.js",
+   "h": "9b9a78ff8d39c1db9714813de075494b984ef32580edf25c751b85dfe87beccc",
+   "s": 8688
   },
   {
    "p": "vendor/firebase/12.19.0/firebase-app.js",
