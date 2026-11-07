@@ -242,13 +242,13 @@
 
   /* ---------- Notification preferences (future feature, stored per account) ---------- */
   function defaultNotif() {
-    return { enabled: false, workout: true, tips: true, weekly: true, monthly: true, leadMin: 60,
+    return { enabled: false, workout: true, tips: true, weekly: true, monthly: true, race: true, hydration: false, leadMin: 60,
       wdTime: "07:00", weTime: "07:00", quietStart: "22:00", quietEnd: "06:00", tz: "" };
   }
   function cleanNotif(n) {
     const d = defaultNotif();
     if (!isObj(n)) return d;
-    for (const k of ["enabled", "workout", "tips", "weekly", "monthly"]) if (typeof n[k] === "boolean") d[k] = n[k];
+    for (const k of ["enabled", "workout", "tips", "weekly", "monthly", "race", "hydration"]) if (typeof n[k] === "boolean") d[k] = n[k];
     if ([15, 30, 60, 90, 120, 180].includes(+n.leadMin)) d.leadMin = +n.leadMin;
     for (const k of ["wdTime", "weTime", "quietStart", "quietEnd"]) if (TIME_RE.test(n[k] || "")) d[k] = n[k];
     if (typeof n.tz === "string" && /^[A-Za-z_+\-/0-9]{0,60}$/.test(n.tz)) d.tz = n.tz;
@@ -509,7 +509,7 @@
    * Returns reminders sorted by time: {id, cat, at: Date, title, body}.
    * Analysis reminders only describe weeks that are already over (real logged data, no invention).
    */
-  function buildReminders({ sessions, weeks, logs, prefs, now, horizonDays = 7 }) {
+  function buildReminders({ sessions, weeks, logs, prefs, now, horizonDays = 7, event = null }) {
     const p = cleanNotif(prefs), out = [];
     if (!p.enabled) return out;
     const end = new Date(now.getTime() + horizonDays * 864e5);
@@ -535,6 +535,24 @@
       const eve = new Date(start); eve.setDate(eve.getDate() - 1); const [h, mi] = dayTime(eve).split(":").map(Number); eve.setHours(h, mi, 0, 0);
       const prep = s.type === "long" || s.type === "race" ? " Siapkan sepatu dan perlengkapanmu." : s.type === "recovery" ? " Santai aja, ini lari pemulihan." : "";
       push({ id: `eve:${s.id}`, cat: "workout", at: eve, deadline: start, title: "Besok ada latihan", body: `Besok ${what}.${prep}` });
+    }
+    if (p.hydration) for (const s of sessions) {
+      if (!(s.type === "long" || s.type === "race") || s.done || s.skipped) continue;
+      const start = localDate(s.date, s.time);
+      const what = `${s.title}${s.dist ? " " + fmtK(s.dist) + " km" : ""}`;
+      push({ id: `hyd:${s.id}`, cat: "hydration", at: new Date(start.getTime() - 90 * 6e4), deadline: start, title: "Minum dulu sebelum lari", body: `${what} jam ${s.time}. Minum secukupnya sekarang, dan bawa air kalau larinya lebih dari 60 menit.` });
+    }
+    if (p.race && event && /^\d{4}-\d{2}-\d{2}$/.test(event.date || "")) {
+      const nm = String(event.name || "Race").slice(0, 60);
+      for (const d of [28, 14, 7, 3, 1]) {
+        const day = localDate(event.date, "00:00"); day.setDate(day.getDate() - d);
+        const [h, mi] = dayTime(day).split(":").map(Number); day.setHours(h, mi, 0, 0);
+        const body = d === 1 ? `Besok ${nm}! Siapkan nomor BIB, sepatu, dan sarapan yang udah biasa kamu makan. Tidur lebih awal.`
+          : d === 3 ? `${nm} 3 hari lagi. Lari pendek santai aja, cek perlengkapan dan rencana pace di tab Race.`
+          : d === 7 ? `${nm} seminggu lagi. Race week: kurangi volume, jaga tidur, jangan coba sepatu atau makanan baru.`
+          : `${nm} ${d} hari lagi.${event.distanceKm ? " Jarak " + fmtK(event.distanceKm) + " km." : ""} Cek rencana race kamu.`;
+        push({ id: `race:${event.id || "ev"}:${d}`, cat: "race", at: day, title: d === 1 ? "Race besok" : `${d} hari menuju race`, body });
+      }
     }
     if (p.tips) for (const w of weeks) {
       const mon = localDate(w.start, p.wdTime);

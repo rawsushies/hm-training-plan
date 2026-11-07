@@ -1473,7 +1473,7 @@ function acctBox(){
 function vMore(){
   return `<div class="titlerow"><h1>Menu</h1>${helpBtn("more")}</div>
   <div style="margin-top:14px" data-tour="acct">${acctBox()}</div>
-  <div class="rows morelist" style="margin-top:14px" data-tour="menu">${NAV_MORE.map(([k,l]) => `<button class="row" data-act="nav" data-t="${k}" ${k === "tutorials" ? 'data-tour="tut-hub"' : ""}><span class="grow">${l}${k === "notif" ? ' <span class="coming">segera hadir</span>' : ""}</span><span class="mu">›</span></button>`).join("")}</div>`;
+  <div class="rows morelist" style="margin-top:14px" data-tour="menu">${NAV_MORE.map(([k,l]) => `<button class="row" data-act="nav" data-t="${k}" ${k === "tutorials" ? 'data-tour="tut-hub"' : ""}><span class="grow">${l}</span><span class="mu">›</span></button>`).join("")}</div>`;
 }
 function progressCard(m, p, isMe, isOwner, canRemove){
   const name = esc(m.displayName || (isMe ? "Kamu" : "Anggota"));
@@ -2791,6 +2791,7 @@ function startApp(){
 </script>
 <script src="js/views-v4.js"></script>
 <script src="js/views-social.js"></script>
+<script src="js/views-notify.js"></script>
 <script>startApp();</script>
 </body>
 </html>
