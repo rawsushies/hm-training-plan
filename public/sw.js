@@ -3,7 +3,7 @@
  * A new worker waits until the app tells it to take over (in-app "Perbarui" or auto-update when the
  * app is in the background), so a running page never mixes files from two releases.
  * Only this app's own files are cached; Firebase/Google API traffic is never intercepted. */
-const VERSION = "hmtp-3.1.0+2026-11-07T04:37:04Z";
+const VERSION = "hmtp-3.1.0+2026-11-07T04:42:37Z";
 const SHELL = ["./", "index.html", "firebase-config.js", "version.json", "manifest.webmanifest", "icon.svg", "icon-192.png",
   "js/version.js", "js/logic.js", "js/sync.js", "js/tutorial.js", "js/notify.js", "js/updater.js", "js/cloud-firebase.js",
   "vendor/firebase/12.19.0/firebase-app.js", "vendor/firebase/12.19.0/firebase-auth.js", "vendor/firebase/12.19.0/firebase-firestore.js"];

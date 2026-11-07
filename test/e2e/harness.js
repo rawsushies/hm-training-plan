@@ -30,7 +30,7 @@ export async function closeBrowser() { await browser?.close(); }
 /** A "device": its own browser context (separate localStorage / IndexedDB), with Firebase config injected. */
 export async function device({ viewport = { width: 390, height: 844 }, seed = null, cloud = true } = {}) {
   const ctx = await browser.newContext({ viewport });
-  if (cloud) await ctx.addInitScript(cfg => { window.HMTP_FIREBASE_CONFIG = cfg; }, CONFIG);
+  await ctx.addInitScript(cfg => { window.HMTP_FIREBASE_CONFIG = cfg; }, cloud ? CONFIG : null);
   if (seed) await ctx.addInitScript(s => { if (!localStorage.getItem("__seeded")) { for (const [k, v] of Object.entries(s)) localStorage.setItem(k, typeof v === "string" ? v : JSON.stringify(v)); localStorage.setItem("__seeded", "1"); } }, seed);
   const page = await ctx.newPage();
   page.errors = [];
