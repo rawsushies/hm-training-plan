@@ -1,17 +1,19 @@
 {
- "version": "3.11.1",
- "build": "2026-11-07T11:10:03Z",
+ "version": "3.12.0",
+ "build": "2026-11-07T12:45:58Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "Perbaikan: kotak biru saat tap menu, susunan judul dan teks lebih rapi"
+  "Buka app langsung masuk, tanpa layar tunggu panjang",
+  "Tanpa pop-up otomatis; onboarding cukup satu layar",
+  "Tandai sesi hari ini selesai dengan satu tap"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "94f0f35ed1336b05b28ecaa8d89497c4fe8635b0208509f7f5304b412acf43c4",
-   "s": 16701
+   "h": "e99a898b20653256db3099da9c0934bd35718c284e0c2fa52af015f1af084ca8",
+   "s": 17009
   },
   {
    "p": "favicon-32.png",
@@ -45,8 +47,8 @@
   },
   {
    "p": "index.html",
-   "h": "472ab50b54e84fade5ff91981b43aab08570635552841987aa29ceede08f7571",
-   "s": 271415
+   "h": "df53f0f3fc8080ecc464fd697e0b54241bae70c672518cf327f2d07b76f48367",
+   "s": 271497
   },
   {
    "p": "js/brand.js",
@@ -120,8 +122,13 @@
   },
   {
    "p": "js/version.js",
-   "h": "f1ce6d739db7c40d5049924c7293086abf0e15590951577d9d8ab99e93f554d7",
+   "h": "bdb0e56e9c1fe8c26500509d764e70f6f27faa46169fde68a4e32649466ad9dc",
    "s": 140
+  },
+  {
+   "p": "js/views-flow.js",
+   "h": "30d2963b7a0f860d65b92d43cb549052f124e67794c9d3124d39c40422b409cf",
+   "s": 5855
   },
   {
    "p": "js/views-m4.js",
@@ -160,8 +167,8 @@
   },
   {
    "p": "sw.js",
-   "h": "b5044f67a12ede74ca8ac0acc370445f665a45ae19e019568eed3c74046b7804",
-   "s": 2573
+   "h": "501337a020d133b5f0ade6417554645864ef2db8ee67e753fe8d9a71fd288548",
+   "s": 2593
   },
   {
    "p": "vendor/capacitor/8.5.3/capacitor.js",

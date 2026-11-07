@@ -220,3 +220,7 @@ body{font-size:var(--fs-body);line-height:1.5}
 .lead{font-size:14px;line-height:1.45;margin:6px 0 12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer}
 .lead.open{display:block;-webkit-line-clamp:unset;overflow:visible}
 .titlerow + .lead{margin-top:4px}
+.ob-more summary{cursor:pointer;color:var(--acc-tx);font-weight:600;padding:6px 0}
+#toast{border-radius:999px;bottom:calc(96px + env(safe-area-inset-bottom,0px));box-shadow:0 8px 24px rgba(0,0,0,.35)}
+#toast.on[role="button"]{cursor:pointer;pointer-events:auto}
+@media (min-width:900px){#toast{bottom:28px}}

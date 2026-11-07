@@ -1156,7 +1156,7 @@ function vHome(){
   const hello = CLOUD.user && ACTIVE_UID && CLOUD.user.displayName ? `Hai, ${esc(CLOUD.user.displayName.split(" ")[0])}` : "Hai, pelari";
   const tutMode = HMTP.tutorialStartMode(S);
   return `${storageNote()}
-  ${tutMode === "banner" && !S.ui.tut ? `<div class="banner">${mascot("mascot-inline")}<div style="flex:1"><b>Tutorial baru dari Kiki</b><p class="sm mu">Sekarang ada tur per fitur dan tombol “?” di tiap halaman.</p><div class="btns" style="margin-top:8px"><button class="btn sm pri" data-act="tutStart" data-id="quick">Mulai (1 menit)</button><button class="btn sm ghost" data-act="tutBanner">Nanti aja</button></div></div></div>` : ""}
+  ${false && tutMode === "banner" && !S.ui.tut ? `<div class="banner">${mascot("mascot-inline")}<div style="flex:1"><b>Tutorial baru dari Kiki</b><p class="sm mu">Sekarang ada tur per fitur dan tombol “?” di tiap halaman.</p><div class="btns" style="margin-top:8px"><button class="btn sm pri" data-act="tutStart" data-id="quick">Mulai (1 menit)</button><button class="btn sm ghost" data-act="tutBanner">Nanti aja</button></div></div></div>` : ""}
   ${hasSample ? `<div class="note info" style="margin-bottom:14px">Ini masih <b>contoh data</b>, bukan hasil lari asli kamu. <button class="link" data-act="clearSample">Hapus contoh data</button></div>` : ""}
   ${cockpit({days, w, wi, done, pct, next, goalSec, hello})}
   ${persistentPain() ? `<div class="note bad" style="margin-bottom:14px">Kamu beberapa kali nyatet ada nyeri. Kurangi atau stop latihan dulu, dan coba konsultasi ke dokter atau fisioterapis kalau nggak membaik.</div>` : ""}
@@ -2348,8 +2348,8 @@ function cockpit({days, w, wi, done, pct, next, goalSec, hello}){
     <button data-act="newLog">${IC.plus}Catat lari</button><button data-act="nav" data-t="recovery">${IC.heart}Check-in</button><button data-act="nav" data-t="race">${IC.race}Strategi</button><button data-act="nav" data-t="shoes">${IC.shoe}Sepatu</button>
   </div>
   <section class="card tipcard" data-reveal><div style="flex:1"><h3 style="margin:0 0 4px">Tips hari ini</h3><p class="sm">${esc(tip.t)}</p><p class="xs mu" style="margin-top:4px">${esc(tip.why)}</p></div></section>
-  <section class="card" data-reveal><h3>Volume mingguan</h3>${vol.some(x => x.b) ? chartBars(vol, {h:120, hi:vol.length - 1}) : `<p class="sm mu">Grafik muncul setelah kamu catat lari.</p>`}<p class="xs mu">Abu = target, berwarna = aktual (km)</p></section>
-  <section class="card" data-reveal><h3>Tren pace</h3>${sparkPace()}</section>
+  ${vol.some(x => x.b) ? `<section class="card" data-reveal><h3>Volume mingguan</h3>${chartBars(vol, {h:120, hi:vol.length - 1})}<p class="xs mu">Abu = target, berwarna = aktual (km)</p></section>` : ""}
+  ${S.logs.filter(l => !l.sample && l.distance >= 1 && paceOf(l)).length >= 3 ? `<section class="card" data-reveal><h3>Tren pace</h3>${sparkPace()}</section>` : ""}
   ${recent.length ? `<section class="card" data-reveal><h3>Aktivitas terakhir</h3><div class="timeline">${recent.map(l => `<button class="tl-item" style="--c:${tc(l.type)};display:block;width:100%;text-align:left;background:none;border:0;color:inherit" data-act="editLog" data-id="${l.id}"><b>${TYPES[l.type]}</b> <span class="num">${fmtKm(l.distance)} km</span> <span class="sm mu">· ${fmtDay(l.date)}${paceOf(l) ? " · " + fmtPace(paceOf(l)) : ""}${l.src ? " · " + esc(l.src) : ""}</span></button>`).join("")}</div></section>` : ""}
   </div>`;
 }
@@ -2802,6 +2802,7 @@ function startApp(){
 <script src="js/views-notify.js"></script>
 <script src="js/views-weather.js"></script>
 <script src="js/views-m4.js"></script>
+<script src="js/views-flow.js"></script>
 <script>startApp();</script>
 </body>
 </html>

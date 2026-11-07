@@ -25,8 +25,8 @@ test("legacy hmtp:v1 data → anonymous slot → first Google sign-in offers mer
   // legacy data visible locally, legacy key untouched
   assert.deepEqual((await H.state(page)).logs.sort(), ["leg1", "leg2"]);
   assert.equal(JSON.parse(await page.evaluate(() => localStorage.getItem("hmtp:v1"))).owner, "claude-user-1");
-  // v2 graduates get a banner instead of a forced tour
-  assert.ok(await page.isVisible('[data-act="tutBanner"]'));
+  // v2 graduates are not interrupted: no banner, no tour
+  assert.equal(await page.$('[data-act="tutBanner"]'), null); assert.equal(await page.$("#tour"), null);
   await H.signIn(page, "alice");
   await page.waitForSelector('[data-act="migMerge"]');
   const summary = await page.textContent(".sheet");
@@ -193,17 +193,19 @@ test("friends: one-time invite, request/accept, private by default, per-friend p
   for (const p of [a.page, b.page, c.page]) assert.deepEqual(p.errors, []);
 });
 
-test("tutorial: new user gets quick start; completion is per account and synced; contextual help opens a feature tour", async () => {
+test("tutorial: no automatic tour after onboarding; quick start on request, completion per account and synced; contextual help opens a feature tour", async () => {
   const d = await H.device();
   await d.page.goto(H.appUrl());
   await H.waitFor(d.page, () => window.__hmtpTest);
   await H.ready(d.page);
   await H.finishOnboarding(d.page);
-  await d.page.waitForSelector("#tour");
-  assert.ok(await d.page.isVisible("#tour"));
-  assert.match(await d.page.textContent("#tour"), /Langkah 1 dari 6/);
+  await d.page.waitForTimeout(600);
+  assert.equal(await d.page.$("#tour"), null, "nothing pops up by itself");
   await H.signIn(d.page, "dina"); await H.waitSynced(d.page);
-  // finish quick start
+  // quick start when the user asks for it
+  await H.act(d.page, "tutStart", { id: "quick" });
+  await d.page.waitForSelector("#tour");
+  assert.match(await d.page.textContent("#tour"), /Langkah 1 dari 6/);
   for (let i = 0; i < 6; i++) await d.page.click('[data-act="tutNext"]');
   await H.waitSynced(d.page);
   const uid = (await H.state(d.page)).uid;
@@ -230,7 +232,6 @@ test("mobile + desktop layouts: no horizontal overflow, tour bubble does not cov
     await page.goto(H.appUrl().replace("?emulator=1", ""));
     await H.ready(page);
     await H.finishOnboarding(page);
-    await page.waitForSelector("#tour");
     for (const t of ["home", "cal", "log", "review", "more", "bareng", "data", "notif", "tutorials", "settings"]) {
       await H.act(page, "nav", { t });
       const over = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
@@ -252,7 +253,7 @@ test("local-only mode (no Firebase config) works fully and is labelled honestly"
   await page.goto(H.appUrl().replace("?emulator=1", ""));
   await H.ready(page);
   await H.finishOnboarding(page);
-  await page.evaluate(() => document.querySelector('[data-act="tutClose"]').click());
+  await page.evaluate(() => document.querySelector('[data-act="tutClose"]')?.click());
   await H.logRun(page, { date: "2026-11-10", km: 5, dur: "35:00" });
   await H.act(page, "nav", { t: "more" });
   assert.match(await page.textContent('[data-tour="acct"]'), /Mode lokal/);
