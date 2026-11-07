@@ -138,24 +138,22 @@ test("concurrent edit of the same run: one wins, the other is preserved and rest
   await H.waitFor(a.page, () => window.__hmtpTest.S().logs[0].distance === 9);
 });
 
-test("friends: one-time invite, request/accept, private by default, per-friend permissions, shared goal, block", async () => {
+test("friends: find by name or email, request/accept, hidden users not findable, private by default, per-friend permissions, shared goal, block", async () => {
   const a = await H.device(), b = await H.device(), c = await H.device();
-  await H.open(a.page); await H.signIn(a.page, "alice"); await H.waitSynced(a.page);
-  await H.act(a.page, "nav", { t: "bareng" });
-  await a.page.click('[data-act="frInvite"]');
-  await a.page.waitForSelector("#fr-link");
-  const link = await a.page.inputValue("#fr-link");
-  assert.match(link, /#friend=/);
-  const joinVia = async (d, name) => {
-    await d.page.goto(H.appUrl() + link.slice(link.indexOf("#")));
-    await H.waitFor(d.page, () => window.__hmtpTest);
-    await H.ready(d.page); await H.finishOnboarding(d.page);
-    await d.page.evaluate(() => { const x = document.querySelector('[data-act="tutClose"]'); if (x) x.click(); });
-    await H.signIn(d.page, name);
-  };
-  // Bob opens the link, signs in, sends a request; Alice accepts
-  await joinVia(b, "bob");
-  await b.page.waitForSelector('[data-act="frSend"]'); await b.page.click('[data-act="frSend"]');
+  for (const [d, n] of [[a, "alice"], [b, "bob"], [c, "carol"]]) { await H.open(d.page); await H.signIn(d.page, n); await H.waitSynced(d.page); await H.act(d.page, "nav", { t: "bareng" }); }
+  // Carol hides herself from search
+  await c.page.click('[data-act="frDiscover"]');
+  const search = async (d, q) => { await d.page.fill("#fr-q", q); await d.page.click('[data-act="frSearch"]'); await H.waitFor(d.page, () => FRIENDS.results && !FRIENDS.searching); return d.page.evaluate(() => FRIENDS.results.map ? FRIENDS.results.map(r => r.name) : FRIENDS.results); };
+  await H.waitFor(c.page, () => S.settings.discoverable === false);
+  await new Promise(r => setTimeout(r, 800));
+  assert.deepEqual(await search(a, "car"), [], "hidden user is not findable");
+  assert.deepEqual(await search(b, "ali"), ["Alice"], "name prefix search");
+  assert.deepEqual(await search(b, "ALICE@example.com"), ["Alice"], "exact email search (hashed)");
+  const profiles = await H.adminDocs("profiles");
+  assert.ok(profiles.every(p => !JSON.stringify(p).includes("@example.com")), "email never stored in the directory");
+  // Bob adds Alice; Alice accepts
+  await b.page.click('[data-act="frAdd"]');
+  await H.waitFor(b.page, () => document.body.textContent.includes("Terkirim") || document.body.textContent.includes("menunggu diterima"));
   await H.waitFor(a.page, () => !!document.querySelector('[data-act="frAccept"]'));
   assert.match(await a.page.textContent("main"), /Bob/);
   await a.page.click('[data-act="frAccept"]');
@@ -171,10 +169,6 @@ test("friends: one-time invite, request/accept, private by default, per-friend p
   const sh = (await H.adminDocs("shares")).find(d => d.name.endsWith(`/${bUid}_${aUid}`));
   assert.ok(sh, "share doc exists");
   assert.deepEqual(Object.keys(sh.fields).sort(), ["name", "owner", "photo", "totalKm", "updatedAt", "viewer", "weekKm"]);
-  // Carol reuses the same one-time link → refused
-  await joinVia(c, "carol");
-  await H.waitFor(c.page, () => document.body.textContent.includes("udah dipakai") || !!document.querySelector('[data-act="frSend"]'));
-  if (await c.page.$('[data-act="frSend"]')) { await c.page.click('[data-act="frSend"]'); await H.waitFor(c.page, () => /nggak bisa dikirim|udah dipakai/.test(document.body.textContent)); }
   // Shared goal: Alice creates, both see Bob's contribution
   await a.page.click('[data-act="goalNew"]');
   await a.page.fill("#gn-n", "100 km bareng"); await a.page.fill("#gn-k", "100"); await a.page.fill("#gn-d", "2027-06-13");

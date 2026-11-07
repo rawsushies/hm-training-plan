@@ -233,6 +233,22 @@ service cloud.firestore {
       allow delete: if signedIn() && resource.data.from == request.auth.uid;
     }
 
+    // profiles/{uid}: opt-in search directory. Only a display name, photo and a SHA-256 of the lowercase email
+    // (exact-email lookup, the address itself is never stored). Signed-in users may read single profiles and run
+    // small prefix searches; nobody can dump the directory in one go.
+    match /profiles/{uid} {
+      allow get: if signedIn();
+      allow list: if signedIn() && request.query.limit <= 10;
+      allow create, update: if isUser(uid)
+        && request.resource.data.keys().hasOnly(['name', 'nameLower', 'photo', 'emailHash', 'updatedAt'])
+        && request.resource.data.name is string && request.resource.data.name.size() >= 1 && request.resource.data.name.size() <= 80
+        && request.resource.data.nameLower == request.resource.data.name.lower()
+        && httpsUrl(request.resource.data.photo)
+        && (!('emailHash' in request.resource.data) || request.resource.data.emailHash.matches('^[0-9a-f]{64}$'))
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if isUser(uid);
+    }
+
     match /requests/{pairId} {
       allow get: if signedIn() && (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
       allow list: if signedIn() && (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
@@ -241,8 +257,14 @@ service cloud.firestore {
         && pairId == pairOf(request.resource.data.from, request.resource.data.to)
         && request.resource.data.fromName is string && request.resource.data.fromName.size() <= 80 && httpsUrl(request.resource.data.fromPhoto)
         && request.resource.data.createdAt == request.time
-        && getAfter(/databases/$(database)/documents/invites/$(request.resource.data.code)).data.usedBy == request.auth.uid
-        && get(/databases/$(database)/documents/invites/$(request.resource.data.code)).data.from == request.resource.data.to
+        && (
+          // v4.1: found through search — the receiver is discoverable (has a public profile)
+          (!('code' in request.resource.data) && exists(/databases/$(database)/documents/profiles/$(request.resource.data.to)))
+          // legacy invite link (kept so links already sent keep working)
+          || (('code' in request.resource.data)
+            && getAfter(/databases/$(database)/documents/invites/$(request.resource.data.code)).data.usedBy == request.auth.uid
+            && get(/databases/$(database)/documents/invites/$(request.resource.data.code)).data.from == request.resource.data.to)
+        )
         && !blocked(request.resource.data.to, request.auth.uid)
         && !friends(request.resource.data.from, request.resource.data.to);
       // the receiver accepts (deleting it while creating the friendship) or rejects; the sender cancels

@@ -224,3 +224,14 @@ body{font-size:var(--fs-body);line-height:1.5}
 #toast{border-radius:999px;bottom:calc(96px + env(safe-area-inset-bottom,0px));box-shadow:0 8px 24px rgba(0,0,0,.35)}
 #toast.on[role="button"]{cursor:pointer;pointer-events:auto}
 @media (min-width:900px){#toast{bottom:28px}}
+.fr-search{display:flex;gap:8px;margin-top:6px}
+.fr-search input{flex:1;min-width:0}
+/* shoe catalogue: sourced facts on top, our notes below */
+.cat .cat-facts{padding-bottom:10px;border-bottom:1px solid var(--line)}
+.cat .cat-notes{padding-top:10px}
+.cat .seg-glass{height:40px;padding:3px;max-width:220px}
+.cat .seg-glass > button{height:34px;font-size:13px}
+.cat-list{margin:8px 0 6px;padding-left:18px}
+.cat-list li{margin:3px 0}
+.cat-list.plus li::marker{content:"+  ";color:var(--ok)}
+.cat-list.minus li::marker{content:"–  ";color:var(--warn)}

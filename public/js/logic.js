@@ -141,6 +141,7 @@
     if (["dark", "light", "system"].includes(s.theme)) o.theme = s.theme;
     for (const k of ["startDate", "raceDate"]) if (validDate(s[k])) o[k] = s[k];
     o.shareBoard = !!s.shareBoard;
+    if (s.discoverable === false) o.discoverable = false;   // v4.1: absent = findable in friend search
     for (const k of ["wdTime", "wkTime"]) if (TIME_RE.test(s[k] || "")) o[k] = s[k];
     o.defaultShoe = ID_RE.test(s.defaultShoe || "") ? s.defaultShoe : null;
     o.notif = cleanNotif(s.notif);

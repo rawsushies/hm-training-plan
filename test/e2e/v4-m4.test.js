@@ -25,7 +25,7 @@ before(async () => { await H.startServer(); await H.launch(); });
 after(async () => { await H.closeBrowser(); H.stopServer(); });
 beforeEach(async () => { await H.resetEmulators(); });
 
-test("shoes: initial km + tracked, rotation suggestion with reason, discovery opens search links only", async () => {
+test("shoes: initial km + tracked, rotation suggestion with reason, catalogue with sourced facts above our plus/minus", async () => {
   const { page } = await H.device(); await H.open(page);
   await H.act(page, "nav", { t: "shoes" });
   await page.click('[data-act="shoeNew"]');
@@ -38,11 +38,21 @@ test("shoes: initial km + tracked, rotation suggestion with reason, discovery op
   assert.ok(await page.$('[data-pill="shoetab"] .glass-pill'), "glass segmented control");
   await page.click('[data-act="shoeTab"][data-v="rotation"]');
   assert.match(await page.textContent("main"), /Saran: Harian[\s\S]*Kenapa: dipakai buat harian/);
-  await page.click('[data-act="shoeTab"][data-v="find"]');
-  await page.fill("#sf-brand", "MerkB");
-  const hrefs = await page.$$eval("[data-sf]", as => as.map(a => a.href));
-  assert.equal(hrefs.length, 3); assert.ok(hrefs.every(h => /^https:\/\/www\.(google|youtube)\.com\//.test(h)));
-  assert.match(decodeURIComponent(hrefs[0]), /MerkB sepatu lari daily trainer/);
+  // Rekomendasi: sourced facts first, then our Plus/Minus tab below; one tap adds the model
+  await page.click('[data-act="shoeTab"][data-v="catalog"]');
+  const card = '[data-cat="nike-pegasus-42"]';
+  const facts = await page.textContent(card + " .cat-facts");
+  assert.match(facts, /Nike[\s\S]*Pegasus 42[\s\S]*Rilis 9 Apr 2026[\s\S]*Sumber: nike\.com · diambil 7 Nov 2026/);
+  assert.match(await page.getAttribute(card + " .cat-facts a", "href"), /^https:\/\/www\.nike\.com\//);
+  const order = await page.$eval(card, el => [el.querySelector(".cat-facts"), el.querySelector(".cat-notes")].map(n => n.getBoundingClientRect().top));
+  assert.ok(order[0] < order[1], "notes are below the sourced facts");
+  assert.match(await page.textContent(card + " .cat-list"), /Serba bisa/);
+  await page.click(card + ' [data-act="catSide"][data-v="nike-pegasus-42|minus"]');
+  assert.match(await page.textContent(card + " .cat-list.minus"), /bantalan maksimal/);
+  await page.click('[data-act="catUse"][data-v="race"]');
+  assert.equal(await page.$(card), null, "filter hides daily shoes");
+  await page.click('[data-act="catAdd"][data-id="nike-alphafly-3"]');
+  assert.equal(await page.evaluate(() => window.__hmtpTest.S().shoes.find(s => s.model === "Alphafly 3").use), "race");
   const shoe = await page.evaluate(() => window.__hmtpTest.S().shoes[0]);
   assert.equal(shoe.initialKm, 250); assert.equal(shoe.use, "daily"); assert.equal(shoe.brand, "MerkA");
   assert.deepEqual(page.errors, []);

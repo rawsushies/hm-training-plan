@@ -19,4 +19,4 @@ external id, the same start minute, or the same date with distance within 3% (an
   v3 shoe records stay byte-identical (no sync churn).
 - Mileage = `initialKm` + km from real (non-sample) runs; the card shows both parts.
 - Rotation: a suggestion for the next session from use fit + wear, with the reason. Race shoes are only suggested for fast sessions and the race. There's also a 28-day share per shoe.
-- Discovery: no catalogue, prices or specs are bundled or scraped. The app builds Google / YouTube search links that the user opens.
+- Catalogue (`public/js/shoe-catalog.js`): 16 current models with brand, model name and release date, each linked to the public source it came from and the retrieval date ("sekitar" = first retail listing, not an official launch). Below the facts, a Plus/Minus tab holds WeRunIt's own short notes, labelled as opinion. No prices or lab specs. One tap adds a model to "Sepatuku".

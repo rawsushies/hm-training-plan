@@ -17,7 +17,7 @@ vShoes = function(){
   const tab = S.ui.shoeTab || "mine", act = S.shoes.filter(x => !x.retired), ret = S.shoes.filter(x => x.retired), noShoe = S.logs.filter(l => !l.shoeId && !l.sample).length;
   const t = todayYmd(), next = allSessions().filter(s => s.date >= t && !["done", "skip"].includes(sState(s))).sort((a, b) => a.date.localeCompare(b.date))[0];
   const sug = next ? SHO.suggest(S.shoes, S.logs, next.type) : null, rot = SHO.rotation(S.shoes, S.logs, t);
-  const tabs = segPill("shoetab", [["mine", "Sepatuku"], ["rotation", "Rotasi"], ["find", "Cari sepatu"]], tab, "shoeTab");
+  const tabs = segPill("shoetab", [["mine", "Sepatuku"], ["catalog", "Rekomendasi"], ["rotation", "Rotasi"]], tab, "shoeTab");
   let body = "";
   if(tab === "mine") body = `<div class="btns" style="margin:12px 0 2px"><button class="btn pri" data-act="shoeNew" data-tour="shoe-add">Tambah sepatu</button></div>
     ${act.length ? `<div data-tour="shoe-list">${act.map(shoeLine).join("")}</div>` : `<p class="mu" style="margin-top:8px">Belum ada sepatu aktif. Tambah sepatu yang kamu pakai, nanti tiap lari bisa dipilih sepatunya.</p>`}
@@ -27,11 +27,8 @@ vShoes = function(){
     <section class="card" style="margin-top:12px"><h3>Sesi berikutnya</h3>${next ? `<p class="sm">${fmtDay(next.date)} · ${esc(next.title)}${next.dist ? " " + fmtKm(next.dist) + " km" : ""}</p>${sug ? `<p style="margin-top:6px">Saran: <b>${esc(sug.shoe.name)}</b></p><p class="xs mu">Kenapa: ${esc(sug.reason)}.</p>` : `<p class="sm mu" style="margin-top:6px">${act.length ? "Belum ada sepatu yang cocok. Isi “dipakai buat” di tiap sepatu." : "Tambah sepatu dulu."}</p>`}` : `<p class="sm mu">Nggak ada sesi terjadwal.</p>`}</section>
     <section class="card" style="margin-top:10px"><h3>${rot.days} hari terakhir</h3>${rot.share.length ? rot.share.map(r => { const x = S.shoes.find(s => s.id === r.id); return `<div class="kv"><span>${esc(x ? x.name : "?")}</span><b class="num">${fmtKm(r.km)} km · ${r.pct}%</b></div>`; }).join("") : `<p class="sm mu">Belum ada lari dengan sepatu di ${rot.days} hari terakhir.</p>`}${rot.unassignedKm ? `<p class="xs mu" style="margin-top:6px">${fmtKm(rot.unassignedKm)} km tanpa sepatu.</p>` : ""}
     <p class="xs mu" style="margin-top:8px">Saran berdasarkan jenis sesi, kegunaan yang kamu isi, dan km tiap sepatu. Bukan aturan; dengarkan kakimu.</p></section>`;
-  else body = `<section class="card" style="margin-top:12px"><h3>Cari sepatu baru</h3><p class="sm mu">WeRunIt nggak menyimpan katalog atau harga sepatu. Tombol di bawah membuka pencarian di browser, jadi info yang kamu lihat langsung dari sumbernya.</p>
-    <div class="g2" style="margin-top:10px"><div class="field"><label for="sf-use">Buat apa</label><select id="sf-use">${Object.entries(SHO.USES).map(([k, l]) => `<option value="${k}" ${S.ui.sfUse === k ? "selected" : ""}>${l}</option>`).join("")}</select></div><div class="field"><label for="sf-brand">Merek (opsional)</label><input type="text" id="sf-brand" maxlength="40" value="${esc(S.ui.sfBrand || "")}"></div></div>
-    <div class="btns">${SHO.searchLinks({use:S.ui.sfUse || "daily", brand:S.ui.sfBrand || ""}).map(l => `<a class="btn sm" href="${esc(l.url)}" target="_blank" rel="noopener" data-sf="${l.id}">${esc(l.label)} ↗</a>`).join("")}</div>
-    <p class="xs mu" style="margin-top:8px">Tips: coba di toko kalau bisa, dan pakai sepatu baru beberapa kali sebelum long run atau race.</p></section>`;
-  return `${pageHead("Sepatu", "Km tiap sepatu (termasuk km sebelum pakai app), saran rotasi, dan pencarian sepatu baru. Batas km itu perkiraan kasar, bukan aturan.")}${tabs}${body}`;
+  else body = shoeCatalog();
+  return `${pageHead("Sepatu", "Km tiap sepatu, rekomendasi model terbaru, dan saran rotasi.")}${tabs}${body}`;
 };
 mShoe = function(){
   const x = M.id ? S.shoes.find(s => s.id === M.id) : {name:"", limit:700};
@@ -52,12 +49,42 @@ Object.assign(ACT, {
     persist(); M = null; render(true); toast("Sepatu tersimpan");
   }
 });
-Object.assign(LIVE, {
-  sfIn:() => { const u = document.getElementById("sf-use"), b = document.getElementById("sf-brand"); S.ui.sfUse = u.value; S.ui.sfBrand = b.value.slice(0, 40);
-    const L = SHO.searchLinks({use:S.ui.sfUse, brand:S.ui.sfBrand}); L.forEach(l => { const a = document.querySelector(`[data-sf="${l.id}"]`); if(a) a.href = l.url; }); }
+/* ---------------- catalogue (embedded facts + our Plus/Minus) ---------------- */
+const CAT = WRI_SHOE_CATALOG;
+const fmtRel = (d, approx) => { const [y, m, dd] = d.split("-").map(Number); return `${approx ? "sekitar " : ""}${dd} ${["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"][m - 1]} ${y}`; };
+function catCard(x){
+  const side = (S.ui.catSide || {})[x.id] || "plus", owned = S.shoes.some(s => s.brand === x.brand && s.model === x.model);
+  return `<article class="card cat" style="margin-top:10px" data-cat="${esc(x.id)}">
+    <div class="cat-facts">
+      <p class="xs mu">${esc(x.brand)}</p>
+      <div class="titlerow"><h3 style="margin:0">${esc(x.model)}</h3><span class="chip">${esc(SHO.USES[x.use])}</span></div>
+      <p class="sm" style="margin-top:4px">Rilis ${fmtRel(x.released, x.approx)}</p>
+      <p class="xs mu" style="margin-top:2px">Sumber: <a href="${esc(x.source.url)}" target="_blank" rel="noopener">${esc(x.source.label)}</a> · diambil ${fmtRel(CAT.retrieved)}</p>
+    </div>
+    <div class="cat-notes">
+      ${segPill("cat:" + x.id, [[x.id + "|plus", "Plus"], [x.id + "|minus", "Minus"]], x.id + "|" + side, "catSide")}
+      <ul class="cat-list ${side}">${x[side].map(t => `<li>${esc(t)}</li>`).join("")}</ul>
+      <p class="xs mu">Catatan WeRunIt (opini, bukan uji lab)</p>
+    </div>
+    <div class="btns" style="margin-top:8px">${owned ? `<span class="chip done">Ada di sepatuku</span>` : `<button class="btn sm" data-act="catAdd" data-id="${esc(x.id)}">+ Tambah ke sepatuku</button>`}</div>
+  </article>`;
+}
+function shoeCatalog(){
+  const f = S.ui.catUse || "all", list = CAT.models.filter(x => f === "all" || x.use === f || (f === "daily" && x.use === "long")).sort((a, b) => b.released.localeCompare(a.released));
+  return `<div style="margin-top:12px">${segPill("catuse", [["all", "Semua"], ["daily", "Harian"], ["tempo", "Tempo"], ["race", "Race"], ["trail", "Trail"]], f, "catUse")}</div>
+    ${list.map(catCard).join("")}
+    <p class="xs mu" style="margin-top:12px">${CAT.models.length} model. Nama, model, dan tanggal rilis dari sumber yang ditautkan di tiap kartu; “sekitar” = tanggal dari listing toko, bukan pengumuman resmi. Harga & stok di Indonesia bisa berbeda.</p>`;
+}
+Object.assign(ACT, {
+  catUse:d => { S.ui.catUse = d.v; render(true); },
+  catSide:d => { const [id, side] = String(d.v).split("|"); if(!id || !["plus", "minus"].includes(side)) return; S.ui.catSide = Object.assign({}, S.ui.catSide, {[id]:side}); render(true); },
+  catAdd:d => {
+    const x = CAT.models.find(m => m.id === d.id); if(!x) return;
+    const sh = HMTP.sanitizeState(Object.assign(defaults(), {shoes:[{id:uid(), name:`${x.brand} ${x.model}`.slice(0, 60), limit:x.use === "race" ? 400 : x.use === "trail" ? 600 : 700, brand:x.brand, model:x.model, use:x.use === "long" ? "long" : x.use, since:todayYmd()}]}), defaults).shoes[0];
+    S.shoes.push(sh); if(!S.settings.defaultShoe && x.use !== "race") S.settings.defaultShoe = sh.id;
+    persist(); render(true); toast(`${x.model} ditambahkan ke sepatuku`);
+  }
 });
-document.addEventListener("input", e => { if(e.target && (e.target.id === "sf-use" || e.target.id === "sf-brand")) LIVE.sfIn(); });
-document.addEventListener("change", e => { if(e.target && e.target.id === "sf-use") LIVE.sfIn(); });
 
 /* ---------------- integrations ---------------- */
 const INTEG = {

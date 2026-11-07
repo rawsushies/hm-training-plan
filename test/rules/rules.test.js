@@ -3,7 +3,7 @@ import { test, before, after, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { initializeTestEnvironment, assertFails, assertSucceeds } from "@firebase/rules-unit-testing";
-import { doc, getDoc, setDoc, updateDoc, deleteDoc, writeBatch, serverTimestamp, Timestamp, collection, getDocs } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, deleteDoc, writeBatch, serverTimestamp, Timestamp, collection, getDocs, query, orderBy, startAt, endAt, limit, where } from "firebase/firestore";
 
 let env;
 const PROJECT = "demo-hmtp";
@@ -279,4 +279,22 @@ test("server-only data: Strava tokens unreachable from clients; inbox readable/d
   await assertFails(getDoc(doc(db("bob"), "users/alice/inbox/strava_1")));
   await assertFails(setDoc(doc(db("alice"), "users/alice/inbox/fake"), { extId: "strava:2", distance: 42 }), "clients cannot forge imports");
   await assertSucceeds(deleteDoc(doc(db("alice"), "users/alice/inbox/strava_1")));
+});
+
+test("profiles directory: owner-only writes with exact fields; signed-in prefix search capped at 10; search-based requests need a profile", async () => {
+  const prof = (name, x = {}) => Object.assign({ name, nameLower: name.toLowerCase(), photo: "", updatedAt: serverTimestamp() }, x);
+  await assertSucceeds(setDoc(doc(db("alice"), "profiles/alice"), prof("Alice Rahma", { emailHash: "a".repeat(64) })));
+  await assertFails(setDoc(doc(db("bob"), "profiles/alice"), prof("Mallory")), "only the owner");
+  await assertFails(setDoc(doc(db("bob"), "profiles/bob"), prof("Bob", { email: "bob@x.com" })), "no raw email");
+  await assertFails(setDoc(doc(db("bob"), "profiles/bob"), Object.assign(prof("Bob"), { nameLower: "someone else" })), "nameLower must match");
+  await assertSucceeds(getDocs(query(collection(db("bob"), "profiles"), orderBy("nameLower"), startAt("ali"), endAt("ali"), limit(10))));
+  await assertSucceeds(getDocs(query(collection(db("bob"), "profiles"), where("emailHash", "==", "a".repeat(64)), limit(10))));
+  await assertFails(getDocs(query(collection(db("bob"), "profiles"), limit(500))), "no directory dump");
+  await assertFails(getDocs(query(collection(db(null), "profiles"), limit(5))), "signed-in only");
+  const req = (from, to) => ({ from, to, fromName: from, fromPhoto: "", createdAt: serverTimestamp() });
+  await assertSucceeds(setDoc(doc(db("bob"), "requests/alice_bob"), req("bob", "alice")), "alice is discoverable");
+  await assertFails(setDoc(doc(db("bob"), "requests/bob_carol"), req("bob", "carol")), "carol has no profile (hidden)");
+  await assertSucceeds(setDoc(doc(db("alice"), "users/alice/blocks/dave"), { at: serverTimestamp() }));
+  await assertFails(setDoc(doc(db("dave"), "requests/alice_dave"), req("dave", "alice")), "blocked");
+  await assertSucceeds(deleteDoc(doc(db("alice"), "profiles/alice")));
 });
