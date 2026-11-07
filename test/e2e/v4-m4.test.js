@@ -92,8 +92,8 @@ test("Health Connect (Android bridge): read-only permission, runs only, review b
 
 test("auto catalogue: weekly data is pulled, merged with the seed (seed notes win, photo added), new models appear with auto notes; bad data rejected", async () => {
   const d = await H.device();
-  const data = { schema: 1, retrieved: "2026-11-09", models: [
-    { id: "nike-pegasus-42", brand: "Nike", model: "Pegasus 42", released: "2026-04-01", use: "daily", source: { label: "Shop A", url: "https://a.example/products/peg" }, image: { url: "https://cdn.shopify.com/x/peg.jpg?width=480", credit: "Shop A", page: "https://a.example/products/peg" }, specs: { weightG: 280 }, plus: ["auto plus"], minus: [] },
+  const data = { schema: 4, retrieved: "2026-11-09", fx: { date: "2026-11-06", source: "ECB via frankfurter.app", rates: { AUD: 10500 } }, models: [
+    { id: "nike-pegasus-42-keely", brand: "Nike", model: "Pegasus 42 Keely Hodgkinson", released: "2026-04-01", use: "daily", source: { label: "Shop A", url: "https://a.example/products/peg" }, image: { url: "https://cdn.shopify.com/x/peg.jpg?width=480", credit: "Shop A", page: "https://a.example/products/peg" }, specs: { weightG: 280, price: 169, priceCurrency: "AUD" }, plus: ["auto plus"], minus: [] },
     { id: "puma-deviate-nitro-4", brand: "PUMA", model: "Deviate Nitro 4", released: "2026-10-20", use: "tempo", source: { label: "Shop B", url: "https://b.example/products/dn4" }, image: { url: "https://cdn.shopify.com/x/dn4.jpg?width=480", credit: "Shop B", page: "https://b.example/products/dn4" }, specs: { weightG: 245, dropMm: 8, plate: "carbon", price: 260, priceCurrency: "AUD" }, plus: ["Pakai carbon plate untuk race dan sesi cepat"], minus: ["Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"] },
     { id: "evil", brand: "X", model: "<img src=x onerror=alert(1)>", released: "2026-10-01", use: "daily", source: { label: "x", url: "javascript:alert(1)" }, plus: [], minus: [] }
   ] };
@@ -104,10 +104,20 @@ test("auto catalogue: weekly data is pulled, merged with the seed (seed notes wi
   await page.click('[data-act="shoeTab"][data-v="catalog"]');
   await page.waitForSelector('[data-cat="auto-pumadeviatenitro4"]');
   const auto = await page.textContent('[data-cat="auto-pumadeviatenitro4"]');
-  assert.match(auto, /Pertama terdaftar di toko 20 Okt 2026/); assert.match(auto, /245 g · drop 8 mm · carbon plate · AUD 260/);
+  assert.match(auto, /Pertama terdaftar di toko 20 Okt 2026/); assert.match(auto, /245 g · drop 8 mm · carbon plate/); assert.match(auto, /AUD 260 ≈ Rp 2,7 jt/);
   assert.match(auto, /Otomatis dari spesifikasi yang ditulis toko/); assert.match(auto, /Foto: Shop B/);
   const peg = await page.textContent('[data-cat="nike-pegasus-42"]');
-  assert.match(peg, /Rilis 9 Apr 2026/, "seed date wins"); assert.match(peg, /Serba bisa/, "seed notes win"); assert.match(peg, /Foto: Shop A/, "photo added from auto data");
+  assert.match(peg, /Rilis 9 Apr 2026/, "seed date wins"); assert.match(peg, /Serba bisa/, "seed notes win"); assert.match(peg, /Foto: Shop A/, "photo added from the edition listing");
+  assert.match(peg, /AUD 169 ≈ Rp 1,8 jt/); assert.match(peg, /Harga terendah di Shop A · kurs ECB via frankfurter\.app 6 Nov 2026/);
+  assert.equal(await page.$('[data-cat="auto-nikepegasus42keelyhodgkinson"]'), null, "edition listing folded into the seed card");
+  assert.match(await page.textContent('[data-cat="hoka-speedgoat-7"]'), /Harga: belum ada di toko yang dipantau/);
+  // Plus/Minus switches in place: no re-render, scroll position kept
+  await page.$eval('[data-cat="hoka-speedgoat-7"]', el => el.scrollIntoView({ block: "center" }));
+  const y0 = await page.evaluate(() => window.scrollY); await page.evaluate(() => { window.__marker = document.querySelector('[data-cat="hoka-speedgoat-7"] .cat-facts'); });
+  await page.click('[data-cat="hoka-speedgoat-7"] [data-act="catSide"][data-v="hoka-speedgoat-7|minus"]');
+  assert.match(await page.textContent('[data-cat="hoka-speedgoat-7"] .cat-list.minus'), /aspal/);
+  assert.ok(Math.abs(await page.evaluate(() => window.scrollY) - y0) < 3, "scroll kept");
+  assert.equal(await page.evaluate(() => window.__marker.isConnected), true, "card was not re-rendered");
   assert.equal(await page.$('[data-cat="auto-xltimgsrcxonerroralert1gt"]'), null);
   assert.ok(!(await page.content()).includes("onerror=alert"), "invalid entry dropped");
   assert.deepEqual(page.errors, []);

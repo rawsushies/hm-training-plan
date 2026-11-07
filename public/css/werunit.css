@@ -436,3 +436,5 @@ summary{padding:12px 0}
 .cat-img{margin:0 0 10px;border-radius:14px;overflow:hidden;background:#fff}
 .cat-img img{display:block;width:100%;aspect-ratio:16/10;object-fit:contain;background:#fff}
 .cat-img figcaption{padding:4px 8px;background:var(--s1)}
+.cat-price{margin-top:6px;font-size:15px}
+.cat-price b{font-family:var(--display);font-size:17px}

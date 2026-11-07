@@ -3,7 +3,7 @@
 // Reads public /products.json feeds of running retailers (no login, no private API), honours robots.txt,
 // identifies itself, waits between requests, and publishes only validated data.
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
-import { buildModels, derivePlusMinus, merge, validate } from "./lib.mjs";
+import { buildModels, collapseEditions, derivePlusMinus, merge, validate } from "./lib.mjs";
 
 const SOURCES = [
   { label: "Pace Athletic", base: "https://www.paceathletic.com", currency: "AUD" },
@@ -42,14 +42,21 @@ async function feed(src) {
 }
 
 const [prevPath, outPath] = process.argv.slice(2);
-const SCHEMA = 3;                                   // bump when normalization changes: older data is rebuilt, not merged
+const SCHEMA = 4;                                   // bump when normalization changes: older data is rebuilt, not merged
 let prev = prevPath && existsSync(prevPath) ? JSON.parse(readFileSync(prevPath, "utf8")) : null;
 if (prev && prev.schema !== SCHEMA) { console.log(`previous catalogue schema ${prev.schema} → rebuilding`); prev = null; }
 const feeds = [];
 for (const s of SOURCES) { try { const f = await feed(s); if (f) feeds.push(f); } catch (e) { console.log(`skip ${s.label}: ${e.message}`); } await sleep(1500); }
 if (!feeds.length) { console.log("no feed reachable; keeping previous catalogue"); process.exit(prev ? 0 : 1); }
-const fresh = derivePlusMinus(buildModels(feeds, today));
-const cat = { schema: SCHEMA, generated: new Date().toISOString(), retrieved: today, sources: feeds.map(f => ({ label: f.label, url: f.base })), models: merge(prev, fresh, { today }) };
+const fresh = derivePlusMinus(collapseEditions(buildModels(feeds, today)));
+// Exchange rates to IDR for an approximate rupiah price (ECB reference rates via frankfurter.app; free, no key).
+let fx = null;
+try {
+  const cur = [...new Set(feeds.map(f => f.currency).filter(Boolean))];
+  const rates = {};
+  for (const c of cur) { const r = await fetch(`https://api.frankfurter.app/latest?from=${c}&to=IDR`, { headers: { "user-agent": UA } }); if (r.ok) { const j = await r.json(); if (j.rates && j.rates.IDR) { rates[c] = j.rates.IDR; fx = { date: j.date, source: "ECB via frankfurter.app", rates }; } } }
+} catch (e) { console.log("fx unavailable: " + e.message); }
+const cat = { schema: SCHEMA, fx, generated: new Date().toISOString(), retrieved: today, sources: feeds.map(f => ({ label: f.label, url: f.base })), models: merge(prev, fresh, { today }) };
 derivePlusMinus(cat.models);                       // re-derive on the merged set so medians cover everything
 validate(cat, today);
 writeFileSync(outPath, JSON.stringify(cat, null, 1));
