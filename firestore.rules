@@ -311,6 +311,16 @@ service cloud.firestore {
       }
     }
 
+    // Server-written import inbox (Strava webhook scaffold, Admin SDK). The owner may read and dismiss items, never write them.
+    match /users/{uid}/inbox/{id} {
+      allow read, delete: if isUser(uid);
+      allow create, update: if false;
+    }
+    // OAuth tokens etc. Admin SDK only; no client may read or write (explicit, on top of the default deny).
+    match /serverOnly/{document=**} {
+      allow read, write: if false;
+    }
+
     // Everything else is denied.
     match /{document=**} {
       allow read, write: if false;

@@ -1,7 +1,7 @@
 {
   "name": "hm-training-plan",
   "private": true,
-  "version": "3.10.0",
+  "version": "3.11.0",
   "description": "Half Marathon Training Plan: single-file mobile web app with Firebase (Google sign-in + Firestore) sync",
   "type": "module",
   "scripts": {
@@ -29,6 +29,7 @@
     "@capacitor/android": "^8.5.3",
     "@capacitor/core": "^8.5.3",
     "@capacitor/filesystem": "^8.1.5",
-    "@capacitor/local-notifications": "^8.3.1"
+    "@capacitor/local-notifications": "^8.3.1",
+    "@capgo/capacitor-health": "^8.11.14"
   }
 }

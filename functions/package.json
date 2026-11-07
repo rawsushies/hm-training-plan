@@ -1,0 +1,9 @@
+{
+  "name": "werunit-functions",
+  "private": true,
+  "description": "SCAFFOLD — not deployed. Strava OAuth + webhook for WeRunIt. Needs the Firebase Blaze plan and a Strava API app.",
+  "type": "module",
+  "main": "index.js",
+  "engines": { "node": "22" },
+  "dependencies": { "firebase-admin": "^13.0.0", "firebase-functions": "^6.0.0" }
+}

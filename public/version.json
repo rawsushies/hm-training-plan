@@ -1,19 +1,19 @@
 {
- "version": "3.10.0",
- "build": "2026-11-07T09:41:41Z",
+ "version": "3.11.0",
+ "build": "2026-11-07T10:05:57Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "Teman: undangan, berbagi privat per teman, target bersama",
-  "Notifikasi Android sungguhan (perlu APK baru)",
-  "Cuaca Open-Meteo + tips sesuai cuaca"
+  "Sepatu: km awal, saran rotasi, cari sepatu",
+  "Integrasi: Health Connect (perlu APK baru), status jujur tiap sumber",
+  "Tampilan: semua pilihan pakai pil kaca yang sama"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "8d49e9de308774b3dbb7acc3a4afc5142ec18aa1d005fd6649bce92fcb6dfd07",
-   "s": 14275
+   "h": "3bca1b5e217ac3c930a0c3df0ac73a09ff4c7c9cab8134c409a85b6f64e22d44",
+   "s": 15121
   },
   {
    "p": "favicon-32.png",
@@ -47,8 +47,8 @@
   },
   {
    "p": "index.html",
-   "h": "baa8b05846c1c17282749c8a3d379dfd0f4176b949e76b6cc1b7579018cd262e",
-   "s": 271063
+   "h": "06c132f11810022b1a76882b44920a6d84706e7e04c1726b99e70018d68f731c",
+   "s": 271444
   },
   {
    "p": "js/brand.js",
@@ -61,9 +61,14 @@
    "s": 20305
   },
   {
+   "p": "js/integrations.js",
+   "h": "9d8c94b3be72eab30bad98256b46356f888e473968ccbf82a67dc3443b5d28bc",
+   "s": 5213
+  },
+  {
    "p": "js/logic.js",
-   "h": "dd7d7feb4168eefd80616c7697076436f76e6bef56f6b9a78a75b2dcd2af5b98",
-   "s": 37548
+   "h": "82f294fe78bd0cf21cf9409048d1d57644addf6cc16657840a6a366d3c9f3121",
+   "s": 38037
   },
   {
    "p": "js/motion.js",
@@ -86,6 +91,11 @@
    "s": 13230
   },
   {
+   "p": "js/shoes.js",
+   "h": "72be34b6dc12682ca6885e4bdd44168319011ac92412596095ebbc43eb95eefa",
+   "s": 4395
+  },
+  {
    "p": "js/social.js",
    "h": "8f6005f4514e1b9aaa845804f94dd9b98e27d3cdf57f9e7fe799e968ed70d82d",
    "s": 5671
@@ -101,14 +111,24 @@
    "s": 30431
   },
   {
+   "p": "js/ui-glass.js",
+   "h": "44f0f4dc2489ab6ce204337a606ecc5cfe06d9f7fae2a9aa8935133da4f4394e",
+   "s": 2848
+  },
+  {
    "p": "js/updater.js",
    "h": "3ff086a0ae9d0585b69f76bc4da478fd4bd150f488ccea9fed02e3db3483330b",
    "s": 11541
   },
   {
    "p": "js/version.js",
-   "h": "2a51d5c1a57cc3ddc1cce32bc236ba66aaf916bc070d03de67397e88b4de445e",
+   "h": "60f356a255503685a09e599d999274e9d62b4cfcf56abfaa9487d0be5f0f2213",
    "s": 140
+  },
+  {
+   "p": "js/views-m4.js",
+   "h": "9c8aff3c08a788e89597f2550945d4c4ab5e764fc965aae547f55d42aaaedff6",
+   "s": 12228
   },
   {
    "p": "js/views-notify.js",
@@ -142,8 +162,8 @@
   },
   {
    "p": "sw.js",
-   "h": "3b52132053b611b38fd8134152c299c7fbab4d0650c6374df0d10b213fdd032f",
-   "s": 2500
+   "h": "626486c9b41440b61484ba224d9020691d9b3b80a2d8bbed8024e89fb41017f6",
+   "s": 2573
   },
   {
    "p": "vendor/capacitor/8.5.3/capacitor.js",

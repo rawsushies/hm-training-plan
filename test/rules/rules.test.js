@@ -267,3 +267,16 @@ test("shared goals: friends only, participants read, each writes only own contri
   await assertSucceeds(updateDoc(doc(db("bob"), "goals/g1"), { status: "completed" }));
   await assertFails(updateDoc(doc(db("bob"), "goals/g1"), { targetKm: 1 }));
 });
+
+test("server-only data: Strava tokens unreachable from clients; inbox readable/deletable by its owner only", async () => {
+  await env.withSecurityRulesDisabled(async c => {
+    await setDoc(doc(c.firestore(), "serverOnly/strava/tokens/alice"), { refresh: "secret" });
+    await setDoc(doc(c.firestore(), "users/alice/inbox/strava_1"), { extId: "strava:1", distance: 5 });
+  });
+  await assertFails(getDoc(doc(db("alice"), "serverOnly/strava/tokens/alice")));
+  await assertFails(setDoc(doc(db("alice"), "serverOnly/strava/tokens/alice"), { refresh: "x" }));
+  await assertSucceeds(getDoc(doc(db("alice"), "users/alice/inbox/strava_1")));
+  await assertFails(getDoc(doc(db("bob"), "users/alice/inbox/strava_1")));
+  await assertFails(setDoc(doc(db("alice"), "users/alice/inbox/fake"), { extId: "strava:2", distance: 42 }), "clients cannot forge imports");
+  await assertSucceeds(deleteDoc(doc(db("alice"), "users/alice/inbox/strava_1")));
+});

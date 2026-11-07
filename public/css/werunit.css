@@ -184,3 +184,12 @@ table.splits tr.five td{background:color-mix(in srgb,var(--acc) 10%,transparent)
 /* weather card */
 .wx-tips{list-style:none;padding:0;margin:0}
 .wx .titlerow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+
+/* glass segmented controls (shared with the nav pill system; js/ui-glass.js) */
+.seg-glass{display:flex;flex-wrap:nowrap;gap:2px;height:46px;padding:4px;border-radius:999px;overflow-x:auto;width:auto;max-width:100%}
+.seg.seg-glass > button,.seg-glass > button{position:relative;z-index:2;flex:1 0 auto;min-width:44px;height:36px;padding:0 14px;border:0;border-radius:999px;background:none;color:var(--mu);font-weight:600;font-size:13px;white-space:nowrap}
+.seg.seg-glass > button.on,.seg-glass > button.on{background:none;border:0;color:var(--tx)}
+.seg-glass > button:focus-visible{outline:2px solid var(--acc-tx);outline-offset:-2px}
+.seg-glass .glass-pill{z-index:1;width:0}
+@media (forced-colors:active){.seg-glass > button.on{outline:2px solid CanvasText}}
+a.btn{text-decoration:none;color:var(--tx);display:inline-flex;align-items:center}

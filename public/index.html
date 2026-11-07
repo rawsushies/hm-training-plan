@@ -276,6 +276,8 @@ ol.steps li{margin:4px 0}
 <script src="js/tutorial.js"></script>
 <script src="js/notify.js"></script>
 <script src="js/weather.js"></script>
+<script src="js/shoes.js"></script>
+<script src="js/integrations.js"></script>
 <script src="js/updater.js"></script>
 <script>
 "use strict";
@@ -940,7 +942,7 @@ const DOCK_ICON = {home:"home", cal:"cal", log:"act", race:"race", more:"more"};
 // Which dock tab is lit for each page (every feature stays reachable; sub-pages light their parent).
 const DOCK_GROUP = {home:"home", cal:"cal", locked:"cal", elev:"cal", strength:"cal", recovery:"cal", log:"log", review:"log", shoes:"log", goals:"log", race:"race", pace:"race"};
 const dockTab = tab => DOCK_GROUP[tab] || "more";
-const NAV_MORE = [["bareng","Bareng teman"],["race","Race plan"],["shoes","Sepatu"],["locked","Locked-in"],["elev","Elevation"],["strength","Strength"],["recovery","Check-in harian"],["goals","Goals"],["guide","Panduan latihan"],["kamus","Kamus istilah"],["pace","Pace calculator"],["settings","Settings"],["notif","Notifikasi"],["data","Data & backup"],["tutorials","Tutorial & bantuan"],["about","Tentang & update"]];
+const NAV_MORE = [["bareng","Bareng teman"],["race","Race plan"],["shoes","Sepatu"],["locked","Locked-in"],["elev","Elevation"],["strength","Strength"],["recovery","Check-in harian"],["goals","Goals"],["guide","Panduan latihan"],["kamus","Kamus istilah"],["pace","Pace calculator"],["settings","Settings"],["notif","Notifikasi"],["integ","Integrasi"],["data","Data & backup"],["tutorials","Tutorial & bantuan"],["about","Tentang & update"]];
 
 /* ============ Tutorial v3 (content in js/tutorial.js) ============
  * Progress (which tours are done) is stored in S.tutorial, which syncs with the account. The step a
@@ -1017,7 +1019,7 @@ function render(keep){
   const y = window.scrollY;
   applyTheme(); PLANW = buildPlan();
   const tab = S.ui.tab;
-  const views = {home:vHome,cal:vCal,log:vLog,review:vReview,more:vMore,bareng:vBareng,locked:vLocked,elev:vElev,strength:vStrength,recovery:vRecovery,goals:vGoals,guide:vGuide,kamus:vKamus,pace:vPace,settings:vSettings,data:vData,race:vRace,shoes:vShoes,notif:vNotif,tutorials:vTutorials,about:vAbout,jadwal:vSchedule};
+  const views = {home:vHome,cal:vCal,log:vLog,review:vReview,more:vMore,bareng:vBareng,locked:vLocked,elev:vElev,strength:vStrength,recovery:vRecovery,goals:vGoals,guide:vGuide,kamus:vKamus,pace:vPace,settings:vSettings,data:vData,race:vRace,shoes:vShoes,notif:vNotif,tutorials:vTutorials,about:vAbout,jadwal:vSchedule,integ:vInteg};
   const mainTab = dockTab(tab);
   if(gateActive()){ document.getElementById("app").innerHTML = vGate() + (M ? modal() : ""); setDock(null); return; }
   document.getElementById("app").innerHTML = `
@@ -1937,9 +1939,13 @@ async function handleActivityFiles(files){
     }catch(e){ errs.push(typeof e === "string" ? e : `${f.name} gagal dibaca.`); }
   }
   if(!items.length){ toast(errs[0] || "Nggak ada lari yang ketemu di file itu."); return; }
+  reviewImport(items, errs);
+}
+/** Shared review step for every import source (files, Health Connect): dedupe, match to plan sessions, confirm. */
+function reviewImport(items, errs = []){
   const used = new Set(S.logs.map(l => l.sessionId).filter(Boolean)), pStart = PLANW[0].start, pEnd = PLANW[PLANW.length-1].end;
   items.sort((a,b) => a.date.localeCompare(b.date)).forEach(it => {
-    it.dup = S.logs.some(l => (it.extId && l.extId === it.extId) || (l.date === it.date && Math.abs(l.distance - it.distance) < 0.15)) || items.some(o => o !== it && o.id && o.extId && o.extId === it.extId);
+    it.dup = WRI_INTEG.isDup(it, S.logs) || items.some(o => o !== it && o.id && o.extId && o.extId === it.extId);
     const s = allSessions().find(x => x.date === it.date && !used.has(x.id));
     if(s && !it.dup){ it.sessionId = s.id; used.add(s.id); it.type = s.type; } else { it.sessionId = null; it.type = it.distance >= 12 ? "long" : "easy"; }
     it.sel = !it.dup && it.date >= pStart && it.date <= pEnd;
@@ -2271,7 +2277,7 @@ function vRace(){
 }
 
 /* ============ Shoes ============ */
-const shoeKm = id => sum(S.logs.filter(l => l.shoeId === id), l => l.distance);
+const shoeKm = id => { const x = S.shoes.find(s => s.id === id); return sum(S.logs.filter(l => l.shoeId === id && !l.sample), l => l.distance) + ((x && x.initialKm) || 0); };
 function vShoes(){
   const noShoe = S.logs.filter(l => !l.shoeId).length;
   return `${pageHead("Sepatu", "Catat km tiap sepatu. Biasanya bantalan sepatu lari mulai berkurang di sekitar 500–800 km, tapi cek juga kondisi sol dan rasa di kaki. Ini perkiraan kasar, bukan aturan.")}
@@ -2791,9 +2797,11 @@ function startApp(){
 }
 </script>
 <script src="js/views-v4.js"></script>
+<script src="js/ui-glass.js"></script>
 <script src="js/views-social.js"></script>
 <script src="js/views-notify.js"></script>
 <script src="js/views-weather.js"></script>
+<script src="js/views-m4.js"></script>
 <script>startApp();</script>
 </body>
 </html>

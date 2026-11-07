@@ -85,7 +85,15 @@
   }
   function cleanShoe(x) {
     if (!isObj(x)) return null;
-    return { id: ID_RE.test(x.id || "") ? x.id : newId(), name: str(x.name, 60) || "Sepatu", limit: Math.round(finite(x.limit, 50, 5000) || 700), retired: !!x.retired };
+    const o = { id: ID_RE.test(x.id || "") ? x.id : newId(), name: str(x.name, 60) || "Sepatu", limit: Math.round(finite(x.limit, 50, 5000) || 700), retired: !!x.retired };
+    // v4 optional fields: only present when set, so v3 shoe records stay byte-identical (no sync churn)
+    const brand = str(x.brand, 40), model = str(x.model, 60), ik = finite(x.initialKm, 0, 5000);
+    if (brand) o.brand = brand;
+    if (model) o.model = model;
+    if (["daily", "tempo", "long", "race", "trail"].includes(x.use)) o.use = x.use;
+    if (ik) o.initialKm = Math.round(ik * 10) / 10;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(x.since || "")) o.since = x.since;
+    return o;
   }
   function cleanReview(r) {
     if (!isObj(r)) return null;
