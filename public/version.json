@@ -1,17 +1,19 @@
 {
- "version": "3.11.1",
- "build": "2026-11-07T11:10:03Z",
+ "version": "3.12.0",
+ "build": "2026-11-07T23:01:12Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "Perbaikan: kotak biru saat tap menu, susunan judul dan teks lebih rapi"
+  "Beranda baru: grafik minggu ini, badan kamu, progres, dan konsistensi",
+  "Kartu grafik bergaya kaca dengan warna gradasi",
+  "Tombol utama lebih mudah dibaca di tema gelap"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "94f0f35ed1336b05b28ecaa8d89497c4fe8635b0208509f7f5304b412acf43c4",
-   "s": 16701
+   "h": "90e00477d57b14bccbe20f80df7156fb5ea904c21a98e0b3d861a930b3406bb3",
+   "s": 26183
   },
   {
    "p": "favicon-32.png",
@@ -45,8 +47,8 @@
   },
   {
    "p": "index.html",
-   "h": "472ab50b54e84fade5ff91981b43aab08570635552841987aa29ceede08f7571",
-   "s": 271415
+   "h": "a293a9633f48f3258718acf158672f03290330f43182fcf5642f42a84d8e9394",
+   "s": 280966
   },
   {
    "p": "js/brand.js",
@@ -105,8 +107,8 @@
   },
   {
    "p": "js/tutorial.js",
-   "h": "d0b3692ccdcaa8b7125ca836a533e9a96519753c036519e4d2e4edc5d167ce36",
-   "s": 30431
+   "h": "38ead6e676a112c19f45f01ad7d798670656b08529d476bf155f68ce2a5ec33e",
+   "s": 30438
   },
   {
    "p": "js/ui-glass.js",
@@ -120,7 +122,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "f1ce6d739db7c40d5049924c7293086abf0e15590951577d9d8ab99e93f554d7",
+   "h": "9387de0b6ff2c0969334c37a0483360e7f64464bd2052d8f7166d4b4da9066aa",
    "s": 140
   },
   {
@@ -160,7 +162,7 @@
   },
   {
    "p": "sw.js",
-   "h": "b5044f67a12ede74ca8ac0acc370445f665a45ae19e019568eed3c74046b7804",
+   "h": "8c6e00b6491d884644195ceca94fd6e43c89d840782482922490458b6243a8fd",
    "s": 2573
   },
   {
