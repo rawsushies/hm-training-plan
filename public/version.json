@@ -1,17 +1,20 @@
 {
- "version": "3.14.1",
- "build": "2026-11-07T23:17:38Z",
+ "version": "3.15.0",
+ "build": "2026-11-07T23:30:36Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "Perbaikan sepatu: plus/minus nggak bikin layar loncat ke atas, harga tampil (plus perkiraan rupiah)"
+  "Tampilan baru di semua layar: grafik dulu, kartu kaca, warna gradasi",
+  "Beranda, Aktivitas, Check-in, Review, dan Jadwal sekarang dibuka dengan grafik",
+  "Menu jadi ikon yang dikelompokkan",
+  "Tombol utama lebih mudah dibaca di tema gelap; kata-kata di grafik lebih enak dibaca"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "92128f5408d137aa4bb2ab8c9ef568970f7c9bb700b3c355e7572a8e036fdfd3",
-   "s": 17889
+   "h": "2115fb537c5b9b4db86f54b47e82624b73ae056028e7c96944c601019d4af84d",
+   "s": 36606
   },
   {
    "p": "favicon-32.png",
@@ -45,8 +48,8 @@
   },
   {
    "p": "index.html",
-   "h": "cda11716efb55df46fed642433b33fd4acacc213e0c9e145df17852b594a933e",
-   "s": 271540
+   "h": "61d7f0fc2304895aef23818e7d18508447b23ca10169a949362625c6eb5734ce",
+   "s": 287666
   },
   {
    "p": "js/brand.js",
@@ -110,8 +113,8 @@
   },
   {
    "p": "js/tutorial.js",
-   "h": "d0b3692ccdcaa8b7125ca836a533e9a96519753c036519e4d2e4edc5d167ce36",
-   "s": 30431
+   "h": "9e6122bffb9037cd909b043f13aab7641601d8f8ee9ffc8a0a10fd7b43320366",
+   "s": 30445
   },
   {
    "p": "js/ui-glass.js",
@@ -125,7 +128,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "70535136dfd47a4002a5ed973dc1cf133e7d09d6df0af27a322a176c99674354",
+   "h": "bf6e801b9245ac1714535c971caad4bb3e15bc8f4ead541f853e619bdd440325",
    "s": 140
   },
   {
@@ -170,7 +173,7 @@
   },
   {
    "p": "sw.js",
-   "h": "6e80c6c5ecc38f9355073104c475e52756dd023a53ddfb9f470d0e4429b05879",
+   "h": "439736ce5b64fcde627a2fecef185895043121e02398b27dd5ff46025ed3f10f",
    "s": 2615
   },
   {

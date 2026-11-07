@@ -1,7 +1,7 @@
 {
   "name": "hm-training-plan",
   "private": true,
-  "version": "3.14.1",
+  "version": "3.15.0",
   "description": "Half Marathon Training Plan: single-file mobile web app with Firebase (Google sign-in + Firestore) sync",
   "type": "module",
   "scripts": {
