@@ -33,7 +33,7 @@ test("boot: real steps complete, then the overlay leaves", async () => {
   assert.deepEqual(page.errors, []);
 });
 
-test("gate: a new signed-out user must sign in before the tutorial; then the quick start begins", async () => {
+test("gate: a new signed-out user must sign in first; then one onboarding screen and the dashboard (no auto tour)", async () => {
   const { page } = await H.device({ gate: true });
   await page.goto(H.appUrl()); await booted(page);
   assert.ok(await page.isVisible(".gate [data-act='signIn']"));
@@ -43,8 +43,8 @@ test("gate: a new signed-out user must sign in before the tutorial; then the qui
   await H.signIn(page, "nina");
   await H.waitFor(page, () => window.__hmtpTest.uid() && typeof M !== "undefined" && M && M.kind === "onboard");   // onboarding first, then the tutorial
   await H.finishOnboarding(page);
-  await H.waitFor(page, () => document.querySelector("#tour"));
-  assert.match(await page.textContent("#tour"), /Langkah 1 dari/);
+  await page.waitForSelector('[data-tour="hero"]');
+  assert.equal(await page.$("#tour"), null);
   assert.equal(await page.evaluate(() => document.getElementById("dock").hidden), false);
 });
 
@@ -54,7 +54,7 @@ test("gate: offline, or with existing device data, the user can continue without
   await off.ctx.setOffline(true); await off.page.evaluate(() => render(false));
   await off.page.click(".gate [data-act='gateLocal']");
   await H.finishOnboarding(off.page);
-  await off.page.waitForSelector("#tour");
+  await off.page.waitForSelector('[data-tour="hero"]');
   assert.equal(await off.page.$(".gate"), null);
   await off.ctx.setOffline(false);
   const legacy = { "hmtp:v1": { v: 2, settings: {}, logs: [{ id: "a", date: "2026-11-10", type: "easy", distance: 5, duration: 1800 }], ui: { tourDone: true, tourV: 2 } } };

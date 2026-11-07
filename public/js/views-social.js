@@ -12,10 +12,11 @@ function rememberName(uid, name, photo){ if(!ACTIVE_UID || !uid) return; const c
 
 /* ---------------- controller ---------------- */
 const FRIENDS = {
-  list:[], req:{incoming:[], outgoing:[]}, shares:{}, goals:[], contrib:{}, subs:{}, gsubs:{}, unsubs:[], started:false, lastShare:{}, lastContrib:{}, blocks:null,
+  list:[], req:{incoming:[], outgoing:[]}, shares:{}, goals:[], contrib:{}, subs:{}, gsubs:{}, unsubs:[], started:false, lastShare:{}, lastContrib:{}, blocks:null, q:"", results:null, searching:false,
   start(){
     if(this.started || !SYNC || !CLOUD.user) return;
     this.started = true; const me = CLOUD.user.uid, err = e => { if(e && e.code === "permission-denied") return; };
+    CLOUD.api.setProfile(CLOUD.user, S.settings.discoverable !== false).catch(() => {});
     this.unsubs.push(CLOUD.api.subscribeFriendships(me, fs => { const gone = this.list.filter(f => !fs.some(g => g.other === f.other)); this.list = fs; gone.forEach(f => { delete this.lastShare[f.other]; CLOUD.api.deleteShare(me, f.other).catch(() => {}); }); this.syncShareSubs(); queueShares(500); this.rr(); }, err));
     this.unsubs.push(CLOUD.api.subscribeRequests(me, r => { this.req = r; r.incoming.forEach(q => rememberName(q.from, q.fromName, q.fromPhoto)); this.rr(); }, err));
     this.unsubs.push(CLOUD.api.subscribeGoals(me, gs => { this.goals = gs; this.syncContribSubs(); queueShares(500); this.rr(); }, err));
@@ -78,6 +79,11 @@ async function maybeFriendInvite(){
 
 /* ---------------- view ---------------- */
 const permLabels = {weekly:"Jarak mingguan & total", completion:"Sesi minggu ini selesai", pbs:"Personal best", plan:"Jadwal 7 hari ke depan", hr:"Detak jantung di pace tertentu (buat cek pace bareng)"};
+function frResult(r){
+  const isFriend = FRIENDS.list.some(f => f.other === r.uid), out = FRIENDS.req.outgoing.some(q => q.to === r.uid), inc = FRIENDS.req.incoming.find(q => q.from === r.uid);
+  const action = isFriend ? `<span class="chip done">Teman</span>` : out ? `<span class="chip">Terkirim</span>` : inc ? `<button class="btn sm pri" data-act="frAccept" data-id="${esc(r.uid)}">Terima</button>` : `<button class="btn sm pri" data-act="frAdd" data-id="${esc(r.uid)}">Tambah</button>`;
+  return `<div class="row">${avatarImg(r.photo, r.name)}<span class="grow"><b>${esc(r.name)}</b></span>${action}</div>`;
+}
 function friendCard(f){
   const sh = FRIENDS.shares[f.other], n = friendName(f.other), mine = S.shareWith[f.other] ? SO.cleanPerms(S.shareWith[f.other]) : SO.defaultPerms();
   const theirs = sh ? [
@@ -105,17 +111,18 @@ function goalCard(g){
     <div class="btns" style="margin-top:6px">${g.status === "active" ? `<button class="btn sm ghost" data-act="goalStatus" data-id="${esc(g.id)}" data-v="completed">Tandai selesai</button>` : ""}${g.createdBy === me ? `<button class="btn sm ghost" data-act="goalDel" data-id="${esc(g.id)}">Hapus</button>` : ""}</div></div>`;
 }
 function vBareng(){
-  const head = pageHead("Teman", "Latihan bareng teman, privat secara default. Kamu yang memilih apa yang dibagikan ke tiap teman, dan bisa mencabutnya kapan saja.");
+  const head = pageHead("Teman", "Cari temanmu, lalu pilih sendiri apa yang dibagikan ke tiap teman.");
   if(CLOUD.state === "off") return `${head}<div style="margin:14px 0">${acctBox()}</div><div class="note info">Fitur teman butuh login Google, dan login belum disetel di app ini.</div>`;
   if(!CLOUD.user || !SYNC) return `${head}<div style="margin:14px 0">${acctBox()}</div><div class="note info">Masuk pakai Google dulu buat menambah teman.</div>${friendPrivacy()}`;
-  const R = FRIENDS.req, inv = S.ui.lastInvite && S.ui.lastInvite.uid === CLOUD.user.uid ? S.ui.lastInvite : null;
+  const R = FRIENDS.req;
   return `${head}
-  <section class="card" style="margin-top:12px" data-tour="groups"><h3>Tambah teman</h3><p class="sm">Kirim link undangan ke temanmu. Link berlaku 7 hari, sekali pakai. Setelah dia mengirim permintaan, kamu yang menerima atau menolak.</p>
-    ${inv ? `<div class="field" style="margin-top:8px"><label for="fr-link">Link undangan (sampai ${fmtD(ymd(new Date(inv.expiresAt)))})</label><input type="text" id="fr-link" readonly value="${esc(inv.url)}"></div><div class="btns"><button class="btn sm pri" data-act="frCopy">Salin link</button>${navigator.share ? `<button class="btn sm" data-act="frShareLink">Bagikan</button>` : ""}<button class="btn sm ghost" data-act="frInviteCancel">Batalkan link</button></div>`
-      : `<button class="btn pri" style="margin-top:8px" data-act="frInvite">Buat link undangan</button>`}</section>
+  <section class="card" style="margin-top:12px" data-tour="groups"><h3>Cari teman</h3>
+    <div class="fr-search"><input type="search" id="fr-q" placeholder="Nama atau email teman" maxlength="80" autocomplete="off" enterkeyhint="search" value="${esc(FRIENDS.q)}" aria-label="Cari teman pakai nama atau email"><button class="btn pri" data-act="frSearch">${FRIENDS.searching ? "…" : "Cari"}</button></div>
+    ${FRIENDS.results ? (FRIENDS.results.error ? `<p class="err" style="margin-top:8px">${esc(FRIENDS.results.error)}</p>` : FRIENDS.results.length ? `<div class="rows" style="margin-top:6px">${FRIENDS.results.map(frResult).join("")}</div>` : `<p class="sm mu" style="margin-top:8px">Nggak ketemu. Coba email lengkapnya, atau minta dia buka menu Teman sekali supaya bisa dicari.</p>`) : ""}
+    <label class="toggle" style="margin-top:10px"><span class="sm">Orang lain bisa menemukanku lewat pencarian<br><span class="xs mu">Yang terlihat cuma nama & foto Google. Email nggak pernah ditampilkan.</span></span><input type="checkbox" data-act="frDiscover" ${S.settings.discoverable !== false ? "checked" : ""}></label></section>
   ${R.incoming.length ? `<section class="card" style="margin-top:10px"><h3>Permintaan masuk</h3>${R.incoming.map(q => `<div class="row"><span class="grow"><b>${esc(q.fromName || "Seseorang")}</b><br><span class="xs mu">ingin berteman</span></span><button class="btn sm pri" data-act="frAccept" data-id="${esc(q.from)}">Terima</button><button class="btn sm ghost" data-act="frReject" data-id="${esc(q.id)}">Tolak</button></div>`).join("")}</section>` : ""}
-  ${R.outgoing.length ? `<section class="card" style="margin-top:10px"><h3>Permintaan terkirim</h3>${R.outgoing.map(q => `<div class="row"><span class="grow sm">Menunggu diterima</span><button class="btn sm ghost" data-act="frReject" data-id="${esc(q.id)}">Batalkan</button></div>`).join("")}</section>` : ""}
-  <section style="margin-top:14px" data-tour="share-toggle"><h2>Teman kamu</h2>${FRIENDS.list.length ? FRIENDS.list.map(friendCard).join("") : `<p class="mu" style="margin-top:6px">Belum ada teman. Buat link undangan di atas.</p>`}</section>
+  ${R.outgoing.length ? `<section class="card" style="margin-top:10px"><h3>Permintaan terkirim</h3>${R.outgoing.map(q => `<div class="row"><span class="grow sm"><b>${esc(friendName(q.to).name)}</b><br><span class="xs mu">menunggu diterima</span></span><button class="btn sm ghost" data-act="frReject" data-id="${esc(q.id)}">Batalkan</button></div>`).join("")}</section>` : ""}
+  <section style="margin-top:14px" data-tour="share-toggle"><h2>Teman kamu</h2>${FRIENDS.list.length ? FRIENDS.list.map(friendCard).join("") : `<p class="mu" style="margin-top:6px">Belum ada teman. Cari pakai nama atau email di atas.</p>`}</section>
   ${FRIENDS.list.length ? `<section style="margin-top:16px"><h2>Target bersama</h2>${FRIENDS.goals.length ? FRIENDS.goals.map(goalCard).join("") : `<p class="sm mu" style="margin-top:6px">Misalnya: “300 km sampai race” bareng satu teman.</p>`}<button class="btn" style="margin-top:10px" data-act="goalNew">Buat target bersama</button></section>` : ""}
   ${friendPrivacy()}
   <div class="sec"><button class="link sm" data-act="frBlocks">Daftar yang kamu blokir</button><p class="xs mu" style="margin-top:6px">Fitur grup sudah diganti dengan Teman. Data grup lama tetap tersimpan dan nggak dihapus.</p></div>`;
@@ -186,4 +193,25 @@ Object.assign(ACT, {
   goalStatus:async d => { try{ await CLOUD.api.setGoalStatus(d.id, d.v); }catch(e){ toast(errText(e && e.code)); } },
   goalDel:async d => { try{ await CLOUD.api.deleteGoal(d.id); }catch(e){ toast(errText(e && e.code)); } }
 });
-TUT.HELP.bareng = {tour:"account", title:"Teman", what:"Tambah teman lewat link undangan, pilih apa yang dibagikan ke tiap teman, cek pace bareng, dan buat target bersama.", why:"Latihan bareng lebih semangat, tanpa membuka data pribadi.", how:["Buat link undangan dan kirim ke teman.", "Terima permintaannya.", "Atur yang kamu bagikan ke dia.", "Buat target bersama atau cek pace bareng."], ex:"Kamu & Rani menargetkan 300 km sampai JAKIM; tiap orang menyumbang km dari larinya sendiri.", warn:"Default privat. Catatan, check-in, nyeri, rute, dan lokasi nggak pernah dibagikan."};
+TUT.HELP.bareng = {tour:"account", title:"Teman", what:"Cari teman pakai nama atau email, pilih apa yang dibagikan ke tiap teman, cek pace bareng, dan buat target bersama.", why:"Latihan bareng lebih semangat, tanpa membuka data pribadi.", how:["Cari nama atau email temanmu, lalu Tambah.", "Dia menerima permintaanmu.", "Atur yang kamu bagikan ke dia.", "Buat target bersama atau cek pace bareng."], ex:"Kamu & Rani menargetkan 300 km sampai JAKIM; tiap orang menyumbang km dari larinya sendiri.", warn:"Default privat. Catatan, check-in, nyeri, rute, dan lokasi nggak pernah dibagikan."};
+Object.assign(ACT, {
+  frSearch:async () => {
+    const el = document.getElementById("fr-q"), q = (el ? el.value : FRIENDS.q).trim(); FRIENDS.q = q;
+    if(q.length < 2){ toast("Ketik minimal 2 huruf"); return; }
+    FRIENDS.searching = true; render(true);
+    try{ const r = await CLOUD.api.searchProfiles(q, CLOUD.user.uid); r.forEach(x => rememberName(x.uid, x.name, x.photo)); FRIENDS.results = r; }
+    catch(e){ FRIENDS.results = {error:isOnline() ? errText(e && e.code) : "Kamu lagi offline."}; }
+    FRIENDS.searching = false; render(true);
+  },
+  frAdd:async d => {
+    try{ await CLOUD.api.sendFriendRequestTo(CLOUD.user, d.id); toast("Permintaan terkirim"); }
+    catch(e){ toast(e && e.code === "permission-denied" ? "Nggak bisa dikirim (sudah berteman, sudah ada permintaan, atau diblokir)." : errText(e && e.code)); }
+  },
+  frDiscover:async () => {
+    const on = S.settings.discoverable === false; S.settings = Object.assign({}, S.settings);
+    if(on) delete S.settings.discoverable; else S.settings.discoverable = false;
+    persist(); try{ await CLOUD.api.setProfile(CLOUD.user, on); }catch(e){} render(true); toast(on ? "Kamu bisa ditemukan lewat pencarian" : "Kamu disembunyikan dari pencarian");
+  }
+});
+// Enter in the search box runs the search.
+document.addEventListener("keydown", e => { if(e.key === "Enter" && e.target && e.target.id === "fr-q"){ e.preventDefault(); ACT.frSearch(); } });

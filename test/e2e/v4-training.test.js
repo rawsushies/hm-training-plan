@@ -12,14 +12,14 @@ async function fresh(seed) {
   return d;
 }
 
-test("onboarding: new user gives (optional) profile + availability, then the tutorial starts", async () => {
+test("onboarding: one screen (availability + folded optional profile), then the dashboard without a tour", async () => {
   const { page } = await fresh();
   assert.equal(await page.evaluate(() => M && M.kind), "onboard");
   assert.equal(await page.$("#tour"), null, "tutorial waits for onboarding");
-  await page.click('[data-act="obNext"][data-skip="1"]');
   await page.click('[data-act="schDay"][data-d="2"]');      // add Wednesday
   await page.click('[data-act="obDone"]');
-  await page.waitForSelector("#tour");
+  await page.waitForSelector('[data-tour="hero"]');
+  assert.equal(await page.$("#tour"), null);
   const st = await page.evaluate(() => ({ onb: S.profile.onboarded, avail: S.schedule.avail }));
   assert.equal(st.onb, true); assert.deepEqual(st.avail, [false, true, true, false, false, true, true]);
   assert.deepEqual(page.errors, []);

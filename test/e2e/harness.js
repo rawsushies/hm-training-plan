@@ -35,6 +35,8 @@ export async function device({ viewport = { width: 390, height: 844 }, seed = nu
   // the same way a user does ("Lanjut tanpa akun"). Gate tests pass gate:true.
   if (!gate) await ctx.addInitScript(() => { if (!localStorage.getItem("hmtp:gate:v4")) localStorage.setItem("hmtp:gate:v4", '"local"'); });
   if (seed) await ctx.addInitScript(s => { if (!localStorage.getItem("__seeded")) { for (const [k, v] of Object.entries(s)) localStorage.setItem(k, typeof v === "string" ? v : JSON.stringify(v)); localStorage.setItem("__seeded", "1"); } }, seed);
+  // Hermetic by default: the live weekly shoe catalogue is not fetched in tests (tests that need it route it themselves).
+  await ctx.route(/raw\.githubusercontent\.com\/rawsushies\/hm-training-plan\/data-shoes\//, r => r.fulfill({ status: 404, body: "" }));
   const page = await ctx.newPage();
   page.errors = [];
   page.on("pageerror", e => page.errors.push(e.message));

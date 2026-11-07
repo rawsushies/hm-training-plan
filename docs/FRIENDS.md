@@ -5,10 +5,8 @@ and nothing reads them any more.
 
 ## Flow
 
-1. A creates an invite link (`#friend=CODE`): 24 random bytes (32-char base64url code), valid for 7 days, single use. Invites can be fetched
-   by exact code (`get`) but never listed.
-2. B opens the link and signs in → sees A's name/photo → *Kirim permintaan* creates `requests/{pair}` (the invite is marked used
-   in the same batch).
+1. Search: each signed-in user who opens Teman publishes an opt-in `profiles/{uid}` (name, photo, SHA-256 of the lowercase email; never the address). Others find them by name prefix or exact email (max 10 results per query). The toggle "Orang lain bisa menemukanku" removes the profile. Legacy invite links still work.
+2. *Tambah* creates `requests/{pair}`; the rules require the receiver to have a public profile and not to have blocked the sender.
 3. A accepts → `friendships/{pair}` (`pair` = the two UIDs sorted and joined with `_`). Either side can remove or block.
 4. Blocking writes `users/{uid}/blocks/{other}` and deletes the friendship, request and own share. The rules refuse new
    requests between blocked users.
