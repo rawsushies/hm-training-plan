@@ -291,3 +291,28 @@ body{font-size:var(--fs-body);line-height:1.5}
 .hc.now{box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--tx)}
 .bodycard:focus-visible,.blockcard:focus-visible,.heat:focus-visible,.stile:focus-visible,.nextw:focus-visible{outline:2px solid var(--acc-tx);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){.bullet-a,.sdot{transition:none}}
+
+/* ---------- Home visuals: glass cards + gradient marks (v4.1.1) ---------- */
+.home-aura{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.home-aura i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.28}
+.home-aura i:nth-child(1){width:340px;height:340px;left:-120px;top:38%;background:var(--acc)}
+.home-aura i:nth-child(2){width:300px;height:300px;right:-110px;top:62%;background:var(--cyan);opacity:.2}
+.home-aura i:nth-child(3){width:260px;height:260px;left:30%;top:88%;background:var(--pink);opacity:.16}
+:root[data-theme="light"] .home-aura i{opacity:.22}
+.vglass{position:relative;overflow:hidden;isolation:isolate;background:linear-gradient(160deg,color-mix(in srgb,var(--glass-solid) 92%,var(--acc)) 0%,var(--glass-solid) 55%,color-mix(in srgb,var(--glass-solid) 94%,var(--cyan)) 100%);border:1px solid var(--glass-b);box-shadow:var(--shadow)}
+@supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  :root:not([data-glass="off"]) .vglass{background:linear-gradient(160deg,color-mix(in srgb,var(--glass) 100%,transparent),color-mix(in srgb,var(--acc) 6%,transparent) 45%,color-mix(in srgb,var(--cyan) 5%,transparent));-webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%)}
+}
+.vglass::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(135deg,rgba(255,255,255,.28),rgba(255,255,255,0) 35%,rgba(121,229,222,.18) 80%,rgba(150,115,255,.3));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;z-index:1}
+.vglass::after{content:"";position:absolute;left:0;right:0;top:0;height:46%;border-radius:inherit;background:linear-gradient(rgba(255,255,255,.07),rgba(255,255,255,0));pointer-events:none;z-index:-1}
+.nextw.vglass::after{inset:auto;right:-40px;top:-40px;left:auto;width:160px;height:160px;border-radius:50%;background:radial-gradient(closest-side,color-mix(in oklab,var(--c) 34%,transparent),transparent)}
+.wk-card{border-radius:var(--r-lg);padding:14px 12px 10px;margin-top:2px}
+.bodycard.vglass,.blockcard.vglass,.heat.vglass{background-color:transparent}
+.bullet-a{box-shadow:0 0 14px color-mix(in oklab,var(--acc) 55%,transparent)}
+.sdot.done{background:radial-gradient(circle at 32% 28%,color-mix(in oklab,var(--c) 55%,#fff),var(--c) 70%);box-shadow:0 0 16px color-mix(in oklab,var(--c) 50%,transparent)}
+.sdot.today{box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--c),0 0 18px color-mix(in oklab,var(--c) 45%,transparent)}
+.bc:not(.none){background:linear-gradient(to top,var(--acc),var(--blue));box-shadow:0 0 8px color-mix(in oklab,var(--acc) 35%,transparent)}
+.bc.low{background:linear-gradient(to top,var(--warn),var(--pink));box-shadow:0 0 8px color-mix(in oklab,var(--warn) 35%,transparent)}
+.hc.run{background:linear-gradient(145deg,color-mix(in oklab,var(--c,var(--acc)) 62%,#fff),var(--c,var(--acc)) 75%);box-shadow:0 0 10px color-mix(in oklab,var(--c,var(--acc)) 40%,transparent),inset 0 1px 0 rgba(255,255,255,.35)}
+.streak i.on{box-shadow:0 0 10px color-mix(in oklab,var(--cyan) 40%,transparent)}
+.stile-v,.nextw-km,.bullet-v .num{text-shadow:0 0 22px color-mix(in oklab,var(--acc) 30%,transparent)}

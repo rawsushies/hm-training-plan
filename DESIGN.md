@@ -502,6 +502,22 @@ Every chart answers one question, stated in its caption.
 | **Check-in rows** | 14 days of how the body feels | Four rows of 14 bars; a taller bar is always better (soreness and pain flipped); low values in `state-caution`; empty days as a flat stub. |
 | **Spark tile** | One headline number with its trend | `label-caps`, value, then an 8-week mini bar or line (34px tall); the current week highlighted in cyan. |
 
+### Chart finish: glass and gradient
+
+Charts sit on frosted glass and their marks glow softly, so the data is the brightest thing on the screen.
+
+- **Chart cards** (`.vglass` in `public/css/werunit.css`): `glass` fill tinted 6% `primary` → 5% `cyan` on a 160° diagonal,
+  `backdrop-filter: blur(18px) saturate(150%)`, a 1px gradient edge (white 28% → transparent → cyan → primary) and a
+  7% white sheen on the top half. Solid `glass-solid` fallback where blur is unsupported or `data-glass="off"`.
+- **Something to blur:** screens with chart cards get an ambient aura behind the content: three blurred blobs
+  (`primary`, `cyan`, `pink`) at 16–28% opacity, fixed, `pointer-events: none`.
+- **Marks:** bars fill bottom-to-top `primary` → `blue` (the current week `blue` → `cyan`); lines stroke `primary` →
+  `cyan` with an area that fades from 38% to 0; done session dots and heatmap cells use a lit radial or diagonal
+  gradient of their own colour with a soft outer glow (`color-mix(... 40–50%, transparent)`, 8–18px). Low values use
+  `state-caution` → `pink`.
+- **Restraint:** gradients and glow belong to data marks and chart cards only, never to body text, captions or axes.
+  Headline numbers may carry a faint 22px `primary` text glow.
+
 - Press and drag on a chart to scrub; a value chip follows the finger and hides on lift. No zoom buttons.
 - Axis labels in `text-faint` 11 px; at most three x-axis labels (start, middle, today).
 - Empty data: dot-grid well, track drawn in `state-idle`, and one line saying what unlocks it:

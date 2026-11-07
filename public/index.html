@@ -1152,7 +1152,7 @@ function vHome(){
   const goalSec = parseDur(st.goalTime);
   const hello = CLOUD.user && ACTIVE_UID && CLOUD.user.displayName ? `Hai, ${esc(CLOUD.user.displayName.split(" ")[0])}` : "Hai, pelari";
   const tutMode = HMTP.tutorialStartMode(S);
-  return `${storageNote()}
+  return `<div class="home-aura" aria-hidden="true"><i></i><i></i><i></i></div>${storageNote()}
   ${tutMode === "banner" && !S.ui.tut ? `<div class="banner">${mascot("mascot-inline")}<div style="flex:1"><b>Tutorial baru dari Kiki</b><p class="sm mu">Sekarang ada tur per fitur dan tombol “?” di tiap halaman.</p><div class="btns" style="margin-top:8px"><button class="btn sm pri" data-act="tutStart" data-id="quick">Mulai (1 menit)</button><button class="btn sm ghost" data-act="tutBanner">Nanti aja</button></div></div></div>` : ""}
   ${hasSample ? `<div class="note info" style="margin-bottom:14px">Ini masih <b>contoh data</b>, bukan hasil lari asli kamu. <button class="link" data-act="clearSample">Hapus contoh data</button></div>` : ""}
   ${cockpit({days, w, wi, done, pct, next, goalSec, hello})}
@@ -1169,6 +1169,7 @@ function vHome(){
 }
 
 /* ---------- Home visuals (v4.1): every section leads with a chart; text only labels it ---------- */
+let VIZ_ID = 0;
 /** Horizontal bullet bar: filled = actual, track = plan, tick = plan end. */
 function bulletBar(actual, plan, {label = "", unit = "km", fmt = fmtKm} = {}){
   const max = Math.max(plan, actual, 0.001), a = Math.min(100, actual / max * 100), p = Math.min(100, plan / max * 100);
@@ -1180,16 +1181,16 @@ function bulletBar(actual, plan, {label = "", unit = "km", fmt = fmtKm} = {}){
 }
 /** Tiny bar chart for tiles. */
 function miniBars(vals, {hi = -1} = {}){
-  const W = 120, H = 34, n = Math.max(1, vals.length), max = Math.max(0.001, ...vals), bw = W / n;
-  return `<svg class="mini" viewBox="0 0 ${W} ${H}" aria-hidden="true">${vals.map((v,i) => { const h = Math.max(v > 0 ? 3 : 1.5, v / max * (H - 2)); return `<rect x="${(i*bw + bw*.18).toFixed(1)}" y="${(H - h).toFixed(1)}" width="${(bw*.64).toFixed(1)}" height="${h.toFixed(1)}" rx="1.5" fill="${v > 0 ? (i === hi ? "var(--cyan)" : "var(--acc)") : "var(--s2)"}"/>`; }).join("")}</svg>`;
+  const W = 120, H = 34, n = Math.max(1, vals.length), max = Math.max(0.001, ...vals), bw = W / n, id = "mb" + (++VIZ_ID);
+  return `<svg class="mini" viewBox="0 0 ${W} ${H}" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--blue)"/><stop offset="1" style="stop-color:var(--acc)"/></linearGradient><linearGradient id="${id}h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--cyan)"/><stop offset="1" style="stop-color:var(--blue)"/></linearGradient></defs>${vals.map((v,i) => { const h = Math.max(v > 0 ? 3 : 1.5, v / max * (H - 2)); return `<rect x="${(i*bw + bw*.18).toFixed(1)}" y="${(H - h).toFixed(1)}" width="${(bw*.64).toFixed(1)}" height="${h.toFixed(1)}" rx="2" fill="${v > 0 ? `url(#${id}${i === hi ? "h" : ""})` : "var(--s2)"}"/>`; }).join("")}</svg>`;
 }
 /** Tiny line chart for tiles; invert = lower is better (pace), drawn higher. */
 function miniLine(vals, {invert = false, area = false} = {}){
   if(vals.length < 2) return `<svg class="mini" viewBox="0 0 120 34" aria-hidden="true"><line x1="0" x2="120" y1="30" y2="30" stroke="var(--s2)" stroke-width="2" stroke-dasharray="3 4"/></svg>`;
-  const W = 120, H = 34, lo = Math.min(...vals), hi = Math.max(...vals), span = hi - lo || 1;
+  const W = 120, H = 34, lo = Math.min(...vals), hi = Math.max(...vals), span = hi - lo || 1, id = "ml" + (++VIZ_ID);
   const X = i => 3 + i * (W - 6) / (vals.length - 1), Y = v => { const f = (v - lo) / span; return 4 + (invert ? f : 1 - f) * (H - 8); };
   const d = vals.map((v,i) => `${i ? "L" : "M"}${X(i).toFixed(1)} ${Y(v).toFixed(1)}`).join(" "), e = vals.length - 1;
-  return `<svg class="mini" viewBox="0 0 ${W} ${H}" aria-hidden="true">${area ? `<path d="${d} L${X(e).toFixed(1)} ${H} L${X(0).toFixed(1)} ${H} Z" fill="var(--acc)" opacity=".12"/>` : ""}<path d="${d}" fill="none" stroke="var(--acc)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${X(e).toFixed(1)}" cy="${Y(vals[e]).toFixed(1)}" r="3.2" fill="var(--cyan)"/></svg>`;
+  return `<svg class="mini" viewBox="0 0 ${W} ${H}" aria-hidden="true"><defs><linearGradient id="${id}s" x1="0" x2="1"><stop offset="0" style="stop-color:var(--acc)"/><stop offset="1" style="stop-color:var(--cyan)"/></linearGradient><linearGradient id="${id}a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--acc);stop-opacity:.38"/><stop offset="1" style="stop-color:var(--acc);stop-opacity:0"/></linearGradient></defs>${area ? `<path d="${d} L${X(e).toFixed(1)} ${H} L${X(0).toFixed(1)} ${H} Z" fill="url(#${id}a)"/>` : ""}<path d="${d}" fill="none" stroke="url(#${id}s)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${X(e).toFixed(1)}" cy="${Y(vals[e]).toFixed(1)}" r="6" fill="var(--cyan)" opacity=".25"/><circle cx="${X(e).toFixed(1)}" cy="${Y(vals[e]).toFixed(1)}" r="3.2" fill="var(--cyan)"/></svg>`;
 }
 /** Minggu ini: target-vs-done bullet plus a 7-day strip of session dots. */
 function homeWeek(w, done, before){
@@ -1205,8 +1206,8 @@ function homeWeek(w, done, before){
   }).join("");
   return `<section class="sec" data-tour="week">
     <div class="sec-h"><h2>Week ${w.n}${before ? ` <span class="sm mu">(mulai ${fmtDay(w.start)})</span>` : ""}</h2><span class="sm mu">${fmtRange(w.start, w.end)}</span></div>
-    <div data-tour="week-stats">${bulletBar(done, w.total, {label:"km minggu ini"})}</div>
-    <div class="wk-days" role="group" aria-label="Sesi minggu ini">${cols}</div>
+    <div class="vglass wk-card"><div data-tour="week-stats">${bulletBar(done, w.total, {label:"km minggu ini"})}</div>
+    <div class="wk-days" role="group" aria-label="Sesi minggu ini">${cols}</div></div>
     <div class="wk-legend xs mu"><span><i class="lg done"></i>Selesai</span><span><i class="lg today"></i>Hari ini</span><span><i class="lg up"></i>Nanti</span><span><i class="lg missed"></i>Kelewat</span></div>
     <p class="xs mu" style="margin-top:6px">${T(KIND_TERM[w.kind], KIND_LBL[w.kind])}: ${esc(w.focus)}</p>
   </section>`;
@@ -1216,7 +1217,7 @@ function homeNext(next){
   if(!next) return `<section class="sec" data-tour="next"><div class="sec-h"><h2>Workout berikutnya</h2></div><p class="mu">Semua sesi udah lewat. Selamat, program selesai!</p></section>`;
   return `<section class="sec" data-tour="next">
     <div class="sec-h"><h2>Workout berikutnya</h2><span class="sm mu">${fmtDay(next.date)}${next.time ? ", " + esc(next.time) : ""}</span></div>
-    <button class="nextw" data-act="openSess" data-id="${next.id}" style="--c:${tc(next.type)}" aria-label="${esc(next.title)}, ${fmtKm(next.dist)} km, buka detail">
+    <button class="nextw vglass" data-act="openSess" data-id="${next.id}" style="--c:${tc(next.type)}" aria-label="${esc(next.title)}, ${fmtKm(next.dist)} km, buka detail">
       <span class="nextw-km num">${fmtKm(next.dist)}<span class="mu"> km</span></span>
       <span class="nextw-t"><span class="nextw-ty"><i></i>${TYPES[next.type]}${next.night ? " · malam" : ""}</span><b>${esc(next.title)}</b><span class="sm mu nextw-d">${esc(next.desc)}</span></span>
     </button>
@@ -1233,9 +1234,9 @@ function homeBody(){
   if(!n) return `<section class="sec"><div class="sec-h"><h2>Badan kamu</h2></div><div class="body-empty"><div class="body-ghost" aria-hidden="true">${Array.from({length:14}, () => "<i></i>").join("")}</div><p class="sm mu">Check-in 30 detik tiap hari, lalu tidur, energi, pegal, dan nyeri kamu tampil di sini sebagai grafik 14 hari.</p><button class="btn sm" data-act="nav" data-t="recovery">Check-in sekarang</button></div></section>`;
   const rows = [["Tidur","sleep",false],["Energi","energy",false],["Pegal","soreness",true],["Nyeri","pain",true]];
   const today = by[t], rd = today ? readiness(today) : null, col = rd ? {ready:"var(--ok)", easy:"var(--warn)", rest:"var(--bad)"}[rd.st] : "var(--mu2)";
-  const cell = (c, k, inv) => { if(!c) return `<i class="bc none"></i>`; const v = inv ? 6 - c[k] : c[k], bad = v <= 2; return `<i class="bc" style="height:${(v / 5 * 100).toFixed(0)}%;background:${bad ? "var(--warn)" : "var(--acc)"}"></i>`; };
+  const cell = (c, k, inv) => { if(!c) return `<i class="bc none"></i>`; const v = inv ? 6 - c[k] : c[k], bad = v <= 2; return `<i class="bc${bad ? " low" : ""}" style="height:${(v / 5 * 100).toFixed(0)}%"></i>`; };
   return `<section class="sec"><div class="sec-h"><h2>Badan kamu</h2><span class="sm mu">14 hari · ${n} check-in</span></div>
-    <button class="bodycard" data-act="nav" data-t="recovery" aria-label="Check-in 14 hari terakhir${rd ? ", hari ini " + RD_LBL[rd.st] : ""}">
+    <button class="bodycard vglass" data-act="nav" data-t="recovery" aria-label="Check-in 14 hari terakhir${rd ? ", hari ini " + RD_LBL[rd.st] : ""}">
       <span class="body-st" style="--c:${col}"><i></i>${rd ? RD_LBL[rd.st] : "Belum check-in hari ini"}</span>
       ${rows.map(([l,k,inv]) => `<span class="body-row"><span class="xs mu">${l}</span><span class="body-bars">${dates.map(d => cell(by[d], k, inv)).join("")}</span></span>`).join("")}
       <span class="xs mu body-ax"><span>${fmtDay(dates[0]).split(", ")[1]}</span><span>batang tinggi = lebih baik</span><span>Hari ini</span></span>
@@ -1251,7 +1252,7 @@ function homeProgress(){
   const paces = [...logs].filter(l => l.distance >= 1 && paceOf(l)).sort((a,b) => a.date.localeCompare(b.date)).map(paceOf), best = paces.length ? Math.min(...paces) : null;
   const bst = badgeStats(), nb = BADGES.filter(x => x.ok(bst)).length;
   const full = weeks.map(w => w.sessions.length && w.sessions.every(s => sState(s) === "done") ? 1 : 0);
-  const tile = (cap, val, unit, chart, act, t) => `<button class="stile" data-act="nav" data-t="${act}"${t ? ` aria-label="${esc(t)}"` : ""}><span class="xs mu stile-c">${cap}</span><span class="num stile-v">${val}<span class="mu"> ${unit}</span></span>${chart}</button>`;
+  const tile = (cap, val, unit, chart, act, t) => `<button class="stile vglass" data-act="nav" data-t="${act}"${t ? ` aria-label="${esc(t)}"` : ""}><span class="xs mu stile-c">${cap}</span><span class="num stile-v">${val}<span class="mu"> ${unit}</span></span>${chart}</button>`;
   return `<section class="sec" data-tour="progress"><div class="sec-h"><h2>Progres kamu</h2><span class="sm mu">8 minggu terakhir</span></div>
     <div class="stiles">
       ${tile("Total km", fmtKm(total), "km", miniLine(cumW, {area:true}), "log")}
@@ -1280,7 +1281,7 @@ function homeConsistency(wi){
   }).join("");
   const ran = weeks.reduce((n, w) => n + new Set(logsIn(w.start, w.end).map(l => l.date)).size, 0);
   return `<section class="sec"><div class="sec-h"><h2>Konsistensi</h2><span class="sm mu">${ran} hari lari · 8 minggu</span></div>
-    <button class="heat" data-act="nav" data-t="cal" aria-label="Kalender 8 minggu terakhir: ${ran} hari lari. Buka jadwal">${rows}</button>
+    <button class="heat vglass" data-act="nav" data-t="cal" aria-label="Kalender 8 minggu terakhir: ${ran} hari lari. Buka jadwal">${rows}</button>
     <div class="wk-legend xs mu"><span><i class="lg hrun"></i>Lari</span><span><i class="lg hmiss"></i>Kelewat</span><span><i class="lg hplan"></i>Rencana</span></div>
   </section>`;
 }
@@ -1288,7 +1289,7 @@ function homeConsistency(wi){
 function homeBlock(b, bs){
   const stl = !bs.started ? "Belum mulai" : bs.ended ? (bs.runRate >= .8 ? "Beres, rutin" : "Beres, cek review") : "Lagi jalan";
   return `<section class="sec" data-tour="month"><div class="sec-h"><h2>Target bulan ini</h2><span class="sm mu">Bulan ke-${b+1} · ${stl}</span></div>
-    <button class="blockcard" data-act="openReview" data-b="${b}" aria-label="Buka review bulan ke-${b+1}">
+    <button class="blockcard vglass" data-act="openReview" data-b="${b}" aria-label="Buka review bulan ke-${b+1}">
       <span class="sm" style="font-weight:600;display:block;margin-bottom:10px">${BLOCK_INFO[b].goal}</span>
       ${bulletBar(bs.doneRuns, bs.plannedRuns, {label:"sesi lari", unit:"sesi", fmt:v => String(Math.round(v))})}
       ${bulletBar(bs.km, bs.plannedKm, {label:"km"})}
