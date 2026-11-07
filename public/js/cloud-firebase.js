@@ -13,6 +13,7 @@ const [{ initializeApp }, A, F] = await Promise.all([
 
 const PATH_RE = /^(runs|strength|checkins|shoes|reviews|plan)\/[A-Za-z0-9_-]{1,60}$/;
 const chunk = (a, n) => { const o = []; for (let i = 0; i < a.length; i += n) o.push(a.slice(i, i + n)); return o; };
+const sha256Hex = async t => [...new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t)))].map(b => b.toString(16).padStart(2, "0")).join("");
 const rand = bytes => { const b = crypto.getRandomValues(new Uint8Array(bytes)); return btoa(String.fromCharCode(...b)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); };
 const userOf = u => u ? { uid: u.uid, displayName: u.displayName || "", email: u.email || "", photoURL: u.photoURL || "" } : null;
 const nativeAuth = () => {
@@ -242,6 +243,28 @@ export async function createCloud(config, opts = {}) {
       const d = s.data(); return { code, from: d.from, fromName: d.fromName, fromPhoto: d.fromPhoto, usedBy: d.usedBy, expiresAt: d.expiresAt && d.expiresAt.toDate() };
     },
     async cancelFriendInvite(code) { await F.deleteDoc(F.doc(db, "invites", code)); },
+    /** Publish (discoverable) or remove the caller's search profile. Never stores the email itself. */
+    async setProfile(user, discoverable) {
+      const ref = F.doc(db, "profiles", user.uid);
+      if (!discoverable) { await F.deleteDoc(ref).catch(() => {}); return; }
+      const name = (user.displayName || "").trim().slice(0, 80) || "Pelari";
+      const body = { name, nameLower: name.toLowerCase(), photo: safePhoto(user.photoURL), updatedAt: F.serverTimestamp() };
+      if (user.email) body.emailHash = await sha256Hex(user.email.trim().toLowerCase());
+      await F.setDoc(ref, body);
+    },
+    /** Search by exact email (hashed) or by name prefix. Max 10 results, never includes the caller. */
+    async searchProfiles(q, myUid) {
+      q = String(q || "").trim().toLowerCase().slice(0, 80);
+      if (q.length < 2) return [];
+      const col = F.collection(db, "profiles");
+      const qs = q.includes("@")
+        ? await F.getDocs(F.query(col, F.where("emailHash", "==", await sha256Hex(q)), F.limit(10)))
+        : await F.getDocs(F.query(col, F.orderBy("nameLower"), F.startAt(q), F.endAt(q + "\uf8ff"), F.limit(10)));
+      return qs.docs.filter(d => d.id !== myUid).map(d => ({ uid: d.id, name: d.data().name, photo: d.data().photo || "" }));
+    },
+    async sendFriendRequestTo(user, toUid) {
+      await F.setDoc(F.doc(db, "requests", pairKey(user.uid, toUid)), { from: user.uid, to: toUid, fromName: (user.displayName || "").slice(0, 80), fromPhoto: safePhoto(user.photoURL), createdAt: F.serverTimestamp() });
+    },
     async sendFriendRequest(user, inv) {
       const b = F.writeBatch(db), id = pairKey(user.uid, inv.from);
       b.update(F.doc(db, "invites", inv.code), { usedBy: user.uid });

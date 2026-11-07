@@ -1,20 +1,20 @@
 {
- "version": "3.13.0",
- "build": "2026-11-07T23:13:09Z",
+ "version": "3.15.0",
+ "build": "2026-11-07T23:17:13Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
   "Tampilan baru di semua layar: grafik dulu, kartu kaca, warna gradasi",
-  "Aktivitas, Check-in, Review, dan Jadwal sekarang dibuka dengan grafik",
+  "Beranda, Aktivitas, Check-in, Review, dan Jadwal sekarang dibuka dengan grafik",
   "Menu jadi ikon yang dikelompokkan",
-  "Kata-kata di grafik lebih enak dibaca"
+  "Tombol utama lebih mudah dibaca di tema gelap; kata-kata di grafik lebih enak dibaca"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "d4a1ffbfa0385b392b782ac1d2239bfe22dce705e115aa7981671a37b3502576",
-   "s": 35418
+   "h": "fe383bcf39af5c77c6b0fd0aa69a19d4293fabdbd9323a59ce551ff14a0e6768",
+   "s": 36508
   },
   {
    "p": "favicon-32.png",
@@ -48,8 +48,8 @@
   },
   {
    "p": "index.html",
-   "h": "5f6699bc9a7de305044c62c802f919fc3659b449bab4d27acf7b681bf770a78c",
-   "s": 287541
+   "h": "61d7f0fc2304895aef23818e7d18508447b23ca10169a949362625c6eb5734ce",
+   "s": 287666
   },
   {
    "p": "js/brand.js",
@@ -58,8 +58,8 @@
   },
   {
    "p": "js/cloud-firebase.js",
-   "h": "2d8f859ab2fa6f3ce1a7c5c85dd7d6c3a30b7fb62c19c869cd2489e5e5542c77",
-   "s": 20305
+   "h": "4f945d4fee0275394492f0b3a35e3ddfb0e7cce035743952bb5b3f89d7afa321",
+   "s": 22019
   },
   {
    "p": "js/integrations.js",
@@ -68,8 +68,8 @@
   },
   {
    "p": "js/logic.js",
-   "h": "82f294fe78bd0cf21cf9409048d1d57644addf6cc16657840a6a366d3c9f3121",
-   "s": 38037
+   "h": "8ae7572585b40cf95b8d9e9335ad763d92395bea3e97d180060ce08e5de936bd",
+   "s": 38141
   },
   {
    "p": "js/motion.js",
@@ -90,6 +90,11 @@
    "p": "js/schedule.js",
    "h": "c8c0a1235d2082f1018676a0767da2a62e31672c8fa4b6cd6d88ae08be471bca",
    "s": 13230
+  },
+  {
+   "p": "js/shoe-catalog.js",
+   "h": "9b0e151578d6ffe2e56e51b96aa9f6d02f157db6c8689543e911cdf1023e1fe3",
+   "s": 8207
   },
   {
    "p": "js/shoes.js",
@@ -123,13 +128,18 @@
   },
   {
    "p": "js/version.js",
-   "h": "dbce10dcb39a276637342466f35b2fb36c66d06e4f32adf6ec3fc158caf174ac",
+   "h": "968bf8aac9c413a3376d4eca15d9740579bddc661115a6f4eaa54fb32f2a8300",
    "s": 140
   },
   {
+   "p": "js/views-flow.js",
+   "h": "30d2963b7a0f860d65b92d43cb549052f124e67794c9d3124d39c40422b409cf",
+   "s": 5855
+  },
+  {
    "p": "js/views-m4.js",
-   "h": "9c8aff3c08a788e89597f2550945d4c4ab5e764fc965aae547f55d42aaaedff6",
-   "s": 12228
+   "h": "eb36d85ccc92fee92cd14152f05ace9e9a83ddc30267b8d7bafc4a2ee25b9e84",
+   "s": 18485
   },
   {
    "p": "js/views-notify.js",
@@ -138,8 +148,8 @@
   },
   {
    "p": "js/views-social.js",
-   "h": "8d68ee7ddaff8d161b965d9ddef29c88948ff5194d5ac2fbe2a638c062c3a9cd",
-   "s": 23508
+   "h": "188b135de06014b9ecc7e5e38794e5905a6c2e1addc0c472067f23872b385cea",
+   "s": 25903
   },
   {
    "p": "js/views-v4.js",
@@ -163,8 +173,8 @@
   },
   {
    "p": "sw.js",
-   "h": "f1bfb927ddffa51d7a11a41fcef2b4aaa7c5aa5802928caf942a835a2f086eca",
-   "s": 2573
+   "h": "303a987bd92f355cbe99c83e2b049d205112c0ad399a5a49ad35fa4a19ceb37f",
+   "s": 2615
   },
   {
    "p": "vendor/capacitor/8.5.3/capacitor.js",

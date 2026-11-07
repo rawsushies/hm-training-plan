@@ -324,8 +324,7 @@ body{font-size:var(--fs-body);line-height:1.5}
 .streak i.on{box-shadow:0 0 10px color-mix(in oklab,var(--cyan) 40%,transparent)}
 .stile-v,.nextw-km,.bullet-v .num{text-shadow:0 0 22px color-mix(in oklab,var(--acc) 30%,transparent)}
 
-/* =========================================================================
-   v5 design layer (DESIGN.md): shared primitives restyled so every screen
+/* ==================================================================   v5 design layer (DESIGN.md): shared primitives restyled so every screen
    reads as one system. Loaded last, so it wins over the base styles.
    ========================================================================= */
 h1{font-family:var(--display);font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
@@ -418,3 +417,22 @@ summary{padding:12px 0}
 .ci-mini i{display:block;width:14px;border-radius:3px;background:linear-gradient(to top,var(--acc),var(--blue));box-shadow:0 0 6px color-mix(in oklab,var(--acc) 30%,transparent)}
 .ci-mini i.low{background:linear-gradient(to top,var(--warn),var(--pink))}
 .ci-mini em{font-style:normal;font-size:10px;color:var(--mu)}
+=======
+.ob-more summary{cursor:pointer;color:var(--acc-tx);font-weight:600;padding:6px 0}
+#toast{border-radius:999px;bottom:calc(96px + env(safe-area-inset-bottom,0px));box-shadow:0 8px 24px rgba(0,0,0,.35)}
+#toast.on[role="button"]{cursor:pointer;pointer-events:auto}
+@media (min-width:900px){#toast{bottom:28px}}
+.fr-search{display:flex;gap:8px;margin-top:6px}
+.fr-search input{flex:1;min-width:0}
+/* shoe catalogue: sourced facts on top, our notes below */
+.cat .cat-facts{padding-bottom:10px;border-bottom:1px solid var(--line)}
+.cat .cat-notes{padding-top:10px}
+.cat .seg-glass{height:40px;padding:3px;max-width:220px}
+.cat .seg-glass > button{height:34px;font-size:13px}
+.cat-list{margin:8px 0 6px;padding-left:18px}
+.cat-list li{margin:3px 0}
+.cat-list.plus li::marker{content:"+  ";color:var(--ok)}
+.cat-list.minus li::marker{content:"–  ";color:var(--warn)}
+.cat-img{margin:0 0 10px;border-radius:14px;overflow:hidden;background:#fff}
+.cat-img img{display:block;width:100%;aspect-ratio:16/10;object-fit:contain;background:#fff}
+.cat-img figcaption{padding:4px 8px;background:var(--s1)}

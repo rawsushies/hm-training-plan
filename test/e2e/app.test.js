@@ -25,8 +25,8 @@ test("legacy hmtp:v1 data → anonymous slot → first Google sign-in offers mer
   // legacy data visible locally, legacy key untouched
   assert.deepEqual((await H.state(page)).logs.sort(), ["leg1", "leg2"]);
   assert.equal(JSON.parse(await page.evaluate(() => localStorage.getItem("hmtp:v1"))).owner, "claude-user-1");
-  // v2 graduates get a banner instead of a forced tour
-  assert.ok(await page.isVisible('[data-act="tutBanner"]'));
+  // v2 graduates are not interrupted: no banner, no tour
+  assert.equal(await page.$('[data-act="tutBanner"]'), null); assert.equal(await page.$("#tour"), null);
   await H.signIn(page, "alice");
   await page.waitForSelector('[data-act="migMerge"]');
   const summary = await page.textContent(".sheet");
@@ -138,24 +138,22 @@ test("concurrent edit of the same run: one wins, the other is preserved and rest
   await H.waitFor(a.page, () => window.__hmtpTest.S().logs[0].distance === 9);
 });
 
-test("friends: one-time invite, request/accept, private by default, per-friend permissions, shared goal, block", async () => {
+test("friends: find by name or email, request/accept, hidden users not findable, private by default, per-friend permissions, shared goal, block", async () => {
   const a = await H.device(), b = await H.device(), c = await H.device();
-  await H.open(a.page); await H.signIn(a.page, "alice"); await H.waitSynced(a.page);
-  await H.act(a.page, "nav", { t: "bareng" });
-  await a.page.click('[data-act="frInvite"]');
-  await a.page.waitForSelector("#fr-link");
-  const link = await a.page.inputValue("#fr-link");
-  assert.match(link, /#friend=/);
-  const joinVia = async (d, name) => {
-    await d.page.goto(H.appUrl() + link.slice(link.indexOf("#")));
-    await H.waitFor(d.page, () => window.__hmtpTest);
-    await H.ready(d.page); await H.finishOnboarding(d.page);
-    await d.page.evaluate(() => { const x = document.querySelector('[data-act="tutClose"]'); if (x) x.click(); });
-    await H.signIn(d.page, name);
-  };
-  // Bob opens the link, signs in, sends a request; Alice accepts
-  await joinVia(b, "bob");
-  await b.page.waitForSelector('[data-act="frSend"]'); await b.page.click('[data-act="frSend"]');
+  for (const [d, n] of [[a, "alice"], [b, "bob"], [c, "carol"]]) { await H.open(d.page); await H.signIn(d.page, n); await H.waitSynced(d.page); await H.act(d.page, "nav", { t: "bareng" }); }
+  // Carol hides herself from search
+  await c.page.click('[data-act="frDiscover"]');
+  const search = async (d, q) => { await d.page.fill("#fr-q", q); await d.page.click('[data-act="frSearch"]'); await H.waitFor(d.page, () => FRIENDS.results && !FRIENDS.searching); return d.page.evaluate(() => FRIENDS.results.map ? FRIENDS.results.map(r => r.name) : FRIENDS.results); };
+  await H.waitFor(c.page, () => S.settings.discoverable === false);
+  await new Promise(r => setTimeout(r, 800));
+  assert.deepEqual(await search(a, "car"), [], "hidden user is not findable");
+  assert.deepEqual(await search(b, "ali"), ["Alice"], "name prefix search");
+  assert.deepEqual(await search(b, "ALICE@example.com"), ["Alice"], "exact email search (hashed)");
+  const profiles = await H.adminDocs("profiles");
+  assert.ok(profiles.every(p => !JSON.stringify(p).includes("@example.com")), "email never stored in the directory");
+  // Bob adds Alice; Alice accepts
+  await b.page.click('[data-act="frAdd"]');
+  await H.waitFor(b.page, () => document.body.textContent.includes("Terkirim") || document.body.textContent.includes("menunggu diterima"));
   await H.waitFor(a.page, () => !!document.querySelector('[data-act="frAccept"]'));
   assert.match(await a.page.textContent("main"), /Bob/);
   await a.page.click('[data-act="frAccept"]');
@@ -171,10 +169,6 @@ test("friends: one-time invite, request/accept, private by default, per-friend p
   const sh = (await H.adminDocs("shares")).find(d => d.name.endsWith(`/${bUid}_${aUid}`));
   assert.ok(sh, "share doc exists");
   assert.deepEqual(Object.keys(sh.fields).sort(), ["name", "owner", "photo", "totalKm", "updatedAt", "viewer", "weekKm"]);
-  // Carol reuses the same one-time link → refused
-  await joinVia(c, "carol");
-  await H.waitFor(c.page, () => document.body.textContent.includes("udah dipakai") || !!document.querySelector('[data-act="frSend"]'));
-  if (await c.page.$('[data-act="frSend"]')) { await c.page.click('[data-act="frSend"]'); await H.waitFor(c.page, () => /nggak bisa dikirim|udah dipakai/.test(document.body.textContent)); }
   // Shared goal: Alice creates, both see Bob's contribution
   await a.page.click('[data-act="goalNew"]');
   await a.page.fill("#gn-n", "100 km bareng"); await a.page.fill("#gn-k", "100"); await a.page.fill("#gn-d", "2027-06-13");
@@ -193,17 +187,19 @@ test("friends: one-time invite, request/accept, private by default, per-friend p
   for (const p of [a.page, b.page, c.page]) assert.deepEqual(p.errors, []);
 });
 
-test("tutorial: new user gets quick start; completion is per account and synced; contextual help opens a feature tour", async () => {
+test("tutorial: no automatic tour after onboarding; quick start on request, completion per account and synced; contextual help opens a feature tour", async () => {
   const d = await H.device();
   await d.page.goto(H.appUrl());
   await H.waitFor(d.page, () => window.__hmtpTest);
   await H.ready(d.page);
   await H.finishOnboarding(d.page);
-  await d.page.waitForSelector("#tour");
-  assert.ok(await d.page.isVisible("#tour"));
-  assert.match(await d.page.textContent("#tour"), /Langkah 1 dari 6/);
+  await d.page.waitForTimeout(600);
+  assert.equal(await d.page.$("#tour"), null, "nothing pops up by itself");
   await H.signIn(d.page, "dina"); await H.waitSynced(d.page);
-  // finish quick start
+  // quick start when the user asks for it
+  await H.act(d.page, "tutStart", { id: "quick" });
+  await d.page.waitForSelector("#tour");
+  assert.match(await d.page.textContent("#tour"), /Langkah 1 dari 6/);
   for (let i = 0; i < 6; i++) await d.page.click('[data-act="tutNext"]');
   await H.waitSynced(d.page);
   const uid = (await H.state(d.page)).uid;
@@ -230,7 +226,6 @@ test("mobile + desktop layouts: no horizontal overflow, tour bubble does not cov
     await page.goto(H.appUrl().replace("?emulator=1", ""));
     await H.ready(page);
     await H.finishOnboarding(page);
-    await page.waitForSelector("#tour");
     for (const t of ["home", "cal", "log", "review", "more", "bareng", "data", "notif", "tutorials", "settings"]) {
       await H.act(page, "nav", { t });
       const over = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
@@ -252,7 +247,7 @@ test("local-only mode (no Firebase config) works fully and is labelled honestly"
   await page.goto(H.appUrl().replace("?emulator=1", ""));
   await H.ready(page);
   await H.finishOnboarding(page);
-  await page.evaluate(() => document.querySelector('[data-act="tutClose"]').click());
+  await page.evaluate(() => document.querySelector('[data-act="tutClose"]')?.click());
   await H.logRun(page, { date: "2026-11-10", km: 5, dur: "35:00" });
   await H.act(page, "nav", { t: "more" });
   assert.match(await page.textContent('[data-tour="acct"]'), /Mode lokal/);

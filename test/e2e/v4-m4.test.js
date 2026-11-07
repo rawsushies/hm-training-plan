@@ -25,7 +25,7 @@ before(async () => { await H.startServer(); await H.launch(); });
 after(async () => { await H.closeBrowser(); H.stopServer(); });
 beforeEach(async () => { await H.resetEmulators(); });
 
-test("shoes: initial km + tracked, rotation suggestion with reason, discovery opens search links only", async () => {
+test("shoes: initial km + tracked, rotation suggestion with reason, catalogue with sourced facts above our plus/minus", async () => {
   const { page } = await H.device(); await H.open(page);
   await H.act(page, "nav", { t: "shoes" });
   await page.click('[data-act="shoeNew"]');
@@ -38,11 +38,21 @@ test("shoes: initial km + tracked, rotation suggestion with reason, discovery op
   assert.ok(await page.$('[data-pill="shoetab"] .glass-pill'), "glass segmented control");
   await page.click('[data-act="shoeTab"][data-v="rotation"]');
   assert.match(await page.textContent("main"), /Saran: Harian[\s\S]*Kenapa: dipakai buat harian/);
-  await page.click('[data-act="shoeTab"][data-v="find"]');
-  await page.fill("#sf-brand", "MerkB");
-  const hrefs = await page.$$eval("[data-sf]", as => as.map(a => a.href));
-  assert.equal(hrefs.length, 3); assert.ok(hrefs.every(h => /^https:\/\/www\.(google|youtube)\.com\//.test(h)));
-  assert.match(decodeURIComponent(hrefs[0]), /MerkB sepatu lari daily trainer/);
+  // Rekomendasi: sourced facts first, then our Plus/Minus tab below; one tap adds the model
+  await page.click('[data-act="shoeTab"][data-v="catalog"]');
+  const card = '[data-cat="nike-pegasus-42"]';
+  const facts = await page.textContent(card + " .cat-facts");
+  assert.match(facts, /Nike[\s\S]*Pegasus 42[\s\S]*Rilis 9 Apr 2026[\s\S]*Sumber: nike\.com · diambil 7 Nov 2026/);
+  assert.match(await page.getAttribute(card + " .cat-facts a", "href"), /^https:\/\/www\.nike\.com\//);
+  const order = await page.$eval(card, el => [el.querySelector(".cat-facts"), el.querySelector(".cat-notes")].map(n => n.getBoundingClientRect().top));
+  assert.ok(order[0] < order[1], "notes are below the sourced facts");
+  assert.match(await page.textContent(card + " .cat-list"), /Serba bisa/);
+  await page.click(card + ' [data-act="catSide"][data-v="nike-pegasus-42|minus"]');
+  assert.match(await page.textContent(card + " .cat-list.minus"), /bantalan maksimal/);
+  await page.click('[data-act="catUse"][data-v="race"]');
+  assert.equal(await page.$(card), null, "filter hides daily shoes");
+  await page.click('[data-act="catAdd"][data-id="nike-alphafly-3"]');
+  assert.equal(await page.evaluate(() => window.__hmtpTest.S().shoes.find(s => s.model === "Alphafly 3").use), "race");
   const shoe = await page.evaluate(() => window.__hmtpTest.S().shoes[0]);
   assert.equal(shoe.initialKm, 250); assert.equal(shoe.use, "daily"); assert.equal(shoe.brand, "MerkA");
   assert.deepEqual(page.errors, []);
@@ -77,5 +87,28 @@ test("Health Connect (Android bridge): read-only permission, runs only, review b
   await H.act(page, "nav", { t: "integ" }); await page.click('[data-act="hcSync"]');
   await page.waitForSelector('[data-act="impSave"]');
   assert.equal(await page.evaluate(() => M.items.filter(i => i.dup).length), 2, "second sync: both already imported");
+  assert.deepEqual(page.errors, []);
+});
+
+test("auto catalogue: weekly data is pulled, merged with the seed (seed notes win, photo added), new models appear with auto notes; bad data rejected", async () => {
+  const d = await H.device();
+  const data = { schema: 1, retrieved: "2026-11-09", models: [
+    { id: "nike-pegasus-42", brand: "Nike", model: "Pegasus 42", released: "2026-04-01", use: "daily", source: { label: "Shop A", url: "https://a.example/products/peg" }, image: { url: "https://cdn.shopify.com/x/peg.jpg?width=480", credit: "Shop A", page: "https://a.example/products/peg" }, specs: { weightG: 280 }, plus: ["auto plus"], minus: [] },
+    { id: "puma-deviate-nitro-4", brand: "PUMA", model: "Deviate Nitro 4", released: "2026-10-20", use: "tempo", source: { label: "Shop B", url: "https://b.example/products/dn4" }, image: { url: "https://cdn.shopify.com/x/dn4.jpg?width=480", credit: "Shop B", page: "https://b.example/products/dn4" }, specs: { weightG: 245, dropMm: 8, plate: "carbon", price: 260, priceCurrency: "AUD" }, plus: ["Pakai carbon plate untuk race dan sesi cepat"], minus: ["Carbon plate: lebih cepat aus/kurang ekonomis kalau dipakai harian"] },
+    { id: "evil", brand: "X", model: "<img src=x onerror=alert(1)>", released: "2026-10-01", use: "daily", source: { label: "x", url: "javascript:alert(1)" }, plus: [], minus: [] }
+  ] };
+  await d.ctx.route(/raw\.githubusercontent\.com\/rawsushies\/hm-training-plan\/data-shoes\/shoes\.json/, r => r.fulfill({ json: data, headers: { "access-control-allow-origin": "*" } }));
+  await d.ctx.route(/cdn\.shopify\.com/, r => r.fulfill({ status: 200, contentType: "image/svg+xml", body: '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"/>' }));
+  const { page } = d; await H.open(page);
+  await H.act(page, "nav", { t: "shoes" });
+  await page.click('[data-act="shoeTab"][data-v="catalog"]');
+  await page.waitForSelector('[data-cat="auto-pumadeviatenitro4"]');
+  const auto = await page.textContent('[data-cat="auto-pumadeviatenitro4"]');
+  assert.match(auto, /Pertama terdaftar di toko 20 Okt 2026/); assert.match(auto, /245 g · drop 8 mm · carbon plate · AUD 260/);
+  assert.match(auto, /Otomatis dari spesifikasi yang ditulis toko/); assert.match(auto, /Foto: Shop B/);
+  const peg = await page.textContent('[data-cat="nike-pegasus-42"]');
+  assert.match(peg, /Rilis 9 Apr 2026/, "seed date wins"); assert.match(peg, /Serba bisa/, "seed notes win"); assert.match(peg, /Foto: Shop A/, "photo added from auto data");
+  assert.equal(await page.$('[data-cat="auto-xltimgsrcxonerroralert1gt"]'), null);
+  assert.ok(!(await page.content()).includes("onerror=alert"), "invalid entry dropped");
   assert.deepEqual(page.errors, []);
 });

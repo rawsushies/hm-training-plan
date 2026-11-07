@@ -56,3 +56,19 @@ test("provider status is honest: only file import (and Health Connect in a capab
   assert.equal(st({ native: true, plugins: { Health: false } }).healthconnect, "needs-app-update");
   assert.equal(st({ native: true, plugins: { Health: true } }).healthconnect, "available");
 });
+
+test("shoe catalogue: every model has brand, model, valid release date, source link + retrieval date, and our plus/minus", async () => {
+  await import("../../public/js/shoe-catalog.js");
+  const C = globalThis.WRI_SHOE_CATALOG;
+  assert.match(C.retrieved, /^\d{4}-\d{2}-\d{2}$/);
+  assert.ok(C.models.length >= 12);
+  const ids = new Set();
+  for (const m of C.models) {
+    assert.ok(!ids.has(m.id), "unique id " + m.id); ids.add(m.id);
+    assert.ok(m.brand && m.model, m.id);
+    assert.match(m.released, /^\d{4}-\d{2}-\d{2}$/); assert.ok(!isNaN(Date.parse(m.released)) && m.released <= C.retrieved, m.id + " not in the future");
+    assert.ok(["daily", "tempo", "long", "race", "trail"].includes(m.use), m.id);
+    assert.match(m.source.url, /^https:\/\//); assert.ok(m.source.label, m.id);
+    assert.ok(m.plus.length >= 1 && m.minus.length >= 1, m.id);
+  }
+});
