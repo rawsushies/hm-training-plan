@@ -59,6 +59,16 @@ test("Catat: Kiki asks one question at a time, answers fold up, the summary show
   await page.waitForSelector(".ask-sum");
   assert.match(await page.textContent(".ask-sum"), /6[\s\S]*7:00[\s\S]*42:00/);
   assert.equal(await page.evaluate(() => S.logs.length), 0, "nothing saved before the summary is confirmed");
+  // changing an earlier answer asks the later questions again (a different date can mean different sessions)
+  await page.click('.ask-h[data-i="0"]');
+  await page.click(".ask-q .ask-o:nth-child(2)");                     // Kemarin
+  assert.equal(await page.evaluate(() => M.a.km), undefined, "later answers cleared");
+  await page.click('.ask-h[data-i="0"]'); await page.click(".ask-q .ask-o:nth-child(1)");   // back to Hari ini
+  if (await page.evaluate(() => /sesi/.test(document.querySelector(".ask-qt").textContent))) await page.click(".ask-q .ask-o:last-of-type");
+  await H.askType(page, "6"); await H.askType(page, "42:00");
+  if (await page.evaluate(() => /jenis/.test(document.querySelector(".ask-qt").textContent))) await H.askPick(page, "easy");
+  await H.askPick(page, 4);
+  await page.waitForSelector(".ask-sum");
   await page.click('[data-act="askSave"]');
   const l = await page.evaluate(() => S.logs[0]);
   assert.equal(l.distance, 6); assert.equal(l.duration, 2520); assert.equal(l.rpe, 4);

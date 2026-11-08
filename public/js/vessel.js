@@ -99,6 +99,7 @@
   }
 
   function mount(root) {
+    for (const v of list) if (!v.cv.isConnected) list.delete(v);
     (root || document).querySelectorAll("canvas.vessel").forEach(cv => {
       const v = setup(cv);
       list.add(v);

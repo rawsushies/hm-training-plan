@@ -90,7 +90,7 @@
     return `<div class="kc-sheet">
       <div class="kc-top"><span class="kc-av">${mascot("kc-kiki", "wave")}</span><span class="kc-who"><b>Kiki</b><span class="cap">${esc(h.title)}</span></span></div>
       <div class="kc-msg"><span class="kc-typing" aria-hidden="true"><i></i><i></i><i></i></span>
-        <p class="cap kc-k">Apa ini?</p><p class="kc-hl">${words(h.what.split(/(?<=\.)\s/)[0], 0)}</p></div>
+        <p class="cap kc-k">Apa ini?</p><p class="kc-hl">${words(h.what.replace(/\.\s[\s\S]*$/, "."), 0)}</p></div>
       <p class="cap kc-k" style="margin-top:14px">Cara pakai</p>
       <ol class="kc-steps">${h.how.map((x, i) => `<li style="--i:${i}"><span class="num">${i + 1}</span>${esc(x)}</li>`).join("")}</ol>
       ${d ? `<div class="kc-replies"><button class="kc-chip pri" data-act="tutStart" data-id="${h.tour}">Tunjukin aku · ${d.steps.length}</button></div>` : ""}
@@ -109,7 +109,7 @@
   /* ---------- Drum wheels for every <select> ---------- */
   const ITEM = 40;
   function wheel(sel) {
-    if (sel.dataset.whl || sel.multiple) return;
+    if (sel.dataset.whl || sel.multiple || !sel.closest(".field")) return;   // inline selects (inside a sentence or toolbar) stay compact
     sel.dataset.whl = "1"; sel.classList.add("whl-src"); sel.tabIndex = -1;
     const w = document.createElement("div");
     w.className = "whl"; w.setAttribute("role", "listbox"); w.tabIndex = 0;
@@ -160,6 +160,9 @@
     const bs = [...seg.children].filter(b => b.tagName === "BUTTON");
     if (seg.dataset.swd || bs.length < 3 || seg.closest(".tour,.dock,.wdial")) return;
     seg.dataset.swd = "1"; seg.classList.add("swd");
+    // a glass pill may already sit in this row (ui-glass.js); the dial's lens replaces it
+    const gp = seg.querySelector(":scope > .glass-pill"); if (gp) gp.remove();
+    seg.classList.remove("rtabs", "glass", "seg-glass"); seg.removeAttribute("data-pill"); seg.setAttribute("role", "group");
     const wrap = document.createElement("div"); wrap.className = "swd-wrap";
     seg.parentNode.insertBefore(wrap, seg); wrap.appendChild(seg);
     wrap.insertAdjacentHTML("beforeend", '<i class="swd-lens" aria-hidden="true"></i>');
@@ -185,13 +188,13 @@
   /* ---------- Long text → headline, sub-headline, context ----------
    * A paragraph or note longer than ~18 words is split: first sentence becomes the headline, the second the
    * sub-headline, the rest folds behind "Detail". The words stay in the page; only the shape changes. */
-  const SENT = /(?<=[.!?])\s+(?=[A-Z0-9“"(])/;
+  const splitSent = t => t.replace(/([.!?])\s+(?=[A-Z0-9“"(])/g, "$1\u0001").split("\u0001");
   function chunk(el) {
     if (el.dataset.ch || el.closest(".tour,.kc-sheet,.ask,.gate,.whl,.swd-wrap,label,button,td,th,.kv,.hsc")) return;
     if (el.querySelector("button,a,input,select,textarea,svg,img,code,b.num")) return;
     const txt = el.textContent.trim(); el.dataset.ch = "1";
     if (txt.split(/\s+/).length < 19) return;
-    const parts = txt.split(SENT); if (parts.length < 2) return;
+    const parts = splitSent(txt); if (parts.length < 2) return;
     const [h, sub, ...rest] = parts;
     el.classList.add("hsc");
     el.innerHTML = `<b class="hsc-h">${esc(h)}</b><span class="hsc-s">${esc(sub)}</span>${rest.length ? `<details class="hsc-c"><summary>Detail</summary><span>${esc(rest.join(" "))}</span></details>` : ""}`;

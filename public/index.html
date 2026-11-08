@@ -2485,6 +2485,7 @@ function cockpit({days, w, wi, done, pct, next, goalSec, hello}){
 
 /* ---------- Sign-in gate (v4): new users sign in before onboarding/tutorial ---------- */
 const GATE_KEY = "hmtp:gate:v4";
+let GATE_SKIP = false;   // "Lanjut offline" while sign-in cannot start online (Firebase failed to load): this session only
 let BOOTING = true;
 /** Health Connect is the second required link, on the Android app only (the web has no Health Connect).
  *  DEVICE.hc: "ok" = read access granted, "na" = Health Connect is not on this phone. */
@@ -2494,14 +2495,14 @@ function hcPending(){
 }
 function gateActive(){
   if(CLOUD.state === "off") return false;
-  if(CLOUD.user || ACTIVE_UID || LS.get(GATE_KEY) === "local") return hcPending();
+  if(CLOUD.user || ACTIVE_UID || GATE_SKIP || LS.get(GATE_KEY) === "local" || (LS.get(GATE_KEY) === "offline" && !isOnline())) return hcPending();
   if(["init","loading"].includes(CLOUD.state)) return false;      // still restoring a session (boot screen covers this)
   return true;
 }
 const HC_LOGO = `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/><path d="M6 12h3l1.5-2.5 2 5 1.5-2.5h4"/></svg>`;
 function vGate(){
   const offline = !isOnline(), busy = CLOUD.state === "signingin", env = typeof INTEG !== "undefined" ? INTEG.env() : {native:false, plugins:{}};
-  const gDone = !!(CLOUD.user || ACTIVE_UID), local = !gDone && LS.get(GATE_KEY) === "local", hcWeb = !env.native, hcOld = env.native && !env.plugins.Health;
+  const gDone = !!(CLOUD.user || ACTIVE_UID), local = !gDone && (GATE_SKIP || LS.get(GATE_KEY) === "local" || (LS.get(GATE_KEY) === "offline" && !isOnline())), hcWeb = !env.native, hcOld = env.native && !env.plugins.Health;
   const hcDone = DEVICE.hc === "ok", hcBusy = typeof INTEG !== "undefined" && INTEG.busy;
   const n = HMTP.hasRealData(S) ? S.logs.filter(l => !l.sample).length : 0;
   const step = (i, ico, name, right, cls) => `<li class="gstep ${cls}"><span class="gstep-n num">${i}</span><span class="gstep-ico">${ico}</span><b>${name}</b>${right}</li>`;
@@ -2521,7 +2522,7 @@ function vGate(){
     ${n ? `<p class="gate-note">${n} lari di perangkat ini ikut tersimpan setelah masuk</p>` : ""}
     ${CLOUD.err && CLOUD.state === "autherror" ? `<p class="err">${esc(errText(CLOUD.err))}</p>` : ""}
     ${CLOUD.errDetail ? `<p class="xs mu" style="word-break:break-word"><code id="err-detail">${esc(CLOUD.errDetail)}</code></p><button class="btn sm" data-act="copyErr">Salin detail</button>` : ""}
-    ${offline && !gDone ? `<p class="gate-note">Offline</p><button class="btn ghost" data-act="gateLocal">Lanjut offline</button>` : ""}
+    ${(offline || CLOUD.state === "error") && !gDone ? `<p class="gate-note">${offline ? "Offline" : "Masuk belum bisa dimulai"}</p><button class="btn ghost" data-act="gateLocal">Lanjut offline</button>` : ""}
     <p class="fine">Data latihanmu privat</p>
   </div>`;
 }
@@ -2661,7 +2662,7 @@ const ACT = {
     finally{ INTEG.busy = false; saveDevice(); render(false); if(!gateActive()){ maybeStartTutorial(); render(false); } }
   },
   gateHcSkip:() => { DEVICE.hc = "skip"; saveDevice(); render(false); if(!gateActive()){ maybeStartTutorial(); render(false); } },
-  gateLocal:() => { LS.set(GATE_KEY, "local"); render(false); maybeStartTutorial(); render(false); },
+  gateLocal:() => { if(isOnline()) GATE_SKIP = true; else LS.set(GATE_KEY, "offline"); render(false); maybeStartTutorial(); render(false); },
   signIn:() => signIn(false),
   retryAcct:() => { if(CLOUD.user) activateAccount(CLOUD.user); },
   syncNow:() => { if(SYNC){ SYNC.schedule(0); toast("Lagi sync..."); } },

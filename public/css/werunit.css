@@ -1065,3 +1065,7 @@ body[data-tab="home"] .a4-race{background:rgba(255,255,255,.12);border-color:rgb
 @media (prefers-reduced-motion:reduce){.ask-o,.ask-custom{animation:none;opacity:1}.ask-q,.ask-sum,.ask-save,.ask-h{animation:none}.ask-bub{display:none}}
 :root[data-motion="reduced"] .ask-o,:root[data-motion="reduced"] .ask-custom{animation:none;opacity:1}
 :root[data-motion="reduced"] .ask-bub{display:none}
+
+/* 4.0.1: file pickers look like the rest of the app */
+input[type="file"]{font:inherit;color:var(--mu);font-size:13px;max-width:100%}
+input[type="file"]::file-selector-button{font:600 13px var(--font);color:var(--tx);background:var(--s2);border:1px solid var(--line);border-radius:999px;padding:8px 14px;margin-right:10px;cursor:pointer}

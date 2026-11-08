@@ -11,7 +11,7 @@ function segPill(key, items, cur, act, extra = ""){
 /** Upgrade the classic single-select `.seg` controls (v3 screens + v4 editors) to the same glass pill. */
 function upgradeSegs(root = document){
   const seen = {};
-  root.querySelectorAll(".seg:not([data-pill])").forEach(seg => {
+  root.querySelectorAll(".seg:not([data-pill]):not(.swd)").forEach(seg => {   // swipe dials (companion.js) have their own lens
     const btns = [...seg.querySelectorAll(":scope > button")];
     if(btns.length < 2 || btns.length > 8 || seg.querySelectorAll(":scope > button.on").length > 1) return;
     const b0 = btns[0].dataset, id = [b0.act, b0.k || "", seg.dataset.tour || ""].join(":");
