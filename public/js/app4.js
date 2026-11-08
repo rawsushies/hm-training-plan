@@ -91,7 +91,7 @@
     const strength = itemsOnDate(todayYmd()).find(x => x.type === "strength");
     if (!s) {
       return `<section class="a4-hero" data-tour="hero"><p class="a4-kicker">Week ${w.n} · ${esc(KIND_LBL[w.kind])}</p>
-        <div class="a4-big"><span class="num">Istirahat</span></div>
+        <div class="a4-big"><span class="num word">Istirahat</span></div>
         <svg class="wshape" viewBox="0 0 340 64" ${SVGNS} aria-hidden="true"><rect x="0" y="58" width="340" height="6" rx="3" fill="var(--line2)"/></svg>
         ${strength ? `<button class="a4-chip" data-act="openSess" data-id="${strength.id}"><i style="--c:${tc("strength")}"></i>${esc(strength.title)}</button>` : ""}
 </section>`;
@@ -126,12 +126,12 @@
     const pain = persistentPain();
     return `${storageNote()}<div class="cockpit a4">
       <div class="a4-top"><div><p class="a4-date">${fmtDay(todayYmd())}</p><h1>Hari ini</h1></div>
-        <button class="a4-race" data-act="nav" data-t="race" data-tour="race-chip" aria-label="${Math.max(0, days)} hari lagi ke ${esc(ev.name)}"><b class="num">${Math.max(0, days)}</b><span>hari ke<br>race</span></button>${helpBtn("home")}</div>
+        <button class="a4-race" data-act="nav" data-t="race" data-tour="race-chip" aria-label="${Math.max(0, days)} hari lagi ke ${esc(ev.name)}"><b class="num">${Math.max(0, days)}</b><span>hari lagi</span></button>${helpBtn("home")}</div>
       ${pain ? `<div class="note bad">Nyeri tercatat beberapa kali. Kurangi latihan, periksa ke dokter atau fisioterapis kalau nggak membaik.</div>` : ""}
       ${heroCard()}
       ${bodyCheck()}
       ${weekBlock()}
-      <!--wx-->
+      ${typeof weatherCard === "function" ? weatherCard() : ""}
       ${nextCard()}
     </div>`;
   };

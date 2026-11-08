@@ -1,6 +1,6 @@
 {
  "version": "4.0.0",
- "build": "2026-11-08T05:51:49Z",
+ "build": "2026-11-08T05:56:21Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
@@ -13,8 +13,8 @@
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "6f3316eb5575e91918a5bdfb195a2129eefab49910f1099c41375385da883016",
-   "s": 55073
+   "h": "26b2463f58d87489b606ebefe48e2ec1fc18f93407baa14bbb7d2b615c46903d",
+   "s": 55443
   },
   {
    "p": "favicon-32.png",
@@ -53,8 +53,8 @@
   },
   {
    "p": "js/app4.js",
-   "h": "e72f51e7c2a9e3a3bfabae0e582a70f06141d5e88d986491b6f340733e7ab695",
-   "s": 25929
+   "h": "94d80ca74bc793151af652867af3331abd70206531f73f52ad82441d7ae223e7",
+   "s": 25976
   },
   {
    "p": "js/brand.js",
@@ -133,7 +133,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "d01b5dca31ec56b5d1754c73c49c34002568c58f91c5ee9a5aeff266e0e1f62d",
+   "h": "b55028ac5a7d59b90cafb8a1b338c154209bae33cef4dd9e0121d05c7b8a9a43",
    "s": 139
   },
   {
@@ -178,8 +178,8 @@
   },
   {
    "p": "sw.js",
-   "h": "5223171207f3abf4d3f58364b01790840754728977a69d9ec5a319218118b246",
-   "s": 2614
+   "h": "c115f198bd9a06d9bb407b4c651e7ffc142d7077a23dba29397dab98bfb2b48d",
+   "s": 2628
   },
   {
    "p": "vendor/capacitor/8.5.3/capacitor.js",

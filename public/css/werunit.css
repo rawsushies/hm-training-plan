@@ -702,3 +702,9 @@ button.a4-card:active{transform:scale(.985)}
 .ql-eff button.on{background:var(--tx)}
 .ql-eff button.on:nth-child(5),.ql-eff button.on:nth-child(4){background:var(--acc)}
 .ql-save{min-height:52px;font-size:16px;width:100%}
+.a4>*,.a4-hero>*,.a4-card>*{min-width:0}
+.a4-big .num.word{font-size:clamp(48px,17vw,80px)}
+@media (max-width:360px){.a4-big .num{font-size:80px}.a4-batt{gap:6px}.a4-batt button{font-size:12px}.a4-race b{font-size:26px}}
+.a4-race span{max-width:4ch}
+/* tours: leave room so the last card can scroll clear of the bottom bubble */
+.shell.touring main{padding-bottom:60vh}
