@@ -123,13 +123,15 @@ test("strength, check-in, goals, shoes, locked-in target, elevation target, revi
   await page.click('[data-act="strSave"]');
   assert.deepEqual(await page.evaluate(() => [S.strength.length, S.strength[0].sessionId, S.strength[0].done.length]), [1, "w1-sA", 2]);
   await H.act(page, "nav", { t: "recovery" });
-  await page.click('[data-act="ciRate"][data-k="pain"][data-v="4"]');
+  await page.click('[data-act="askStart"][data-f="ci"]');           // check-in is six questions from Kiki
+  for (const v of [3, 2, 2, 3, 3, 4]) await H.askPick(page, v);
   assert.match(await page.textContent('[data-tour="ci-result"]'), /Mending istirahat/);
-  await page.click('[data-act="ciSave"]');
+  await page.click('[data-act="askSave"]');
   assert.equal(await page.evaluate(() => S.checkins.length), 1);
   await H.act(page, "goalEdit", { id: "longrun" }); await page.fill("#gl-target", "18"); await page.click('[data-act="saveGoal"]');
   assert.equal(await page.evaluate(() => S.goals.items.find(x => x.id === "longrun").target), 18);
-  await H.act(page, "shoeNew"); await page.fill("#sh-name", "Biru"); await page.click('[data-act="saveShoe"]');
+  await H.act(page, "askStart", { f: "shoe" }); await H.askSkip(page); await H.askType(page, "Biru");
+  await H.askPick(page, "daily"); await H.askPick(page, 0); await H.askPick(page, 700); await page.click('[data-act="askSave"]');
   const shoeId = await page.evaluate(() => S.shoes[0].id);
   assert.equal(await page.evaluate(() => S.settings.defaultShoe), shoeId);
   await H.act(page, "lockCfg", { id: "w2-wd" }); await page.fill("#lc-pace", "7:30"); await page.click('[data-act="saveLockCfg"]');

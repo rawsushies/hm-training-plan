@@ -21,7 +21,7 @@
     "": '<rect x="22" y="26" width="6" height="7" rx="3"/><rect x="36" y="26" width="6" height="7" rx="3"/>'
   };
   mascot = function (cls = "mascot", mood = "") {
-    const eyes = EYES[mood] || EYES[""];
+    const eyes = EYES[mood.split(" ")[0]] || EYES[""];
     return `<svg class="${cls} kiki ${mood}" viewBox="0 0 64 64" aria-hidden="true">
       <ellipse class="k-sh" cx="32" cy="61" rx="15" ry="2.4"/>
       <g class="k-bob">
@@ -36,6 +36,7 @@
           <path class="k-tail" d="M52 18 q6 -1 9 -5 M52 21 q6 1 10 -1"/>
           <rect class="k-visor" x="16" y="23" width="32" height="13" rx="6.5"/>
           <g class="k-eyes">${eyes}</g>
+          <rect class="k-mouth" x="28.5" y="37.4" width="7" height="1.8" rx=".9"/>
         </g>
       </g></svg>`;
   };
@@ -54,7 +55,7 @@
     return `<div class="tour kchat" id="tour" role="dialog" aria-live="polite" aria-label="Tutorial ${esc(d.title)}">
       <div class="bubble">
         <div class="kc-top">
-          <span class="kc-av">${mascot("kc-kiki", mood)}</span>
+          <span class="kc-av">${mascot("kc-kiki", mood + " talk").replace('class="kc-kiki', `style="--tn:${(st.t + " " + st.b).split(/\s+/).length * 2}" class="kc-kiki`)}</span>
           <span class="kc-who"><b>Kiki</b><span class="cap">${esc(d.title)} · ${t.i + 1}/${n}</span></span>
           <button class="kc-x" data-act="tutClose" aria-label="Tutup tutorial">×</button>
         </div>
@@ -186,7 +187,7 @@
    * sub-headline, the rest folds behind "Detail". The words stay in the page; only the shape changes. */
   const SENT = /(?<=[.!?])\s+(?=[A-Z0-9“"(])/;
   function chunk(el) {
-    if (el.dataset.ch || el.closest(".tour,.kc-sheet,.gate,.whl,.swd-wrap,label,button,td,th,.kv,.hsc")) return;
+    if (el.dataset.ch || el.closest(".tour,.kc-sheet,.ask,.gate,.whl,.swd-wrap,label,button,td,th,.kv,.hsc")) return;
     if (el.querySelector("button,a,input,select,textarea,svg,img,code,b.num")) return;
     const txt = el.textContent.trim(); el.dataset.ch = "1";
     if (txt.split(/\s+/).length < 19) return;

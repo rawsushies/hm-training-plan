@@ -222,10 +222,9 @@ function tabOverview(P){
     </div></details>
     ${p.excluded && p.excluded.length ? `<details style="margin-top:6px"><summary class="sm">${p.excluded.length} catatan nggak dipakai</summary><div class="bd"><ul class="clean xs">${p.excluded.slice(0, 20).map(x => `<li>${fmtD(x.log.date)} ${fmtKm(x.log.distance)} km: ${esc(x.reason)}</li>`).join("")}</ul></div></details>` : ""}
   </div>
-  <div class="card" style="margin-top:12px"><h3>Hasil race / tes terbaru (opsional)</h3>
+  <div class="card" style="margin-top:12px"><h3>Hasil race / tes</h3>
     ${P.rp.recent.map((r, i) => `<div class="kv"><span>${esc(r.label || "Hasil")} ${fmtKm(r.km)} km ${r.date ? "· " + fmtD(r.date) : ""}</span><span>${fmtDur(r.sec)} <button class="link sm" data-act="rcRecentDel" data-i="${i}">hapus</button></span></div>`).join("")}
-    <div class="g3" style="margin-top:8px"><div class="field"><label for="rr-km">Km</label><input type="text" inputmode="decimal" id="rr-km" placeholder="10"></div><div class="field"><label for="rr-t">Waktu</label><input type="text" id="rr-t" placeholder="55:30"></div><div class="field"><label for="rr-d">Tanggal</label><input type="date" id="rr-d"></div></div>
-    <div class="btns"><button class="btn sm" data-act="rcRecentAdd">Tambah</button><label class="sm mu" style="display:flex;align-items:center;gap:6px">Eksponen <select id="rr-exp" data-live="rcExp" style="width:auto;min-height:32px">${[1.04, 1.06, 1.08].map(x => `<option ${P.rp.exp === x ? "selected" : ""}>${x}</option>`).join("")}</select></label></div></div>`;
+    <div class="btns" style="margin-top:8px"><button class="btn sm pri" data-act="askStart" data-f="result">Tambah hasil</button><label class="sm mu" style="display:flex;align-items:center;gap:6px">Eksponen <select id="rr-exp" data-live="rcExp" style="width:auto;min-height:32px">${[1.04, 1.06, 1.08].map(x => `<option ${P.rp.exp === x ? "selected" : ""}>${x}</option>`).join("")}</select></label></div></div>`;
 }
 function tabPace(P){
   const rp = P.rp, h = Math.floor(P.rows.length / 2), first = P.rows[h - 1].cum, second = P.T - first;

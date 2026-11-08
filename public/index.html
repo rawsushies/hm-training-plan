@@ -2398,7 +2398,7 @@ const shoeKm = id => { const x = S.shoes.find(s => s.id === id); return sum(S.lo
 function vShoes(){
   const noShoe = S.logs.filter(l => !l.shoeId).length;
   return `${pageHead("Sepatu", "Catat km tiap sepatu. Biasanya bantalan sepatu lari mulai berkurang di sekitar 500–800 km, tapi cek juga kondisi sol dan rasa di kaki. Ini perkiraan kasar, bukan aturan.")}
-  <div class="btns" style="margin:14px 0"><button class="btn pri" data-act="shoeNew" data-tour="shoe-add">Tambah sepatu</button></div>
+  <div class="btns" style="margin:14px 0"><button class="btn pri" data-act="askStart" data-f="shoe" data-tour="shoe-add">Tambah sepatu</button></div>
   ${S.shoes.length ? `<div class="rows" data-tour="shoe-list">${S.shoes.map(x => { const km = shoeKm(x.id), pct = Math.min(100, Math.round(km/x.limit*100)); return `<div style="padding:12px 0;border-bottom:1px solid var(--line)">
     <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline"><b>${esc(x.name)}</b><span>${S.settings.defaultShoe === x.id ? '<span class="chip done">Default</span>' : ''}${x.retired ? '<span class="chip">Pensiun</span>' : ''}</span></div>
     <div class="sm" style="display:flex;justify-content:space-between;margin:6px 0"><span class="tab">${fmtKm(km)} / ${x.limit} km</span><span class="mu">${S.logs.filter(l => l.shoeId === x.id).length} lari</span></div>
@@ -2962,6 +2962,7 @@ function startApp(){
 <script src="js/vessel.js"></script>
 <script src="js/app4.js"></script>
 <script src="js/companion.js"></script>
+<script src="js/ask.js"></script>
 <script>startApp();</script>
 </body>
 </html>

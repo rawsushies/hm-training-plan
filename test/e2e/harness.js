@@ -72,6 +72,10 @@ export const waitSynced = page => waitFor(page, () => { const s = window.__hmtpT
 export async function act(page, name, data = {}) {
   await page.evaluate(([name, data]) => { const el = document.createElement("button"); el.dataset.act = name; Object.assign(el.dataset, data); document.body.appendChild(el); el.click(); el.remove(); }, [name, data]);
 }
+/** "Tanya Kiki" question flows: pick a choice by its value, type a custom answer, or skip. */
+export const askPick = (page, v) => page.click(`.ask-q [data-act="askAns"][data-v='${JSON.stringify(v)}']`);
+export async function askType(page, text) { await page.fill("#ask-in", String(text)); await page.click('.ask-q [data-act="askCustom"]'); }
+export const askSkip = page => page.click('.ask-q [data-act="askSkip"]');
 /** Add a run through the real UI form. */
 export async function logRun(page, { date, km, dur }) {
   await act(page, "newLog");

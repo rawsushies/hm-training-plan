@@ -19,7 +19,7 @@ vShoes = function(){
   const sug = next ? SHO.suggest(S.shoes, S.logs, next.type) : null, rot = SHO.rotation(S.shoes, S.logs, t);
   const tabs = segPill("shoetab", [["mine", "Sepatuku"], ["catalog", "Rekomendasi"], ["rotation", "Rotasi"]], tab, "shoeTab");
   let body = "";
-  if(tab === "mine") body = `<div class="btns" style="margin:12px 0 2px"><button class="btn pri" data-act="shoeNew" data-tour="shoe-add">Tambah sepatu</button></div>
+  if(tab === "mine") body = `<div class="btns" style="margin:12px 0 2px"><button class="btn pri" data-act="askStart" data-f="shoe" data-tour="shoe-add">Tambah sepatu</button></div>
     ${act.length ? `<div data-tour="shoe-list">${act.map(shoeLine).join("")}</div>` : `<p class="mu" style="margin-top:8px">Belum ada sepatu</p>`}
     ${ret.length ? `<h3 style="margin-top:18px">Pensiun</h3>${ret.map(shoeLine).join("")}` : ""}
     ${noShoe && S.shoes.length ? `<p class="sm mu" style="margin-top:12px">${noShoe} lari belum ada sepatunya. <button class="link sm" data-act="shoeAssign">Pasang ke sepatu default</button></p>` : ""}`;

@@ -315,6 +315,12 @@ The dock and segmented controls are pills. Nested radius = outer − padding, ne
 - **Coach card (old, replaced by Kiki chat):** a wide card docked above the tab bar, Kiki peeking over its top-left edge, a segmented
   progress line, "Title · 2/6", one line of copy, Lewati on the left and a round orange arrow on the right. Swipe left
   for next, right for back. No side tab, no speech-bubble tail.
+- **Tanya Kiki (manual input):** typing data in is one question per screen. Kiki asks (lip-syncing while the question
+  types out, bubbles rising behind it); the person taps a choice card or types their own answer; the answered
+  question folds into a one-line history (tap to change it) and the next question slides up below. Nothing is saved
+  until the end, where Kiki shows the result (readiness and Siap for a check-in, km / pace / time / Beban for a run,
+  a life bar for a shoe) above one Simpan button. Used for the daily check-in, Catat lari (record button) and Tambah
+  sepatu (`public/js/ask.js`). Editing an existing run or shoe keeps the full form.
 - **Swipe dials:** any button row with three or more options (check-in 1–5, months, frequency and similar) is a
   horizontal drum; the chosen option sits in the orange lens; swiping and letting go picks the option in the lens.
 - **Long text:** a paragraph over ~18 words becomes headline (first sentence, bold), sub-headline (second sentence,

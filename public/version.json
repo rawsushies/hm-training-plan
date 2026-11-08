@@ -1,21 +1,21 @@
 {
  "version": "4.0.0",
- "build": "2026-11-08T07:12:48Z",
+ "build": "2026-11-08T07:23:17Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
   "4 tab: Hari ini, Lari, Race, Kamu",
   "Skor Siap, Beban, Tidur sebagai cairan",
-  "Kiki baru: ngobrol, bergerak, bereaksi",
-  "Pilihan pakai roda dan dial geser",
+  "Tanya Kiki: isi data satu pertanyaan per layar",
+  "Kiki baru: ngobrol, lipsync, bergerak",
   "Masuk Google + Health Connect (bisa dilewati)"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "b5777d0cba5a0644098cb2ed789df4b6c47a5955383050b0c330e7a29d79ae6e",
-   "s": 78603
+   "h": "813662b3407f168765ec93a71d15ab780127d9bfb649aadea408a26a90c938ef",
+   "s": 84362
   },
   {
    "p": "favicon-32.png",
@@ -49,13 +49,18 @@
   },
   {
    "p": "index.html",
-   "h": "1a85cdbdda6aa516654a2216aacd4faae160be1328c3964928f4da3948970a6d",
-   "s": 283907
+   "h": "e7d01f4ce5f417773e6c000b651d0feda7f280585d9237f487dd5826b581633c",
+   "s": 283956
   },
   {
    "p": "js/app4.js",
    "h": "73624a7666e6fb6471e06134534efcaa91304cb5f7364d9301c557e73a6f58ce",
    "s": 43131
+  },
+  {
+   "p": "js/ask.js",
+   "h": "58c065eb47aa055af5add8f0237136bcac99295e3244c6ef6b076606cdf51cc4",
+   "s": 17173
   },
   {
    "p": "js/brand.js",
@@ -69,8 +74,8 @@
   },
   {
    "p": "js/companion.js",
-   "h": "b523bc7ba51f92810d6c2e778917a411500dcc43ae02b07055aab2da8d4670ed",
-   "s": 14333
+   "h": "f4cc328586bcafc213b668e4108b6441efd07f71b98744ba8e61c54ab3b2ca1f",
+   "s": 14549
   },
   {
    "p": "js/integrations.js",
@@ -144,7 +149,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "e762ecc573e4f9b046571a258a13a9810199b46303cf4745ec0e27abe2986f0c",
+   "h": "287553c82942ee805445281e09b00b8b6adb98a469ab0eecc3aa4d56ea1266a8",
    "s": 139
   },
   {
@@ -159,8 +164,8 @@
   },
   {
    "p": "js/views-m4.js",
-   "h": "e3272d93c959341ae887be658caff1907a119087c68816ca51017e6745526c44",
-   "s": 20766
+   "h": "207b1b4c70c222fc4dd4dadb4ed7aa6e97b27d7876d21313dad15cfa13a32f74",
+   "s": 20781
   },
   {
    "p": "js/views-notify.js",
@@ -174,8 +179,8 @@
   },
   {
    "p": "js/views-v4.js",
-   "h": "b07a20b2149a2d460a1f463734507c7f9699922a45a86c2e2b1967b1549ca0d7",
-   "s": 54293
+   "h": "71bd8e648bac974727c78a327d4739938013274ec78841d3739be72fef1703a8",
+   "s": 53957
   },
   {
    "p": "js/views-weather.js",
@@ -194,8 +199,8 @@
   },
   {
    "p": "sw.js",
-   "h": "b4f33c16149d959aeddb04bbfc7fb524543149474e505bd77e92d4bb9e3a2248",
-   "s": 2679
+   "h": "1b0f6e1dc9098e4af6c6aceb38a20fd6ae98827ee57b00afc5475f534b40b1f6",
+   "s": 2692
   },
   {
    "p": "vendor/capacitor/8.5.3/capacitor.js",
