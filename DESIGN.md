@@ -303,8 +303,16 @@ The dock and segmented controls are pills. Nested radius = outer − padding, ne
 - **Gate:** two numbered links, both required. 1 Google, 2 Health Connect (Android app only; on the web the row reads
   "Android" and is dimmed, and on a phone without Health Connect it reads "Tidak ada"). The app stays behind the gate
   until both are done. The only bypass is "Lanjut offline", shown only when there is no connection.
-- **Coach:** the mark on an orange disc (`mascot()`), used for the tour and help sheets. The old Kiki character is gone.
-- **Tour bubble:** `surface-1` card with an orange left edge, "Title · 2/6", one line of copy, Lanjut / Lewati.
+- **Kiki (companion bot):** a small sporty robot: white helmet head, black visor with two orange LED eyes that blink,
+  orange headband with flying tails, antenna, graphite body with a "21" race bib, fists. Bobs gently; cheers on the
+  last tutorial step. Drawn in `public/js/companion.js` (`mascot(cls, mood)`), used in the tour, help sheets and
+  onboarding. Still under reduced motion.
+- **Coach card (tutorial):** a wide card docked above the tab bar, Kiki peeking over its top-left edge, a segmented
+  progress line, "Title · 2/6", one line of copy, Lewati on the left and a round orange arrow on the right. Swipe left
+  for next, right for back. No side tab, no speech-bubble tail.
+- **Pickers:** every `<select>` renders as a drum wheel (swipe or tap a row; the orange lens marks the value). The real
+  select stays in the DOM, invisible, so forms and handlers are unchanged. Day pickers are a week dial: seven days
+  around a ring, selected days orange, the count in the centre.
 - **Update strip:** a pill with the version number in an orange badge, two words, one button.
 
 ## Motion

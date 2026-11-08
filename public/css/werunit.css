@@ -853,3 +853,64 @@ body[data-tab="home"] .a4-race{background:rgba(255,255,255,.12);border-color:rgb
 .ex-more summary{cursor:pointer;list-style:none;margin-top:4px}
 .ex-more summary::-webkit-details-marker{display:none}
 .integ-off{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+
+/* ===== 4.0 companion layer: Kiki bot, coach card, drum wheels, week dial ===== */
+.kiki{overflow:visible;flex:none}
+.kiki .k-sh{fill:#000;opacity:.25}
+.kiki .k-head{fill:#f3f2f6}
+.kiki .k-visor{fill:#141415}
+.kiki .k-eyes rect{fill:#FF5A1F;transform-box:fill-box;transform-origin:center;animation:k-blink 4.2s infinite}
+.kiki .k-band,.kiki .k-tip{fill:#FF5A1F}
+.kiki .k-tail{stroke:#FF5A1F;stroke-width:2.6;fill:none;stroke-linecap:round}
+.kiki .k-ant{stroke:#f3f2f6;stroke-width:2.6;stroke-linecap:round}
+.kiki .k-body{fill:#2b2b30}
+.kiki .k-bib{fill:#f3f2f6}
+.kiki .k-no{font:800 8px/1 var(--bib);fill:#141415}
+.kiki .k-arm{stroke:#2b2b30;stroke-width:5;fill:none;stroke-linecap:round}
+.kiki .k-fist{fill:#f3f2f6}
+.kiki .k-bob{animation:k-bob 2.4s ease-in-out infinite;transform-origin:32px 58px}
+.kiki.cheer .k-bob{animation:k-cheer .7s ease-in-out infinite alternate}
+@keyframes k-blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+@keyframes k-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@keyframes k-cheer{to{transform:translateY(-4px) rotate(-4deg)}}
+.mascot-inline.kiki{width:48px;height:48px}
+
+.tour.coachcard{left:10px;right:10px;align-items:stretch}
+.tour.coachcard .bubble{position:relative;flex:1;padding:16px 16px 12px;padding-left:96px;min-height:124px;border:1px solid var(--line);border-radius:22px;background:var(--s1);box-shadow:0 -6px 30px rgba(0,0,0,.45);touch-action:pan-y;overflow:visible;max-height:none}
+.tour.coachcard .bubble::after{display:none}
+.tour .cc-bot{position:absolute;left:6px;top:-30px;width:86px;height:86px;pointer-events:none}
+.tour .cc-kiki{width:86px;height:86px}
+.tour.coachcard .prog{position:absolute;left:96px;right:16px;top:9px;margin:0}
+.tour.coachcard .prog i{height:3px;background:var(--s2)}
+.tour.coachcard .prog i.on{background:color-mix(in srgb,var(--acc) 55%,transparent)}
+.tour.coachcard .prog i.cur{background:var(--acc)}
+.tour .cc-cap{margin-top:6px}
+.tour.coachcard h3{font-size:19px;margin:2px 0 2px;letter-spacing:-.01em}
+.tour.coachcard p.sm{color:var(--mu)}
+.cc-ctl{display:flex;align-items:center;gap:8px;margin-top:10px}
+.cc-skip{background:none;border:0;color:var(--mu2);font:600 13px var(--font);padding:8px 0;cursor:pointer}
+.cc-swipe{flex:1;text-align:center;font:600 9px/1 var(--font);letter-spacing:.2em;text-transform:uppercase;color:var(--mu2);opacity:.6}
+.cc-round{width:46px;height:46px;border-radius:50%;border:0;background:var(--acc);color:#fff;display:grid;place-items:center;cursor:pointer;flex:none}
+.cc-round.ghost{background:var(--s2);color:var(--tx);width:40px;height:40px}
+.cc-round svg{width:20px;height:20px;stroke:currentColor;stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.tour.coachcard.top .cc-bot{top:auto;bottom:-22px}
+@media (min-width:900px){.tour.coachcard{left:auto;right:24px;width:440px}}
+
+.whl-src{position:absolute!important;width:1px!important;height:1px!important;min-height:0!important;padding:0!important;border:0!important;opacity:0;pointer-events:none;overflow:hidden}
+.field{position:relative}
+.whl{position:relative;height:120px;border-radius:16px;background:var(--s1);overflow:hidden;perspective:340px;outline:none;-webkit-mask-image:linear-gradient(transparent,#000 28%,#000 72%,transparent);mask-image:linear-gradient(transparent,#000 28%,#000 72%,transparent)}
+.whl:focus-visible{border-color:var(--acc)}
+.whl.off{opacity:.45;pointer-events:none}
+.whl-track{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;padding:40px 0;box-sizing:border-box;scrollbar-width:none;transform-style:preserve-3d;overscroll-behavior:contain}
+.whl-track::-webkit-scrollbar{display:none}
+.whl-i{height:40px;line-height:40px;scroll-snap-align:center;text-align:center;font-size:16px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 14px;cursor:pointer;transform-origin:center;will-change:transform}
+.whl-i.on{color:var(--tx);font-weight:700;font-size:18px}
+.whl-lens{position:absolute;left:8px;right:8px;top:40px;height:40px;border-radius:12px;border:1.5px solid var(--acc);background:color-mix(in srgb,var(--acc) 10%,transparent);pointer-events:none}
+
+.wdial{position:relative;width:200px;height:200px;margin:10px auto 4px;border-radius:50%;background:radial-gradient(circle,transparent 46px,var(--s1) 47px,var(--s1) 99px,transparent 100px);border:1px solid var(--line)}
+.wd-core{position:absolute;inset:0;margin:auto;width:76px;height:76px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--s2)}
+.wd-core b{font:700 30px/1 var(--bib)}
+.wd-d{position:absolute;left:50%;top:50%;width:42px;height:42px;margin:-21px 0 0 -21px;transform:translate(var(--x),var(--y));border-radius:50%;border:1px solid var(--line);background:var(--s2);color:var(--mu);font:700 12px/1 var(--font);cursor:pointer;transition:background .2s,color .2s,transform .25s cubic-bezier(.22,1,.36,1)}
+.wd-d.on{background:var(--acc);border-color:var(--acc);color:#fff;transform:translate(var(--x),var(--y)) scale(1.1)}
+@media (prefers-reduced-motion:reduce){.kiki *{animation:none!important}}
+:root[data-motion="reduced"] .kiki *{animation:none!important}

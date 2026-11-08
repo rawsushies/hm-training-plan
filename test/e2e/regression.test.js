@@ -42,7 +42,8 @@ const PROBE = () => {
     reviews: [0, 1].map(b => { const r = reviewOf(b); return { imp: r.imp, con: r.con, need: r.need, decision: r.decision, focus: r.focus }; }),
     badges: badgeStats(), goals: S.goals.items.map(g => goalValue(g.id)),
     ready: S.checkins.map(c => readiness(c)), pain: persistentPain(),
-    pc: pcOut("5", "35:00"), pp: ppOut("7:30", "15"), rp: rpOut("3:20:00", "pelan"), rp2: rpOut("2:59:59", "rata"),
+    pc: pcOut("5", "35:00").replace(/\s*<p[\s\S]*?<\/p>/g, "").trim(),   // numbers only; the caveat line was cut in 4.0
+    pp: ppOut("7:30", "15"), rp: rpOut("3:20:00", "pelan"), rp2: rpOut("2:59:59", "rata"),
     csv: csvOf().split("\n").slice(0, 4)
   });
 };
