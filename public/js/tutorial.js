@@ -10,7 +10,7 @@
     steps: [
       { tab: "home", sel: null, t: "Kenalan sama Kiki", b: "Selamat datang di WeRunIt! Aku temen lari kamu di sini. WeRunIt nyimpen rencana latihan 31 minggu kamu, nyatet lari, dan ngerangkum progres. Yuk kenalan 6 langkah aja." },
       { tab: "home", sel: "hero", t: "Latihan hari ini", b: "Angka besar = jarak hari ini. Balok di bawahnya = bentuk latihannya: abu-abu = pemanasan/pendinginan, putih = lari santai, oranye = bagian berat. Tap “✓ Selesai” kalau udah lari sesuai rencana, atau “Mulai” buat timer." },
-      { tab: "home", sel: "week", t: "Minggu ini", b: "Bar = km minggu ini dibanding target. Bulatan = sesi tiap hari: penuh = selesai, cincin oranye = hari ini, garis putus merah = kelewat. Tap bulatan buat detail." },
+      { tab: "home", sel: "scores", t: "Skor harian", b: "Siap, Beban, Tidur: tiga skor 0–100 kayak di jam olahraga. Siap ngasih target beban hari ini. Tap skor buat lihat grafik 30 hari." },
       { tab: "home", sel: "next", t: "Berikutnya", b: "Sesi terdekat setelah hari ini, lengkap dengan bentuk latihannya. Tap buat detail." },
       { tab: "log", sel: "log-new", t: "Catat lari", b: "Tombol oranye “+” atau “Catat”: jarak udah keisi dari rencana, tinggal geser +/−, isi waktu kalau ada, pilih effort, Simpan. Pace dihitung otomatis." },
       { tab: "more", sel: "tut-hub", t: "Butuh bantuan?", b: "Di tab Kamu → “Tutorial” ada tur per fitur. Tiap halaman juga punya tombol “?” buat penjelasan singkat." }
@@ -18,13 +18,13 @@
   };
   const T = {
     dashboard: { title: "Dashboard", steps: [
-      { tab: "home", sel: "hero", t: "Latihan hari ini", b: "Jarak hari ini dalam angka besar. Di hari istirahat tulisannya “Istirahat”, dan kalau udah dicatat kartunya berubah jadi hasil larimu." },
-      { tab: "home", sel: "hero", t: "Bentuk latihan", b: "Tiap balok = satu bagian latihan. Lebar = lamanya, tinggi = beratnya. Oranye = bagian inti yang berat." },
-      { tab: "home", sel: "body", t: "Badan hari ini", b: "Satu tap: Segar, Oke, Capek, atau Nyeri. Itu jadi check-in harian dan nentuin saran: siap lari, santai dulu, atau istirahat." },
-      { tab: "home", sel: "week-stats", t: "Km minggu ini", b: "Isian bar = km yang udah kamu lari minggu ini, garis tegak = target minggu ini." },
-      { tab: "home", sel: "week", t: "Sesi minggu ini", b: "Tiap bulatan = satu sesi. Penuh = selesai, cincin oranye = hari ini, garis putus merah = kelewat. Angka di bawah = km." },
+      { tab: "home", sel: "scores", t: "Siap, Beban, Tidur", b: "Tiga skor harian 0–100. Siap = seberapa pulih badanmu (check-in dibanding biasanya + kesegaran latihan). Beban = seberapa berat latihan hari ini. Tidur = kualitas tidur dari check-in. Tap salah satu buat grafik 30 hari." },
+      { tab: "home", sel: "hero", t: "Latihan hari ini", b: "Angka besar = jarak hari ini. Balok = bentuk latihan: lebar = lama, tinggi = berat, oranye = bagian inti. “✓ Selesai” mencatat jarak rencana, “Mulai” buka timer." },
+      { tab: "home", sel: "body", t: "Badan hari ini", b: "Satu tap: Segar, Oke, Capek, atau Nyeri. Itu jadi check-in harian yang ngisi skor Siap dan Tidur." },
+      { tab: "home", sel: "monitor", t: "Monitor badan", b: "Lima sinyal: tidur, energi, pegal, nyeri, dan rasio beban 7:28 hari. Centang hijau = dalam rentang aman, tanda seru = perlu diperhatiin." },
+      { tab: "home", sel: "week", t: "Sesi minggu ini", b: "Bar = km minggu ini dibanding target. Bulatan = sesi: penuh = selesai, cincin oranye = hari ini, garis putus merah = kelewat." },
       { tab: "home", sel: "next", t: "Berikutnya", b: "Sesi berikutnya setelah hari ini, dengan bentuk latihannya." },
-      { tab: "home", sel: "race-chip", t: "Hitung mundur race", b: "Sisa hari ke race. Tap buat tab Race: perkiraan finish, rekor, dan strategi race." },
+      { tab: "home", sel: "race-chip", t: "Hitung mundur race", b: "Sisa hari ke race. Tap buat tab Race: kesiapan race, rasio beban, rekor, dan strategi." },
     ] },
     calendar: { title: "Jadwal latihan", steps: [
       { tab: "cal", sel: "cal-mode", t: "Tampilan bulan atau per minggu", b: "“Bulan” nampilin kalender. “Per minggu” nampilin 31 minggu berurutan dengan target, km aktual, dan semua sesi (termasuk strength)." },

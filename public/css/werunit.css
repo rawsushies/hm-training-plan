@@ -708,3 +708,66 @@ button.a4-card:active{transform:scale(.985)}
 .a4-race span{max-width:4ch}
 /* tours: leave room so the last card can scroll clear of the bottom bubble */
 .shell.touring main{padding-bottom:60vh}
+
+/* ---------- 4.0 scores: liquid vessels, monitor, detail, race blob, load dial ---------- */
+.cap{font-family:var(--font);text-transform:uppercase;letter-spacing:.14em;font-weight:700;font-size:13px}
+h2.cap{font-size:13px;margin:0}
+.a4-scores{display:grid;gap:12px}
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.trio-i{display:grid;justify-items:center;gap:6px;background:none;border:0;padding:4px 0;color:var(--tx);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.vbox{position:relative;display:grid;place-items:center;width:min(28vw,112px);aspect-ratio:1}
+.vbox.big{width:200px}
+.vbox canvas{position:absolute;inset:0;width:100%!important;height:100%!important}
+.vnum{position:relative;display:flex;align-items:baseline;gap:1px;text-shadow:0 1px 6px rgba(0,0,0,.55);pointer-events:none}
+.vnum b{font-size:clamp(26px,8vw,36px);line-height:1;color:#fff}
+.vbox.big .vnum b{font-size:64px}
+.vnum small{font-size:13px;color:rgba(255,255,255,.85);font-weight:600}
+.trio-i .tl{font-size:12px;text-transform:uppercase;letter-spacing:.14em;font-weight:700}
+.tt{font-size:11px;color:var(--mu2)}
+.target{display:grid;gap:6px;background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.tk{font-size:13px;color:var(--mu)}
+.tk b{color:var(--tx);font-size:16px}
+.tbar{position:relative;display:block;height:8px;border-radius:4px;background:var(--s2)}
+.tbar .zone{position:absolute;top:0;bottom:0;border-radius:4px;background:color-mix(in srgb,#3aa0ff 45%,transparent)}
+.tbar .mark{position:absolute;top:-4px;width:4px;height:16px;margin-left:-2px;border-radius:2px;background:#3aa0ff;box-shadow:0 0 0 2px var(--bg)}
+.mon{display:grid;gap:14px}
+.mon-h{display:flex;align-items:center;justify-content:space-between;background:none;border:0;padding:0;color:var(--tx);cursor:pointer}
+.chev{font-size:22px;color:var(--mu)}
+.mon-row{display:grid;grid-template-columns:repeat(5,1fr)}
+.mon-i{display:grid;justify-items:center;gap:8px;padding:2px 0}
+.mon-i+.mon-i{border-left:1px solid var(--line)}
+.mon-i svg{width:26px;height:26px;fill:none;stroke:var(--mu);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.mon-i .cap{font-size:10px;letter-spacing:.1em}
+.mk{display:grid;place-items:center;width:26px;height:26px;border-radius:5px;font-style:normal;font-weight:800;font-size:14px}
+.mk .ico{width:16px;height:16px;stroke-width:3}
+.mk.ok{background:color-mix(in srgb,#2fd47a 22%,transparent);color:#2fd47a}
+.mk.bad{background:color-mix(in srgb,#f5c242 22%,transparent);color:#f5c242}
+.mk.na{background:var(--s2);color:var(--mu2)}
+.mon-f{display:flex;align-items:center;gap:12px;background:var(--s2);border-radius:10px;padding:10px 12px;font-size:15px}
+.mon-f.all .mk{background:#2fd47a;color:#0b1a12}
+.sc-hero{display:grid;justify-items:center;gap:8px;padding:8px 0 4px}
+.sc-hero h1.cap{font-size:15px;letter-spacing:.2em}
+.sc-w{margin:0;font-size:16px;font-weight:600}
+.brk{display:flex;height:10px;gap:2px;border-radius:5px;overflow:hidden;margin:12px 0 8px}
+.drv{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+.drv:first-of-type{border-top:0}
+.drv b{font-weight:600}
+.drv b.ok{color:#2fd47a}.drv b.bad{color:#f5c242}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:8px;vertical-align:-1px}
+.blob{position:relative;display:grid;place-items:center;margin:4px auto 0;width:min(86vw,300px);aspect-ratio:1}
+.blob svg{position:absolute;inset:0;width:100%;height:100%;animation:blobspin 60s linear infinite}
+.blob-p{fill:var(--tx)}
+.blob-in{position:relative;display:grid;justify-items:center;gap:2px;color:var(--bg);text-align:center}
+.blob-in .cap{font-size:10px;color:color-mix(in srgb,var(--bg) 70%,transparent)}
+.blob-in>b{font-size:72px;line-height:.9;color:var(--bg)}
+.blob-in .mu{color:color-mix(in srgb,var(--bg) 65%,transparent)!important}
+.blob-pred{font-size:12px;margin-top:6px;color:var(--bg)}
+.blob-pred b{font-size:16px}
+@keyframes blobspin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.blob svg{animation:none}}
+.dial{display:grid;gap:4px;justify-items:center;text-align:center}
+.dial h2{justify-self:start}
+.dial svg{width:100%;max-width:300px;height:auto}
+.dial-v{display:grid;gap:2px;margin-top:-8px}
+.dial-v b{font-size:40px;line-height:1}
+.dial-v .ok{color:#2fd47a}.dial-v .bad{color:#f5c242}

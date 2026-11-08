@@ -1,20 +1,20 @@
 {
  "version": "4.0.0",
- "build": "2026-11-08T05:56:21Z",
+ "build": "2026-11-08T06:18:58Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
   "WeRunIt 4.0: aplikasi cepat dengan 4 tab (Hari ini, Lari, Race, Kamu) dan tombol catat oranye",
+  "Skor harian Siap, Beban, Tidur sebagai wadah cairan yang bergerak; tap buat grafik 30 hari",
   "Latihan hari ini tampil sebagai bentuk; ✓ Selesai atau Mulai dalam satu tap",
-  "Check-in badan satu tap, catat lari cepat dengan jarak yang udah keisi",
-  "Feed lari ala Strava dan rekor sebagai medali"
+  "Check-in badan satu tap, monitor 5 sinyal, rasio beban, dan kesiapan race"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "26b2463f58d87489b606ebefe48e2ec1fc18f93407baa14bbb7d2b615c46903d",
-   "s": 55443
+   "h": "33c24e8af35e577dae170b832160b6cd623b8a0edf283ed98d254b8c44483344",
+   "s": 59846
   },
   {
    "p": "favicon-32.png",
@@ -48,13 +48,13 @@
   },
   {
    "p": "index.html",
-   "h": "6692c8b970cb0a4903d99bafc329744fc69e2bd2ad1b63344730ea60458141b9",
-   "s": 287795
+   "h": "6a5f0b970b5a68f4541debb14c4cf8c600011d17a3cef1524f9e1c7bef7ac00b",
+   "s": 287869
   },
   {
    "p": "js/app4.js",
-   "h": "94d80ca74bc793151af652867af3331abd70206531f73f52ad82441d7ae223e7",
-   "s": 25976
+   "h": "3ad8d658560b122716cce3b334e670f5f8620d03d155f5eaf5baa989885389c0",
+   "s": 38616
   },
   {
    "p": "js/brand.js",
@@ -97,6 +97,11 @@
    "s": 13230
   },
   {
+   "p": "js/scores.js",
+   "h": "b5289ed6592f34f68f34a1865d74a4cac8ffdf63353c6639fddb835d0e1a03f0",
+   "s": 10276
+  },
+  {
    "p": "js/shoe-catalog.js",
    "h": "9b0e151578d6ffe2e56e51b96aa9f6d02f157db6c8689543e911cdf1023e1fe3",
    "s": 8207
@@ -118,8 +123,8 @@
   },
   {
    "p": "js/tutorial.js",
-   "h": "0a12aacfa9adea3e10355b50c79b3baecb557c6214fc3432e8bd007ef97e0518",
-   "s": 29621
+   "h": "f1ae9f05402380ebc26d982861e8d666e6d048ea328e661117733e4c13700bbb",
+   "s": 29792
   },
   {
    "p": "js/ui-glass.js",
@@ -133,8 +138,13 @@
   },
   {
    "p": "js/version.js",
-   "h": "b55028ac5a7d59b90cafb8a1b338c154209bae33cef4dd9e0121d05c7b8a9a43",
+   "h": "4dade09de4bbb5482bb2cb0ce257c35b316f4a599ccdaa4913b38b274b0e492a",
    "s": 139
+  },
+  {
+   "p": "js/vessel.js",
+   "h": "9f60f63bbafe864fbbecdec8192e6c708fe7dbe33183c6687a55ab2012eeb299",
+   "s": 6288
   },
   {
    "p": "js/views-flow.js",
@@ -178,8 +188,8 @@
   },
   {
    "p": "sw.js",
-   "h": "c115f198bd9a06d9bb407b4c651e7ffc142d7077a23dba29397dab98bfb2b48d",
-   "s": 2628
+   "h": "b5dab88dc1bc9e4a301ecfe77e5aeba5f79e032375af0312e8bd4eff74c4c6df",
+   "s": 2660
   },
   {
    "p": "vendor/capacitor/8.5.3/capacitor.js",

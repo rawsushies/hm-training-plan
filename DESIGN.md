@@ -227,6 +227,32 @@ compete with the core loop.
 - **Dock grouping:** calendar, hari lari, locked-in, elevation, strength and check-in light Hari ini; review and
   integrasi light Lari; pace and goals light Race; everything else lights Kamu.
 
+### Daily scores: Siap, Beban, Tidur (`public/js/scores.js`, `public/js/vessel.js`)
+
+Three 0–100 scores open Hari ini, each a **liquid vessel**: glass filled to the value, two travelling waves on the
+surface, fine metal flake drifting in the liquid, the surface levelling when the phone tilts (where the browser
+allows device orientation) and splashing on tap. One shared animation loop; a still frame under reduced motion.
+Charts stay crisp; only gauges are liquid. Tap a vessel for its detail: a big vessel, 30 days of bars coloured by
+band with a dashed AVG line, the band breakdown, and the drivers.
+
+| Score | Answers | Model (published method) | Colour |
+| --- | --- | --- | --- |
+| **Siap** | How recovered am I? | Hooper-style wellness from the check-in as a robust z-score against the runner's own winsorized EWMA baseline (half-life 14), 0.65 weight; Banister freshness (CTL τ28 − ATL τ7), 0.35 weight; logistic squash anchoring a typical day near 58; pain ≥ 4 caps at 30 | green ≥ 67, yellow 34–66, red < 34 |
+| **Beban** | How hard was today? | Session load = minutes × intensity (Edwards 5-zone on %HRmax when an average HR and the measured HRmax exist; otherwise Foster session-RPE ÷ 2; otherwise a per-type default), logarithmic `100·ln(load+1)/ln(2401)` | blue `#3aa0ff` |
+| **Tidur** | How was my sleep? | Reported sleep quality (85%) plus seven-night consistency (15%) | violet `#8f86ff` |
+
+- **Confidence tier** under each score: *Kalibrasi* (baseline still learning or no data), *Data masih tipis*
+  (building), or nothing when solid. With no honest input the vessel stays empty and shows "–".
+- **Target beban** for today follows Siap: green 60–80, yellow 45–65, red 0–40; a bar shows today's Beban against it.
+- **Monitor badan:** five signals in a row (tidur, energi, pegal, nyeri, rasio beban) each with a green check or
+  an amber "!", and a footer "n/5 sinyal dalam rentang".
+- **Race tab:** *Kesiapan race* as a slowly turning wavy blob (plan completion and predicted finish inside) and
+  *Rasio beban* as a dial (acute:chronic workload ratio, Hulin 2016; green 0.8–1.3, yellow to 1.5, red above).
+- Labels in this layer use uppercase tracked type (`.cap`), the sports-watch convention.
+- The three-score structure, confidence tiers, logistic anchoring and the liquid-vessel idea follow NOOP's open
+  documentation (github.com/ryanbr/noop, PolyForm Noncommercial). WeRunIt's implementation is independent
+  JavaScript for its own data; no NOOP code or assets are used. Not medical advice.
+
 ### Data as shapes
 
 | Shape | Data | Rule |
@@ -311,6 +337,7 @@ opacity and transform only. The old `--ease-pop*` tokens now resolve to the same
 - Tokens: `public/css/werunit.css` (`:root` and `[data-theme="light"]`) and the "v6 race layer" at its end.
 - Fonts: Inter and Barlow Condensed via Google Fonts in `public/index.html`.
 - Logo mark: `public/js/brand.js` (flat race orange); notification accent: `public/js/notify.js`.
+- Scores: `public/js/scores.js` (pure, unit-tested in `test/unit/scores.test.js`); liquid vessels: `public/js/vessel.js`.
 - 4.0 screens, record button, quick log and body check: `public/js/app4.js` (loaded after the other view modules,
   before `startApp()`). Shared pieces it reuses from `public/index.html`: `raceRoute`, `homeWeek`, `homeConsistency`,
   `bulletBar`, `chartBars`, `runSteps`.

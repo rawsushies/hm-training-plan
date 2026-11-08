@@ -18,7 +18,7 @@
   Object.assign(DOCK_GROUP, {
     home: "home", cal: "home", jadwal: "home", locked: "home", elev: "home", strength: "home", recovery: "home",
     log: "log", review: "log", integ: "log",
-    race: "race", pace: "race", goals: "race"
+    race: "race", pace: "race", goals: "race", score: "home"
   });
 
   const SVGNS = 'xmlns="http://www.w3.org/2000/svg"';
@@ -78,8 +78,9 @@
     return r.st === "rest" ? "nyeri" : r.st === "easy" ? "capek" : r.v >= 4.5 ? "segar" : "oke";
   }
   function bodyCheck() {
-    const t = todayYmd(), c = S.checkins.find(x => x.date === t && !x.sample), lv = bodyLevel(c), r = c ? readiness(c) : null;
-    return `<section class="a4-card a4-body" data-tour="body"><div class="a4-row"><h2>Badan hari ini</h2>${r ? `<span class="a4-st st-${r.st}">${RD_LBL[r.st]}</span>` : ""}</div>
+    const t = todayYmd(), c = S.checkins.find(x => x.date === t && !x.sample), lv = bodyLevel(c);
+    const ch = c && G4.WRI_SCORES ? G4.WRI_SCORES.charge(scoreCtx()) : null, st = ch && ch.score !== null ? { green: "ready", yellow: "easy", red: "rest" }[ch.band] : null;
+    return `<section class="a4-card a4-body" data-tour="body"><div class="a4-row"><h2>Badan hari ini</h2>${st ? `<span class="a4-st st-${st}">Siap ${ch.score}% · ${BANDW[ch.band]}</span>` : ""}</div>
       <div class="a4-batt" role="group" aria-label="Gimana badan hari ini">${BODY.map(b => `<button class="${lv === b.k ? "on" : ""} b-${b.k}" data-act="ciQuick" data-k="${b.k}" aria-pressed="${lv === b.k}">${battery(b.n, b.x)}<span>${b.l}</span></button>`).join("")}</div></section>`;
   }
 
@@ -121,15 +122,136 @@
     return `<button class="a4-card a4-next" data-tour="next" data-act="openSess" data-id="${n.id}"><span class="a4-kicker">Berikutnya · ${fmtDay(n.date)}</span>
       <span class="a4-next-r"><span><b>${esc(TYPES[n.type])}</b><br><span class="mu sm">${esc(n.title)}</span></span><span class="num a4-next-km">${fmtKm(n.dist)}<small> km</small></span></span>${workoutShape(n, 28)}</button>`;
   }
+  /* ---------- Daily scores: Siap / Beban / Tidur (js/scores.js) as liquid vessels (js/vessel.js) ---------- */
+  const SC = () => G4.WRI_SCORES;
+  const G4 = typeof globalThis !== "undefined" ? globalThis : window;
+  const COL = { green: "#2fd47a", yellow: "#f5c242", red: "#ff5a5f", none: "#5a5a60", beban: "#3aa0ff", tidur: "#8f86ff" };
+  const TIER = { solid: "", building: "Data masih tipis", calibrating: "Kalibrasi" };
+  const BANDW = { green: "Siap", yellow: "Sedang", red: "Pelan dulu", none: "Belum ada data" };
+  function scoreCtx(date) { return { date: date || todayYmd(), checkins: S.checkins, logs: S.logs.filter(l => !l.sample), strength: S.strength.filter(r => !r.sample), hrMax: S.profile && S.profile.hrMax }; }
+  function todayScores() {
+    const c = scoreCtx(); if (!SC()) return null;
+    const siap = SC().charge(c), beban = SC().dayEffort(c), tidur = SC().rest(c);
+    return { siap, beban, tidur, target: SC().targetEffort(siap.score), ratio: siap.load.acwr };
+  }
+  function vessel(k, val, col, big) {
+    const unit = k === "beban" ? "" : "%";
+    return `<span class="vbox${big ? " big" : ""}"><canvas class="vessel" data-v="${val === null ? "" : val}" data-c="${col}"></canvas><span class="vnum"><b class="num">${val === null ? "–" : val}</b>${val === null ? "" : `<small>${unit}</small>`}</span></span>`;
+  }
+  function scoreTrio(sc) {
+    const it = [["siap", "Siap", sc.siap.score, COL[sc.siap.band], sc.siap.tier], ["beban", "Beban", sc.beban.score, COL.beban, sc.beban.tier], ["tidur", "Tidur", sc.tidur.score, COL.tidur, sc.tidur.tier]];
+    const t = sc.target, b = sc.beban.score;
+    return `<section class="a4-scores" data-tour="scores">
+      <div class="trio">${it.map(([k, l, v, c, tier]) => `<button class="trio-i" data-act="score" data-k="${k}" aria-label="${l} ${v === null ? "belum ada data" : v + (k === "beban" ? "" : " persen")}${TIER[tier] ? ", " + TIER[tier] : ""}">${vessel(k, v, c)}<span class="tl">${l}</span>${TIER[tier] ? `<span class="tt">${TIER[tier]}</span>` : ""}</button>`).join("")}</div>
+      ${t ? `<div class="target"><span class="tk">Target beban hari ini <b class="num">${t[0]}–${t[1]}</b></span><span class="tbar" role="img" aria-label="Beban ${b} dari target ${t[0]} sampai ${t[1]}"><i class="zone" style="left:${t[0]}%;width:${t[1] - t[0]}%"></i><i class="mark" style="left:${b}%"></i></span></div>` : ""}
+    </section>`;
+  }
+  /** Health-monitor style row: five signals, each in or out of the runner's own range. */
+  function monitor(sc) {
+    const t = todayYmd(), c = S.checkins.find(x => x.date === t && !x.sample);
+    const rz = SC().ratioZone(sc.ratio);
+    const ICO = {
+      tidur: '<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>',
+      energi: '<path d="M13 3 5 13h6l-1 8 8-10h-6z"/>',
+      pegal: '<path d="M7 20c0-4 2-6 2-9s-1-5 1-7M17 20c0-4-2-6-2-9s1-5-1-7M9 12h6"/>',
+      nyeri: '<circle cx="12" cy="12" r="8"/><path d="M12 8v5M12 16h.01"/>',
+      beban: '<path d="M3 17l5-5 4 3 6-7"/><path d="M15 8h3v3"/>'
+    };
+    const sig = [
+      ["tidur", "Tidur", c ? c.sleep >= 3 : null],
+      ["energi", "Energi", c ? c.energy >= 3 : null],
+      ["pegal", "Pegal", c ? c.soreness <= 3 : null],
+      ["nyeri", "Nyeri", c ? c.pain <= 2 : null],
+      ["beban", "Rasio", rz === "none" ? null : rz === "sweet" || rz === "low"]
+    ];
+    const ok = sig.filter(x => x[2] === true).length, known = sig.filter(x => x[2] !== null).length;
+    return `<section class="a4-card mon" data-tour="monitor"><button class="mon-h" data-act="score" data-k="siap"><h2 class="cap">Monitor badan</h2><span class="chev">›</span></button>
+      <div class="mon-row">${sig.map(([k, l, v]) => `<div class="mon-i"><svg viewBox="0 0 24 24" aria-hidden="true">${ICO[k]}</svg><span class="cap">${l}</span><i class="mk ${v === null ? "na" : v ? "ok" : "bad"}" aria-label="${l}: ${v === null ? "belum ada data" : v ? "dalam rentang" : "di luar rentang"}">${v === null ? "–" : v ? IC.check : "!"}</i></div>`).join("")}</div>
+      <div class="mon-f ${known && ok === known ? "all" : ""}"><i class="mk ${known && ok === known ? "ok" : known ? "bad" : "na"}">${known && ok === known ? IC.check : known ? "!" : "–"}</i>${known ? `${ok}/${known} sinyal dalam rentang` : "Check-in buat lihat sinyal badan"}</div></section>`;
+  }
+  /** 30-day score bars coloured by band, with the average as a dashed line (crisp, not liquid). */
+  function scoreBars(series, k) {
+    const W = 340, H = 150, pl = 26, pb = 18, pt = 8, n = series.length, bw = (W - pl) / n, ih = H - pt - pb;
+    const vals = series.map(x => x[k]), known = vals.filter(v => v !== null), avg = known.length ? known.reduce((a, b) => a + b, 0) / known.length : null;
+    let s = `<svg viewBox="0 0 ${W} ${H}" class="chart" role="img" aria-label="${k} 30 hari, rata-rata ${avg === null ? "–" : Math.round(avg)}">`;
+    [0, 25, 50, 75, 100].forEach(v => { const y = pt + ih * (1 - v / 100); s += `<line x1="${pl}" x2="${W}" y1="${y}" y2="${y}" class="gl"/><text x="${pl - 4}" y="${y + 3}" class="ax" text-anchor="end">${v}</text>`; });
+    vals.forEach((v, i) => {
+      if (v === null) return;
+      const col = k === "beban" ? COL.beban : k === "tidur" ? COL.tidur : COL[SC().band(v)];
+      const h = Math.max(2, ih * v / 100);
+      s += `<rect x="${(pl + i * bw + bw * .15).toFixed(1)}" y="${(pt + ih - h).toFixed(1)}" width="${(bw * .7).toFixed(1)}" height="${h.toFixed(1)}" rx="1.5" fill="${col}"${i === n - 1 ? "" : ' opacity=".85"'}/>`;
+    });
+    if (avg !== null) { const y = pt + ih * (1 - avg / 100); s += `<line x1="${pl}" x2="${W - 26}" y1="${y}" y2="${y}" stroke="var(--tx)" stroke-dasharray="3 3" stroke-width="1.2"/><rect x="${W - 26}" y="${y - 8}" width="26" height="16" rx="3" fill="var(--tx)"/><text x="${W - 13}" y="${y + 3.5}" font-size="9" font-weight="700" text-anchor="middle" fill="var(--bg)" font-family="Inter,system-ui,sans-serif">AVG</text>`; }
+    [0, Math.floor(n / 2), n - 1].forEach((i, j) => { const d = parseYmd(series[i].date); s += `<text x="${pl + i * bw + bw / 2}" y="${H - 4}" class="ax" text-anchor="${j === 0 ? "start" : j === 2 ? "end" : "middle"}">${d.getDate()} ${BULAN[d.getMonth()]}</text>`; });
+    return { svg: s + "</svg>", avg };
+  }
+  function vScore() {
+    const k = ["siap", "beban", "tidur"].includes(S.ui.score) ? S.ui.score : "siap", sc = todayScores();
+    const ser = SC().series(scoreCtx(), 30), bars = scoreBars(ser, k), cur = sc[k];
+    const name = { siap: "Siap", beban: "Beban", tidur: "Tidur" }[k];
+    const col = k === "siap" ? COL[cur.band] : COL[k];
+    const vals = ser.map(x => x[k]).filter(v => v !== null);
+    const cnt = { green: 0, yellow: 0, red: 0 }; if (k !== "beban") vals.forEach(v => cnt[SC().band(v)]++);
+    let detail = "";
+    if (k === "siap") {
+      const d = cur.drivers || {}, L = cur.load, rz = SC().ratioZone(L.acwr);
+      const row = (l, v, good) => `<div class="drv"><span>${l}</span><b class="${good === null ? "" : good ? "ok" : "bad"}">${v}</b></div>`;
+      detail = `<section class="a4-card"><h2 class="cap">Pemicu</h2>
+        ${row("Badan vs biasanya", "wellness" in d ? (d.wellness >= 0 ? "+" : "") + d.wellness.toFixed(1).replace(".", ",") + " σ" : "belum check-in", "wellness" in d ? d.wellness >= -0.5 : null)}
+        ${row("Kesegaran (fitness − capek)", "freshness" in d ? (d.freshness >= 0 ? "segar" : "capek") + " " + (d.freshness >= 0 ? "+" : "") + d.freshness.toFixed(1).replace(".", ",") : "belum ada lari", "freshness" in d ? d.freshness >= -0.8 : null)}
+        ${row("Rasio beban 7:28 hari", L.acwr === null ? "–" : L.acwr.toFixed(2).replace(".", ",") + "×", rz === "none" ? null : rz === "sweet" || rz === "low")}
+        ${d.pain ? row("Nyeri", "tercatat · dibatasi merah", false) : ""}
+        <p class="xs mu" style="margin-top:8px">Dibandingin sama baseline-mu sendiri (EWMA 14 hari). Pendekatan ilmiah terbuka, bukan saran medis.</p></section>`;
+    } else if (k === "beban") {
+      const ls = SC().dayLoads(S.logs.filter(l => !l.sample), S.strength, todayYmd(), 7, S.profile && S.profile.hrMax);
+      detail = `<section class="a4-card"><h2 class="cap">7 hari terakhir</h2>${ls.map(x => `<div class="drv"><span>${fmtDay(x.date)}</span><b class="num">${SC().effort(x.load)}</b></div>`).join("")}
+        <p class="xs mu" style="margin-top:8px">Beban = menit × intensitas (RPE, atau zona detak jantung kalau HR maks diisi), dalam skala log 0–100.</p></section>`;
+    } else {
+      const ci = S.checkins.filter(c => !c.sample).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 7);
+      detail = `<section class="a4-card"><h2 class="cap">Tidur 7 hari</h2>${ci.length ? ci.map(c => `<div class="drv"><span>${fmtDay(c.date)}</span><b>${["", "Jelek", "Kurang", "Lumayan", "Nyenyak", "Nyenyak banget"][c.sleep] || "–"}</b></div>`).join("") : `<p class="mu sm">Belum ada check-in</p>`}
+        <p class="xs mu" style="margin-top:8px">Dari check-in harian (kualitas tidur), plus sedikit bobot buat konsistensi seminggu.</p></section>`;
+    }
+    return `<div class="a4"><div class="pagehead"><button class="back" data-act="nav" data-t="home">‹ Hari ini</button></div>
+      <div class="sc-hero"><h1 class="cap">${name}</h1>${vessel(k, cur.score, col, true)}<p class="sc-w">${k === "siap" ? BANDW[cur.band] : k === "beban" ? (sc.target ? `Target hari ini ${sc.target[0]}–${sc.target[1]}` : "Hari ini") : cur.score === null ? "Belum ada data" : cur.score >= 67 ? "Cukup" : cur.score >= 34 ? "Kurang" : "Jelek"}</p>${TIER[cur.tier] ? `<span class="tt">${TIER[cur.tier]}</span>` : ""}</div>
+      <section class="a4-card"><div class="sec-h"><h2 class="cap">30 hari</h2><span class="num sm">rata-rata ${bars.avg === null ? "–" : Math.round(bars.avg)}</span></div>${bars.svg}</section>
+      ${k !== "beban" && vals.length ? `<section class="a4-card"><h2 class="cap">Rincian (hari)</h2><div class="brk">${["green", "yellow", "red"].map(b => cnt[b] ? `<i style="flex:${cnt[b]};background:${COL[b]}"></i>` : "").join("")}</div>
+        ${[["green", "Bagus (67+)"], ["yellow", "Sedang (34–66)"], ["red", "Rendah (<34)"]].map(([b, l]) => `<div class="drv"><span><i class="sw" style="background:${COL[b]}"></i>${l}</span><b class="num">${cnt[b]}×</b></div>`).join("")}</section>` : ""}
+      ${detail}</div>`;
+  }
+  /** Race readiness as a wavy blob (plan done + prediction inside), and the load ratio as a dial. */
+  function readinessBlob(pct, predS, goal) {
+    const n = 9, R = 92, amp = 9, pts = [];
+    for (let i = 0; i <= 180; i++) { const a = i / 180 * Math.PI * 2, r = R + amp * Math.sin(a * n); pts.push(`${(110 + r * Math.cos(a)).toFixed(1)},${(110 + r * Math.sin(a)).toFixed(1)}`); }
+    return `<div class="blob"><svg viewBox="0 0 220 220" aria-hidden="true"><polygon class="blob-p" points="${pts.join(" ")}"/></svg>
+      <div class="blob-in"><span class="cap">Kesiapan race</span><b class="num">${pct}%</b><span class="mu sm">rencana tercapai</span>${predS ? `<span class="blob-pred"><b class="num">${fmtDur(predS)}</b> perkiraan${goal ? ` · target <span class="num">${fmtDur(goal)}</span>` : ""}</span>` : ""}</div></div>`;
+  }
+  function ratioDial(r) {
+    const lo = 0.5, hi = 2.0, ang = v => Math.PI * (1 - (Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo)), P = (v, rr) => [100 + rr * Math.cos(ang(v)), 100 - rr * Math.sin(ang(v))];
+    const arc = (a, b, rr) => { const [x1, y1] = P(a, rr), [x2, y2] = P(b, rr); return `M${x1.toFixed(1)} ${y1.toFixed(1)} A${rr} ${rr} 0 0 1 ${x2.toFixed(1)} ${y2.toFixed(1)}`; };
+    const z = SC().ratioZone(r), word = { none: "Belum cukup data", low: "Di bawah biasanya", sweet: "Aman, sesuai kapasitas", high: "Naik cepat, hati-hati", danger: "Terlalu tinggi, kurangi" }[z];
+    const ticks = [0.5, 0.8, 1, 1.3, 1.5, 2].map(v => { const [x1, y1] = P(v, 78), [x2, y2] = P(v, 86); return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="var(--mu2)" stroke-width="1.2"/>`; }).join("");
+    const needle = r === null ? "" : (() => { const [x, y] = P(r, 70); return `<line x1="100" y1="100" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--tx)" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="100" r="6" fill="var(--tx)"/>`; })();
+    return `<section class="a4-card dial"><h2 class="cap">Rasio beban</h2><svg viewBox="0 0 200 112" role="img" aria-label="Rasio beban ${r === null ? "belum ada" : r.toFixed(2)}">
+      <path d="${arc(lo, hi, 90)}" fill="none" stroke="var(--s2)" stroke-width="12" stroke-linecap="round"/>
+      <path d="${arc(0.8, 1.3, 90)}" fill="none" stroke="${COL.green}" stroke-width="12"/>
+      <path d="${arc(1.3, 1.5, 90)}" fill="none" stroke="${COL.yellow}" stroke-width="12"/>
+      <path d="${arc(1.5, 2.0, 90)}" fill="none" stroke="${COL.red}" stroke-width="12" stroke-linecap="round"/>${ticks}${needle}</svg>
+      <div class="dial-v"><b class="num">${r === null ? "–" : r.toFixed(2).replace(".", ",") + "×"}</b><span class="${z === "sweet" ? "ok" : z === "none" || z === "low" ? "mu" : "bad"}">${word}</span><span class="xs mu">Beban 7 hari dibanding 28 hari. Aman 0,8–1,3×</span></div></section>`;
+  }
+
   vHome = function () {
+    if (S.ui.tab === "score") return vScore();
     const ev = activeEvent(), days = Math.round((parseYmd(ev.eventDate) - parseYmd(todayYmd())) / DAY);
+    const sc = todayScores();
     const pain = persistentPain();
     return `${storageNote()}<div class="cockpit a4">
       <div class="a4-top"><div><p class="a4-date">${fmtDay(todayYmd())}</p><h1>Hari ini</h1></div>
         <button class="a4-race" data-act="nav" data-t="race" data-tour="race-chip" aria-label="${Math.max(0, days)} hari lagi ke ${esc(ev.name)}"><b class="num">${Math.max(0, days)}</b><span>hari lagi</span></button>${helpBtn("home")}</div>
       ${pain ? `<div class="note bad">Nyeri tercatat beberapa kali. Kurangi latihan, periksa ke dokter atau fisioterapis kalau nggak membaik.</div>` : ""}
+      ${sc ? scoreTrio(sc) : ""}
       ${heroCard()}
       ${bodyCheck()}
+      ${sc ? monitor(sc) : ""}
       ${weekBlock()}
       ${typeof weatherCard === "function" ? weatherCard() : ""}
       ${nextCard()}
@@ -193,10 +315,8 @@
     return `<div class="a4">
       <div class="a4-top"><div><p class="a4-date">${fmtDay(ev.eventDate)} ${parseYmd(ev.eventDate).getFullYear()} · ${fmtKm(ev.distanceKm)} km</p><h1>${esc(ev.name)}</h1></div>${helpBtn("race")}</div>
       <section class="a4-card a4-rhero"><div class="a4-big"><span class="num">${days}</span><span class="u">hari lagi</span></div><div class="route">${raceRoute(wi)}</div></section>
-      <div class="a4-pair">
-        <section class="a4-card a4-ring"><svg viewBox="0 0 80 80" ${SVGNS} aria-hidden="true"><circle cx="40" cy="40" r="34" fill="none" stroke="var(--s2)" stroke-width="8"/><circle cx="40" cy="40" r="34" fill="none" stroke="var(--acc)" stroke-width="8" stroke-linecap="round" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - pct / 100)).toFixed(1)}" transform="rotate(-90 40 40)"/></svg><div><b class="num">${pct}%</b><span>rencana sampai minggu ini</span><span class="mu sm num">${fmtKm(doneKm)} / ${fmtKm(planKm)} km</span></div></section>
-        <section class="a4-card a4-pred"><span class="a4-kicker">Perkiraan finish</span><b class="num">${predS ? fmtDur(predS) : "–"}</b>${goal ? `<span class="mu sm">target <span class="num">${fmtDur(goal)}</span></span>${predS ? `<span class="vsplan rev"><i style="width:${Math.min(100, goal / Math.max(goal, predS) * 100).toFixed(1)}%"></i><b style="left:${Math.min(100, predS / Math.max(goal, predS) * 100).toFixed(1)}%"></b></span><span class="sm ${predS <= goal ? "ok" : "mu"}">${predS <= goal ? "Di bawah target" : "Lewat " + fmtDur(predS - goal)}</span>` : ""}` : ""}${!predS ? `<span class="mu sm">Butuh lari dengan waktu</span>` : ""}</section>
-      </div>
+      ${readinessBlob(pct, predS, goal)}
+      ${SC() ? ratioDial(SC().charge(scoreCtx()).load.acwr) : ""}
       ${vol.some(x => x.b) ? `<section class="a4-card"><div class="sec-h"><h2>Volume mingguan</h2></div>${chartBars(vol, { h: 170, hi: vol.length - 1 })}${lgd()}</section>` : ""}
       <section class="a4-card"><h2>Rekor</h2><div class="a4-medals">${medal(fmtKm(longest), "km", "Terjauh", longest >= 10)}${medal(best ? fmtPace(best, false) : "–", "/km", "Pace terbaik", !!best)}${medal(fmtKm(bst.total), "km", "Total", bst.total >= 100)}${medal(String(bst.streak), "mgg", "Streak", bst.streak >= 2)}</div></section>
       ${homeConsistency(wi).replace('<section class="sec">', '<section class="a4-card">')}
@@ -290,8 +410,13 @@
       const r = readiness(S.checkins[S.checkins.length - 1]);
       toast(`Check-in: ${b.l} · ${RD_LBL[r.st]}`);
     },
-    feedMore: () => { S.ui.feedN = (S.ui.feedN || 20) + 20; render(true); }
+    feedMore: () => { S.ui.feedN = (S.ui.feedN || 20) + 20; render(true); },
+    score: d => { S.ui.score = d.k; S.ui.tab = "score"; M = null; persist(); render(false); }
   });
+
+  /* ---------- Liquid vessels come alive after each paint ---------- */
+  const _afterPaint4 = afterPaint;
+  afterPaint = function () { _afterPaint4(); if (G4.WRI_VESSEL) G4.WRI_VESSEL.mount(document.getElementById("app")); };
 
   /* ---------- Record button (beside the dock) ---------- */
   let REC = null;
