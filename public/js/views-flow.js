@@ -24,7 +24,7 @@ maybeStartTutorial = function(){ if(!RUN && !S.ui.tut && !M && !BOOTING && !gate
 
 mOnboard = function(){
   const p = S.profile, u = CLOUD.user;
-  return `${mHead(`Halo${u && u.displayName ? ", " + esc(u.displayName.split(" ")[0]) : ""}! Kapan kamu bisa lari?`, `3 lari per minggu menuju ${esc(activeEvent().name)}. Bisa diubah kapan saja.`)}
+  return `<div class="help-h">${mascot("mascot-inline")}${mHead(`${u && u.displayName ? esc(u.displayName.split(" ")[0]) + ", k" : "K"}apan kamu bisa lari?`)}</div>
     ${availEditor(schedDraft(), true)}
     <details class="ob-more" style="margin-top:10px"><summary class="sm">Profil buat strategi race (opsional)</summary>
       <div class="g2" style="margin-top:8px"><div class="field"><label for="ob-m">Berat (kg)</label><input type="text" inputmode="decimal" id="ob-m" value="${p.massKg ?? ""}"></div><div class="field"><label for="ob-hr">HR maks terukur</label><input type="text" inputmode="numeric" id="ob-hr" value="${p.hrMax ?? ""}" placeholder="kalau tahu"></div></div>

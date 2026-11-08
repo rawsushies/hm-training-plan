@@ -1,25 +1,26 @@
 {
- "version": "3.16.0",
- "build": "2026-11-07T23:54:19Z",
+ "version": "4.0.0",
+ "build": "2026-11-08T07:23:17Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "Tampilan baru bergaya aplikasi olahraga: grafit, satu warna oranye, angka besar",
-  "Teks dipangkas: tanpa paragraf pembuka dan kartu tips, penjelasan ada di tombol ?",
-  "Beranda: hitung mundur race dengan rute latihan dari minggu 1 sampai garis finish",
-  "Ikon app baru"
+  "4 tab: Hari ini, Lari, Race, Kamu",
+  "Skor Siap, Beban, Tidur sebagai cairan",
+  "Tanya Kiki: isi data satu pertanyaan per layar",
+  "Kiki baru: ngobrol, lipsync, bergerak",
+  "Masuk Google + Health Connect (bisa dilewati)"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "894b77d0478c10ff3715786af9d1dbe7b4a28abb04cc6ed2bf020a5728844d21",
-   "s": 46397
+   "h": "813662b3407f168765ec93a71d15ab780127d9bfb649aadea408a26a90c938ef",
+   "s": 84362
   },
   {
    "p": "favicon-32.png",
-   "h": "ad04fb5359d0c183073bed88996d5614bce4bff081c6d29b161190ddca7e9fa1",
-   "s": 913
+   "h": "807fb3340e2a3f7ae60c79a9caae77a62f026ad49d2e65b3f53f9db63eeac7da",
+   "s": 780
   },
   {
    "p": "firebase-config.js",
@@ -28,38 +29,53 @@
   },
   {
    "p": "icon-192.png",
-   "h": "88cfbc1fe8cbb871b2e68d25ae20ba984e0557ccce39d4d2a905604322c8e3b5",
-   "s": 6963
+   "h": "4fa2614cef6088755200c867dc64f6803b5ad5c4e994ae8daf61aa31a7a066c7",
+   "s": 5743
   },
   {
    "p": "icon-512.png",
-   "h": "b47546d75a949d79166d0acd30812c52b5ff9dd43ac41ab0c3d4bee3eb90418c",
-   "s": 20094
+   "h": "9b1907b607244f02308a7991d359bedc251e41a56a696c30dcdbc21380cb88c6",
+   "s": 17057
   },
   {
    "p": "icon-maskable-512.png",
-   "h": "ed67a5ba833dd31432910cf177557126e8522f026677363ba41bf5a5dac793bc",
-   "s": 10060
+   "h": "04cc7e10957c64b360673fd90f5d381b6de8777182d6b072f017c668689f84c0",
+   "s": 8339
   },
   {
    "p": "icon.svg",
-   "h": "23b79ca743bcf4fdaac6c3bac78c80cb5eacb39baada1a5c3997b7769e28cc55",
-   "s": 679
+   "h": "7b04ceb50be4d2874e268684e2f8083d40ca871f0a3839be7dd99ae7219a1c56",
+   "s": 633
   },
   {
    "p": "index.html",
-   "h": "1cb6c1654701cb428e4d2525667756f58bbe0cd5a4799ecc67aaf6ab8ab31897",
-   "s": 287760
+   "h": "e7d01f4ce5f417773e6c000b651d0feda7f280585d9237f487dd5826b581633c",
+   "s": 283956
+  },
+  {
+   "p": "js/app4.js",
+   "h": "73624a7666e6fb6471e06134534efcaa91304cb5f7364d9301c557e73a6f58ce",
+   "s": 43131
+  },
+  {
+   "p": "js/ask.js",
+   "h": "58c065eb47aa055af5add8f0237136bcac99295e3244c6ef6b076606cdf51cc4",
+   "s": 17173
   },
   {
    "p": "js/brand.js",
-   "h": "bcad6afde01a361852fcdf5f69ae96e63944d11948b0055a455c6ffbb80b6fe6",
-   "s": 3671
+   "h": "86d0ce6a986b02c446af7fceaf9443c2032f0cdf05de840cf96579b47847f040",
+   "s": 3427
   },
   {
    "p": "js/cloud-firebase.js",
    "h": "4f945d4fee0275394492f0b3a35e3ddfb0e7cce035743952bb5b3f89d7afa321",
    "s": 22019
+  },
+  {
+   "p": "js/companion.js",
+   "h": "f4cc328586bcafc213b668e4108b6441efd07f71b98744ba8e61c54ab3b2ca1f",
+   "s": 14549
   },
   {
    "p": "js/integrations.js",
@@ -92,6 +108,11 @@
    "s": 13230
   },
   {
+   "p": "js/scores.js",
+   "h": "b5289ed6592f34f68f34a1865d74a4cac8ffdf63353c6639fddb835d0e1a03f0",
+   "s": 10276
+  },
+  {
    "p": "js/shoe-catalog.js",
    "h": "9b0e151578d6ffe2e56e51b96aa9f6d02f157db6c8689543e911cdf1023e1fe3",
    "s": 8207
@@ -113,8 +134,8 @@
   },
   {
    "p": "js/tutorial.js",
-   "h": "a511e251a7bfa2bf327ae2f5582c3094a85b61d42f0cd060c154c380c31b307f",
-   "s": 30505
+   "h": "016bfcc4110472c0c2c13ae207da86539c37843a8d518be3fb7aebd7aa4301eb",
+   "s": 19795
   },
   {
    "p": "js/ui-glass.js",
@@ -128,18 +149,23 @@
   },
   {
    "p": "js/version.js",
-   "h": "3e275d1fa9b556b027e20c74a5c1672e78e25bfe7b3f226077bd21c4ca7f2ff1",
-   "s": 140
+   "h": "287553c82942ee805445281e09b00b8b6adb98a469ab0eecc3aa4d56ea1266a8",
+   "s": 139
+  },
+  {
+   "p": "js/vessel.js",
+   "h": "9f60f63bbafe864fbbecdec8192e6c708fe7dbe33183c6687a55ab2012eeb299",
+   "s": 6288
   },
   {
    "p": "js/views-flow.js",
-   "h": "394bab98fe724c9e1a022df30f3930be1e39b481817ed1e5b28c335f960ddcfa",
-   "s": 5855
+   "h": "828d637154fc28dbd2cdd759c506158699ff8e8b148b57d1995c26f24b4d40b5",
+   "s": 5822
   },
   {
    "p": "js/views-m4.js",
-   "h": "940a56a8bf0f328ef79c2b1e1ddb4b015e5b30cab1018b2556f33f72d61988d6",
-   "s": 21084
+   "h": "207b1b4c70c222fc4dd4dadb4ed7aa6e97b27d7876d21313dad15cfa13a32f74",
+   "s": 20781
   },
   {
    "p": "js/views-notify.js",
@@ -148,13 +174,13 @@
   },
   {
    "p": "js/views-social.js",
-   "h": "9d1c31272149f559ebf01f4f3ddc009ae64904fa80d90a8e56de323ed63c9623",
-   "s": 25898
+   "h": "e3d2439067ca9196726fb37e25734bc4e9f0bf644490a7d40de4580c044b2c75",
+   "s": 25867
   },
   {
    "p": "js/views-v4.js",
-   "h": "9240cbcd5517029422160a307bad75423f9dbdb643f0f9f33525e50fb3f18d60",
-   "s": 55059
+   "h": "71bd8e648bac974727c78a327d4739938013274ec78841d3739be72fef1703a8",
+   "s": 53957
   },
   {
    "p": "js/views-weather.js",
@@ -173,8 +199,8 @@
   },
   {
    "p": "sw.js",
-   "h": "704051e9acd88d24b1a6debbb79d48bd812955cad1811bd357b0c2764dec03fb",
-   "s": 2615
+   "h": "1b0f6e1dc9098e4af6c6aceb38a20fd6ae98827ee57b00afc5475f534b40b1f6",
+   "s": 2692
   },
   {
    "p": "vendor/capacitor/8.5.3/capacitor.js",

@@ -28,9 +28,11 @@ beforeEach(async () => { await H.resetEmulators(); });
 test("shoes: initial km + tracked, rotation suggestion with reason, catalogue with sourced facts above our plus/minus", async () => {
   const { page } = await H.device(); await H.open(page);
   await H.act(page, "nav", { t: "shoes" });
-  await page.click('[data-act="shoeNew"]');
-  await page.fill("#sh-name", "Harian"); await page.fill("#sh-brand", "MerkA"); await page.selectOption("#sh-use", "daily"); await page.fill("#sh-init", "250"); await page.fill("#sh-lim", "600");
-  await page.click('[data-act="saveShoe"]');
+  await page.click('[data-act="askStart"][data-f="shoe"]');        // adding a shoe is five questions from Kiki
+  await H.askType(page, "MerkA"); await H.askType(page, "Harian"); await H.askPick(page, "daily");
+  await H.askType(page, 250); await H.askType(page, 600);
+  assert.match(await page.textContent(".ask-sum"), /Harian[\s\S]*250[\s\S]*600/, "summary before saving");
+  await page.click('[data-act="askSave"]');
   await H.logRun(page, { date: "2026-11-10", km: 8, dur: "56:00" });
   await H.act(page, "nav", { t: "shoes" });
   const t = await page.textContent("main");
@@ -73,6 +75,10 @@ test("Health Connect (Android bridge): read-only permission, runs only, review b
   await d.ctx.addInitScript(FAKE);
   await d.ctx.addInitScript({ content: `window.Capacitor = { DEBUG: false, isLoggingEnabled: false, Plugins: {} };\n${BRIDGE}\n${pluginJS()}` });
   const { page } = d; await H.open(page);
+  await page.click(".gate [data-act='gateHc']");               // on the Android app Health Connect is linked at the gate first
+  await page.waitForFunction(() => !document.querySelector(".gate"));
+  await H.finishOnboarding(page);
+  await page.evaluate(() => { if (document.querySelector("#tour")) document.querySelector('[data-act="tutClose"]').click(); });
   await H.act(page, "nav", { t: "integ" });
   await page.click('[data-act="hcSync"]');
   await page.waitForSelector('[data-act="impSave"]');

@@ -2,7 +2,7 @@
 version: alpha
 name: WeRunIt
 description: >
-  A race-day instrument for one runner: graphite surfaces, hairlines, one race-orange accent and bib numerals.
+  WeRunIt 4.0, the quick app. A race-day instrument for one runner: graphite surfaces, hairlines, one race-orange accent and bib numerals.
   Opening the app answers "am I on track for my race, and what do I run today?" with almost no reading.
 colors:
   # Dark (primary theme) — graphite ramp
@@ -206,35 +206,69 @@ motion:
 Mobile-first single column, 16px gutters, 4px grid. Same thing, same size: one card padding (16), one tile padding
 (14), one list row height.
 
-### Beranda (`vHome`, `cockpit`)
+### WeRunIt 4.0: four tabs and a record button (`public/js/app4.js`)
 
-1. **Hero (moment 1):** "Week 11 dari 31 · Elevation", readiness chip, `?`. The countdown in bib numerals with
-   "hari lagi ke BTN JAKIM Half Marathon". Date, distance, target. The **route line** (`raceRoute`): a course from week 1
-   to a chequered finish flag; walked weeks drawn in `text`, the rest in `line-strong`; week dots solid when ≥ 80% of
-   planned km was run, grey when partial, hollow when empty; you are the orange marker.
-2. Two quiet actions: Catat lari, Check-in.
-3. Weather card (when relevant).
-4. **Volume mingguan (moment 2, the main chart):** 8 weeks, plan as a dark track, actual in `text-faint`, this week in
-   orange; this week's km in the header.
-5. Tren pace (small line), Aktivitas terakhir (list).
-6. Hari ini, then the week: a progress bar (orange, the only accent bullet) and the 7-day session dots (done = filled
-   off-white with a check, today = orange ring, upcoming = hairline circle, missed = dashed red with ✕).
-7. Workout berikutnya: distance as the figure, one line of type, Mulai timer + Catat.
-8. Badan kamu: 14-day check-in rows in neutral bars, low values in `caution`.
-9. Progres kamu: six number tiles, no mini charts.
-10. Konsistensi: 8-week heatmap; run days in `text` shaded by distance, missed sessions dashed, today ringed orange.
-11. Target bulan ini: two progress bars against the block plan; tap for the review.
+4.0 is a quick app. A runner opens it, sees what to run, taps once, and closes it. Fewer things on screen, every
+number paired with a shape. Older features stay reachable from **Kamu** (or from the tab they belong to) but never
+compete with the core loop.
 
-### Other screens
+| Tab | Job | What is on it |
+| --- | --- | --- |
+| **Hari ini** (`home`) | What do I run today? | Date and race countdown chip; the **workout card**: today's distance as a bib numeral and the workout **shape** (one block per step, width = time, height = intensity, orange = hard part), ✓ Selesai (logs the planned distance) and ▶ Mulai (timer); after logging it becomes the result (km, pace, time, effort, a distance-vs-plan bar). Rest days say "Istirahat". Then the **one-tap body check** (four batteries: Segar, Oke, Capek, Nyeri), the week (progress bar + session dots), weather when set, and the next session with its shape |
+| **Lari** (`log`) | What did I run? | This week as a big number and seven day bars (today orange); a **feed of run cards** like Strava: type, day, three big numbers (km, pace, time), a distance-vs-plan bar, effort as ten cells; links to Review and Kalender; Filter and Import folded at the bottom |
+| **Race** (`race`) | Am I ready? | Countdown and the route line, plan completion ring, predicted finish against target (a forecast from runs, never the target echoed back), weekly volume, **records as medals** (longest, best pace, total, streak), consistency heatmap, then the race strategy workspace |
+| **Kamu** (`more`) | Me and everything else | Account, three lifetime numbers, then one clean list: Latihan (hari lari, kalender, check-in, strength, locked-in, elevation), Gear & teman (sepatu, teman, goals), App (settings, notifikasi, integrasi, data, panduan, kamus, tutorial, tentang) |
 
-| Screen | Leads with |
-| --- | --- |
-| Latihan | Month progress bars (km, sessions), then the calendar; days you ran are a raised cell, today is an orange chip |
-| Aktivitas | Totals tiles, 12-week km bars, the session share as one stacked bar in neutral steps by rank; import folded into one row |
-| Check-in | 14-day check-in rows, the 1–5 inputs, the readiness ring in its semantic colour |
-| Review | Progress bars and number tiles for the block; each chart in its own card |
-| Race | Event card with the countdown, prediction as a 56px figure; method, data and limits folded into "Cara hitung" |
-| Menu | Account, then grouped tiles (Latihan, Badan & progres, Belajar, Akun & data) with muted line icons |
+- **Record button:** a 60px orange circle beside the dock opens **Catat lari**: the distance is prefilled from today's
+  plan and set with −/+ 0,5 km (or typed), time is optional, effort is five bars (RPE 2/4/6/7/9), date defaults to
+  today. One tap saves. "Isi detail lengkap" opens the full form (shoes, HR, notes, elevation).
+- **One-tap body check** writes a normal check-in (sleep, soreness, fatigue, energy, motivation, pain), so readiness,
+  reviews and sync work unchanged. The full six-question check-in stays under Kamu › Check-in.
+- **Dock grouping:** calendar, hari lari, locked-in, elevation, strength and check-in light Hari ini; review and
+  integrasi light Lari; pace and goals light Race; everything else lights Kamu.
+
+### Daily scores: Siap, Beban, Tidur (`public/js/scores.js`, `public/js/vessel.js`)
+
+Three 0–100 scores open Hari ini, each a **liquid vessel**: glass filled to the value, two travelling waves on the
+surface, fine metal flake drifting in the liquid, the surface levelling when the phone tilts (where the browser
+allows device orientation) and splashing on tap. One shared animation loop; a still frame under reduced motion.
+Charts stay crisp; only gauges are liquid. Tap a vessel for its detail: a big vessel, 30 days of bars coloured by
+band with a dashed AVG line, the band breakdown, and the drivers.
+
+| Score | Answers | Model (published method) | Colour |
+| --- | --- | --- | --- |
+| **Siap** | How recovered am I? | Hooper-style wellness from the check-in as a robust z-score against the runner's own winsorized EWMA baseline (half-life 14), 0.65 weight; Banister freshness (CTL τ28 − ATL τ7), 0.35 weight; logistic squash anchoring a typical day near 58; pain ≥ 4 caps at 30 | green ≥ 67, yellow 34–66, red < 34 |
+| **Beban** | How hard was today? | Session load = minutes × intensity (Edwards 5-zone on %HRmax when an average HR and the measured HRmax exist; otherwise Foster session-RPE ÷ 2; otherwise a per-type default), logarithmic `100·ln(load+1)/ln(2401)` | blue `#3aa0ff` |
+| **Tidur** | How was my sleep? | Reported sleep quality (85%) plus seven-night consistency (15%) | violet `#8f86ff` |
+
+- **Confidence tier** under each score: *Kalibrasi* (baseline still learning or no data), *Data masih tipis*
+  (building), or nothing when solid. With no honest input the vessel stays empty and shows "–".
+- **Target beban** for today follows Siap: green 60–80, yellow 45–65, red 0–40; a bar shows today's Beban against it.
+- **Monitor badan:** five signals in a row (tidur, energi, pegal, nyeri, rasio beban) each with a green check or
+  an amber "!", and a footer "n/5 sinyal dalam rentang".
+- **Race tab:** *Kesiapan race* as a slowly turning wavy blob (plan completion and predicted finish inside) and
+  *Rasio beban* as a dial (acute:chronic workload ratio, Hulin 2016; green 0.8–1.3, yellow to 1.5, red above).
+- **Home layout (NOOP-style):** a purple-blue sky behind the header that fades into graphite (`body[data-tab="home"]`),
+  the spaced WERUNIT wordmark, a dark score panel holding the three vessels ("SIAP ›") and the target-load bar, then
+  the workout, body check and monitor, then **Kartu kamu**: rows with a mini vessel, an uppercase label, a sub-line,
+  a big value and a chevron (rasio beban, kesiapan race, perkiraan finish, km minggu ini, streak).
+- **Score detail:** 30-day bars with MEAN / MIN / MAX, a 17-week calendar heatmap, the band breakdown, **Cara kerja**
+  (the model's weights as bars) and the drivers.
+- Labels in this layer use uppercase tracked type (`.cap`), the sports-watch convention.
+- The three-score structure, confidence tiers, logistic anchoring and the liquid-vessel idea follow NOOP's open
+  documentation (github.com/ryanbr/noop, PolyForm Noncommercial). WeRunIt's implementation is independent
+  JavaScript for its own data; no NOOP code or assets are used. Not medical advice.
+
+### Data as shapes
+
+| Shape | Data | Rule |
+| --- | --- | --- |
+| Workout shape (`workoutShape`) | The session's steps from the timer (`runSteps`) | Width = duration (estimated from distance when open-ended), height = intensity; warm-up/cool-down/rest in `text-faint`, steady running in `text`, hard work in orange |
+| Distance vs plan (`vsPlan`) | Logged km against the session's planned km | 6px track; fill in `text`; an orange tick where the plan ends |
+| Effort cells (`effortCells`) | RPE 1–10 | Ten cells; filled cells in `text-muted`, orange when RPE ≥ 8 |
+| Battery (`battery`) | Body check level | Four bars down to one; a cross for pain; the chosen one takes its meaning colour |
+| Medal (`medal`) | A personal record | Ribbon and disc; orange when the record is earned |
+| Route line (`raceRoute`) | Weeks from start to race day | See Race |
 
 ## Elevation & Depth
 
@@ -258,6 +292,44 @@ The dock and segmented controls are pills. Nested radius = outer − padding, ne
 - **Dock:** `surface-0` pill; the active tab sits on a `surface-2` indicator. Its two-ended spring is the one motion
   exception (unit-tested in `test/unit/motion.test.js`).
 - **Legend (`lgd()`):** two small squares, "Target" and "Aktual", instead of a caption sentence.
+
+## Brand surfaces (4.0)
+
+- **Mark:** a stride "W" whose last leg keeps climbing into an arrow (`TRACK` + `CADENCE` in `brand.js`). Flat race
+  orange on graphite, strokes only. White on the orange coach disc.
+- **Wordmark:** WERUNIT in Barlow Condensed caps; the "IT" is orange. No gradient, no foil.
+- **Boot:** mark draws in, wordmark rises, four lane segments (App, Versi, Akun, Data) fill orange as each real step
+  finishes. Grey segment = skipped. No sentences.
+- **Gate:** two numbered links, both required. 1 Google, 2 Health Connect (Android app only; on the web the row reads
+  "Android" and is dimmed, and on a phone without Health Connect it reads "Tidak ada"). The app stays behind the gate
+  until both are done. The only bypass is "Lanjut offline", shown only when there is no connection.
+- **Kiki (companion bot):** a small sporty robot: white helmet head, black visor with two orange LED eyes that blink,
+  orange headband with flying tails, antenna, graphite body with a "21" race bib, fists. Bobs gently; cheers on the
+  last tutorial step. Drawn in `public/js/companion.js` (`mascot(cls, mood)`), used in the tour, help sheets and
+  onboarding. Still under reduced motion.
+- **Kiki chat (tutorial + help):** the tutorial is a chat with Kiki: avatar, name, "Title · 2/6", a progress line,
+  then one message (typing dots, then a bold headline and a short line whose words land one by one), then reply chips
+  (Ayo / Oke, lanjut / Siap, Lewati, ‹). Moods: wave on the first step, point when a target is highlighted, think when
+  nothing is highlighted, cheer on the last step. Help sheets use the same chat: "Apa ini?" as one message, "Cara
+  pakai" as numbered steps that slide in. Kiki's voice: first person, casual, one idea per line.
+- **Coach card (old, replaced by Kiki chat):** a wide card docked above the tab bar, Kiki peeking over its top-left edge, a segmented
+  progress line, "Title · 2/6", one line of copy, Lewati on the left and a round orange arrow on the right. Swipe left
+  for next, right for back. No side tab, no speech-bubble tail.
+- **Tanya Kiki (manual input):** typing data in is one question per screen. Kiki asks (lip-syncing while the question
+  types out, bubbles rising behind it); the person taps a choice card or types their own answer; the answered
+  question folds into a one-line history (tap to change it) and the next question slides up below. Nothing is saved
+  until the end, where Kiki shows the result (readiness and Siap for a check-in, km / pace / time / Beban for a run,
+  a life bar for a shoe) above one Simpan button. Used for the daily check-in, Catat lari (record button) and Tambah
+  sepatu (`public/js/ask.js`). Editing an existing run or shoe keeps the full form.
+- **Swipe dials:** any button row with three or more options (check-in 1–5, months, frequency and similar) is a
+  horizontal drum; the chosen option sits in the orange lens; swiping and letting go picks the option in the lens.
+- **Long text:** a paragraph over ~18 words becomes headline (first sentence, bold), sub-headline (second sentence,
+  muted) and context (the rest, behind "Detail").
+- **Gate skip:** on the Android app the Health Connect step offers "Lewati" for phones without it (e.g. Huawei).
+- **Pickers:** every `<select>` renders as a drum wheel (swipe or tap a row; the orange lens marks the value). The real
+  select stays in the DOM, invisible, so forms and handlers are unchanged. Day pickers are a week dial: seven days
+  around a ring, selected days orange, the count in the centre.
+- **Update strip:** a pill with the version number in an orange badge, two words, one button.
 
 ## Motion
 
@@ -284,6 +356,11 @@ opacity and transform only. The old `--ease-pop*` tokens now resolve to the same
 - Buttons are verbs: Mulai, Catat, Simpan, Urungkan.
 - Chart words: bar, garis, titik. Describe marks by role ("Target", "Aktual"), never by a colour.
 - Safety copy (pain, injury) stays, shortened to one sentence that still says rest and see a professional.
+- Tour steps are one line (at most about 12 words). Help sheets carry only "Apa ini?" and "Cara pakai".
+- Secondary screens: no hint paragraphs under fields; how-to text folds behind a "Cara" disclosure; things that are not
+  available are a list of names with a status chip, not paragraphs.
+- Cut in 4.0: Panduan latihan and Kamus istilah are no longer in the menu; the About page lost the motion demo and the
+  how-updates-work essay.
 
 ## Accessibility
 
@@ -309,7 +386,9 @@ opacity and transform only. The old `--ease-pop*` tokens now resolve to the same
 - Tokens: `public/css/werunit.css` (`:root` and `[data-theme="light"]`) and the "v6 race layer" at its end.
 - Fonts: Inter and Barlow Condensed via Google Fonts in `public/index.html`.
 - Logo mark: `public/js/brand.js` (flat race orange); notification accent: `public/js/notify.js`.
-- Home: `vHome`, `cockpit`, `raceRoute`, `homeWeek`, `homeNext`, `homeBody`, `homeProgress`, `homeConsistency`,
-  `homeBlock` in `public/index.html`.
+- Scores: `public/js/scores.js` (pure, unit-tested in `test/unit/scores.test.js`); liquid vessels: `public/js/vessel.js`.
+- 4.0 screens, record button, quick log and body check: `public/js/app4.js` (loaded after the other view modules,
+  before `startApp()`). Shared pieces it reuses from `public/index.html`: `raceRoute`, `homeWeek`, `homeConsistency`,
+  `bulletBar`, `chartBars`, `runSteps`.
 - Icons and splash: regenerate with `node scripts/make-brand-assets.mjs` after any change to the mark (it reads
   `public/js/brand.js`; background `#141415`).
