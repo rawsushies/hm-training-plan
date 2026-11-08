@@ -8,23 +8,23 @@
   const QUICK = {
     id: "quick", title: "Mulai cepat", mins: 1,
     steps: [
-      { tab: "home", sel: null, t: "WeRunIt", b: "Rencana 31 minggu, log lari, dan skor harian. 6 langkah." },
-      { tab: "home", sel: "hero", t: "Latihan hari ini", b: "Angka = km hari ini. Balok = bentuk sesi, oranye = bagian berat. ✓ = selesai." },
-      { tab: "home", sel: "scores", t: "Skor harian", b: "Siap, Beban, Tidur, 0–100. Tap untuk tren 30 hari." },
-      { tab: "home", sel: "next", t: "Berikutnya", b: "Sesi berikutnya. Tap untuk detail." },
-      { tab: "log", sel: "log-new", t: "Catat lari", b: "Tombol oranye: jarak terisi dari rencana, pilih effort, simpan." },
-      { tab: "more", sel: "tut-hub", t: "Butuh bantuan?", b: "Tur per fitur ada di Kamu → Tutorial. Tombol ? di tiap halaman." }
+      { tab: "home", sel: null, t: "Halo, aku Kiki", b: "Pelatih sakumu sampai garis finish. Satu menit, enam langkah." },
+      { tab: "home", sel: "hero", t: "Ini lari hari ini", b: "Angka besar itu km-nya. Udah lari? Tap ✓." },
+      { tab: "home", sel: "scores", t: "Tiga skor, sekali lirik", b: "Siap, Beban, Tidur. Tap satu buat lihat trennya." },
+      { tab: "home", sel: "next", t: "Habis ini apa?", b: "Sesi berikutnya, lengkap sama bentuknya." },
+      { tab: "log", sel: "log-new", t: "Catat dalam 5 detik", b: "Tombol oranye. Jaraknya udah aku isiin." },
+      { tab: "more", sel: "tut-hub", t: "Aku nggak ke mana-mana", b: "Bingung? Tap ? di halaman mana aja." }
     ]
   };
   const T = {
     dashboard: { title: "Dashboard", steps: [
-      { tab: "home", sel: "scores", t: "Siap, Beban, Tidur", b: "Siap = pulih. Beban = berat hari ini. Tidur = dari check-in." },
-      { tab: "home", sel: "hero", t: "Latihan hari ini", b: "Lebar balok = lama, tinggi = berat. ✓ catat rencana, ▶ buka timer." },
-      { tab: "home", sel: "body", t: "Badan hari ini", b: "Satu tap: Segar, Oke, Capek, Nyeri. Mengisi Siap dan Tidur." },
-      { tab: "home", sel: "monitor", t: "Monitor badan", b: "Lima sinyal. Hijau = aman, ! = perhatikan." },
-      { tab: "home", sel: "week", t: "Sesi minggu ini", b: "Bar = km vs target. Titik penuh = selesai, cincin = hari ini." },
-      { tab: "home", sel: "next", t: "Berikutnya", b: "Sesi setelah hari ini." },
-      { tab: "home", sel: "race-chip", t: "Hitung mundur race", b: "Sisa hari ke race. Tap untuk tab Race." },
+      { tab: "home", sel: "scores", t: "Tiga angka, satu pagi", b: "Siap = pulih. Beban = berat. Tidur = dari check-in." },
+      { tab: "home", sel: "hero", t: "Bentuk latihanmu", b: "Lebar = lama, tinggi = berat. ✓ catat, ▶ timer." },
+      { tab: "home", sel: "body", t: "Gimana badanmu?", b: "Satu tap. Aku ubah jadi skor Siap dan Tidur." },
+      { tab: "home", sel: "monitor", t: "Lima lampu sinyal", b: "Hijau aman. Tanda ! artinya pelan-pelan." },
+      { tab: "home", sel: "week", t: "Minggu ini", b: "Bar = km vs target. Titik penuh = beres." },
+      { tab: "home", sel: "next", t: "Habis ini", b: "Sesi setelah hari ini." },
+      { tab: "home", sel: "race-chip", t: "Hari menuju race", b: "Tap buat buka tab Race." },
     ] },
     calendar: { title: "Jadwal latihan", steps: [
       { tab: "cal", sel: "cal-mode", t: "Tampilan bulan atau per minggu", b: "Bulan atau per minggu." },

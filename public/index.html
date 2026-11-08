@@ -2490,7 +2490,7 @@ let BOOTING = true;
  *  DEVICE.hc: "ok" = read access granted, "na" = Health Connect is not on this phone. */
 function hcPending(){
   if(typeof INTEG === "undefined") return false;
-  const e = INTEG.env(); return e.native && e.plugins.Health && !["ok","na"].includes(DEVICE.hc);
+  const e = INTEG.env(); return e.native && e.plugins.Health && !["ok","na","skip"].includes(DEVICE.hc);
 }
 function gateActive(){
   if(CLOUD.state === "off") return false;
@@ -2517,6 +2517,7 @@ function vGate(){
       ${step(1, G_LOGO, "Google", gRight, gDone ? "done" : local ? "na" : "on")}
       ${step(2, HC_LOGO, "Health Connect", hcRight, hcDone ? "done" : hcWeb || hcOld || DEVICE.hc === "na" ? "na" : gDone || local ? "on" : "")}
     </ol>
+    ${hcPending() && (gDone || local) ? `<p class="gate-note">HP Huawei atau tanpa Health Connect? <button class="link" data-act="gateHcSkip">Lewati</button></p>` : ""}
     ${n ? `<p class="gate-note">${n} lari di perangkat ini ikut tersimpan setelah masuk</p>` : ""}
     ${CLOUD.err && CLOUD.state === "autherror" ? `<p class="err">${esc(errText(CLOUD.err))}</p>` : ""}
     ${CLOUD.errDetail ? `<p class="xs mu" style="word-break:break-word"><code id="err-detail">${esc(CLOUD.errDetail)}</code></p><button class="btn sm" data-act="copyErr">Salin detail</button>` : ""}
@@ -2659,6 +2660,7 @@ const ACT = {
     }catch(e){ toast("Health Connect: " + String(e && e.message || e).slice(0, 80)); }
     finally{ INTEG.busy = false; saveDevice(); render(false); if(!gateActive()){ maybeStartTutorial(); render(false); } }
   },
+  gateHcSkip:() => { DEVICE.hc = "skip"; saveDevice(); render(false); if(!gateActive()){ maybeStartTutorial(); render(false); } },
   gateLocal:() => { LS.set(GATE_KEY, "local"); render(false); maybeStartTutorial(); render(false); },
   signIn:() => signIn(false),
   retryAcct:() => { if(CLOUD.user) activateAccount(CLOUD.user); },

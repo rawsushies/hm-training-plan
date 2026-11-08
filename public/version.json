@@ -1,21 +1,21 @@
 {
  "version": "4.0.0",
- "build": "2026-11-08T06:55:07Z",
+ "build": "2026-11-08T07:08:28Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
   "4 tab: Hari ini, Lari, Race, Kamu",
   "Skor Siap, Beban, Tidur sebagai cairan",
-  "Logo, layar buka, dan Kiki baru",
-  "Pilihan pakai roda geser",
-  "Masuk Google + Health Connect"
+  "Kiki baru: ngobrol, bergerak, bereaksi",
+  "Pilihan pakai roda dan dial geser",
+  "Masuk Google + Health Connect (bisa dilewati)"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "267931828535113d887f8d362ce85de367284c73dd51bdcfcb471f1e3932b951",
-   "s": 71703
+   "h": "65088644f24ca85eecaf5f8071c720ab9b8f6ad0942e0aef645c3e2ee9964e13",
+   "s": 78194
   },
   {
    "p": "favicon-32.png",
@@ -49,8 +49,8 @@
   },
   {
    "p": "index.html",
-   "h": "f7084e55564f47847af2fe9e672eb5d3e943c3d981d6c0fe72423ab7a42392ce",
-   "s": 283600
+   "h": "1a85cdbdda6aa516654a2216aacd4faae160be1328c3964928f4da3948970a6d",
+   "s": 283907
   },
   {
    "p": "js/app4.js",
@@ -69,8 +69,8 @@
   },
   {
    "p": "js/companion.js",
-   "h": "cb8754bd4bbadcf2451e2e780afac574cdbeca01ea1f41972905d326b75c5151",
-   "s": 8369
+   "h": "b523bc7ba51f92810d6c2e778917a411500dcc43ae02b07055aab2da8d4670ed",
+   "s": 14333
   },
   {
    "p": "js/integrations.js",
@@ -129,8 +129,8 @@
   },
   {
    "p": "js/tutorial.js",
-   "h": "37fdfb9894870a10262415dd299e0892d237cb25a84c12483247481dab075b7c",
-   "s": 19918
+   "h": "016bfcc4110472c0c2c13ae207da86539c37843a8d518be3fb7aebd7aa4301eb",
+   "s": 19795
   },
   {
    "p": "js/ui-glass.js",
@@ -144,7 +144,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "558417ea3d7f784d89b05b8cc31841e08b8c088a7e0787c8b28106e87612ff00",
+   "h": "c0f27e473a4b545c6f1af2ca48834f5219d9f232f0558a18ec678c46a0c1273d",
    "s": 139
   },
   {
@@ -194,7 +194,7 @@
   },
   {
    "p": "sw.js",
-   "h": "e1ee15d0ad63eac973b2ebe2ba79109f0ecc0ecf4cde854d41e05be024a36d00",
+   "h": "89b3c265caf1e55e43340337c16ac456fa8dfe0912da4f24bb5ec09cd8b67f0e",
    "s": 2679
   },
   {

@@ -307,9 +307,19 @@ The dock and segmented controls are pills. Nested radius = outer − padding, ne
   orange headband with flying tails, antenna, graphite body with a "21" race bib, fists. Bobs gently; cheers on the
   last tutorial step. Drawn in `public/js/companion.js` (`mascot(cls, mood)`), used in the tour, help sheets and
   onboarding. Still under reduced motion.
-- **Coach card (tutorial):** a wide card docked above the tab bar, Kiki peeking over its top-left edge, a segmented
+- **Kiki chat (tutorial + help):** the tutorial is a chat with Kiki: avatar, name, "Title · 2/6", a progress line,
+  then one message (typing dots, then a bold headline and a short line whose words land one by one), then reply chips
+  (Ayo / Oke, lanjut / Siap, Lewati, ‹). Moods: wave on the first step, point when a target is highlighted, think when
+  nothing is highlighted, cheer on the last step. Help sheets use the same chat: "Apa ini?" as one message, "Cara
+  pakai" as numbered steps that slide in. Kiki's voice: first person, casual, one idea per line.
+- **Coach card (old, replaced by Kiki chat):** a wide card docked above the tab bar, Kiki peeking over its top-left edge, a segmented
   progress line, "Title · 2/6", one line of copy, Lewati on the left and a round orange arrow on the right. Swipe left
   for next, right for back. No side tab, no speech-bubble tail.
+- **Swipe dials:** any button row with three or more options (check-in 1–5, months, frequency and similar) is a
+  horizontal drum; the chosen option sits in the orange lens; swiping and letting go picks the option in the lens.
+- **Long text:** a paragraph over ~18 words becomes headline (first sentence, bold), sub-headline (second sentence,
+  muted) and context (the rest, behind "Detail").
+- **Gate skip:** on the Android app the Health Connect step offers "Lewati" for phones without it (e.g. Huawei).
 - **Pickers:** every `<select>` renders as a drum wheel (swipe or tap a row; the orange lens marks the value). The real
   select stays in the DOM, invisible, so forms and handlers are unchanged. Day pickers are a week dial: seven days
   around a ring, selected days orange, the count in the centre.
