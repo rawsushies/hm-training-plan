@@ -1,25 +1,25 @@
 {
  "version": "4.0.0",
- "build": "2026-11-08T06:22:14Z",
+ "build": "2026-11-08T06:41:53Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "WeRunIt 4.0: aplikasi cepat dengan 4 tab (Hari ini, Lari, Race, Kamu) dan tombol catat oranye",
-  "Skor harian Siap, Beban, Tidur sebagai wadah cairan yang bergerak; tap buat grafik 30 hari, kalender, dan cara kerjanya",
-  "Latihan hari ini tampil sebagai bentuk; ✓ Selesai atau Mulai dalam satu tap",
-  "Check-in badan satu tap, monitor 5 sinyal, kartu rasio beban, kesiapan race, perkiraan finish"
+  "4 tab: Hari ini, Lari, Race, Kamu",
+  "Skor Siap, Beban, Tidur sebagai cairan",
+  "Logo dan layar buka baru",
+  "Masuk Google + Health Connect"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "31c99aa798500ce452eaa4eb6fc1eb2214addf1a8db4ca3bcd7d68133fa705c2",
-   "s": 62839
+   "h": "8a59fcb707d3dc1291b734a7db142baa70165c8dacbab6fabb46c8f90080647a",
+   "s": 66520
   },
   {
    "p": "favicon-32.png",
-   "h": "ad04fb5359d0c183073bed88996d5614bce4bff081c6d29b161190ddca7e9fa1",
-   "s": 913
+   "h": "807fb3340e2a3f7ae60c79a9caae77a62f026ad49d2e65b3f53f9db63eeac7da",
+   "s": 780
   },
   {
    "p": "firebase-config.js",
@@ -28,38 +28,38 @@
   },
   {
    "p": "icon-192.png",
-   "h": "88cfbc1fe8cbb871b2e68d25ae20ba984e0557ccce39d4d2a905604322c8e3b5",
-   "s": 6963
+   "h": "4fa2614cef6088755200c867dc64f6803b5ad5c4e994ae8daf61aa31a7a066c7",
+   "s": 5743
   },
   {
    "p": "icon-512.png",
-   "h": "b47546d75a949d79166d0acd30812c52b5ff9dd43ac41ab0c3d4bee3eb90418c",
-   "s": 20094
+   "h": "9b1907b607244f02308a7991d359bedc251e41a56a696c30dcdbc21380cb88c6",
+   "s": 17057
   },
   {
    "p": "icon-maskable-512.png",
-   "h": "ed67a5ba833dd31432910cf177557126e8522f026677363ba41bf5a5dac793bc",
-   "s": 10060
+   "h": "04cc7e10957c64b360673fd90f5d381b6de8777182d6b072f017c668689f84c0",
+   "s": 8339
   },
   {
    "p": "icon.svg",
-   "h": "23b79ca743bcf4fdaac6c3bac78c80cb5eacb39baada1a5c3997b7769e28cc55",
-   "s": 679
+   "h": "7b04ceb50be4d2874e268684e2f8083d40ca871f0a3839be7dd99ae7219a1c56",
+   "s": 633
   },
   {
    "p": "index.html",
-   "h": "6a5f0b970b5a68f4541debb14c4cf8c600011d17a3cef1524f9e1c7bef7ac00b",
-   "s": 287869
+   "h": "6c413cfcc0965a47d06ed77160ecad9e15bbd11acea396b2783a8eb28272ba07",
+   "s": 283430
   },
   {
    "p": "js/app4.js",
-   "h": "3cbefd96a94a9dfc4e9704461015b6e22d80c2bd0360c3bc53412b7c9b691e4d",
-   "s": 43173
+   "h": "73624a7666e6fb6471e06134534efcaa91304cb5f7364d9301c557e73a6f58ce",
+   "s": 43131
   },
   {
    "p": "js/brand.js",
-   "h": "bcad6afde01a361852fcdf5f69ae96e63944d11948b0055a455c6ffbb80b6fe6",
-   "s": 3671
+   "h": "86d0ce6a986b02c446af7fceaf9443c2032f0cdf05de840cf96579b47847f040",
+   "s": 3427
   },
   {
    "p": "js/cloud-firebase.js",
@@ -123,8 +123,8 @@
   },
   {
    "p": "js/tutorial.js",
-   "h": "f1ae9f05402380ebc26d982861e8d666e6d048ea328e661117733e4c13700bbb",
-   "s": 29792
+   "h": "37fdfb9894870a10262415dd299e0892d237cb25a84c12483247481dab075b7c",
+   "s": 19918
   },
   {
    "p": "js/ui-glass.js",
@@ -138,7 +138,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "eca686f81de0e617f049b9823b98ac55d73070772bad699cb0ac693e58eca41e",
+   "h": "44600cb64e6d0e8e0a5f5af4b8810fd9292816135a76d4dc7b0463d4ea9ccc7c",
    "s": 139
   },
   {
@@ -153,8 +153,8 @@
   },
   {
    "p": "js/views-m4.js",
-   "h": "940a56a8bf0f328ef79c2b1e1ddb4b015e5b30cab1018b2556f33f72d61988d6",
-   "s": 21084
+   "h": "e3272d93c959341ae887be658caff1907a119087c68816ca51017e6745526c44",
+   "s": 20766
   },
   {
    "p": "js/views-notify.js",
@@ -163,13 +163,13 @@
   },
   {
    "p": "js/views-social.js",
-   "h": "9d1c31272149f559ebf01f4f3ddc009ae64904fa80d90a8e56de323ed63c9623",
-   "s": 25898
+   "h": "e3d2439067ca9196726fb37e25734bc4e9f0bf644490a7d40de4580c044b2c75",
+   "s": 25867
   },
   {
    "p": "js/views-v4.js",
-   "h": "9240cbcd5517029422160a307bad75423f9dbdb643f0f9f33525e50fb3f18d60",
-   "s": 55059
+   "h": "b07a20b2149a2d460a1f463734507c7f9699922a45a86c2e2b1967b1549ca0d7",
+   "s": 54293
   },
   {
    "p": "js/views-weather.js",
@@ -188,7 +188,7 @@
   },
   {
    "p": "sw.js",
-   "h": "3fea8cd55e9c9d2232ef992ef614d7833cff579de92934b7e529129b1d97a11b",
+   "h": "0561c21f53dce9ae384bc12e76fd690bc99891185f263e5b84931ff6af603011",
    "s": 2660
   },
   {
