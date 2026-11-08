@@ -2501,21 +2501,21 @@ function gateActive(){
 const HC_LOGO = `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/><path d="M6 12h3l1.5-2.5 2 5 1.5-2.5h4"/></svg>`;
 function vGate(){
   const offline = !isOnline(), busy = CLOUD.state === "signingin", env = typeof INTEG !== "undefined" ? INTEG.env() : {native:false, plugins:{}};
-  const gDone = !!(CLOUD.user || ACTIVE_UID), hcWeb = !env.native, hcOld = env.native && !env.plugins.Health;
+  const gDone = !!(CLOUD.user || ACTIVE_UID), local = !gDone && LS.get(GATE_KEY) === "local", hcWeb = !env.native, hcOld = env.native && !env.plugins.Health;
   const hcDone = DEVICE.hc === "ok", hcBusy = typeof INTEG !== "undefined" && INTEG.busy;
   const n = HMTP.hasRealData(S) ? S.logs.filter(l => !l.sample).length : 0;
   const step = (i, ico, name, right, cls) => `<li class="gstep ${cls}"><span class="gstep-n num">${i}</span><span class="gstep-ico">${ico}</span><b>${name}</b>${right}</li>`;
-  const gRight = gDone ? `<span class="gstep-ok">${IC.check}</span>`
+  const gRight = gDone ? `<span class="gstep-ok">${IC.check}</span>` : local ? `<span class="xs mu">Offline</span>`
     : `<button class="gbtn" data-act="signIn" ${busy || offline ? "disabled" : ""}>${busy ? "..." : "Masuk"}</button>`;
   const hcRight = hcDone ? `<span class="gstep-ok">${IC.check}</span>`
     : DEVICE.hc === "na" ? `<span class="xs mu">Tidak ada</span>`
     : hcWeb ? `<span class="xs mu">Android</span>` : hcOld ? `<span class="xs mu">Perlu APK baru</span>`
-    : `<button class="gbtn" data-act="gateHc" ${!gDone || hcBusy ? "disabled" : ""}>${hcBusy ? "..." : "Hubungkan"}</button>`;
+    : `<button class="gbtn" data-act="gateHc" ${!(gDone || local) || hcBusy ? "disabled" : ""}>${hcBusy ? "..." : "Hubungkan"}</button>`;
   return `<div class="gate">
     <div class="gate-top">${WRI_BRAND.mark({size:72, liquid:!WRI_MOTION.reduced()})}<h1 class="gate-word">WeRun<span class="holo-text">It</span></h1></div>
     <ol class="gsteps">
-      ${step(1, G_LOGO, "Google", gRight, gDone ? "done" : "on")}
-      ${step(2, HC_LOGO, "Health Connect", hcRight, hcDone ? "done" : hcWeb || hcOld || DEVICE.hc === "na" ? "na" : gDone ? "on" : "")}
+      ${step(1, G_LOGO, "Google", gRight, gDone ? "done" : local ? "na" : "on")}
+      ${step(2, HC_LOGO, "Health Connect", hcRight, hcDone ? "done" : hcWeb || hcOld || DEVICE.hc === "na" ? "na" : gDone || local ? "on" : "")}
     </ol>
     ${n ? `<p class="gate-note">${n} lari di perangkat ini ikut tersimpan setelah masuk</p>` : ""}
     ${CLOUD.err && CLOUD.state === "autherror" ? `<p class="err">${esc(errText(CLOUD.err))}</p>` : ""}

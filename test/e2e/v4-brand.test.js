@@ -71,7 +71,7 @@ test("gate: on the Android app Health Connect is the required second link", asyn
   const { page } = await H.device({ cloud: false });
   await page.goto(H.appUrl().replace("?emulator=1", "")); await H.ready(page);
   await page.evaluate(() => {
-    CLOUD.state = "signedout";
+    CLOUD.state = "signedout"; M = null; S.ui.tut = null;
     INTEG.env = () => ({ native: true, plugins: { Health: true } });
     INTEG.plugin = () => ({ isAvailable: async () => ({ available: true }), requestAuthorization: async () => ({ readAuthorized: ["workouts", "distance"] }) });
     render(false);

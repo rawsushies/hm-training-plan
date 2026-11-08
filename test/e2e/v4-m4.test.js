@@ -73,6 +73,10 @@ test("Health Connect (Android bridge): read-only permission, runs only, review b
   await d.ctx.addInitScript(FAKE);
   await d.ctx.addInitScript({ content: `window.Capacitor = { DEBUG: false, isLoggingEnabled: false, Plugins: {} };\n${BRIDGE}\n${pluginJS()}` });
   const { page } = d; await H.open(page);
+  await page.click(".gate [data-act='gateHc']");               // on the Android app Health Connect is linked at the gate first
+  await page.waitForFunction(() => !document.querySelector(".gate"));
+  await H.finishOnboarding(page);
+  await page.evaluate(() => { if (document.querySelector("#tour")) document.querySelector('[data-act="tutClose"]').click(); });
   await H.act(page, "nav", { t: "integ" });
   await page.click('[data-act="hcSync"]');
   await page.waitForSelector('[data-act="impSave"]');
