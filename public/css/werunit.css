@@ -988,3 +988,11 @@ body[data-tab="home"] .a4-race{background:rgba(255,255,255,.12);border-color:rgb
 @media (prefers-reduced-motion:reduce){.kw,.kc-chip,.kc-steps li{animation:none!important;opacity:1;transform:none}.kc-typing{display:none}.tour.kchat .bubble{animation:none}}
 :root[data-motion="reduced"] .kw,:root[data-motion="reduced"] .kc-chip,:root[data-motion="reduced"] .kc-steps li{animation:none!important;opacity:1;transform:none}
 :root[data-motion="reduced"] .kc-typing{display:none}
+@media (max-height:520px){
+  .tour.kchat .bubble{padding:8px 10px}
+  .kc-top{gap:8px}.kc-av{width:34px;height:34px;margin:0}.kc-kiki{width:38px;height:38px}
+  .kc-prog{display:none}
+  .kc-msg{margin:6px 0 0;padding:8px 10px;min-height:0}
+  .kc-hl{font-size:16px}.kc-sub{font-size:12.5px;margin-top:2px}
+  .kc-replies{margin-top:6px}.kc-chip{height:32px;padding:0 12px;font-size:13px}.kc-swipe{display:none}
+}

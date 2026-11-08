@@ -82,7 +82,7 @@ test("gate: on the Android app Health Connect is the required second link", asyn
   await page.waitForFunction(() => !document.querySelector(".gate"));
   assert.equal(await page.evaluate(() => DEVICE.hc), "ok");
   // a phone without Health Connect (e.g. Huawei) can skip the step
-  await page.evaluate(() => { DEVICE.hc = null; render(false); });
+  await page.evaluate(() => { DEVICE.hc = null; M = null; S.ui.tut = null; render(false); });
   await page.click(".gate [data-act='gateHcSkip']");
   await page.waitForFunction(() => !document.querySelector(".gate"));
   assert.equal(await page.evaluate(() => DEVICE.hc), "skip");

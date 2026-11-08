@@ -1,6 +1,6 @@
 {
  "version": "4.0.0",
- "build": "2026-11-08T07:08:28Z",
+ "build": "2026-11-08T07:12:48Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
@@ -14,8 +14,8 @@
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "65088644f24ca85eecaf5f8071c720ab9b8f6ad0942e0aef645c3e2ee9964e13",
-   "s": 78194
+   "h": "b5777d0cba5a0644098cb2ed789df4b6c47a5955383050b0c330e7a29d79ae6e",
+   "s": 78603
   },
   {
    "p": "favicon-32.png",
@@ -144,7 +144,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "c0f27e473a4b545c6f1af2ca48834f5219d9f232f0558a18ec678c46a0c1273d",
+   "h": "e762ecc573e4f9b046571a258a13a9810199b46303cf4745ec0e27abe2986f0c",
    "s": 139
   },
   {
@@ -194,7 +194,7 @@
   },
   {
    "p": "sw.js",
-   "h": "89b3c265caf1e55e43340337c16ac456fa8dfe0912da4f24bb5ec09cd8b67f0e",
+   "h": "b4f33c16149d959aeddb04bbfc7fb524543149474e505bd77e92d4bb9e3a2248",
    "s": 2679
   },
   {
