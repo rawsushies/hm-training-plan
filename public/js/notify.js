@@ -31,7 +31,7 @@
   ];
   const MAX_SCHEDULED = 60;           // well under Android's per-app alarm limit
   const SMALL_ICON = "ic_stat_werunit";
-  const ACCENT = "#9673FF";   // --acc
+  const ACCENT = "#FF5A1F";   // --acc
 
   /** Stable positive 31-bit id from a reminder id string (FNV-1a). */
   function numId(s) {

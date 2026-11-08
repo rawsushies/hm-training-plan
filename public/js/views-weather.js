@@ -59,7 +59,7 @@ function weatherCard(){
 }
 const wxAttrib = () => `<p class="xs mu">Data cuaca: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (CC BY 4.0)</p>`;
 const _cockpitW = cockpit;
-cockpit = function(o){ const h = _cockpitW(o); return h.replace('<section class="card tipcard"', weatherCard() + '<section class="card tipcard"'); };
+cockpit = function(o){ const h = _cockpitW(o); return h.replace("<!--wx-->", weatherCard()); };   // slot after the quick actions
 
 function mWxLoc(){
   const l = WX.loc(), R = WX.results;

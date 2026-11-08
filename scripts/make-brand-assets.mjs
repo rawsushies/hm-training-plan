@@ -5,7 +5,7 @@ import { chromium } from "playwright";
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync } from "node:fs";
 import vm from "node:vm";
 const ctx = {}; vm.runInNewContext(readFileSync("public/js/brand.js", "utf8"), ctx);
-const B = ctx.WRI_BRAND, BG = "#13131C";
+const B = ctx.WRI_BRAND, BG = "#141415";
 const svgDoc = (inner, n, bg = "transparent") => `<html><body style="margin:0;background:${bg}">${inner.replace("<svg ", `<svg style="display:block" `).replace(/width="\d+" height="\d+"/, `width="${n}" height="${n}"`)}</body></html>`;
 const scaled = (opts, pad) => { // mark inside a padded square (pad = fraction of the canvas left around the mark)
   const m = B.mark(Object.assign({ size: 64 }, opts)).replace('viewBox="0 0 64 64"', `viewBox="${-64 * pad} ${-64 * pad} ${64 * (1 + 2 * pad)} ${64 * (1 + 2 * pad)}"`);

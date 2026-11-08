@@ -96,7 +96,7 @@ function friendCard(f){
   return `<div class="card" style="margin-top:10px">
     <div style="display:flex;align-items:center;gap:10px">${avatarImg(n.photo, n.name)}<div style="flex:1;min-width:0"><b>${esc(n.name)}</b><p class="xs mu">Teman${f.since ? " sejak " + fmtD(ymd(f.since)) : ""}</p></div></div>
     ${theirs ? `<div class="stats c3" style="margin-top:10px">${theirs}</div>` : `<p class="sm mu" style="margin-top:8px">${esc(n.name)} belum membagikan data latihan.</p>`}
-    ${pbs ? `<p class="sm" style="margin-top:8px">🏅 ${pbs}</p>` : ""}
+    ${pbs ? `<p class="sm" style="margin-top:8px">${pbs}</p>` : ""}
     ${sh && sh.activities && sh.activities.length ? `<p class="sm" style="margin-top:6px"><b>Aktivitas dibagikan:</b> ${sh.activities.map(a => `${fmtD(a.date)} ${esc(TYPES[a.type] || a.type)} ${fmtKm(a.km)} km${a.sec ? " · " + fmtDur(a.sec) : ""}`).join("; ")}</p>` : ""}
     ${sh && sh.plan && sh.plan.length ? `<p class="sm" style="margin-top:6px"><b>Jadwal:</b> ${sh.plan.map(p => `${fmtDay(p.date)} ${esc(p.title)}${p.km ? " " + fmtKm(p.km) + " km" : ""}`).join("; ")}</p>` : ""}
     <p class="xs mu" style="margin-top:8px">Yang kamu bagikan ke ${esc(n.name)}: ${esc(sharedMine)}</p>
