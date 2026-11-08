@@ -8,127 +8,127 @@
   const QUICK = {
     id: "quick", title: "Mulai cepat", mins: 1,
     steps: [
-      { tab: "home", sel: null, t: "Kenalan sama Kiki", b: "Selamat datang di WeRunIt! Aku temen lari kamu di sini. WeRunIt nyimpen rencana latihan 31 minggu kamu, nyatet lari, dan ngerangkum progres. Yuk kenalan 6 langkah aja." },
-      { tab: "home", sel: "hero", t: "Latihan hari ini", b: "Angka besar = jarak hari ini. Balok di bawahnya = bentuk latihannya: abu-abu = pemanasan/pendinginan, putih = lari santai, oranye = bagian berat. Tap “✓ Selesai” kalau udah lari sesuai rencana, atau “Mulai” buat timer." },
-      { tab: "home", sel: "scores", t: "Skor harian", b: "Siap, Beban, Tidur: tiga skor 0–100 kayak di jam olahraga. Siap ngasih target beban hari ini. Tap skor buat lihat grafik 30 hari." },
-      { tab: "home", sel: "next", t: "Berikutnya", b: "Sesi terdekat setelah hari ini, lengkap dengan bentuk latihannya. Tap buat detail." },
-      { tab: "log", sel: "log-new", t: "Catat lari", b: "Tombol oranye “+” atau “Catat”: jarak udah keisi dari rencana, tinggal geser +/−, isi waktu kalau ada, pilih effort, Simpan. Pace dihitung otomatis." },
-      { tab: "more", sel: "tut-hub", t: "Butuh bantuan?", b: "Di tab Kamu → “Tutorial” ada tur per fitur. Tiap halaman juga punya tombol “?” buat penjelasan singkat." }
+      { tab: "home", sel: null, t: "WeRunIt", b: "Rencana 31 minggu, log lari, dan skor harian. 6 langkah." },
+      { tab: "home", sel: "hero", t: "Latihan hari ini", b: "Angka = km hari ini. Balok = bentuk sesi, oranye = bagian berat. ✓ = selesai." },
+      { tab: "home", sel: "scores", t: "Skor harian", b: "Siap, Beban, Tidur, 0–100. Tap untuk tren 30 hari." },
+      { tab: "home", sel: "next", t: "Berikutnya", b: "Sesi berikutnya. Tap untuk detail." },
+      { tab: "log", sel: "log-new", t: "Catat lari", b: "Tombol oranye: jarak terisi dari rencana, pilih effort, simpan." },
+      { tab: "more", sel: "tut-hub", t: "Butuh bantuan?", b: "Tur per fitur ada di Kamu → Tutorial. Tombol ? di tiap halaman." }
     ]
   };
   const T = {
     dashboard: { title: "Dashboard", steps: [
-      { tab: "home", sel: "scores", t: "Siap, Beban, Tidur", b: "Tiga skor harian 0–100. Siap = seberapa pulih badanmu (check-in dibanding biasanya + kesegaran latihan). Beban = seberapa berat latihan hari ini. Tidur = kualitas tidur dari check-in. Tap salah satu buat grafik 30 hari." },
-      { tab: "home", sel: "hero", t: "Latihan hari ini", b: "Angka besar = jarak hari ini. Balok = bentuk latihan: lebar = lama, tinggi = berat, oranye = bagian inti. “✓ Selesai” mencatat jarak rencana, “Mulai” buka timer." },
-      { tab: "home", sel: "body", t: "Badan hari ini", b: "Satu tap: Segar, Oke, Capek, atau Nyeri. Itu jadi check-in harian yang ngisi skor Siap dan Tidur." },
-      { tab: "home", sel: "monitor", t: "Monitor badan", b: "Lima sinyal: tidur, energi, pegal, nyeri, dan rasio beban 7:28 hari. Centang hijau = dalam rentang aman, tanda seru = perlu diperhatiin." },
-      { tab: "home", sel: "week", t: "Sesi minggu ini", b: "Bar = km minggu ini dibanding target. Bulatan = sesi: penuh = selesai, cincin oranye = hari ini, garis putus merah = kelewat." },
-      { tab: "home", sel: "next", t: "Berikutnya", b: "Sesi berikutnya setelah hari ini, dengan bentuk latihannya." },
-      { tab: "home", sel: "race-chip", t: "Hitung mundur race", b: "Sisa hari ke race. Tap buat tab Race: kesiapan race, rasio beban, rekor, dan strategi." },
+      { tab: "home", sel: "scores", t: "Siap, Beban, Tidur", b: "Siap = pulih. Beban = berat hari ini. Tidur = dari check-in." },
+      { tab: "home", sel: "hero", t: "Latihan hari ini", b: "Lebar balok = lama, tinggi = berat. ✓ catat rencana, ▶ buka timer." },
+      { tab: "home", sel: "body", t: "Badan hari ini", b: "Satu tap: Segar, Oke, Capek, Nyeri. Mengisi Siap dan Tidur." },
+      { tab: "home", sel: "monitor", t: "Monitor badan", b: "Lima sinyal. Hijau = aman, ! = perhatikan." },
+      { tab: "home", sel: "week", t: "Sesi minggu ini", b: "Bar = km vs target. Titik penuh = selesai, cincin = hari ini." },
+      { tab: "home", sel: "next", t: "Berikutnya", b: "Sesi setelah hari ini." },
+      { tab: "home", sel: "race-chip", t: "Hitung mundur race", b: "Sisa hari ke race. Tap untuk tab Race." },
     ] },
     calendar: { title: "Jadwal latihan", steps: [
-      { tab: "cal", sel: "cal-mode", t: "Tampilan bulan atau per minggu", b: "“Bulan” nampilin kalender. “Per minggu” nampilin 31 minggu berurutan dengan target, km aktual, dan semua sesi (termasuk strength)." },
-      { tab: "cal", sel: "cal", t: "Kalender & warna sesi", b: "Kotak kecil berwarna = sesi di hari itu. Warnanya sesuai jenis (lihat keterangan di bawah). Kotak bergaris tepi = udah selesai, pudar = di-skip. Rabu bergaris miring karena Rabu malam sengaja dikosongin." },
-      { tab: "cal", sel: "cal-legend", t: "Arti warna", b: "Easy, Long, Recovery, Locked-in, Elevation, Benchmark, Race, Strength, dan Istirahat. Hari tanpa kotak = hari istirahat." },
-      { tab: "cal", sel: "cal-day", t: "Detail hari", b: "Tap tanggal buat lihat sesinya di sini: jarak, jam, keterangan, dan kalau udah dicatat, perbandingan rencana → aktual." },
-      { tab: "cal", sel: "cal-actions", t: "Skip, edit, pindah hari", b: "“Skip” nandain sesi dilewati (bisa dibatalin). “Edit” ngubah nama, jarak, atau keterangan sesi; target asli dari PDF tetap kelihatan. “Pindah hari” mindahin sesi ke tanggal lain (bukan Rabu, dan masih di masa latihan); app ngasih peringatan kalau nempel sama lari lain." },
-      { tab: "cal", sel: null, t: "Istirahat, cutback, taper", b: "Hari tanpa sesi = istirahat (boleh jalan santai). Tiap minggu ke-4 adalah minggu ringan (cutback) dengan benchmark. Minggu 28–30 adalah taper: jarak turun supaya kaki segar di race day minggu 31." }
+      { tab: "cal", sel: "cal-mode", t: "Tampilan bulan atau per minggu", b: "Bulan atau per minggu." },
+      { tab: "cal", sel: "cal", t: "Kalender & warna sesi", b: "Kotak warna = sesi. Tepi = selesai, pudar = skip." },
+      { tab: "cal", sel: "cal-legend", t: "Arti warna", b: "Warna per jenis sesi. Kosong = istirahat." },
+      { tab: "cal", sel: "cal-day", t: "Detail hari", b: "Tap tanggal: sesi, jarak, rencana vs aktual." },
+      { tab: "cal", sel: "cal-actions", t: "Skip, edit, pindah hari", b: "Skip, edit, atau pindah hari. Bisa dibatalkan." },
+      { tab: "cal", sel: null, t: "Istirahat, cutback, taper", b: "Tiap minggu ke-4 ringan. Minggu 28–30 taper." }
     ] },
     log: { title: "Log lari", steps: [
-      { tab: "log", sel: "log-new", t: "Catat lari manual", b: "Tap “Catat lari”. Isi tanggal, jenis lari, jarak (km), dan waktu total (mm:ss atau j:mm:ss). Nggak tahu waktunya? Isi pace aja, waktu dihitung dari pace × jarak." },
-      { tab: "log", sel: null, t: "Kolom opsional", b: "Tanjakan (meter naik), HR rata-rata dan HR tertinggi (detak jantung), RPE 1–10 (seberapa capek rasanya), cuaca, sepatu, dan catatan. Semua opsional, tapi RPE dan catatan bikin review bulanan lebih berguna." },
-      { tab: "log", sel: null, t: "Nyambungin ke sesi terjadwal", b: "Kolom “Sesi di jadwal” nampilin sesi ±7 hari dari tanggal lari yang belum punya catatan. Pilih sesinya supaya sesi itu jadi “Selesai”. Satu sesi cuma bisa punya satu catatan." },
-      { tab: "log", sel: "log-filter", t: "Filter & urutan", b: "Saring per bulan, jenis, atau jarak, dan urutkan dari terbaru, pace tercepat, terjauh, atau tanjakan terbanyak. Di bawahnya ada total km dan pace rata-rata hasil filter." },
-      { tab: "log", sel: "log-list", t: "Edit atau hapus", b: "Tap baris lari buat edit. Tombol “Hapus” ada di form edit, dan minta konfirmasi dulu." }
+      { tab: "log", sel: "log-new", t: "Catat lari manual", b: "Jarak + waktu, atau jarak + pace." },
+      { tab: "log", sel: null, t: "Kolom opsional", b: "HR, RPE, tanjakan, sepatu: opsional." },
+      { tab: "log", sel: null, t: "Nyambungin ke sesi terjadwal", b: "Pilih sesi di jadwal supaya sesi itu selesai." },
+      { tab: "log", sel: "log-filter", t: "Filter & urutan", b: "Saring bulan, jenis, jarak. Urutkan." },
+      { tab: "log", sel: "log-list", t: "Edit atau hapus", b: "Tap lari untuk edit atau hapus." }
     ] },
     import: { title: "Import aktivitas", steps: [
-      { tab: "log", sel: "import", t: "Format yang didukung", b: "File GPX atau TCX (satu lari per file, dari Strava, Garmin, Huawei, dll) dan activities.csv dari export akun Strava (banyak lari sekaligus). File FIT belum didukung." },
-      { tab: "log", sel: "import", t: "Alur import", b: "Pilih file → app baca tanggal, jarak, waktu, tanjakan, dan HR → muncul daftar buat dicentang. Lari yang tanggalnya pas sama sesi terjadwal otomatis dicocokin ke sesi itu." },
-      { tab: "log", sel: "import", t: "Deteksi duplikat", b: "Lari yang udah ada (tanggal sama dan jarak beda ≤150 m, atau ID aktivitas yang sama) ditandai “Udah ada” dan nggak dicentang. Kamu tetap bisa centang manual kalau memang beda." },
-      { tab: "log", sel: "import-help", t: "Cek sebelum simpan", b: "Waktu dari GPX = durasi rekaman dari awal sampai akhir, termasuk berhenti. Setelah disimpan, semua bisa diedit seperti catatan biasa. “Cara ambil file-nya” jelasin langkah export dari tiap aplikasi." }
+      { tab: "log", sel: "import", t: "Format yang didukung", b: "GPX, TCX, atau activities.csv Strava." },
+      { tab: "log", sel: "import", t: "Alur import", b: "Pilih file → centang → simpan. Sesi dicocokkan otomatis." },
+      { tab: "log", sel: "import", t: "Deteksi duplikat", b: "Lari yang sudah ada ditandai dan tidak dicentang." },
+      { tab: "log", sel: "import-help", t: "Cek sebelum simpan", b: "Semua bisa diedit setelah disimpan." }
     ] },
     timer: { title: "Workout timer", steps: [
-      { tab: "home", sel: "timer-btn", t: "Mulai", b: "Tap “▶ Mulai timer” di sesi mana pun (Home, Jadwal, atau Locked-in). Layar dijaga tetap nyala kalau browser mendukung. Timer ini nggak pakai GPS." },
-      { tab: "home", sel: null, t: "Bagian-bagian latihan", b: "Easy/long/recovery: satu bagian, timer jalan terus. Interval & tempo: pemanasan 10 menit → lari kerja → jogging pemulihan (diulang sesuai jumlah set) → pendinginan 5 menit. Benchmark & elevation: pemanasan → bagian inti (tap “Lanjut” kalau beres) → pendinginan." },
-      { tab: "home", sel: null, t: "Bunyi, getar, pindah bagian", b: "3 detik terakhir tiap bagian ada bunyi, dan pas ganti bagian ada bunyi + getar. Bagian berdurasi pindah otomatis; “Lanjut ›” buat pindah lebih awal." },
-      { tab: "home", sel: null, t: "Jeda, lanjut, batal", b: "“Jeda” menghentikan hitungan, “Lanjut timer” melanjutkan. “Batalin tanpa nyimpen” menutup timer tanpa catatan. Kalau halaman ketutup, timer dilanjutin pas app dibuka lagi." },
-      { tab: "home", sel: null, t: "Selesai & simpan", b: "“Selesai” menutup timer dan membuka form catatan lari dengan waktu total udah keisi dan jarak dari rencana. Ganti jaraknya sesuai jam/aplikasi kamu, lalu simpan." }
+      { tab: "home", sel: "timer-btn", t: "Mulai", b: "▶ di sesi mana pun. Tanpa GPS." },
+      { tab: "home", sel: null, t: "Bagian-bagian latihan", b: "Pemanasan → kerja → jog → pendinginan." },
+      { tab: "home", sel: null, t: "Bunyi, getar, pindah bagian", b: "Bunyi + getar saat ganti bagian." },
+      { tab: "home", sel: null, t: "Jeda, lanjut, batal", b: "Jeda, lanjut, atau batal." },
+      { tab: "home", sel: null, t: "Selesai & simpan", b: "Selesai membuka form dengan waktu terisi." }
     ] },
     locked: { title: "Locked-in", steps: [
-      { tab: "locked", sel: null, t: "Tujuannya", b: "Tiap 2 minggu ada sesi locked-in: minggu ke-2 latihan jaga pace/effort (interval atau tempo), minggu ke-4 benchmark. Tujuannya lari stabil di target, bukan secepat mungkin." },
-      { tab: "locked", sel: "locked-pace", t: "Pace yang disepakati", b: "Pace target sesi ini. Kalau belum diset, patokannya RPE. Lari bareng teman? Sepakati satu pace ini." },
-      { tab: "locked", sel: "locked-steps", t: "Urutannya", b: "Pemanasan, lalu set kerja (jumlah ulangan × menit lari) diselingi jogging santai, lalu pendinginan. Angka-angka ini yang dipakai timer." },
-      { tab: "locked", sel: "locked-actions", t: "Atur target", b: "“Atur target” ngubah jenis sesi, pace, target waktu, RPE, jumlah ulangan, lama lari, jeda, jarak benchmark, atau time attack. “Pakai pace ini buat sesi berikutnya” nyalin pace ke semua sesi locked-in/benchmark yang belum dicatat." },
-      { tab: "locked", sel: "locked-hist", t: "Hasil vs target", b: "Setelah dicatat, app bandingin pace aktual sama target. Beda ≤10 detik = pace kejaga (ini juga dihitung di goal “Jaga pace”). Grafik dan tabel nunjukin semua sesi yang udah ada waktunya." }
+      { tab: "locked", sel: null, t: "Tujuannya", b: "Jaga pace stabil, bukan secepat mungkin." },
+      { tab: "locked", sel: "locked-pace", t: "Pace yang disepakati", b: "Pace target sesi ini." },
+      { tab: "locked", sel: "locked-steps", t: "Urutannya", b: "Pemanasan, set kerja, pendinginan." },
+      { tab: "locked", sel: "locked-actions", t: "Atur target", b: "Ubah pace, ulangan, jeda." },
+      { tab: "locked", sel: "locked-hist", t: "Hasil vs target", b: "Beda ≤10 dtk = pace terjaga." }
     ] },
     elev: { title: "Elevation", steps: [
-      { tab: "elev", sel: null, t: "Tujuannya", b: "Sebulan sekali sesi tanjakan gantiin long run Sabtu (bukan tambahan). Melatih kaki dan napas di tanjakan dengan effort stabil." },
-      { tab: "elev", sel: "elev-list", t: "Target naik", b: "“Set target naik” = target total meter tanjakan (elevation gain) buat sesi itu. Sesuaikan sama rute yang ada." },
-      { tab: "elev", sel: "elev-list", t: "Mencatat sesi", b: "“Catat sesi” buka form catatan lari. Isi kolom Tanjakan (m) dari jam/aplikasi, plus catatan rute. File GPX/TCX yang di-import juga ngisi tanjakan otomatis." },
-      { tab: "elev", sel: "elev-chart", t: "Target vs aktual", b: "Grafik: abu-abu = target, berwarna = aktual per sesi elevation. Total tanjakan semua lari juga ada di Home dan di grafik Review. Jarak sesi elevation biasanya lebih pendek dari long run karena effort-nya lebih berat." }
+      { tab: "elev", sel: null, t: "Tujuannya", b: "Sebulan sekali, ganti long run Sabtu." },
+      { tab: "elev", sel: "elev-list", t: "Target naik", b: "Target meter naik." },
+      { tab: "elev", sel: "elev-list", t: "Mencatat sesi", b: "Catat sesi, isi tanjakan." },
+      { tab: "elev", sel: "elev-chart", t: "Target vs aktual", b: "Abu = target, warna = aktual." }
     ] },
     strength: { title: "Strength", steps: [
-      { tab: "strength", sel: "str-kind", t: "Strength A dan B", b: "A = kaki dan keseimbangan (±15–25 menit). B = perut, pinggul, dan betis, lebih ringan. Semua cuma pakai berat badan." },
-      { tab: "strength", sel: "str-sets", t: "Jumlah set", b: "Pilih 1 atau 2 set. Minggu pertama atau kaki masih pegal, 1 set cukup." },
-      { tab: "strength", sel: "str-ex", t: "Gerakan & cara", b: "Tiap gerakan ada repetisi, cara melakukan, kuncinya, dan salah yang sering. Centang kotak di kiri tiap gerakan yang udah kamu kerjakan." },
-      { tab: "strength", sel: "str-save", t: "Simpan sesi", b: "Pilih tanggal lalu “Simpan sesi strength” (minimal satu gerakan dicentang). Kalau dibuka dari jadwal, sesi itu otomatis jadi “Selesai”; kalau nggak, app nyari sesi strength sejenis di minggu itu." },
-      { tab: "strength", sel: "str-next", t: "Jadwal & riwayat", b: "Jadwal strength berikutnya dan riwayat sesi yang udah dicatat. Riwayat bisa dihapus kalau salah catat." }
+      { tab: "strength", sel: "str-kind", t: "Strength A dan B", b: "A = kaki. B = inti dan betis." },
+      { tab: "strength", sel: "str-sets", t: "Jumlah set", b: "1 atau 2 set." },
+      { tab: "strength", sel: "str-ex", t: "Gerakan & cara", b: "Centang gerakan yang selesai." },
+      { tab: "strength", sel: "str-save", t: "Simpan sesi", b: "Simpan. Sesi di jadwal ikut selesai." },
+      { tab: "strength", sel: "str-next", t: "Jadwal & riwayat", b: "Jadwal berikutnya dan riwayat." }
     ] },
     recovery: { title: "Check-in harian", steps: [
-      { tab: "recovery", sel: "ci-rate", t: "Enam pertanyaan", b: "Tidur, otot pegal, kaki capek, tenaga, semangat, dan nyeri, masing-masing skala 1–5. Butuh ±20 detik. Satu check-in per tanggal; isi lagi di tanggal yang sama = menimpa." },
-      { tab: "recovery", sel: "ci-result", t: "Indikator kesiapan", b: "Rata-rata sederhana dari 6 jawaban (pegal, capek, dan nyeri dibalik). ≥3,8 = “Siap lari”, ≥2,8 = “Santai dulu”, di bawahnya = “Mending istirahat”. Nyeri 4–5 selalu = istirahat, nyeri 3 menurunkan “Siap” jadi “Santai”." },
-      { tab: "recovery", sel: "ci-result", t: "Ini bukan diagnosa", b: "Indikator ini cuma patokan kasar, bukan penilaian medis. Kalau nyeri muncul berulang (2 dari 3 check-in terakhir), app ngasih peringatan buat kurangi latihan dan konsultasi ke dokter atau fisioterapis." },
-      { tab: "recovery", sel: "ci-hist", t: "Riwayat", b: "10 check-in terakhir. Rata-rata skornya juga muncul di Review bulanan." }
+      { tab: "recovery", sel: "ci-rate", t: "Enam pertanyaan", b: "Enam skala 1–5. 20 detik." },
+      { tab: "recovery", sel: "ci-result", t: "Indikator kesiapan", b: "Hijau = lari, kuning = santai, merah = istirahat." },
+      { tab: "recovery", sel: "ci-result", t: "Ini bukan diagnosa", b: "Bukan diagnosa. Nyeri berulang = periksa." },
+      { tab: "recovery", sel: "ci-hist", t: "Riwayat", b: "Riwayat check-in." }
     ] },
     review: { title: "Review bulanan", steps: [
-      { tab: "review", sel: "review", t: "Pilih bulan", b: "Program dibagi 8 blok (Nov–Jun). Tap bulan buat lihat review blok itu." },
-      { tab: "review", sel: "rev-table", t: "Rencana vs aktual", b: "Km, sesi lari, lari terjauh, pace rata-rata, benchmark terbaik, tanjakan, strength, dan skor check-in. Semuanya dari data yang kamu catat." },
-      { tab: "review", sel: "rev-sum", t: "Yang membaik, stabil, perlu dibenahi", b: "App bandingin sama bulan sebelumnya (kalau ada datanya) dan ngasih saran lanjut atau ulang beban. Kalau datanya kurang, app bilang belum bisa dibandingin." },
-      { tab: "review", sel: "rev-notes", t: "Catatan kamu", b: "Empat pertanyaan: yang paling oke, yang paling berat, pemulihan, dan satu hal yang mau dibenahi. Tap “Simpan catatan”. Catatan ini privat." },
-      { tab: "review", sel: "rev-charts", t: "Grafik", b: "Km per minggu, pace per minggu, long run Sabtu, tanjakan, dan seberapa rutin per bulan." }
+      { tab: "review", sel: "review", t: "Pilih bulan", b: "Pilih bulan." },
+      { tab: "review", sel: "rev-table", t: "Rencana vs aktual", b: "Rencana vs aktual." },
+      { tab: "review", sel: "rev-sum", t: "Yang membaik, stabil, perlu dibenahi", b: "Naik, stabil, atau ulang." },
+      { tab: "review", sel: "rev-notes", t: "Catatan kamu", b: "Catatan pribadi." },
+      { tab: "review", sel: "rev-charts", t: "Grafik", b: "Grafik per minggu." }
     ] },
     race: { title: "Race plan", steps: [
-      { tab: "race", sel: "rp-input", t: "Target finish & strategi", b: "Isi target finish (j:mm:ss) untuk 21,1 km. “Rata” = pace sama tiap km. “Mulai pelan” = 5 km pertama ±15 detik/km lebih lambat, sisanya sedikit lebih cepat supaya total waktunya tetap sama." },
-      { tab: "race", sel: "rp-table", t: "Pace per km", b: "Tabel pace tiap km dan waktu kumulatif di tiap titik, plus catatan strategi per bagian (km 0–5, 5–10, dst). Cocokin kolom waktu sama cut-off resmi di race guide." }
+      { tab: "race", sel: "rp-input", t: "Target finish & strategi", b: "Target finish + strategi." },
+      { tab: "race", sel: "rp-table", t: "Pace per km", b: "Pace dan waktu tiap km." }
     ] },
     shoes: { title: "Sepatu", steps: [
-      { tab: "shoes", sel: "shoe-add", t: "Tambah sepatu", b: "Isi nama dan batas km perkiraan (default 700). Sepatu pertama otomatis jadi default." },
-      { tab: "shoes", sel: "shoe-list", t: "Default, km, pensiun", b: "Sepatu default otomatis dipilih di form catatan lari dan di import. Km tiap sepatu = jumlah jarak lari yang pakai sepatu itu. Mendekati batas (≥90%) ada peringatan. “Pensiunkan” nyembunyiin sepatu dari pilihan." },
-      { tab: "shoes", sel: "shoe-list", t: "Lari tanpa sepatu", b: "Kalau ada lari yang belum ada sepatunya, muncul tombol buat masang semuanya ke sepatu default." }
+      { tab: "shoes", sel: "shoe-add", t: "Tambah sepatu", b: "Nama + batas km." },
+      { tab: "shoes", sel: "shoe-list", t: "Default, km, pensiun", b: "Default, km, pensiun." },
+      { tab: "shoes", sel: "shoe-list", t: "Lari tanpa sepatu", b: "Pasang sepatu ke lari lama sekaligus." }
     ] },
     goals: { title: "Goals & badge", steps: [
-      { tab: "goals", sel: "goal-main", t: "Goal utama", b: "Judul dan target race kamu (bisa diedit). Tercentang otomatis pas kamu mencatat lari di sesi race day." },
-      { tab: "goals", sel: "goal-ms", t: "Milestone", b: "Tujuh goal yang dihitung dari data: minggu lengkap, km tertinggi seminggu, long run terjauh, sesi locked-in yang pace-nya kejaga, sesi elevation, sesi strength, dan benchmark. Target bisa diedit." },
-      { tab: "goals", sel: "goal-badges", t: "Badge", b: "19 badge yang kebuka otomatis dari catatan asli (contoh data nggak dihitung), misal lari pertama, 10K, total 100 km, atau streak 4 minggu lengkap." },
-      { tab: "goals", sel: "goal-check", t: "Checklist race day", b: "Daftar persiapan race day yang bisa dicentang." }
+      { tab: "goals", sel: "goal-main", t: "Goal utama", b: "Goal race kamu." },
+      { tab: "goals", sel: "goal-ms", t: "Milestone", b: "Milestone dari data." },
+      { tab: "goals", sel: "goal-badges", t: "Badge", b: "Badge dari lari asli." },
+      { tab: "goals", sel: "goal-check", t: "Checklist race day", b: "Checklist race day." }
     ] },
     pace: { title: "Pace calculator", steps: [
-      { tab: "pace", sel: "pc", t: "Dari jarak & waktu", b: "Isi jarak dan waktu finish → pace rata-rata, plus perkiraan 5K, 10K, dan half marathon pakai rumus Riegel (waktu × (jarak baru ÷ jarak lama)^1,06)." },
-      { tab: "pace", sel: "pp", t: "Dari target pace", b: "Isi pace → waktu tempuh 5K, 10K, half marathon, dan jarak lain. Ini hitungan lurus tanpa faktor capek." },
-      { tab: "pace", sel: null, t: "Cuma perkiraan", b: "Makin jauh beda jaraknya, makin kasar perkiraan Riegel. Panas, tanjakan, dan latihan long run sangat ngaruh. Buat strategi race per km, pakai Race plan." }
+      { tab: "pace", sel: "pc", t: "Dari jarak & waktu", b: "Jarak + waktu → pace dan perkiraan." },
+      { tab: "pace", sel: "pp", t: "Dari target pace", b: "Pace → waktu tempuh." },
+      { tab: "pace", sel: null, t: "Cuma perkiraan", b: "Perkiraan, bukan janji." }
     ] },
     data: { title: "Data & backup", steps: [
-      { tab: "data", sel: "data-sync", t: "Status data", b: "Nunjukin di mana data kamu: cuma di perangkat ini, atau juga ke-sync ke akun Google kamu, plus perubahan yang belum terkirim dan konflik kalau ada." },
-      { tab: "data", sel: "data-export", t: "Export", b: "“Export JSON” = backup lengkap (semua log, settings, catatan). “Export CSV” = daftar lari buat dibuka di spreadsheet." },
-      { tab: "data", sel: "data-import", t: "Import backup", b: "Pilih file JSON dari app ini. “Gabungkan” menambah yang belum ada tanpa menghapus apa pun. “Ganti semua” mengganti data sekarang. Sebelum keduanya, app bikin backup otomatis yang bisa dipulihkan." },
-      { tab: "data", sel: "data-backups", t: "Kenapa tetap backup?", b: "Sync menjaga data antar perangkat, tapi kalau kamu salah hapus, hapusan itu ikut ke-sync. Backup JSON sesekali (misal tiap akhir bulan) jadi pegangan kedua." }
+      { tab: "data", sel: "data-sync", t: "Status data", b: "Di mana datamu tersimpan." },
+      { tab: "data", sel: "data-export", t: "Export", b: "JSON = backup, CSV = spreadsheet." },
+      { tab: "data", sel: "data-import", t: "Import backup", b: "Gabungkan atau ganti. Backup dibuat dulu." },
+      { tab: "data", sel: "data-backups", t: "Kenapa tetap backup?", b: "Backup sesekali tetap berguna." }
     ] },
     account: { title: "Akun & teman", steps: [
-      { tab: "more", sel: "acct", t: "Masuk dengan Google", b: "Tap “Masuk dengan Google”. Setelah masuk, data kamu ke-sync ke akun kamu dan bisa dibuka di perangkat lain. Tanpa masuk, app tetap jalan penuh, data cuma di perangkat ini." },
-      { tab: "more", sel: "acct", t: "Sync & ganti akun", b: "Statusnya kelihatan di sini: ke-sync, lagi sync, offline (perubahan disimpan dan dikirim nanti), atau gagal. “Ganti akun” keluar dulu lalu pilih akun lain; tiap akun punya data sendiri yang terpisah di perangkat ini." },
-      { tab: "bareng", sel: "groups", t: "Tambah teman", b: "Buat link undangan dan kirim ke temanmu. Link berlaku 7 hari dan sekali pakai. Temanmu mengirim permintaan, kamu yang menerima atau menolak." },
-      { tab: "bareng", sel: "share-toggle", t: "Privat per teman", b: "Defaultnya nggak ada yang dibagikan. Untuk tiap teman kamu bisa menyalakan: jarak mingguan, sesi selesai, personal best, aktivitas tertentu, jadwal, dan HR di pace tertentu. Catatan, check-in, nyeri, rute, dan lokasi nggak pernah dibagikan." }
+      { tab: "more", sel: "acct", t: "Masuk dengan Google", b: "Masuk dan sync antar perangkat." },
+      { tab: "more", sel: "acct", t: "Sync & ganti akun", b: "Status sync dan ganti akun." },
+      { tab: "bareng", sel: "groups", t: "Tambah teman", b: "Link undangan 7 hari, sekali pakai." },
+      { tab: "bareng", sel: "share-toggle", t: "Privat per teman", b: "Pilih apa yang dibagi per teman." }
     ] },
     settings: { title: "Settings", steps: [
-      { tab: "settings", sel: "st-days", t: "Hari & jam latihan", b: "Pilih hari lari weekday (Senin, Selasa, Kamis, atau Jumat; Rabu dikosongin) dan jam lari weekday/weekend. Strength ikut dijadwalkan di hari kerja lain." },
-      { tab: "settings", sel: "st-dates", t: "Tanggal mulai & race", b: "Tanggal mulai otomatis digeser ke Senin. Mengubahnya menggeser semua tanggal sesi; catatan lari tetap nempel ke sesinya (misal “Week 3 long run”), jadi cek lagi jadwal setelah ganti." },
-      { tab: "settings", sel: "st-goal", t: "Target & satuan", b: "Target finish dipakai di dashboard dan race plan. Satuan pace bisa per km atau per mile. Target km/minggu cuma dipakai buat goal; jadwal tetap ikut PDF." },
-      { tab: "settings", sel: "st-theme", t: "Tampilan", b: "Gelap, terang, atau ikut pengaturan HP." }
+      { tab: "settings", sel: "st-days", t: "Hari & jam latihan", b: "Hari dan jam latihan." },
+      { tab: "settings", sel: "st-dates", t: "Tanggal mulai & race", b: "Tanggal mulai dan race." },
+      { tab: "settings", sel: "st-goal", t: "Target & satuan", b: "Target dan satuan." },
+      { tab: "settings", sel: "st-theme", t: "Tampilan", b: "Gelap, terang, atau ikut HP." }
     ] },
     notif: { title: "Notifikasi", steps: [
-      { tab: "notif", sel: null, t: "Di aplikasi Android", b: "Pengingat dikirim oleh aplikasi Android lewat sistem Android, jadi tetap muncul walau app ditutup. Versi web cuma menyimpan pilihan dan nggak pernah minta izin." },
-      { tab: "notif", sel: "notif-prefs", t: "Pilihan per kategori", b: "Workout, hitung mundur race, pengingat minum, tips, rekap mingguan, dan review bulanan bisa dinyalakan sendiri-sendiri, plus waktu pengingat dan jam tenang. Izin baru diminta setelah kamu menyalakan dan menyimpan." },
-      { tab: "notif", sel: "notif-preview", t: "Pratinjau", b: "Pengingat 7 hari ke depan yang dibuat dari jadwal asli kamu." }
+      { tab: "notif", sel: null, t: "Di aplikasi Android", b: "Pengingat dikirim aplikasi Android." },
+      { tab: "notif", sel: "notif-prefs", t: "Pilihan per kategori", b: "Nyalakan per kategori." },
+      { tab: "notif", sel: "notif-preview", t: "Pratinjau", b: "Pengingat 7 hari ke depan." }
     ] }
   };
   const ORDER = ["dashboard", "calendar", "log", "import", "timer", "locked", "elev", "strength", "recovery", "review", "race", "shoes", "goals", "pace", "data", "account", "settings", "notif"];

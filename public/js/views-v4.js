@@ -22,12 +22,12 @@ function dayChips(sel, act, extra = ""){ return `<div class="seg" role="group">$
 function availEditor(D, compact){
   const av = D.avail.map((v, i) => v ? i : -1).filter(i => i >= 0);
   const opt = (sel, allowAuto) => (allowAuto ? `<option value="">Otomatis</option>` : "") + av.map(i => `<option value="${i}" ${sel === i ? "selected" : ""}>${SC.DAYS[i]}</option>`).join("");
-  return `<div class="field"><span class="lbl">Hari yang kamu bisa lari</span>${dayChips(av, "schDay")}<span class="hint">Pilih semua hari yang memungkinkan. Jumlah lari tetap ${D.freq} kali seminggu, hari kosong nggak otomatis jadi latihan.</span></div>
+  return `<div class="field"><span class="lbl">Hari yang kamu bisa lari</span>${dayChips(av, "schDay")}<span class="hint">${D.freq}× seminggu</span></div>
   <div class="g2"><div class="field"><label for="sch-long">Long run</label><select id="sch-long" data-live="schPref" data-k="long">${opt(D.long, false)}</select></div>
   <div class="field"><label for="sch-q">Sesi cepat / weekday</label><select id="sch-q" data-live="schPref" data-k="quality">${opt(D.quality, false)}</select></div></div>
-  ${compact ? "" : `<div class="g2"><div class="field"><label for="sch-r">Recovery run</label><select id="sch-r" data-live="schPref" data-k="recovery">${opt(D.recovery, true)}</select><span class="hint">Otomatis = sehari setelah long run kalau bisa.</span></div>
-  <div class="field"><span class="lbl">Lari per minggu</span><div class="seg">${[2, 3, 4].map(f => `<button class="${D.freq === f ? "on" : ""}" data-act="schFreq" data-v="${f}">${f}×</button>`).join("")}</div><span class="hint">Default program: 3×.</span></div></div>
-  <div class="field"><span class="lbl">Hari strength (opsional)</span>${dayChips(D.strength, "schStr")}<span class="hint">Kosongkan = otomatis di hari tanpa lari, bukan sehari sebelum long run.</span></div>`}`;
+  ${compact ? "" : `<div class="g2"><div class="field"><label for="sch-r">Recovery run</label><select id="sch-r" data-live="schPref" data-k="recovery">${opt(D.recovery, true)}</select></div>
+  <div class="field"><span class="lbl">Lari per minggu</span><div class="seg">${[2, 3, 4].map(f => `<button class="${D.freq === f ? "on" : ""}" data-act="schFreq" data-v="${f}">${f}×</button>`).join("")}</div></div></div>
+  <div class="field"><span class="lbl">Hari strength (opsional)</span>${dayChips(D.strength, "schStr")}</div>`}`;
 }
 function previewHtml(D){
   return previewWeeks(D).map(w => {
@@ -45,8 +45,8 @@ function vSchedule(){
   <div class="sec" style="margin-top:8px" data-tour="sch-avail">${availEditor(D)}
     <div class="g2"><div class="field"><label for="st-wdt2">Jam lari hari kerja</label><input type="time" id="st-wdt2" value="${esc(S.settings.wdTime)}"></div><div class="field"><label for="st-wkt2">Jam lari weekend</label><input type="time" id="st-wkt2" value="${esc(S.settings.wkTime)}"></div></div>
     <div class="btns"><button class="btn pri" data-act="schSave">Simpan jadwal</button>${custom ? `<button class="btn ghost" data-act="schLegacy">Kembali ke susunan lama</button>` : ""}</div>
-    <p class="xs mu" style="margin-top:8px">${custom ? "Kamu pakai jadwal sendiri." : "Sekarang pakai susunan lama (lari weekday + Sabtu + Minggu)."} Sesi yang udah kamu pindah manual tetap di tanggal pilihanmu. Catatan lari tetap nempel ke sesinya.</p></div>
-  <div class="sec" data-tour="sch-preview"><h2>Pratinjau</h2><p class="sm mu">Minggu ini dan minggu depan dengan pilihan di atas (belum disimpan).</p>${previewHtml(D)}</div>`;
+</div>
+  <div class="sec" data-tour="sch-preview"><h2>Pratinjau</h2>${previewHtml(D)}</div>`;
 }
 Object.assign(LIVE, {
   schPref:el => { const D = schedDraft(), k = el.dataset.k; D[k] = el.value === "" ? null : +el.value; render(true); }
@@ -222,7 +222,7 @@ function tabOverview(P){
     </div></details>
     ${p.excluded && p.excluded.length ? `<details style="margin-top:6px"><summary class="sm">${p.excluded.length} catatan nggak dipakai</summary><div class="bd"><ul class="clean xs">${p.excluded.slice(0, 20).map(x => `<li>${fmtD(x.log.date)} ${fmtKm(x.log.distance)} km: ${esc(x.reason)}</li>`).join("")}</ul></div></details>` : ""}
   </div>
-  <div class="card" style="margin-top:12px"><h3>Hasil race / tes terbaru (opsional)</h3><p class="xs mu">Isi hasil yang nggak ada di log (misal race tahun lalu). Ini dipakai sebagai sesi usaha.</p>
+  <div class="card" style="margin-top:12px"><h3>Hasil race / tes terbaru (opsional)</h3>
     ${P.rp.recent.map((r, i) => `<div class="kv"><span>${esc(r.label || "Hasil")} ${fmtKm(r.km)} km ${r.date ? "· " + fmtD(r.date) : ""}</span><span>${fmtDur(r.sec)} <button class="link sm" data-act="rcRecentDel" data-i="${i}">hapus</button></span></div>`).join("")}
     <div class="g3" style="margin-top:8px"><div class="field"><label for="rr-km">Km</label><input type="text" inputmode="decimal" id="rr-km" placeholder="10"></div><div class="field"><label for="rr-t">Waktu</label><input type="text" id="rr-t" placeholder="55:30"></div><div class="field"><label for="rr-d">Tanggal</label><input type="date" id="rr-d"></div></div>
     <div class="btns"><button class="btn sm" data-act="rcRecentAdd">Tambah</button><label class="sm mu" style="display:flex;align-items:center;gap:6px">Eksponen <select id="rr-exp" data-live="rcExp" style="width:auto;min-height:32px">${[1.04, 1.06, 1.08].map(x => `<option ${P.rp.exp === x ? "selected" : ""}>${x}</option>`).join("")}</select></label></div></div>`;

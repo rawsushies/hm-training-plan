@@ -293,6 +293,20 @@ The dock and segmented controls are pills. Nested radius = outer − padding, ne
   exception (unit-tested in `test/unit/motion.test.js`).
 - **Legend (`lgd()`):** two small squares, "Target" and "Aktual", instead of a caption sentence.
 
+## Brand surfaces (4.0)
+
+- **Mark:** a stride "W" whose last leg keeps climbing into an arrow (`TRACK` + `CADENCE` in `brand.js`). Flat race
+  orange on graphite, strokes only. White on the orange coach disc.
+- **Wordmark:** WERUNIT in Barlow Condensed caps; the "IT" is orange. No gradient, no foil.
+- **Boot:** mark draws in, wordmark rises, four lane segments (App, Versi, Akun, Data) fill orange as each real step
+  finishes. Grey segment = skipped. No sentences.
+- **Gate:** two numbered links, both required. 1 Google, 2 Health Connect (Android app only; on the web the row reads
+  "Android" and is dimmed, and on a phone without Health Connect it reads "Tidak ada"). The app stays behind the gate
+  until both are done. The only bypass is "Lanjut offline", shown only when there is no connection.
+- **Coach:** the mark on an orange disc (`mascot()`), used for the tour and help sheets. The old Kiki character is gone.
+- **Tour bubble:** `surface-1` card with an orange left edge, "Title · 2/6", one line of copy, Lanjut / Lewati.
+- **Update strip:** a pill with the version number in an orange badge, two words, one button.
+
 ## Motion
 
 One curve: `cubic-bezier(0.22, 1, 0.36, 1)`. Press 150ms with scale 0.98; menus 200ms; entrances 400ms fade and 8px
@@ -318,6 +332,11 @@ opacity and transform only. The old `--ease-pop*` tokens now resolve to the same
 - Buttons are verbs: Mulai, Catat, Simpan, Urungkan.
 - Chart words: bar, garis, titik. Describe marks by role ("Target", "Aktual"), never by a colour.
 - Safety copy (pain, injury) stays, shortened to one sentence that still says rest and see a professional.
+- Tour steps are one line (at most about 12 words). Help sheets carry only "Apa ini?" and "Cara pakai".
+- Secondary screens: no hint paragraphs under fields; how-to text folds behind a "Cara" disclosure; things that are not
+  available are a list of names with a status chip, not paragraphs.
+- Cut in 4.0: Panduan latihan and Kamus istilah are no longer in the menu; the About page lost the motion demo and the
+  how-updates-work essay.
 
 ## Accessibility
 

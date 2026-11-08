@@ -48,7 +48,7 @@ test("gate: a new signed-out user must sign in first; then one onboarding screen
   assert.equal(await page.evaluate(() => document.getElementById("dock").hidden), false);
 });
 
-test("gate: offline, or with existing device data, the user can continue without an account", async () => {
+test("gate: offline the user can continue; existing device data no longer bypasses Google", async () => {
   const off = await H.device({ gate: true });
   await off.page.goto(H.appUrl()); await booted(off.page);
   await off.ctx.setOffline(true); await off.page.evaluate(() => render(false));
@@ -60,10 +60,27 @@ test("gate: offline, or with existing device data, the user can continue without
   const legacy = { "hmtp:v1": { v: 2, settings: {}, logs: [{ id: "a", date: "2026-11-10", type: "easy", distance: 5, duration: 1800 }], ui: { tourDone: true, tourV: 2 } } };
   const old = await H.device({ gate: true, seed: legacy });
   await old.page.goto(H.appUrl()); await booted(old.page);
-  assert.match(await old.page.textContent(".gate"), /Ada data latihan di perangkat ini/);
-  await old.page.click(".gate [data-act='gateLocal']");
-  await old.page.waitForSelector(".cockpit");
+  assert.match(await old.page.textContent(".gate"), /1 lari di perangkat ini/);
+  assert.equal(await old.page.$(".gate [data-act='gateLocal']"), null, "Google sign-in is required online");
+  assert.ok(await old.page.isVisible(".gate [data-act='signIn']"));
+  assert.match(await old.page.textContent(".gate"), /Health Connect[\s\S]*Android/, "Health Connect step shown, Android-only on the web");
   assert.equal(await old.page.evaluate(() => S.logs.length), 1, "existing data intact");
+});
+
+test("gate: on the Android app Health Connect is the required second link", async () => {
+  const { page } = await H.device({ cloud: false });
+  await page.goto(H.appUrl().replace("?emulator=1", "")); await H.ready(page);
+  await page.evaluate(() => {
+    CLOUD.state = "signedout";
+    INTEG.env = () => ({ native: true, plugins: { Health: true } });
+    INTEG.plugin = () => ({ isAvailable: async () => ({ available: true }), requestAuthorization: async () => ({ readAuthorized: ["workouts", "distance"] }) });
+    render(false);
+  });
+  assert.ok(await page.isVisible(".gate [data-act='gateHc']"), "Health Connect step blocks the app");
+  assert.ok(await page.evaluate(() => document.getElementById("dock").hidden));
+  await page.click(".gate [data-act='gateHc']");
+  await page.waitForFunction(() => !document.querySelector(".gate"));
+  assert.equal(await page.evaluate(() => DEVICE.hc), "ok");
 });
 
 test("dock: the glass pill moves only on a real tab tap, stretches in flight, settles; every page reachable", async () => {

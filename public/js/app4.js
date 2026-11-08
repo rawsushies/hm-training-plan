@@ -378,7 +378,7 @@
   const ROWS = [
     ["Latihan", [["jadwal", "Hari lari"], ["cal", "Kalender"], ["recovery", "Check-in"], ["strength", "Strength"], ["locked", "Locked-in"], ["elev", "Elevation"]]],
     ["Gear & teman", [["shoes", "Sepatu"], ["bareng", "Teman"], ["goals", "Goals & badge"]]],
-    ["App", [["settings", "Settings"], ["notif", "Notifikasi"], ["integ", "Integrasi"], ["data", "Data & backup"], ["guide", "Panduan"], ["kamus", "Kamus"], ["tutorials", "Tutorial"], ["about", "Tentang"]]]
+    ["App", [["settings", "Settings"], ["notif", "Notifikasi"], ["integ", "Integrasi"], ["data", "Data & backup"], ["tutorials", "Tutorial"], ["about", "Tentang"]]]
   ];
   vMore = function () {
     const ls = S.logs.filter(l => !l.sample), y = String(new Date().getFullYear());

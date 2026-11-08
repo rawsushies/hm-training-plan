@@ -926,29 +926,14 @@ const IC = {
   heart:'<svg class="ico" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
   shoe:'<svg class="ico" viewBox="0 0 24 24"><path d="M3 16c0-3 1-7 3-8l3 2 3-1c1 3 4 4 7 4 1.5 0 2 1 2 2v1H3z"/><path d="M3 19h18"/></svg>'
 };
-function mascot(cls = "mascot"){
-  return `<svg class="${cls}" viewBox="0 0 80 80" aria-hidden="true">
-    <ellipse cx="40" cy="75" rx="18" ry="3" fill="#000" opacity=".18"/>
-    <path d="M33 56 L26 68 L20 68" stroke="#2a2f33" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M46 56 L54 63 L60 60" stroke="#2a2f33" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-    <ellipse cx="19" cy="69" rx="5" ry="3" fill="#7b9cc2"/><ellipse cx="61" cy="60" rx="5" ry="3" fill="#7b9cc2" transform="rotate(-25 61 60)"/>
-    <circle cx="40" cy="36" r="24" fill="#c8f03c"/>
-    <path d="M17 29 Q40 21 63 29 L63 35 Q40 27 17 35Z" fill="#7b9cc2"/>
-    <path d="M62 30 Q71 28 74 22 M62 33 Q72 34 76 29" stroke="#7b9cc2" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-    <ellipse cx="32" cy="41" rx="3" ry="3.8" fill="#1d2124"/><ellipse cx="48" cy="41" rx="3" ry="3.8" fill="#1d2124"/>
-    <circle cx="33" cy="39.6" r="1" fill="#fff"/><circle cx="49" cy="39.6" r="1" fill="#fff"/>
-    <ellipse cx="26" cy="48" rx="3.5" ry="2.2" fill="#f2907e" opacity=".75"/><ellipse cx="54" cy="48" rx="3.5" ry="2.2" fill="#f2907e" opacity=".75"/>
-    <path d="M35 49 Q40 54 45 49" stroke="#1d2124" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-    <path d="M17 44 Q9 40 8 33" stroke="#a9d12a" stroke-width="5" fill="none" stroke-linecap="round"/>
-    <path d="M63 44 Q71 49 75 45" stroke="#a9d12a" stroke-width="5" fill="none" stroke-linecap="round"/>
-  </svg>`;
-}
+/** Coach badge (4.0): the mark on a race-orange disc. Replaces the old Kiki mascot everywhere. */
+function mascot(cls = "mascot"){ return `<span class="${cls} coach" aria-hidden="true">${WRI_BRAND.mark({size:40, mode:"white", weight:7})}</span>`; }
 const NAV_MAIN = [["home","Beranda"],["cal","Latihan"],["log","Aktivitas"],["race","Race"],["more","Menu"]];
 const DOCK_ICON = {home:"home", cal:"cal", log:"act", race:"race", more:"more"};
 // Which dock tab is lit for each page (every feature stays reachable; sub-pages light their parent).
 const DOCK_GROUP = {home:"home", cal:"cal", locked:"cal", elev:"cal", strength:"cal", recovery:"cal", log:"log", review:"log", shoes:"log", goals:"log", race:"race", pace:"race"};
 const dockTab = tab => DOCK_GROUP[tab] || "more";
-const NAV_MORE = [["bareng","Bareng teman"],["race","Race plan"],["shoes","Sepatu"],["locked","Locked-in"],["elev","Elevation"],["strength","Strength"],["recovery","Check-in harian"],["goals","Goals"],["guide","Panduan latihan"],["kamus","Kamus istilah"],["pace","Pace calculator"],["settings","Settings"],["notif","Notifikasi"],["integ","Integrasi"],["data","Data & backup"],["tutorials","Tutorial & bantuan"],["about","Tentang & update"]];
+const NAV_MORE = [["bareng","Bareng teman"],["race","Race plan"],["shoes","Sepatu"],["locked","Locked-in"],["elev","Elevation"],["strength","Strength"],["recovery","Check-in harian"],["goals","Goals"],["pace","Pace calculator"],["settings","Settings"],["notif","Notifikasi"],["integ","Integrasi"],["data","Data & backup"],["tutorials","Tutorial & bantuan"],["about","Tentang & update"]];
 
 /* ============ Tutorial v3 (content in js/tutorial.js) ============
  * Progress (which tours are done) is stored in S.tutorial, which syncs with the account. The step a
@@ -992,11 +977,11 @@ function tutBubble(){
   const t = S.ui.tut, d = tourDef(t.id); if(!d || !d.steps[t.i]) return "";
   const st = d.steps[t.i], n = d.steps.length, last = t.i === n-1;
   return `<div class="tour" id="tour" role="dialog" aria-live="polite" aria-label="Tutorial ${esc(d.title)}">${mascot()}<div class="bubble">
-    <div class="titlerow"><p class="xs mu">${esc(d.title)} · Langkah ${t.i+1} dari ${n}</p><button class="x" data-act="tutClose" aria-label="Tutup tutorial">×</button></div>
+    <div class="titlerow"><p class="cap">${esc(d.title)} · ${t.i+1}/${n}</p><button class="x" data-act="tutClose" aria-label="Tutup tutorial">×</button></div>
     <div class="prog" aria-hidden="true">${d.steps.map((_,i) => `<i class="${i <= t.i ? "on" : ""}"></i>`).join("")}</div>
     <h3 style="margin:4px 0">${esc(st.t)}</h3><p class="sm">${esc(st.b)}</p>
-    <p class="xs mu" id="tour-miss" style="margin-top:6px" hidden>Bagian ini belum kelihatan sekarang (misalnya belum ada datanya), tapi penjelasannya tetap berlaku.</p>
-    <div class="btns" style="margin-top:10px">${t.i > 0 ? `<button class="btn sm ghost" data-act="tutPrev">‹ Balik</button>` : ""}<button class="btn sm pri" data-act="tutNext">${last ? "Selesai" : "Lanjut ›"}</button>${t.id === "quick" && !last ? `<button class="btn sm ghost" data-act="tutClose">Lewati</button>` : ""}<button class="btn sm ghost" data-act="tutAll">Semua tutorial</button></div></div></div>`;
+    <p class="xs mu" id="tour-miss" style="margin-top:6px" hidden>Muncul setelah ada data</p>
+    <div class="btns" style="margin-top:10px">${t.i > 0 ? `<button class="btn sm ghost" data-act="tutPrev" aria-label="Balik">‹</button>` : ""}<button class="btn sm pri" data-act="tutNext">${last ? "Selesai" : "Lanjut"}</button>${t.id === "quick" && !last ? `<button class="btn sm ghost" data-act="tutClose">Lewati</button>` : ""}</div></div></div>`;
 }
 /** Highlight the target, scroll it into view, and keep the bubble from covering it. */
 function placeTour(){
@@ -1027,7 +1012,7 @@ function render(keep){
   const tab = S.ui.tab;
   const views = {home:vHome,cal:vCal,log:vLog,review:vReview,more:vMore,bareng:vBareng,locked:vLocked,elev:vElev,strength:vStrength,recovery:vRecovery,goals:vGoals,guide:vGuide,kamus:vKamus,pace:vPace,settings:vSettings,data:vData,race:vRace,shoes:vShoes,notif:vNotif,tutorials:vTutorials,about:vAbout,jadwal:vSchedule,integ:vInteg};
   const mainTab = dockTab(tab);
-  if(gateActive()){ document.getElementById("app").innerHTML = vGate() + (M ? modal() : ""); setDock(null); return; }
+  if(gateActive()){ document.body.dataset.tab = "gate"; document.getElementById("app").innerHTML = vGate() + (M ? modal() : ""); setDock(null); return; }
   document.getElementById("app").innerHTML = `
   <div class="shell ${!RUN && S.ui.tut && !M ? "touring" : ""}">
     <nav class="side" aria-label="Navigasi">
@@ -1596,7 +1581,7 @@ function acctBox(){
 const MENU_GROUPS = [
   ["Latihan", "var(--c-long)", ["race","jadwal","locked","elev","strength","pace","shoes"]],
   ["Badan & progres", "var(--c-recovery)", ["recovery","goals","bareng"]],
-  ["Belajar", "var(--c-easy)", ["guide","kamus","tutorials"]],
+  ["Belajar", "var(--c-easy)", ["tutorials"]],
   ["Akun & data", "var(--c-elevation)", ["settings","notif","integ","data","about"]]
 ];
 const MENU_IC = {
@@ -1740,7 +1725,7 @@ function vLocked(){
       <button class="btn" data-act="lockCfg" data-id="${s.id}">Atur target</button>
       ${c.targetPace ? `<button class="btn ghost" data-act="applyPace" data-id="${s.id}">Pakai pace ini buat sesi berikutnya</button>` : ""}
     </div>
-    <p class="xs mu" style="margin-top:10px">Badan belum siap? Turunin target atau ganti jadi easy run. Kalau minggu itu udah ada tanjakan berat, jangan tambah time attack.</p>
+    
   </div>
   <div class="sec" data-tour="locked-hist"><div class="sec-h"><h2>Dibanding sesi sebelumnya</h2></div>
     ${doneList.length ? `${chartLine(doneList.map(x => ({l:"W"+x.n, v:paceOf(logFor(x.id))})), {fmt: v => fmtPace(v,false)})}
@@ -1774,7 +1759,7 @@ function vElev(){
     ${lg && lg.notes ? `<p class="sm" style="margin-top:6px">Catatan rute: ${esc(lg.notes)}</p>` : ""}
     <div class="btns" style="margin-top:8px">${lg ? `<button class="btn sm" data-act="editLog" data-id="${lg.id}">Edit catatan</button>` : `<button class="btn sm pri" data-act="logSess" data-id="${s.id}">Catat sesi</button>`}<button class="btn sm ghost" data-act="elevCfg" data-id="${s.id}">Set target naik</button></div>
   </div>`).join("")}</div>
-  <p class="xs mu" style="margin-top:12px">Di minggu elevation: lari weekday dibuat santai, lari Minggu lebih pendek atau ganti jalan.</p>`;
+`;
 }
 
 /* ---------- Strength ---------- */
@@ -1786,24 +1771,21 @@ function vStrength(){
   return `${storageNote()}${pageHead("Strength tanpa alat", "Cuma pakai berat badan. Nggak butuh dumbbell, mesin, atau karet. Yang penting gerakannya rapi, bukan banyaknya.")}
   <div class="seg" style="margin:14px 0;max-width:300px" data-tour="str-kind"><button class="${k==='A'?'on':''}" data-act="strK" data-k="A">Strength A</button><button class="${k==='B'?'on':''}" data-act="strK" data-k="B">Strength B</button></div>
   <h2>${k === "A" ? "Kaki dan keseimbangan" : "Perut, pinggul, dan betis"}</h2>
-  <p class="sm mu" style="margin-top:2px">${k === "A" ? "Sekitar 15–25 menit." : "Lebih ringan dari A. Enak dilakukan pas badan lagi segar."} Istirahat 45–75 detik antar set. Berhenti 2–3 repetisi sebelum benar-benar nggak kuat.</p>
+  <p class="cap" style="margin-top:4px">${k === "A" ? "15–25 mnt" : "10–15 mnt"} · jeda 45–75 dtk</p>
   ${linked ? `<p class="sm" style="margin-top:8px">Jadwalnya: <b>${fmtDay(linked.date)}</b> (Week ${linked.n})</p>` : ""}
   <div style="display:flex;gap:10px;align-items:center;margin:12px 0;flex-wrap:wrap" data-tour="str-sets">
     <span class="sm">Jumlah set:</span><div class="seg" style="width:150px"><button class="${D.sets===1?'on':''}" data-act="strSets" data-v="1">1 set</button><button class="${D.sets===2?'on':''}" data-act="strSets" data-v="2">2 set</button></div>
-    <span class="xs mu">Minggu pertama atau kaki masih pegal? 1 set cukup.</span>
   </div>
   <div data-tour="str-ex">${EX[k].map(e => { const on = D.done.includes(e.k); return `<div class="ex">
     <button class="tick ${on?'on':''}" data-act="strTick" data-k="${e.k}" aria-pressed="${on}" aria-label="Tandai ${e.n} beres">${on ? IC.check : ""}</button>
     <div style="flex:1"><div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><h3>${e.n}</h3><span class="num" style="font-size:17px">${D.sets} × ${e.reps}</span></div>
-      <p class="sm" style="margin-top:4px">${e.how}</p>
-      <p class="sm" style="margin-top:4px"><b>Kuncinya:</b> ${e.tip}</p>
-      <p class="sm mu" style="margin-top:2px"><b>Salah yang sering:</b> ${e.bad}</p></div></div>`; }).join("")}</div>
+      <details class="ex-more"><summary class="xs mu">Cara</summary><p class="sm" style="margin-top:4px">${e.how}</p><p class="sm mu" style="margin-top:4px">${e.tip}</p></details></div></div>`; }).join("")}</div>
   <div class="field" style="margin-top:14px;max-width:220px"><label for="str-date">Tanggal</label><input type="date" id="str-date" value="${D.date}"></div>
   <button class="btn pri" data-act="strSave" data-tour="str-save" ${D.done.length ? "" : "disabled"}>Simpan sesi strength</button>
   ${D.done.length ? "" : `<p class="xs mu" style="margin-top:6px">Centang minimal satu gerakan dulu.</p>`}
   <div class="sec" style="margin-top:18px" data-tour="str-next"><div class="sec-h"><h2>Jadwal berikutnya</h2></div>
     ${up.length ? `<div class="rows">${up.map(sessRow).join("")}</div>` : `<p class="mu">Nggak ada strength terjadwal lagi.</p>`}
-    <p class="xs mu" style="margin-top:8px">Strength ditaruh malam habis kerja di hari nggak lari, bukan Rabu, dan yang berat nggak sehari sebelum long run atau locked-in. Kurangi pas minggu paling berat, habis tanjakan berat, atau menjelang race.</p></div>
+</div>
   <div class="sec"><div class="sec-h"><h2>Riwayat</h2><span class="sm mu">${S.strength.length} sesi</span></div>
     ${hist.length ? `<div class="rows">${hist.map(r => `<div class="row"><span class="day"><b>${parseYmd(r.date).getDate()} ${BULAN[parseYmd(r.date).getMonth()]}</b></span><span class="stripe" style="--c:var(--c-strength)"></span><span class="grow"><b>Strength ${r.kind}</b>${r.sample ? ' <span class="chip sample">Contoh</span>' : ""}<br><span class="sm mu">${r.sets} set, ${r.done.length}/${EX[r.kind].length} gerakan</span></span><button class="btn sm ghost" data-act="delStr" data-id="${r.id}">Hapus</button></div>`).join("")}</div>` : `<p class="mu">Belum ada sesi strength.</p>`}</div>`;
 }
@@ -1827,15 +1809,14 @@ function vRecovery(){
   ${persistentPain() ? `<div class="note bad" style="margin:12px 0">Nyeri muncul berkali-kali di check-in terakhir. Stop atau kurangi latihan dulu, dan coba konsultasi ke dokter atau fisioterapis kalau nggak membaik.</div>` : ""}
   ${homeBody({static:true})}
   <div class="field" style="max-width:220px;margin-top:14px"><label for="ci-date">Tanggal</label><input type="date" id="ci-date" value="${C.date}" data-live="ciDate"></div>
-  <div data-tour="ci-rate">${CI_FIELDS.map(([k,l,labels]) => `<div class="field"><span class="lbl">${l}</span><div class="seg">${[1,2,3,4,5].map(v => `<button class="${C[k]===v?'on':''}" data-act="ciRate" data-k="${k}" data-v="${v}" aria-pressed="${C[k]===v}">${v}</button>`).join("")}</div><span class="hint">${labels.map((x,i) => x ? `${i+1} = ${x}` : "").filter(Boolean).join(", ")}</span></div>`).join("")}</div>
+  <div data-tour="ci-rate">${CI_FIELDS.map(([k,l,labels]) => `<div class="field"><span class="lbl">${l}</span><div class="seg">${[1,2,3,4,5].map(v => `<button class="${C[k]===v?'on':''}" data-act="ciRate" data-k="${k}" data-v="${v}" aria-pressed="${C[k]===v}">${v}</button>`).join("")}</div><span class="hint ci-ends"><span>${esc(labels[0] || "")}</span><span>${esc(labels[4] || "")}</span></span></div>`).join("")}</div>
   <div data-tour="ci-result" class="note ${r.st === "rest" ? "bad" : r.st === "easy" ? "warn" : ""}" style="margin:6px 0 12px"><div class="rd-ring">${readyRing(r)}<div><b>${RD_LBL[r.st]}</b><br>${RD_TXT[r.st]}</div></div>${C.pain >= 4 ? "<br>Nyeri tajam atau bikin cara jalan berubah: stop lari. Kalau pusing, nyeri dada, sesak yang nggak biasa, atau mau pingsan, stop dan cari bantuan medis." : ""}</div>
   <button class="btn pri" data-act="ciSave">Simpan check-in</button>
   <div class="sec" style="margin-top:18px" data-tour="ci-hist"><div class="sec-h"><h2>Riwayat</h2></div>
     ${hist.length ? `<div class="rows">${hist.map(c => { const rr = readiness(c); return `<div class="row"><span class="day"><b>${parseYmd(c.date).getDate()} ${BULAN[parseYmd(c.date).getMonth()]}</b></span><span class="grow"><b>${RD_LBL[rr.st]}</b>${c.sample ? ' <span class="chip sample">Contoh</span>' : ""}<br><span class="ci-mini" role="img" aria-label="Tidur ${c.sleep}, pegal ${c.soreness}, capek ${c.fatigue}, tenaga ${c.energy}, semangat ${c.motivation}, nyeri ${c.pain}">${[["Tidur",c.sleep,0],["Pegal",c.soreness,1],["Capek",c.fatigue,1],["Tenaga",c.energy,0],["Semangat",c.motivation,0],["Nyeri",c.pain,1]].map(([n,v,inv]) => { const g = inv ? 6 - v : v; return `<span title="${n} ${v}"><i class="${g <= 2 ? "low" : ""}" style="height:${4 + g * 4}px"></i><em>${n.slice(0,3)}</em></span>`; }).join("")}</span></span><button class="btn sm ghost" data-act="delCi" data-d="${c.date}">Hapus</button></div>`; }).join("")}</div>` : `<p class="mu">Belum ada check-in.</p>`}</div>
   <div class="sec"><h2>${T("RPE")} dan ${T("Talk test","talk test")}</h2>
     <table class="t t-wrap" style="margin-top:10px"><tr><th>RPE</th><th>Rasanya</th></tr><tr><td>2–3</td><td>Santai banget</td></tr><tr><td>3–4</td><td>Nyaman, masih bisa ngobrol kalimat penuh</td></tr><tr><td>5–6</td><td>Mulai kerja, tapi masih bisa dikontrol</td></tr><tr><td>7</td><td>Berat, tapi masih kepegang</td></tr><tr><td>8–9</td><td>Berat banget</td></tr></table>
-    <p class="sm" style="margin-top:10px"><b>Talk test:</b> santai = masih bisa ngobrol kalimat penuh. Sedang = cuma bisa ngomong pendek-pendek. Berat = susah ngomong, pakai cuma di bagian latihan yang direncanakan.</p>
-    <p class="xs mu" style="margin-top:6px">App ini sengaja nggak pakai zona detak jantung. Rasa capek dan talk test jadi patokan utama.</p></div>
+</div>
   <div class="sec"><h2>Kapan latihan perlu diubah</h2>
     <table class="t t-wrap" style="margin-top:10px"><tr><th>Kondisi</th><th>Mending gini</th></tr>
     <tr><td>Pegal dikit / capek biasa</td><td>Lari santai lebih pendek, atau tambah istirahat.</td></tr>
@@ -1920,7 +1901,7 @@ function pcOut(d, t){
     <div class="kv"><span>Perkiraan 5K</span><span class="tab">${fmtDur(r(5))}</span></div>
     <div class="kv"><span>Perkiraan 10K</span><span class="tab">${fmtDur(r(10))}</span></div>
     <div class="kv"><span>Perkiraan Half Marathon</span><span class="tab">${fmtDur(r(21.0975))}</span></div>
-    <p class="xs mu" style="margin-top:8px">Makin jauh beda jaraknya, makin kasar perkiraannya. Cuaca panas, tanjakan, dan latihan long run kamu juga ngaruh.</p>`;
+`;
 }
 function ppOut(p, d){
   const P = parsePace(p), D = num(d);
@@ -1935,17 +1916,16 @@ function vSettings(){
   return `${storageNote()}${pageHead("Settings")}
   <div style="margin-top:14px">
   <div data-tour="st-days"><div class="field"><label for="st-wd">Hari lari weekday (malam, habis kerja)</label><select id="st-wd">${WEEKDAYS.map(w => `<option value="${w.v}" ${s.weekday===w.v?'selected':''}>${w.l}</option>`).join("")}<option disabled>Rabu (malamnya dikosongin)</option></select>
-    <span class="hint">Default Selasa, biar kaki sempat pulih sebelum long run Sabtu. Jumat sebaiknya jangan buat sesi berat, karena besoknya long run. Strength juga dijadwalkan malam di hari kerja lain.</span></div>
+    </div>
   <p class="sm" style="margin:-4px 0 12px">Mau pilih hari sendiri (misal lari Senin, Rabu, Sabtu)? <button class="link sm" data-act="nav" data-t="jadwal">Atur ketersediaan hari</button></p>
   <div class="g2"><div class="field"><label for="st-wdt">Jam lari weekday</label><input type="time" id="st-wdt" value="${esc(s.wdTime)}"><span class="hint">Setelah pulang kerja.</span></div>
   <div class="field"><label for="st-wkt">Jam lari weekend</label><input type="time" id="st-wkt" value="${esc(s.wkTime)}"></div></div></div>
-  <div class="g2" data-tour="st-dates"><div class="field"><label for="st-start">Mulai latihan</label><input type="date" id="st-start" value="${s.startDate}"><span class="hint">Otomatis digeser ke hari Senin. Mengubahnya menggeser semua tanggal sesi; catatan lari tetap nempel ke sesinya.</span></div>
+  <div class="g2" data-tour="st-dates"><div class="field"><label for="st-start">Mulai latihan</label><input type="date" id="st-start" value="${s.startDate}"><span class="hint">Mulai Senin</span></div>
   <div class="field"><label for="st-race">Tanggal race</label><input type="date" id="st-race" value="${s.raceDate}"></div></div>
   <div class="g2" data-tour="st-goal"><div class="field"><label for="st-goal">Target finish</label><input type="text" id="st-goal" value="${esc(s.goalTime)}" placeholder="j:mm:ss"><span class="hint">${gs && !isNaN(gs) ? "Rata-rata " + fmtPace(gs/21.1) : ""}</span></div>
   <div class="field"><label for="st-unit">Satuan pace</label><select id="st-unit"><option value="km" ${s.unit==='km'?'selected':''}>menit per km</option><option value="mi" ${s.unit==='mi'?'selected':''}>menit per mile</option></select></div></div>
   <div class="g2"><div class="field"><label for="st-pl">Target km/minggu paling tinggi (bawah)</label><input type="number" id="st-pl" value="${s.peakLow}" min="5" max="80"></div>
   <div class="field"><label for="st-ph">Target km/minggu paling tinggi (atas)</label><input type="number" id="st-ph" value="${s.peakHigh}" min="5" max="100"></div></div>
-  <p class="xs mu" style="margin:-4px 0 12px">Km per minggu tetap ikut jadwal di PDF. Angka ini cuma dipakai buat goal.</p>
   <div class="g2"><div class="field"><label for="st-rpe">RPE default locked-in</label><input type="text" id="st-rpe" value="${esc(s.lockedRpe)}"></div>
   <div class="field"><label for="st-bk">Jarak benchmark default (km)</label><input type="text" inputmode="decimal" id="st-bk" value="${fmtKm(s.benchKm)}"></div></div>
   <div class="field" data-tour="st-theme"><label for="st-theme">Tampilan</label><select id="st-theme"><option value="dark" ${s.theme==='dark'?'selected':''}>Gelap</option><option value="light" ${s.theme==='light'?'selected':''}>Terang</option><option value="system" ${s.theme==='system'?'selected':''}>Ikut HP</option></select></div>
@@ -1990,19 +1970,19 @@ function vData(){
   </div>
   <div class="sec" data-tour="data-export"><h2>Export</h2><p class="sm mu" style="margin:4px 0 10px">${S.logs.length} lari, ${S.strength.length} strength, ${S.checkins.length} check-in, ${S.shoes.length} sepatu.</p>
     <div class="btns"><button class="btn" data-act="exportJson">Export JSON (backup lengkap)</button><button class="btn" data-act="exportCsv" ${S.logs.length?'':'disabled'}>Export log ke CSV</button></div>
-    <p class="xs mu" style="margin-top:8px">Walau udah ke-sync, simpan backup JSON sesekali. Kalau ada yang kehapus, hapusan itu juga ikut ke-sync.</p></div>
-  <div class="sec" data-tour="data-import"><h2>Import backup</h2><p class="sm mu" style="margin:4px 0 10px">Buat file JSON dari app ini (termasuk dari versi lama di claude.ai). Buat file lari dari Strava atau jam, pakai Import di halaman Log Lari.</p>
+</div>
+  <div class="sec" data-tour="data-import"><h2>Import backup</h2>
     <div class="field"><label for="imp-file">Pilih file JSON</label><input type="file" id="imp-file" accept=".json,application/json"></div>
     <div class="field"><label for="imp-text">Atau tempel isi JSON</label><textarea id="imp-text" placeholder='{"v":2, ...}'></textarea></div>
     <div class="btns"><button class="btn pri" data-act="importMerge">Gabungkan (aman)</button><button class="btn danger" data-act="importText">Ganti semua</button></div>
-    <p class="xs mu" style="margin-top:6px">“Gabungkan” cuma nambah yang belum ada, duplikat dilewati. “Ganti semua” mengganti data sekarang${signed ? " termasuk di akun" : ""}. Sebelum keduanya, backup otomatis dibuat.</p><div id="imp-err"></div></div>
+    <p class="xs mu" style="margin-top:6px">Backup otomatis dibuat dulu</p><div id="imp-err"></div></div>
   <div class="sec" data-tour="data-backups"><h2>Backup otomatis</h2><p class="sm mu" style="margin:4px 0 10px">Dibuat sebelum gabung data, import, atau reset. Disimpan di perangkat ini.</p>
     ${bks.length ? `<div class="rows">${bks.map(b => `<div class="row" style="flex-wrap:wrap"><span class="grow"><b class="sm">${esc(b.label || "Backup")}</b><br><span class="xs mu">${fmtTime(b.at)} · ${b.counts ? `${b.counts.logs} lari, ${b.counts.checkins} check-in` : ""}</span></span><span class="btns"><button class="btn sm" data-act="backupMerge" data-id="${esc(b.key)}">Gabungkan</button><button class="btn sm ghost" data-act="backupDl" data-id="${esc(b.key)}">Download</button><button class="btn sm ghost" data-act="backupDel" data-id="${esc(b.key)}">Hapus</button></span></div>`).join("")}</div>` : `<p class="sm mu">Belum ada.</p>`}</div>
   ${legacy.length || hasClaudeRuntime() ? `<div class="sec"><h2>Data dari versi lama</h2>
     ${legacy.map(k => { const o = hydrate(LS.get(k)), c = HMTP.countState(o); return `<div class="row"><span class="grow sm"><b>${k === "hmtp:v1" ? "Data versi 2 di browser ini" : "Data versi 2 (akun lain di browser ini)"}</b><br><span class="xs mu">${c.logs} lari, ${c.checkins} check-in</span></span><button class="btn sm" data-act="legacyMerge" data-id="${esc(k)}">Gabungkan</button></div>`; }).join("")}
     ${hasClaudeRuntime() ? `<p class="sm" style="margin-top:8px">App ini lagi dibuka di claude.ai. Kamu bisa ambil data yang ke-sync di akun Claude kamu sekali, lalu export JSON buat dibawa ke versi baru.</p><button class="btn sm" style="margin-top:8px" data-act="claudeLegacy">Ambil data dari akun Claude</button>` : ""}
     <p class="xs mu" style="margin-top:8px">Data lama nggak pernah diubah atau dihapus otomatis.</p></div>` : ""}
-  <div class="sec"><h2>Contoh data</h2><p class="sm mu" style="margin:4px 0 10px">Buat lihat cara kerja dashboard. Ditandai “Contoh”, bisa dihapus kapan aja tanpa ngeganggu data asli.</p>
+  <div class="sec"><h2>Contoh data</h2>
     <div class="btns"><button class="btn" data-act="loadSample">Muat contoh data</button><button class="btn ghost" data-act="clearSample">Hapus contoh data</button></div></div>
   <div class="sec"><h2>Reset</h2><p class="sm mu" style="margin:4px 0 10px">Hapus semua log, progres, dan settings${signed ? ", termasuk yang ke-sync di akun kamu" : ""}. Backup otomatis dibuat dulu.</p><button class="btn danger" data-act="askReset">Reset semua data</button></div>`;
 }
@@ -2102,7 +2082,7 @@ function modal(){
   return `<div class="sheet-bg" data-act="${M.kind === "migrate" ? "" : "closeM"}"></div><div class="sheet" role="dialog" aria-modal="true">${body ? body() : ""}</div>`;
 }
 const mHead = (t, sub) => `<div class="sheet-h"><div><h2>${t}</h2>${sub ? `<p class="sm mu">${sub}</p>` : ""}</div><button class="x" data-act="closeM" aria-label="Tutup">×</button></div>`;
-function mTerm(){ return `<div style="display:flex;gap:12px;align-items:flex-start">${mascot("mascot-inline")}<div style="flex:1">${mHead(esc(M.k))}<p>${esc(GLOSS[M.k] || "")}</p><button class="link sm" style="margin-top:12px" data-act="nav" data-t="kamus">Lihat semua istilah</button></div></div>`; }
+function mTerm(){ return `<div style="display:flex;gap:12px;align-items:flex-start">${mascot("mascot-inline")}<div style="flex:1">${mHead(esc(M.k))}<p>${esc(GLOSS[M.k] || "")}</p></div></div>`; }
 function mImpHelp(){
   return `${mHead("Cara ambil file lari")}
   <h3>Strava (banyak lari sekaligus)</h3><ol class="steps sm"><li>Buka strava.com di browser, masuk ke Settings → My Account.</li><li>Pilih “Download or Delete Your Account” → “Request your archive”.</li><li>Strava kirim email berisi file ZIP. Buka, ambil file <b>activities.csv</b>.</li><li>Pilih file itu di tombol import.</li></ol>
@@ -2214,15 +2194,10 @@ const mText = () => `${mHead(M.title, "Download nggak tersedia di sini. Salin te
 function mHelp(){
   const h = TUT.HELP[M.k]; if(!h) return mHead("Bantuan");
   const d = h.tour ? tourDef(h.tour) : null;
-  return `${mHead(esc(h.title), "Pelajari fitur ini")}
-  <div style="display:flex;gap:12px;align-items:flex-start">${mascot("mascot-inline")}<div style="flex:1">
-    <h3>Apa ini?</h3><p class="sm" style="margin:2px 0 10px">${esc(h.what)}</p>
-    <h3>Kenapa ada?</h3><p class="sm" style="margin:2px 0 10px">${esc(h.why)}</p>
-    <h3>Cara pakai</h3><ol class="steps sm">${h.how.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
-    ${h.ex ? `<h3 style="margin-top:10px">Contoh</h3><p class="sm" style="margin-top:2px">${esc(h.ex)}</p>` : ""}
-    ${h.warn ? `<div class="note warn" style="margin-top:10px"><b>Perlu diingat:</b> ${esc(h.warn)}</div>` : ""}
-  </div></div>
-  <div class="btns" style="margin-top:14px">${d ? `<button class="btn pri" data-act="tutStart" data-id="${h.tour}">Mulai tur fitur ini (${d.steps.length} langkah)</button>` : ""}<button class="btn ghost" data-act="nav" data-t="tutorials">Semua tutorial</button></div>`;
+  return `<div class="help-h">${mascot("mascot-inline")}${mHead(esc(h.title))}</div>
+    <p class="cap" style="margin-top:6px">Apa ini?</p><p class="sm" style="margin:2px 0 12px">${esc(h.what)}</p>
+    <p class="cap">Cara pakai</p><ol class="steps sm">${h.how.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
+  ${d ? `<div class="btns" style="margin-top:14px"><button class="btn pri" data-act="tutStart" data-id="${h.tour}">Tur · ${d.steps.length}</button></div>` : ""}`;
 }
 function countRow(label, a, b){ return `<tr><td>${label}</td><td class="tab">${a}</td><td class="tab">${b}</td></tr>`; }
 function mMigrate(){
@@ -2511,33 +2486,51 @@ function cockpit({days, w, wi, done, pct, next, goalSec, hello}){
 /* ---------- Sign-in gate (v4): new users sign in before onboarding/tutorial ---------- */
 const GATE_KEY = "hmtp:gate:v4";
 let BOOTING = true;
-function gateActive(){
-  if(CLOUD.state === "off" || CLOUD.user || ACTIVE_UID) return false;
-  if(["init","loading"].includes(CLOUD.state)) return false;      // still restoring a session (boot screen covers this)
-  return LS.get(GATE_KEY) !== "local";
+/** Health Connect is the second required link, on the Android app only (the web has no Health Connect).
+ *  DEVICE.hc: "ok" = read access granted, "na" = Health Connect is not on this phone. */
+function hcPending(){
+  if(typeof INTEG === "undefined") return false;
+  const e = INTEG.env(); return e.native && e.plugins.Health && !["ok","na"].includes(DEVICE.hc);
 }
+function gateActive(){
+  if(CLOUD.state === "off") return false;
+  if(CLOUD.user || ACTIVE_UID || LS.get(GATE_KEY) === "local") return hcPending();
+  if(["init","loading"].includes(CLOUD.state)) return false;      // still restoring a session (boot screen covers this)
+  return true;
+}
+const HC_LOGO = `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/><path d="M6 12h3l1.5-2.5 2 5 1.5-2.5h4"/></svg>`;
 function vGate(){
-  const offline = !isOnline(), hasData = HMTP.hasRealData(S), busy = CLOUD.state === "signingin";
+  const offline = !isOnline(), busy = CLOUD.state === "signingin", env = typeof INTEG !== "undefined" ? INTEG.env() : {native:false, plugins:{}};
+  const gDone = !!(CLOUD.user || ACTIVE_UID), hcWeb = !env.native, hcOld = env.native && !env.plugins.Health;
+  const hcDone = DEVICE.hc === "ok", hcBusy = typeof INTEG !== "undefined" && INTEG.busy;
+  const n = HMTP.hasRealData(S) ? S.logs.filter(l => !l.sample).length : 0;
+  const step = (i, ico, name, right, cls) => `<li class="gstep ${cls}"><span class="gstep-n num">${i}</span><span class="gstep-ico">${ico}</span><b>${name}</b>${right}</li>`;
+  const gRight = gDone ? `<span class="gstep-ok">${IC.check}</span>`
+    : `<button class="gbtn" data-act="signIn" ${busy || offline ? "disabled" : ""}>${busy ? "..." : "Masuk"}</button>`;
+  const hcRight = hcDone ? `<span class="gstep-ok">${IC.check}</span>`
+    : DEVICE.hc === "na" ? `<span class="xs mu">Tidak ada</span>`
+    : hcWeb ? `<span class="xs mu">Android</span>` : hcOld ? `<span class="xs mu">Perlu APK baru</span>`
+    : `<button class="gbtn" data-act="gateHc" ${!gDone || hcBusy ? "disabled" : ""}>${hcBusy ? "..." : "Hubungkan"}</button>`;
   return `<div class="gate">
-    <div class="gate-card glass holo-edge">
-      ${WRI_BRAND.mark({size:88, liquid:!WRI_MOTION.reduced()})}
-      <h1>WeRun<span class="holo-text">It</span></h1>
-      <p class="lead gate-lead">Teman latihan lari yang paham datamu: rencana latihan, strategi race, sepatu, dan latihan bareng teman.</p>
-      <button class="gbtn" data-act="signIn" ${busy || offline ? "disabled" : ""}>${G_LOGO}${busy ? "Lagi masuk..." : "Masuk dengan Google"}</button>
-      ${CLOUD.err && CLOUD.state === "autherror" ? `<p class="err" style="margin-top:10px">${esc(errText(CLOUD.err))}</p>` : ""}
-      ${CLOUD.errDetail ? `<p class="xs mu" style="margin-top:6px;word-break:break-word">Detail teknis: <code id="err-detail">${esc(CLOUD.errDetail)}</code></p><button class="btn sm" style="margin-top:6px" data-act="copyErr">Salin detail</button>` : ""}
-      ${offline ? `<div class="note warn" style="margin-top:14px;text-align:left">Kamu lagi offline. Masuk butuh internet. Kamu bisa lanjut tanpa akun dulu, lalu masuk nanti dari Menu.</div><button class="btn" style="margin-top:10px;width:100%" data-act="gateLocal">Lanjut tanpa akun</button>`
-        : hasData ? `<p class="sm" style="margin-top:14px">Ada data latihan di perangkat ini. Masuk buat menyimpannya ke akunmu (kamu bisa pilih digabung atau nggak), atau lanjut tanpa akun.</p><button class="btn ghost" style="margin-top:8px;width:100%" data-act="gateLocal">Lanjut tanpa akun</button>` : ""}
-      <p class="fine">Akun Google cuma dipakai buat masuk dan sync antar perangkat. Data latihanmu privat.</p>
-    </div></div>`;
+    <div class="gate-top">${WRI_BRAND.mark({size:72, liquid:!WRI_MOTION.reduced()})}<h1 class="gate-word">WeRun<span class="holo-text">It</span></h1></div>
+    <ol class="gsteps">
+      ${step(1, G_LOGO, "Google", gRight, gDone ? "done" : "on")}
+      ${step(2, HC_LOGO, "Health Connect", hcRight, hcDone ? "done" : hcWeb || hcOld || DEVICE.hc === "na" ? "na" : gDone ? "on" : "")}
+    </ol>
+    ${n ? `<p class="gate-note">${n} lari di perangkat ini ikut tersimpan setelah masuk</p>` : ""}
+    ${CLOUD.err && CLOUD.state === "autherror" ? `<p class="err">${esc(errText(CLOUD.err))}</p>` : ""}
+    ${CLOUD.errDetail ? `<p class="xs mu" style="word-break:break-word"><code id="err-detail">${esc(CLOUD.errDetail)}</code></p><button class="btn sm" data-act="copyErr">Salin detail</button>` : ""}
+    ${offline && !gDone ? `<p class="gate-note">Offline</p><button class="btn ghost" data-act="gateLocal">Lanjut offline</button>` : ""}
+    <p class="fine">Data latihanmu privat</p>
+  </div>`;
 }
 /* ---------- Startup sequence: every step listed is a real task, nothing is faked ---------- */
-const BOOT_STEPS = [["shell","Menyiapkan aplikasi"],["update","Cek versi terbaru"],["account","Memulihkan akun"],["data","Menyiapkan dashboard"]];
+const BOOT_STEPS = [["shell","App"],["update","Versi"],["account","Akun"],["data","Data"]];
 function bootStep(id, state, note){
   const ol = document.getElementById("boot-steps"); if(!ol) return;
-  if(!ol.children.length) ol.innerHTML = BOOT_STEPS.map(([k,l]) => `<li data-k="${k}"><i>·</i><span>${l}</span></li>`).join("");
+  if(!ol.children.length) ol.innerHTML = BOOT_STEPS.map(([k,l]) => `<li data-k="${k}"><i></i><span>${l}</span></li>`).join("");
   const li = ol.querySelector(`[data-k="${id}"]`); if(!li) return;
-  li.className = state; li.querySelector("i").textContent = state === "ok" ? "✓" : state === "skip" ? "–" : "•";
+  li.className = state;
   if(note) li.querySelector("span").textContent = BOOT_STEPS.find(x => x[0] === id)[1] + " · " + note;
 }
 const waitFor = (cond, ms) => new Promise(res => { const t0 = Date.now(); const tick = () => { if(cond()) res(true); else if(Date.now() - t0 > ms) res(false); else setTimeout(tick, 60); }; tick(); });
@@ -2572,30 +2565,24 @@ function initUpdates(){
 }
 function updateBanner(){
   const u = HMTPUpdate;
-  if(u.state === "ready") return `<div class="upd js-upd" role="status"><span><b>Versi baru ${esc((u.latest && u.latest.version) || "")} siap.</b> Data kamu aman, cuma tampilan yang dimuat ulang.</span><span class="btns"><button class="btn sm" data-act="updApply">Perbarui sekarang</button><button class="btn sm ghost" data-act="nav" data-t="about">Lihat</button></span></div>`;
-  if(u.state === "native-required") return `<div class="upd js-upd" role="status"><span><b>Ada versi APK baru.</b> Perlu install ulang sekali buat fitur baru.</span><span class="btns"><button class="btn sm" data-act="updApk">Download APK</button></span></div>`;
-  if(u.mustUpdate) return `<div class="upd js-upd" role="status"><span><b>Perbarui app dulu.</b> Sync dijeda supaya data tetap aman.</span><span class="btns"><button class="btn sm" data-act="updCheck">Cek update</button></span></div>`;
+  if(u.state === "ready") return `<div class="upd js-upd" role="status"><span class="upd-v num">${esc((u.latest && u.latest.version) || "")}</span><b>Versi baru</b><span class="btns"><button class="btn sm" data-act="updApply">Perbarui</button></span></div>`;
+  if(u.state === "native-required") return `<div class="upd js-upd" role="status"><span class="upd-v">APK</span><b>Versi Android baru</b><span class="btns"><button class="btn sm" data-act="updApk">Download</button></span></div>`;
+  if(u.mustUpdate) return `<div class="upd js-upd" role="status"><span class="upd-v">!</span><b>Perbarui dulu · sync dijeda</b><span class="btns"><button class="btn sm" data-act="updCheck">Cek</button></span></div>`;
   return `<span class="js-upd" hidden></span>`;
 }
 function vAbout(){
   const u = HMTPUpdate, L = u.latest, cur = u.current;
-  const mode = {sw:"Web / PWA (update lewat service worker)", native:`Aplikasi Android (live update, native level ${u.nativeLevel})`, none:"Mode pengembangan (tanpa service worker)"}[u.mode] || u.mode;
-  return `${pageHead("Tentang & update", "App ini bisa diperbarui otomatis tanpa install ulang. Data latihan kamu nggak ikut berubah.")}
+  const mode = {sw:"Web", native:`Android · native ${u.nativeLevel}`, none:"Dev"}[u.mode] || u.mode;
+  return `${pageHead("Tentang")}
+  <section class="a4-card about-hero">${WRI_BRAND.mark({size:56})}<div><b class="about-v num">${esc(cur.version)}</b><span class="cap">${esc(mode)} · ${esc(cur.build || "–")}</span></div></section>
   <div class="sec" style="margin-top:8px">
-    <div class="kv"><span>Versi yang jalan</span><b>${esc(cur.version)}</b></div>
-    <div class="kv"><span>Build</span><span class="tab">${esc(cur.build || "–")}</span></div>
-    <div class="kv"><span>Jenis</span><span>${esc(mode)}</span></div>
-    <div class="kv"><span>Status update</span><span>${esc(UPD_TXT[u.state] || u.state)}${u.state === "downloading" && u.progress ? ` (${u.progress}%)` : ""}${u.state === "error" ? ` (${esc(u.err === "offline" ? "offline" : u.err)})` : ""}</span></div>
-    <div class="kv"><span>Versi terbaru</span><span>${L ? esc(L.version) : "–"}</span></div>
-    <div class="kv"><span>Terakhir dicek</span><span>${fmtTime(u.lastCheck)}</span></div>
-    <div class="btns" style="margin-top:12px"><button class="btn" data-act="updCheck">Cek update sekarang</button>${u.state === "ready" ? `<button class="btn pri" data-act="updApply">Perbarui sekarang</button>` : ""}${u.state === "native-required" ? `<button class="btn pri" data-act="updApk">Download APK baru</button>` : ""}</div>
-    <label class="toggle" style="margin-top:12px"><span><b>Update otomatis</b><br><span class="xs mu">Versi baru dipasang sendiri pas app lagi di latar belakang atau pas dibuka lagi. Nggak pernah di tengah timer atau pas kamu ngisi form.</span></span><input type="checkbox" data-act="updAuto" ${u.auto ? "checked" : ""}></label>
+    <div class="kv"><span>Status</span><span>${esc(UPD_TXT[u.state] || u.state)}${u.state === "downloading" && u.progress ? ` (${u.progress}%)` : ""}${u.state === "error" ? ` (${esc(u.err === "offline" ? "offline" : u.err)})` : ""}</span></div>
+    <div class="kv"><span>Terbaru</span><span>${L ? esc(L.version) : "–"}</span></div>
+    <div class="kv"><span>Dicek</span><span>${fmtTime(u.lastCheck)}</span></div>
+    <div class="btns" style="margin-top:12px"><button class="btn" data-act="updCheck">Cek update</button>${u.state === "ready" ? `<button class="btn pri" data-act="updApply">Perbarui</button>` : ""}${u.state === "native-required" ? `<button class="btn pri" data-act="updApk">Download APK</button>` : ""}</div>
+    <label class="toggle" style="margin-top:12px"><span><b>Update otomatis</b><br><span class="xs mu">Tidak pernah saat timer jalan</span></span><input type="checkbox" data-act="updAuto" ${u.auto ? "checked" : ""}></label>
   </div>
-  ${L && L.notes && L.notes.length ? `<div class="sec"><h2>Yang baru di ${esc(L.version)}</h2><ul class="clean sm">${L.notes.map(n => `<li>${esc(n)}</li>`).join("")}</ul></div>` : ""}
-  <div class="sec"><div class="titlerow"><h2>${WRI_BRAND.lockup({size:28})}</h2></div><p class="sm mu" style="margin-top:6px">${esc(WRI_BRAND.TAGLINE)} Dulu bernama Half Marathon Training Plan; data dan akunmu tetap sama.</p>
-    <h3 style="margin-top:14px">Demo animasi indikator tab</h3><p class="xs mu">Referensi gerak 12 detik (diputar otomatis hanya di demo ini; navigasi asli cuma bergerak saat kamu tap).</p>
-    <div class="demo-wrap" id="pill-demo"></div></div>
-  <div class="sec"><h3>Gimana cara kerjanya?</h3><p class="sm mu" style="margin-top:4px">App ngecek versi baru tiap dibuka dan tiap jam. ${u.mode === "native" ? "File versi baru didownload, dicek keasliannya (hash SHA-256), lalu dipakai. Kalau versi baru gagal jalan, app balik otomatis ke versi sebelumnya." : "Versi baru didownload di latar belakang, lalu dipasang pas kamu tap “Perbarui” atau otomatis."} Perubahan besar di bagian Android (misalnya izin baru) tetap butuh install APK baru, dan app bakal ngasih tahu.</p></div>`;
+  ${L && L.notes && L.notes.length ? `<div class="sec"><h2>Baru di ${esc(L.version)}</h2><ul class="clean sm">${L.notes.map(n => `<li>${esc(n)}</li>`).join("")}</ul></div>` : ""}`;
 }
 
 /* ============ Actions ============ */
@@ -2660,6 +2647,18 @@ const ACT = {
   tutBanner:() => { S.tutorial.bannerDismissed = true; persist(); render(true); toast("Oke. Tutorial ada di Menu → Tutorial & bantuan."); },
   tutReset:() => { S.tutorial.tours = {}; S.tutorial.quick = false; S.tutorial.bannerDismissed = true; persist(); render(true); toast("Tanda selesai tutorial direset."); },
   /* ---- account ---- */
+  gateHc:async () => {
+    if(INTEG.busy) return; INTEG.busy = true; render(false);
+    try{
+      const H = INTEG.plugin(), av = await H.isAvailable();
+      if(!av || !av.available) DEVICE.hc = "na";
+      else {
+        const a = await H.requestAuthorization({read:["workouts", "distance"]});
+        if(a && (a.readAuthorized || []).includes("workouts")) DEVICE.hc = "ok"; else toast("Izinkan baca latihan di Health Connect");
+      }
+    }catch(e){ toast("Health Connect: " + String(e && e.message || e).slice(0, 80)); }
+    finally{ INTEG.busy = false; saveDevice(); render(false); if(!gateActive()){ maybeStartTutorial(); render(false); } }
+  },
   gateLocal:() => { LS.set(GATE_KEY, "local"); render(false); maybeStartTutorial(); render(false); },
   signIn:() => signIn(false),
   retryAcct:() => { if(CLOUD.user) activateAccount(CLOUD.user); },

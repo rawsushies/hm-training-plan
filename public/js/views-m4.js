@@ -20,7 +20,7 @@ vShoes = function(){
   const tabs = segPill("shoetab", [["mine", "Sepatuku"], ["catalog", "Rekomendasi"], ["rotation", "Rotasi"]], tab, "shoeTab");
   let body = "";
   if(tab === "mine") body = `<div class="btns" style="margin:12px 0 2px"><button class="btn pri" data-act="shoeNew" data-tour="shoe-add">Tambah sepatu</button></div>
-    ${act.length ? `<div data-tour="shoe-list">${act.map(shoeLine).join("")}</div>` : `<p class="mu" style="margin-top:8px">Belum ada sepatu aktif. Tambah sepatu yang kamu pakai, nanti tiap lari bisa dipilih sepatunya.</p>`}
+    ${act.length ? `<div data-tour="shoe-list">${act.map(shoeLine).join("")}</div>` : `<p class="mu" style="margin-top:8px">Belum ada sepatu</p>`}
     ${ret.length ? `<h3 style="margin-top:18px">Pensiun</h3>${ret.map(shoeLine).join("")}` : ""}
     ${noShoe && S.shoes.length ? `<p class="sm mu" style="margin-top:12px">${noShoe} lari belum ada sepatunya. <button class="link sm" data-act="shoeAssign">Pasang ke sepatu default</button></p>` : ""}`;
   else if(tab === "rotation") body = `
@@ -173,13 +173,14 @@ const INTEG = {
   busy:false
 };
 function vInteg(){
-  const env = INTEG.env(), lvl = {available:"ok", "needs-app-update":"warn"};
-  return `${pageHead("Integrasi", "Ambil data lari dari aplikasi dan jam lain. Status di bawah jujur: yang belum tersedia ditulis apa adanya.")}
-  <div data-tour="integ">${ING.PROVIDERS.map(p => { const st = p.status(env); return `<section class="card" style="margin-top:10px"><div class="titlerow"><b>${esc(p.name)}</b><span class="chip ${st.state === "available" ? "done" : ""}">${esc(ING.STATE_LBL[st.state])}</span></div>
-    <p class="sm ${lvl[st.state] ? "" : "mu"}" style="margin-top:6px">${esc(st.note)}</p>
+  const env = INTEG.env(), all = ING.PROVIDERS.map(p => ({p, st:p.status(env)}));
+  const on = all.filter(x => x.st.state === "available"), off = all.filter(x => x.st.state !== "available");
+  return `${pageHead("Integrasi")}
+  <div data-tour="integ">${on.map(({p, st}) => `<section class="card" style="margin-top:10px"><div class="titlerow"><b>${esc(p.name)}</b><span class="chip done">${esc(ING.STATE_LBL[st.state])}</span></div>
     ${p.id === "file" ? `<div class="btns" style="margin-top:8px"><button class="btn sm pri" data-act="nav" data-t="data">Import file</button><button class="btn sm ghost" data-act="importHelp">Cara ambil file</button></div>` : ""}
-    ${p.id === "healthconnect" && st.state === "available" ? `<div class="btns" style="margin-top:8px"><button class="btn sm pri" data-act="hcSync" ${INTEG.busy ? "disabled" : ""}>${INTEG.busy ? "Membaca..." : "Ambil lari 30 hari terakhir"}</button></div><p class="xs mu" style="margin-top:6px">Kamu melihat daftarnya dulu sebelum disimpan. Duplikat otomatis ditandai.</p>` : ""}</section>`; }).join("")}</div>
-  <div class="sec"><p class="xs mu">Data yang diimport cuma disimpan di akunmu. Token pihak ketiga nggak pernah disimpan di aplikasi.</p></div>`;
+    ${p.id === "healthconnect" ? `<div class="btns" style="margin-top:8px"><button class="btn sm pri" data-act="hcSync" ${INTEG.busy ? "disabled" : ""}>${INTEG.busy ? "Membaca..." : "Ambil 30 hari"}</button></div>` : ""}</section>`).join("")}
+    <h2 class="a4-sec">Belum tersedia</h2>
+    <div class="rows">${off.map(({p, st}) => `<div class="row"><span class="grow">${esc(p.name)}</span><span class="chip">${esc(ING.STATE_LBL[st.state])}</span></div>`).join("")}</div></div>`;
 }
 Object.assign(ACT, {
   hcSync:async () => {

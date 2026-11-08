@@ -1,17 +1,14 @@
 /* WeRunIt brand system: one source for the mark used by the app, splash, PWA icons and Android assets.
  *
- * The mark is a single continuous line: a forward lane enters a running track, loops round the bend,
- * comes back along the top straight and becomes a cadence "W". Track + W + forward motion in one stroke.
- * Built from strokes only, so it stays legible down to notification-icon size.
+ * The mark (4.0): a stride "W" whose last leg keeps climbing into an arrow. Two strides, then up and forward:
+ * the shape of a progress line that ends higher than it started. Strokes only, legible at notification size.
  * Exposes globalThis.WRI_BRAND.
  */
 (function (G) {
   "use strict";
-  // Geometry in a 64×64 box.
-  // One continuous line: a forward lane (bottom right) runs into the track's bottom straight, loops round
-  // the bend, returns along the top straight and drops into the W's cadence peaks.
-  const TRACK = "M59 51 H25 a19 19 0 0 1 0 -38 H38 Q46.5 13 44.6 21";
-  const CADENCE = "M44.6 21 L38.8 39.5 L32 28 L25.2 39.5 L19.5 26.5";
+  // Geometry in a 64×64 box. TRACK = the stride W, CADENCE = the arrowhead it runs into.
+  const TRACK = "M10 23 L19.5 47 L29.5 28 L39 47 L54 16";
+  const CADENCE = "M43 16 H54 V27";
   const HOLO = [["0", "#FF5A1F"], ["1", "#FF5A1F"]];   // flat race orange (unslop: no hue gradient on the mark)
   let n = 0;
 

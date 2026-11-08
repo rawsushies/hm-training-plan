@@ -127,7 +127,7 @@ function vBareng(){
   ${friendPrivacy()}
   <div class="sec"><button class="link sm" data-act="frBlocks">Daftar yang kamu blokir</button><p class="xs mu" style="margin-top:6px">Fitur grup sudah diganti dengan Teman. Data grup lama tetap tersimpan dan nggak dihapus.</p></div>`;
 }
-const friendPrivacy = () => `<div class="sec"><h3>Apa yang privat?</h3><p class="sm" style="margin-top:6px">Selalu privat: catatan lari, check-in & nyeri, review, rute dan lokasi, data kesehatan, settings. Teman cuma lihat nama & foto Google kamu, plus hal yang kamu nyalakan khusus untuk dia. Server (Firestore rules) menolak kolom lain.</p></div>`;
+const friendPrivacy = () => `<div class="sec"><h3>Apa yang privat?</h3><div class="integ-off">${["Catatan","Check-in","Nyeri","Rute","Kesehatan","Settings"].map(x => `<span class="chip">${x}</span>`).join("")}</div><p class="xs mu" style="margin-top:6px">Teman hanya lihat nama, foto, dan yang kamu nyalakan</p></div>`;
 function mFriendReq(){ const i = M.inv; return `${mHead("Permintaan pertemanan")}<div style="display:flex;gap:10px;align-items:center">${avatarImg(i.fromPhoto, i.fromName)}<b>${esc(i.fromName || "Seseorang")}</b></div><p class="sm" style="margin-top:10px">Kirim permintaan pertemanan? Setelah diterima, kalian bisa memilih data apa yang dibagikan satu sama lain. Defaultnya nggak ada yang dibagikan.</p><div class="btns" style="margin-top:12px"><button class="btn pri" data-act="frSend">Kirim permintaan</button><button class="btn ghost" data-act="frSendNo">Nggak jadi</button></div>`; }
 function mFrPerms(){
   const p = SO.cleanPerms(S.shareWith[M.id]), n = friendName(M.id).name, recent = [...S.logs].filter(l => !l.sample).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 10);

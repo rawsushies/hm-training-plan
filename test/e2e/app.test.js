@@ -199,7 +199,7 @@ test("tutorial: no automatic tour after onboarding; quick start on request, comp
   // quick start when the user asks for it
   await H.act(d.page, "tutStart", { id: "quick" });
   await d.page.waitForSelector("#tour");
-  assert.match(await d.page.textContent("#tour"), /Langkah 1 dari 6/);
+  assert.match(await d.page.textContent("#tour"), /· 1\/6/);
   for (let i = 0; i < 6; i++) await d.page.click('[data-act="tutNext"]');
   await H.waitSynced(d.page);
   const uid = (await H.state(d.page)).uid;
@@ -210,7 +210,7 @@ test("tutorial: no automatic tour after onboarding; quick start on request, comp
   await d.page.click('.helpbtn[data-k="cal"]');
   assert.match(await d.page.textContent(".sheet"), /Apa ini\?[\s\S]*Cara pakai/);
   await d.page.click('.sheet [data-act="tutStart"]');
-  assert.match(await d.page.textContent("#tour"), /Jadwal latihan · Langkah 1 dari 6/);
+  assert.match(await d.page.textContent("#tour"), /Jadwal latihan · 1\/6/);
   for (let i = 0; i < 4; i++) await d.page.click('[data-act="tutNext"]');
   assert.ok(await d.page.$('[data-tour="cal-actions"].tour-hl'), "session actions highlighted on a day that has sessions");
   // a new device for the same account does not show the quick start again
