@@ -142,7 +142,7 @@
     const it = [["siap", "Siap", sc.siap.score, COL[sc.siap.band], sc.siap.tier], ["beban", "Beban", sc.beban.score, COL.beban, sc.beban.tier], ["tidur", "Tidur", sc.tidur.score, COL.tidur, sc.tidur.tier]];
     const t = sc.target, b = sc.beban.score;
     return `<section class="a4-scores" data-tour="scores">
-      <div class="trio">${it.map(([k, l, v, c, tier]) => `<button class="trio-i" data-act="score" data-k="${k}" aria-label="${l} ${v === null ? "belum ada data" : v + (k === "beban" ? "" : " persen")}${TIER[tier] ? ", " + TIER[tier] : ""}">${vessel(k, v, c)}<span class="tl">${l}</span>${TIER[tier] ? `<span class="tt">${TIER[tier]}</span>` : ""}</button>`).join("")}</div>
+      <div class="trio">${it.map(([k, l, v, c, tier]) => `<button class="trio-i" data-act="score" data-k="${k}" aria-label="${l} ${v === null ? "belum ada data" : v + (k === "beban" ? "" : " persen")}${TIER[tier] ? ", " + TIER[tier] : ""}">${vessel(k, v, c)}<span class="tl">${l} ›</span>${TIER[tier] ? `<span class="tt">${TIER[tier]}</span>` : ""}</button>`).join("")}</div>
       ${t ? `<div class="target"><span class="tk">Target beban hari ini <b class="num">${t[0]}–${t[1]}</b></span><span class="tbar" role="img" aria-label="Beban ${b} dari target ${t[0]} sampai ${t[1]}"><i class="zone" style="left:${t[0]}%;width:${t[1] - t[0]}%"></i><i class="mark" style="left:${b}%"></i></span></div>` : ""}
     </section>`;
   }
@@ -185,6 +185,44 @@
     [0, Math.floor(n / 2), n - 1].forEach((i, j) => { const d = parseYmd(series[i].date); s += `<text x="${pl + i * bw + bw / 2}" y="${H - 4}" class="ax" text-anchor="${j === 0 ? "start" : j === 2 ? "end" : "middle"}">${d.getDate()} ${BULAN[d.getMonth()]}</text>`; });
     return { svg: s + "</svg>", avg };
   }
+  /** NOOP-style card list: a small vessel, an uppercase label, a value, a chevron. */
+  function cardList(sc) {
+    const ev = activeEvent(), wi = curWeekIdx(), w = PLANW[wi];
+    const toDate = PLANW.slice(0, wi + 1), planKm = sum(toDate, x => x.total), doneKm = sum(toDate, x => sum(logsIn(x.start, x.end).filter(l => !l.sample), l => l.distance));
+    const pct = planKm ? Math.min(100, Math.round(doneKm / planKm * 100)) : 0;
+    const wk = sum(logsIn(w.start, w.end).filter(l => !l.sample), l => l.distance);
+    let pred = null; try { const p = racePlanData().pred; pred = p && p.seconds && p.source !== "target" ? p.seconds : null; } catch (e) { pred = null; }
+    const goal = parseDur(ev.targetFinish || S.settings.goalTime || "") || null, r = sc.ratio, st = badgeStats().streak;
+    const rows = [
+      ["race", "Rasio beban", "Beban 7 hari vs 28 hari", r === null ? "–" : r.toFixed(2).replace(".", ",") + "×", r === null ? null : Math.min(100, r / 2 * 100), r === null ? COL.none : SC().ratioZone(r) === "sweet" ? COL.green : SC().ratioZone(r) === "low" ? COL.beban : COL.yellow],
+      ["race", "Kesiapan race", "Rencana tercapai", pct + "%", pct, COL.green],
+      ["race", "Perkiraan finish", goal ? "Target " + fmtDur(goal) : "Dari lari kamu", pred ? fmtDur(pred) : "–", pred && goal ? Math.min(100, goal / pred * 100) : null, COL.tidur],
+      ["log", "Km minggu ini", "Target " + fmtKm(w.total) + " km", fmtKm(wk), Math.min(100, wk / Math.max(1, w.total) * 100), COL.beban],
+      ["goals", "Streak", "Minggu lengkap berturut-turut", st + " mgg", Math.min(100, st / 8 * 100), "#ff8a3d"]
+    ];
+    return `<div class="a4-sech"><h2 class="cap">Kartu kamu</h2></div><div class="cards">${rows.map(([t, l, sub, v, f, c]) => `<button class="crow" data-act="nav" data-t="${t}"><span class="mini"><canvas class="vessel" data-v="${f === null ? "" : Math.round(f)}" data-c="${c}"></canvas></span><span class="crow-t"><b class="cap">${l}</b><span>${sub}</span></span><span class="crow-v num">${v}</span><span class="chev">›</span></button>`).join("")}</div>`;
+  }
+  /** Calendar heatmap of a score over the last ~17 weeks (Mon–Sun columns). */
+  function scoreCal(k) {
+    const days = 119, ser = SC().series(scoreCtx(), days), cols = Math.ceil(days / 7);
+    const first = parseYmd(ser[0].date), off = (first.getDay() + 6) % 7;
+    let s = `<svg viewBox="0 0 ${cols * 14 + 30} ${7 * 14 + 4}" class="cal-hm" role="img" aria-label="${k} ${days} hari">`;
+    ["Sen", "", "Rab", "", "Jum", "", ""].forEach((d, i) => { if (d) s += `<text x="0" y="${i * 14 + 11}" font-size="8" fill="var(--mu2)" font-family="Inter,system-ui,sans-serif">${d}</text>`; });
+    ser.forEach((x, i) => {
+      const j = i + off, c = Math.floor(j / 7), r = j % 7, v = x[k];
+      const fill = v === null ? "var(--s2)" : k === "siap" ? COL[SC().band(v)] : k === "beban" ? COL.beban : COL.tidur;
+      const op = v === null ? 1 : k === "siap" ? 0.9 : (0.25 + 0.75 * v / 100).toFixed(2);
+      s += `<rect x="${24 + c * 14}" y="${r * 14}" width="11" height="11" rx="2.5" fill="${fill}" opacity="${op}"/>`;
+    });
+    return s + "</svg>";
+  }
+  /** "How this works": the model's weights as bars. */
+  function modelBars(k) {
+    const M = { siap: [["Badan vs biasanya (check-in)", 65, COL.beban], ["Kesegaran: fitness − capek", 35, "#ff8a3d"], ["Nyeri ≥ 4", "batas merah", COL.red]],
+      beban: [["Menit lari", "×", COL.beban], ["Intensitas: zona HR, atau RPE ÷ 2", "1–5", "#ff8a3d"], ["Skala log", "0–100", COL.tidur]],
+      tidur: [["Kualitas tidur (check-in)", 85, COL.tidur], ["Konsistensi 7 malam", 15, COL.beban]] }[k];
+    return `<section class="a4-card"><h2 class="cap">Cara kerja</h2>${M.map(([l, w, c]) => `<div class="mb"><div class="mb-h"><span>${l}</span><b style="color:${c}">${typeof w === "number" ? "~" + w + "%" : w}</b></div><span class="mb-t"><i style="width:${typeof w === "number" ? w : 100}%;background:${c}"></i></span></div>`).join("")}</section>`;
+  }
   function vScore() {
     const k = ["siap", "beban", "tidur"].includes(S.ui.score) ? S.ui.score : "siap", sc = todayScores();
     const ser = SC().series(scoreCtx(), 30), bars = scoreBars(ser, k), cur = sc[k];
@@ -213,9 +251,12 @@
     }
     return `<div class="a4"><div class="pagehead"><button class="back" data-act="nav" data-t="home">‹ Hari ini</button></div>
       <div class="sc-hero"><h1 class="cap">${name}</h1>${vessel(k, cur.score, col, true)}<p class="sc-w">${k === "siap" ? BANDW[cur.band] : k === "beban" ? (sc.target ? `Target hari ini ${sc.target[0]}–${sc.target[1]}` : "Hari ini") : cur.score === null ? "Belum ada data" : cur.score >= 67 ? "Cukup" : cur.score >= 34 ? "Kurang" : "Jelek"}</p>${TIER[cur.tier] ? `<span class="tt">${TIER[cur.tier]}</span>` : ""}</div>
-      <section class="a4-card"><div class="sec-h"><h2 class="cap">30 hari</h2><span class="num sm">rata-rata ${bars.avg === null ? "–" : Math.round(bars.avg)}</span></div>${bars.svg}</section>
+      <section class="a4-card"><div class="sec-h"><h2 class="cap">30 hari</h2></div>${bars.svg}
+        <div class="mmm"><span><em class="cap">Mean</em><b class="num">${bars.avg === null ? "–" : Math.round(bars.avg)}</b></span><span><em class="cap">Min</em><b class="num">${vals.length ? Math.min(...vals) : "–"}</b></span><span><em class="cap">Max</em><b class="num">${vals.length ? Math.max(...vals) : "–"}</b></span></div></section>
+      <section class="a4-card"><div class="sec-h"><h2 class="cap">Kalender</h2><span class="sm mu">17 minggu</span></div>${scoreCal(k)}</section>
       ${k !== "beban" && vals.length ? `<section class="a4-card"><h2 class="cap">Rincian (hari)</h2><div class="brk">${["green", "yellow", "red"].map(b => cnt[b] ? `<i style="flex:${cnt[b]};background:${COL[b]}"></i>` : "").join("")}</div>
         ${[["green", "Bagus (67+)"], ["yellow", "Sedang (34–66)"], ["red", "Rendah (<34)"]].map(([b, l]) => `<div class="drv"><span><i class="sw" style="background:${COL[b]}"></i>${l}</span><b class="num">${cnt[b]}×</b></div>`).join("")}</section>` : ""}
+      ${modelBars(k)}
       ${detail}</div>`;
   }
   /** Race readiness as a wavy blob (plan done + prediction inside), and the load ratio as a dial. */
@@ -248,10 +289,12 @@
       <div class="a4-top"><div><p class="a4-date">${fmtDay(todayYmd())}</p><h1>Hari ini</h1></div>
         <button class="a4-race" data-act="nav" data-t="race" data-tour="race-chip" aria-label="${Math.max(0, days)} hari lagi ke ${esc(ev.name)}"><b class="num">${Math.max(0, days)}</b><span>hari lagi</span></button>${helpBtn("home")}</div>
       ${pain ? `<div class="note bad">Nyeri tercatat beberapa kali. Kurangi latihan, periksa ke dokter atau fisioterapis kalau nggak membaik.</div>` : ""}
-      ${sc ? scoreTrio(sc) : ""}
+      <p class="wordmark" aria-hidden="true">WERUNIT</p>
+      ${sc ? `<div class="spanel">${scoreTrio(sc)}</div>` : ""}
       ${heroCard()}
       ${bodyCheck()}
       ${sc ? monitor(sc) : ""}
+      ${sc ? cardList(sc) : ""}
       ${weekBlock()}
       ${typeof weatherCard === "function" ? weatherCard() : ""}
       ${nextCard()}
@@ -416,7 +459,7 @@
 
   /* ---------- Liquid vessels come alive after each paint ---------- */
   const _afterPaint4 = afterPaint;
-  afterPaint = function () { _afterPaint4(); if (G4.WRI_VESSEL) G4.WRI_VESSEL.mount(document.getElementById("app")); };
+  afterPaint = function () { _afterPaint4(); document.body.dataset.tab = S.ui.tab; if (G4.WRI_VESSEL) G4.WRI_VESSEL.mount(document.getElementById("app")); };
 
   /* ---------- Record button (beside the dock) ---------- */
   let REC = null;

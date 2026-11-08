@@ -248,6 +248,12 @@ band with a dashed AVG line, the band breakdown, and the drivers.
   an amber "!", and a footer "n/5 sinyal dalam rentang".
 - **Race tab:** *Kesiapan race* as a slowly turning wavy blob (plan completion and predicted finish inside) and
   *Rasio beban* as a dial (acute:chronic workload ratio, Hulin 2016; green 0.8–1.3, yellow to 1.5, red above).
+- **Home layout (NOOP-style):** a purple-blue sky behind the header that fades into graphite (`body[data-tab="home"]`),
+  the spaced WERUNIT wordmark, a dark score panel holding the three vessels ("SIAP ›") and the target-load bar, then
+  the workout, body check and monitor, then **Kartu kamu**: rows with a mini vessel, an uppercase label, a sub-line,
+  a big value and a chevron (rasio beban, kesiapan race, perkiraan finish, km minggu ini, streak).
+- **Score detail:** 30-day bars with MEAN / MIN / MAX, a 17-week calendar heatmap, the band breakdown, **Cara kerja**
+  (the model's weights as bars) and the drivers.
 - Labels in this layer use uppercase tracked type (`.cap`), the sports-watch convention.
 - The three-score structure, confidence tiers, logistic anchoring and the liquid-vessel idea follow NOOP's open
   documentation (github.com/ryanbr/noop, PolyForm Noncommercial). WeRunIt's implementation is independent

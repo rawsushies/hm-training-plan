@@ -1,20 +1,20 @@
 {
  "version": "4.0.0",
- "build": "2026-11-08T06:18:58Z",
+ "build": "2026-11-08T06:22:14Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
   "WeRunIt 4.0: aplikasi cepat dengan 4 tab (Hari ini, Lari, Race, Kamu) dan tombol catat oranye",
-  "Skor harian Siap, Beban, Tidur sebagai wadah cairan yang bergerak; tap buat grafik 30 hari",
+  "Skor harian Siap, Beban, Tidur sebagai wadah cairan yang bergerak; tap buat grafik 30 hari, kalender, dan cara kerjanya",
   "Latihan hari ini tampil sebagai bentuk; ✓ Selesai atau Mulai dalam satu tap",
-  "Check-in badan satu tap, monitor 5 sinyal, rasio beban, dan kesiapan race"
+  "Check-in badan satu tap, monitor 5 sinyal, kartu rasio beban, kesiapan race, perkiraan finish"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "33c24e8af35e577dae170b832160b6cd623b8a0edf283ed98d254b8c44483344",
-   "s": 59846
+   "h": "31c99aa798500ce452eaa4eb6fc1eb2214addf1a8db4ca3bcd7d68133fa705c2",
+   "s": 62839
   },
   {
    "p": "favicon-32.png",
@@ -53,8 +53,8 @@
   },
   {
    "p": "js/app4.js",
-   "h": "3ad8d658560b122716cce3b334e670f5f8620d03d155f5eaf5baa989885389c0",
-   "s": 38616
+   "h": "3cbefd96a94a9dfc4e9704461015b6e22d80c2bd0360c3bc53412b7c9b691e4d",
+   "s": 43173
   },
   {
    "p": "js/brand.js",
@@ -138,7 +138,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "4dade09de4bbb5482bb2cb0ce257c35b316f4a599ccdaa4913b38b274b0e492a",
+   "h": "eca686f81de0e617f049b9823b98ac55d73070772bad699cb0ac693e58eca41e",
    "s": 139
   },
   {
@@ -188,7 +188,7 @@
   },
   {
    "p": "sw.js",
-   "h": "b5dab88dc1bc9e4a301ecfe77e5aeba5f79e032375af0312e8bd4eff74c4c6df",
+   "h": "3fea8cd55e9c9d2232ef992ef614d7833cff579de92934b7e529129b1d97a11b",
    "s": 2660
   },
   {
