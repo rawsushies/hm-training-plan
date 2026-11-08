@@ -1,21 +1,20 @@
 {
- "version": "4.0.0",
- "build": "2026-11-08T07:23:17Z",
+ "version": "4.0.1",
+ "build": "2026-11-08T11:15:11Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "4 tab: Hari ini, Lari, Race, Kamu",
-  "Skor Siap, Beban, Tidur sebagai cairan",
-  "Tanya Kiki: isi data satu pertanyaan per layar",
-  "Kiki baru: ngobrol, lipsync, bergerak",
-  "Masuk Google + Health Connect (bisa dilewati)"
+  "Perbaikan: aplikasi bisa dibuka di iPhone lama",
+  "Perbaikan: ganti jawaban sebelumnya ikut memperbarui pertanyaan berikutnya",
+  "Perbaikan: lanjut offline cuma berlaku selama offline",
+  "Perbaikan: tombol geser dan sorotan tidak tumpang tindih"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "813662b3407f168765ec93a71d15ab780127d9bfb649aadea408a26a90c938ef",
-   "s": 84362
+   "h": "e9f560e80e61b21f6907b980a34720f0e9a37a6c8f70f2bdbf7d629939580e9e",
+   "s": 84702
   },
   {
    "p": "favicon-32.png",
@@ -49,8 +48,8 @@
   },
   {
    "p": "index.html",
-   "h": "e7d01f4ce5f417773e6c000b651d0feda7f280585d9237f487dd5826b581633c",
-   "s": 283956
+   "h": "0a891ca0b526f6dbcbe9d07e845bdf3f97c7de3f4b19ccafb87c09d51da134cf",
+   "s": 284323
   },
   {
    "p": "js/app4.js",
@@ -59,8 +58,8 @@
   },
   {
    "p": "js/ask.js",
-   "h": "58c065eb47aa055af5add8f0237136bcac99295e3244c6ef6b076606cdf51cc4",
-   "s": 17173
+   "h": "60718fb9a2d3d2e1e166a03f38551ee660caa7321be4832e6de767f14fe368ac",
+   "s": 17524
   },
   {
    "p": "js/brand.js",
@@ -74,8 +73,8 @@
   },
   {
    "p": "js/companion.js",
-   "h": "f4cc328586bcafc213b668e4108b6441efd07f71b98744ba8e61c54ab3b2ca1f",
-   "s": 14549
+   "h": "179229f40fb20d172a79b95916f97e2bb287e5263b00a2437ae4f019f9c05e43",
+   "s": 14988
   },
   {
    "p": "js/integrations.js",
@@ -139,8 +138,8 @@
   },
   {
    "p": "js/ui-glass.js",
-   "h": "e275bb124632b462539681e182fdbbbc5105967a76b18bfbf758eae63f3505b2",
-   "s": 3165
+   "h": "3f7cb2ab9abd01f24a37b55d2780f816a2f74fcd61442ca9c9ecd40920f8c33b",
+   "s": 3227
   },
   {
    "p": "js/updater.js",
@@ -149,13 +148,13 @@
   },
   {
    "p": "js/version.js",
-   "h": "287553c82942ee805445281e09b00b8b6adb98a469ab0eecc3aa4d56ea1266a8",
+   "h": "d2f75d40b1235c41f21e34a21ce5eefab661c36a16b4e3178cd16f866c2b2565",
    "s": 139
   },
   {
    "p": "js/vessel.js",
-   "h": "9f60f63bbafe864fbbecdec8192e6c708fe7dbe33183c6687a55ab2012eeb299",
-   "s": 6288
+   "h": "9f1040979c02374dc927e070ab52de1c02a8376dfe4f8fc5e2805a8e948a24a5",
+   "s": 6353
   },
   {
    "p": "js/views-flow.js",
@@ -199,7 +198,7 @@
   },
   {
    "p": "sw.js",
-   "h": "1b0f6e1dc9098e4af6c6aceb38a20fd6ae98827ee57b00afc5475f534b40b1f6",
+   "h": "5d0894c4ab977760fabe20ae2ae5f4732f62c1cf5e8cf4a91dfafad9bf68c539",
    "s": 2692
   },
   {

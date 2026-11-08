@@ -88,7 +88,7 @@
       save(a) {
         const sess = a.sess ? sessById(a.sess) : null, dur = a.dur ? parseDur(a.dur) : null;
         if (sess) delete S.status[sess.id];
-        S.logs.push({ id: uid(), date: a.date, type: sess ? sess.type : (a.type || "easy"), sessionId: sess ? sess.id : null, distance: a.km, duration: dur && !isNaN(dur) ? dur : null, elev: null, hrAvg: null, hrMax: null, rpe: a.rpe || null, weather: "", notes: "", shoeId: a.shoe || S.settings.defaultShoe || null });
+        S.logs.push({ id: uid(), date: a.date, type: sess ? sess.type : (a.type || "easy"), sessionId: sess ? sess.id : null, distance: a.km, duration: dur && !isNaN(dur) ? dur : null, elev: null, hrAvg: null, hrMax: null, rpe: a.rpe || null, weather: "", notes: "", shoeId: a.shoe === undefined ? (S.settings.defaultShoe || null) : (a.shoe || null) });
         return "Lari tersimpan";
       }
     }
@@ -112,8 +112,18 @@
 
   /* ---------- engine ---------- */
   const steps = () => FLOWS[M.f].steps(M.a).filter(s => !s.show || s.show(M.a));
-  const readBack = (s, v) => v === null || v === undefined || v === "" && s.skip && !s.opts ? (s.skip || "–")
-    : s.fmt ? s.fmt(v, M.a) : (s.opts && (s.opts.find(o => o.v === v) || {}).l) || String(v);
+  const readBack = (s, v) => {
+    if (v === null || v === undefined) return s.skip || "–";
+    if (s.fmt) return s.fmt(v, M.a);
+    if (v === "") return s.skip || "–";
+    return (s.opts && (s.opts.find(o => o.v === v) || {}).l) || String(v);
+  };
+  // Changing an earlier answer can change which questions follow (a different date has different sessions),
+  // so every answer after it is asked again.
+  function set(s, v) {
+    if (s.k in M.a && M.a[s.k] !== v) steps().slice(M.i + 1).forEach(x => { delete M.a[x.k]; });
+    M.a[s.k] = v;
+  }
   const words = (txt, start) => esc(txt).split(/\s+/).map((w, i) => `<span class="kw" style="--i:${start + i}">${w}</span>`).join(" ");
 
   function mAsk() {
@@ -160,13 +170,13 @@
     const t = String(raw || "").trim().slice(0, 60); if (!t) return err("Isi dulu ya"); return t;
   }
   const _modal = modal;
-  modal = function () { return M && M.kind === "ask" ? `<div class="sheet-bg" data-act="closeM"></div><div class="sheet ask-sheet" role="dialog" aria-modal="true">${mAsk()}</div>` : _modal(); };
+  modal = function () { return M && M.kind === "ask" ? `<div class="sheet-bg"></div><div class="sheet ask-sheet" role="dialog" aria-modal="true">${mAsk()}</div>` : _modal(); };
 
   Object.assign(ACT, {
     askStart: d => { M = { kind: "ask", f: d.f, i: 0, a: {} }; render(true); },
-    askAns: d => { const s = steps()[M.i]; if (!s) return; M.a[s.k] = JSON.parse(d.v); next(); },
-    askCustom: () => { const s = steps()[M.i]; if (!s) return; const v = accept(s, document.getElementById("ask-in").value); if (v === undefined) return; M.a[s.k] = v; next(); },
-    askSkip: () => { const s = steps()[M.i]; if (!s) return; M.a[s.k] = s.k === "dur" || s.k === "brand" ? "" : null; next(); },
+    askAns: d => { const s = steps()[M.i]; if (!s) return; set(s, JSON.parse(d.v)); next(); },
+    askCustom: () => { const s = steps()[M.i]; if (!s) return; const v = accept(s, document.getElementById("ask-in").value); if (v === undefined) return; set(s, v); next(); },
+    askSkip: () => { const s = steps()[M.i]; if (!s) return; set(s, s.k === "dur" || s.k === "brand" ? "" : null); next(); },
     askGo: d => { M.i = +d.i; render(true); },
     askSave: () => { const t = FLOWS[M.f].save(M.a); persist(); M = null; render(true); toast(t); }
   });
