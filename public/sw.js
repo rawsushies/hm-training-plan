@@ -3,7 +3,7 @@
  * A new worker waits until the app tells it to take over (in-app "Perbarui" or auto-update when the
  * app is in the background), so a running page never mixes files from two releases.
  * Only this app's own files are cached; Firebase/Google API traffic is never intercepted. */
-const VERSION = "hmtp-4.0.0+2026-11-08T06:41:53Z";
+const VERSION = "hmtp-4.0.0+2026-11-08T06:49:16Z";
 const SHELL = ["./", "vendor/capacitor/8.5.3/capacitor.js", "css/werunit.css", "js/brand.js", "js/motion.js", "js/schedule.js", "js/race.js", "js/views-v4.js", "js/ui-glass.js", "js/views-social.js", "js/views-notify.js", "js/views-weather.js", "js/weather.js", "js/shoes.js", "js/shoe-catalog.js", "js/integrations.js", "js/views-m4.js", "js/views-flow.js", "js/scores.js", "js/vessel.js", "js/app4.js", "js/companion.js", "js/social.js", "icon-maskable-512.png", "index.html", "firebase-config.js", "version.json", "manifest.webmanifest", "icon.svg", "icon-192.png",
   "js/version.js", "js/logic.js", "js/sync.js", "js/tutorial.js", "js/notify.js", "js/updater.js", "js/cloud-firebase.js",
   "vendor/firebase/12.19.0/firebase-app.js", "vendor/firebase/12.19.0/firebase-auth.js", "vendor/firebase/12.19.0/firebase-firestore.js"];

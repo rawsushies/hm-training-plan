@@ -1,20 +1,21 @@
 {
  "version": "4.0.0",
- "build": "2026-11-08T06:41:53Z",
+ "build": "2026-11-08T06:49:16Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
   "4 tab: Hari ini, Lari, Race, Kamu",
   "Skor Siap, Beban, Tidur sebagai cairan",
-  "Logo dan layar buka baru",
+  "Logo, layar buka, dan Kiki baru",
+  "Pilihan pakai roda geser",
   "Masuk Google + Health Connect"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "8a59fcb707d3dc1291b734a7db142baa70165c8dacbab6fabb46c8f90080647a",
-   "s": 66520
+   "h": "267931828535113d887f8d362ce85de367284c73dd51bdcfcb471f1e3932b951",
+   "s": 71703
   },
   {
    "p": "favicon-32.png",
@@ -48,8 +49,8 @@
   },
   {
    "p": "index.html",
-   "h": "6c413cfcc0965a47d06ed77160ecad9e15bbd11acea396b2783a8eb28272ba07",
-   "s": 283430
+   "h": "dd1820c3e4f278220cbc0ebe0076af18ba1fa692796890fff1e021b0b2913c76",
+   "s": 283470
   },
   {
    "p": "js/app4.js",
@@ -65,6 +66,11 @@
    "p": "js/cloud-firebase.js",
    "h": "4f945d4fee0275394492f0b3a35e3ddfb0e7cce035743952bb5b3f89d7afa321",
    "s": 22019
+  },
+  {
+   "p": "js/companion.js",
+   "h": "cb8754bd4bbadcf2451e2e780afac574cdbeca01ea1f41972905d326b75c5151",
+   "s": 8369
   },
   {
    "p": "js/integrations.js",
@@ -138,7 +144,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "44600cb64e6d0e8e0a5f5af4b8810fd9292816135a76d4dc7b0463d4ea9ccc7c",
+   "h": "b5f470be51389b4844edb56a9e4b91c57b9f0bf451778ddf7ffaeec55528a57b",
    "s": 139
   },
   {
@@ -148,8 +154,8 @@
   },
   {
    "p": "js/views-flow.js",
-   "h": "394bab98fe724c9e1a022df30f3930be1e39b481817ed1e5b28c335f960ddcfa",
-   "s": 5855
+   "h": "828d637154fc28dbd2cdd759c506158699ff8e8b148b57d1995c26f24b4d40b5",
+   "s": 5822
   },
   {
    "p": "js/views-m4.js",
@@ -188,8 +194,8 @@
   },
   {
    "p": "sw.js",
-   "h": "0561c21f53dce9ae384bc12e76fd690bc99891185f263e5b84931ff6af603011",
-   "s": 2660
+   "h": "5631235ccde89bfb1ae1b2b33eb75a8c661f78803661f8817b90e944484c0eb7",
+   "s": 2679
   },
   {
    "p": "vendor/capacitor/8.5.3/capacitor.js",
