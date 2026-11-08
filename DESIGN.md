@@ -2,7 +2,7 @@
 version: alpha
 name: WeRunIt
 description: >
-  A race-day instrument for one runner: graphite surfaces, hairlines, one race-orange accent and bib numerals.
+  WeRunIt 4.0, the quick app. A race-day instrument for one runner: graphite surfaces, hairlines, one race-orange accent and bib numerals.
   Opening the app answers "am I on track for my race, and what do I run today?" with almost no reading.
 colors:
   # Dark (primary theme) — graphite ramp
@@ -206,35 +206,37 @@ motion:
 Mobile-first single column, 16px gutters, 4px grid. Same thing, same size: one card padding (16), one tile padding
 (14), one list row height.
 
-### Beranda (`vHome`, `cockpit`)
+### WeRunIt 4.0: four tabs and a record button (`public/js/app4.js`)
 
-1. **Hero (moment 1):** "Week 11 dari 31 · Elevation", readiness chip, `?`. The countdown in bib numerals with
-   "hari lagi ke BTN JAKIM Half Marathon". Date, distance, target. The **route line** (`raceRoute`): a course from week 1
-   to a chequered finish flag; walked weeks drawn in `text`, the rest in `line-strong`; week dots solid when ≥ 80% of
-   planned km was run, grey when partial, hollow when empty; you are the orange marker.
-2. Two quiet actions: Catat lari, Check-in.
-3. Weather card (when relevant).
-4. **Volume mingguan (moment 2, the main chart):** 8 weeks, plan as a dark track, actual in `text-faint`, this week in
-   orange; this week's km in the header.
-5. Tren pace (small line), Aktivitas terakhir (list).
-6. Hari ini, then the week: a progress bar (orange, the only accent bullet) and the 7-day session dots (done = filled
-   off-white with a check, today = orange ring, upcoming = hairline circle, missed = dashed red with ✕).
-7. Workout berikutnya: distance as the figure, one line of type, Mulai timer + Catat.
-8. Badan kamu: 14-day check-in rows in neutral bars, low values in `caution`.
-9. Progres kamu: six number tiles, no mini charts.
-10. Konsistensi: 8-week heatmap; run days in `text` shaded by distance, missed sessions dashed, today ringed orange.
-11. Target bulan ini: two progress bars against the block plan; tap for the review.
+4.0 is a quick app. A runner opens it, sees what to run, taps once, and closes it. Fewer things on screen, every
+number paired with a shape. Older features stay reachable from **Kamu** (or from the tab they belong to) but never
+compete with the core loop.
 
-### Other screens
+| Tab | Job | What is on it |
+| --- | --- | --- |
+| **Hari ini** (`home`) | What do I run today? | Date and race countdown chip; the **workout card**: today's distance as a bib numeral and the workout **shape** (one block per step, width = time, height = intensity, orange = hard part), ✓ Selesai (logs the planned distance) and ▶ Mulai (timer); after logging it becomes the result (km, pace, time, effort, a distance-vs-plan bar). Rest days say "Istirahat". Then the **one-tap body check** (four batteries: Segar, Oke, Capek, Nyeri), the week (progress bar + session dots), weather when set, and the next session with its shape |
+| **Lari** (`log`) | What did I run? | This week as a big number and seven day bars (today orange); a **feed of run cards** like Strava: type, day, three big numbers (km, pace, time), a distance-vs-plan bar, effort as ten cells; links to Review and Kalender; Filter and Import folded at the bottom |
+| **Race** (`race`) | Am I ready? | Countdown and the route line, plan completion ring, predicted finish against target (a forecast from runs, never the target echoed back), weekly volume, **records as medals** (longest, best pace, total, streak), consistency heatmap, then the race strategy workspace |
+| **Kamu** (`more`) | Me and everything else | Account, three lifetime numbers, then one clean list: Latihan (hari lari, kalender, check-in, strength, locked-in, elevation), Gear & teman (sepatu, teman, goals), App (settings, notifikasi, integrasi, data, panduan, kamus, tutorial, tentang) |
 
-| Screen | Leads with |
-| --- | --- |
-| Latihan | Month progress bars (km, sessions), then the calendar; days you ran are a raised cell, today is an orange chip |
-| Aktivitas | Totals tiles, 12-week km bars, the session share as one stacked bar in neutral steps by rank; import folded into one row |
-| Check-in | 14-day check-in rows, the 1–5 inputs, the readiness ring in its semantic colour |
-| Review | Progress bars and number tiles for the block; each chart in its own card |
-| Race | Event card with the countdown, prediction as a 56px figure; method, data and limits folded into "Cara hitung" |
-| Menu | Account, then grouped tiles (Latihan, Badan & progres, Belajar, Akun & data) with muted line icons |
+- **Record button:** a 60px orange circle beside the dock opens **Catat lari**: the distance is prefilled from today's
+  plan and set with −/+ 0,5 km (or typed), time is optional, effort is five bars (RPE 2/4/6/7/9), date defaults to
+  today. One tap saves. "Isi detail lengkap" opens the full form (shoes, HR, notes, elevation).
+- **One-tap body check** writes a normal check-in (sleep, soreness, fatigue, energy, motivation, pain), so readiness,
+  reviews and sync work unchanged. The full six-question check-in stays under Kamu › Check-in.
+- **Dock grouping:** calendar, hari lari, locked-in, elevation, strength and check-in light Hari ini; review and
+  integrasi light Lari; pace and goals light Race; everything else lights Kamu.
+
+### Data as shapes
+
+| Shape | Data | Rule |
+| --- | --- | --- |
+| Workout shape (`workoutShape`) | The session's steps from the timer (`runSteps`) | Width = duration (estimated from distance when open-ended), height = intensity; warm-up/cool-down/rest in `text-faint`, steady running in `text`, hard work in orange |
+| Distance vs plan (`vsPlan`) | Logged km against the session's planned km | 6px track; fill in `text`; an orange tick where the plan ends |
+| Effort cells (`effortCells`) | RPE 1–10 | Ten cells; filled cells in `text-muted`, orange when RPE ≥ 8 |
+| Battery (`battery`) | Body check level | Four bars down to one; a cross for pain; the chosen one takes its meaning colour |
+| Medal (`medal`) | A personal record | Ribbon and disc; orange when the record is earned |
+| Route line (`raceRoute`) | Weeks from start to race day | See Race |
 
 ## Elevation & Depth
 
@@ -309,7 +311,8 @@ opacity and transform only. The old `--ease-pop*` tokens now resolve to the same
 - Tokens: `public/css/werunit.css` (`:root` and `[data-theme="light"]`) and the "v6 race layer" at its end.
 - Fonts: Inter and Barlow Condensed via Google Fonts in `public/index.html`.
 - Logo mark: `public/js/brand.js` (flat race orange); notification accent: `public/js/notify.js`.
-- Home: `vHome`, `cockpit`, `raceRoute`, `homeWeek`, `homeNext`, `homeBody`, `homeProgress`, `homeConsistency`,
-  `homeBlock` in `public/index.html`.
+- 4.0 screens, record button, quick log and body check: `public/js/app4.js` (loaded after the other view modules,
+  before `startApp()`). Shared pieces it reuses from `public/index.html`: `raceRoute`, `homeWeek`, `homeConsistency`,
+  `bulletBar`, `chartBars`, `runSteps`.
 - Icons and splash: regenerate with `node scripts/make-brand-assets.mjs` after any change to the mark (it reads
   `public/js/brand.js`; background `#141415`).

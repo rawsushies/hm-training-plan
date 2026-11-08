@@ -13,6 +13,10 @@ notification-ready preferences.
 intelligence, friends with per-friend private sharing, Android notifications, Open-Meteo weather tips, shoe rotation, and
 integrations (file import, Health Connect). Status and what still needs credentials or a device: [docs/V4.md](docs/V4.md).
 
+**4.0 (quick app):** four tabs (Hari ini, Lari, Race, Kamu) and an orange record button. Today's workout is drawn as a
+shape with one-tap done/start, check-in is one tap, runs are a feed of cards, records are medals. Data, sync and every
+older feature are unchanged. Design rules: [DESIGN.md](DESIGN.md).
+
 **Live:** https://we-run-it.web.app · **Android:** see [docs/ANDROID.md](docs/ANDROID.md) ·
 **Shipping changes:** see [docs/UPDATES.md](docs/UPDATES.md) (installed apps update themselves).
 

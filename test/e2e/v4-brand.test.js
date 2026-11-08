@@ -82,7 +82,7 @@ test("dock: the glass pill moves only on a real tab tap, stretches in flight, se
   assert.ok(Math.abs(rest.w - a.w) < 2 && rest.blur < 1.7, "settled clear at the new tab");
   assert.equal(await page.getAttribute('#dock [data-t="race"]', "aria-current"), "page");
   // sub-pages light their parent tab; every page reachable
-  for (const [t, parent] of [["locked", "cal"], ["review", "log"], ["shoes", "log"], ["pace", "race"], ["settings", "more"], ["bareng", "more"]]) {
+  for (const [t, parent] of [["locked", "home"], ["cal", "home"], ["review", "log"], ["shoes", "more"], ["pace", "race"], ["settings", "more"], ["bareng", "more"]]) {   // 4.0 tabs: Hari ini, Lari, Race, Kamu
     await H.act(page, "nav", { t });
     assert.equal(await page.getAttribute(`#dock [data-t="${parent}"]`, "aria-current"), "page", t);
   }

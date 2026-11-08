@@ -1,20 +1,20 @@
 {
- "version": "3.16.0",
- "build": "2026-11-07T23:54:19Z",
+ "version": "4.0.0",
+ "build": "2026-11-08T05:51:49Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "Tampilan baru bergaya aplikasi olahraga: grafit, satu warna oranye, angka besar",
-  "Teks dipangkas: tanpa paragraf pembuka dan kartu tips, penjelasan ada di tombol ?",
-  "Beranda: hitung mundur race dengan rute latihan dari minggu 1 sampai garis finish",
-  "Ikon app baru"
+  "WeRunIt 4.0: aplikasi cepat dengan 4 tab (Hari ini, Lari, Race, Kamu) dan tombol catat oranye",
+  "Latihan hari ini tampil sebagai bentuk; ✓ Selesai atau Mulai dalam satu tap",
+  "Check-in badan satu tap, catat lari cepat dengan jarak yang udah keisi",
+  "Feed lari ala Strava dan rekor sebagai medali"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "894b77d0478c10ff3715786af9d1dbe7b4a28abb04cc6ed2bf020a5728844d21",
-   "s": 46397
+   "h": "6f3316eb5575e91918a5bdfb195a2129eefab49910f1099c41375385da883016",
+   "s": 55073
   },
   {
    "p": "favicon-32.png",
@@ -48,8 +48,13 @@
   },
   {
    "p": "index.html",
-   "h": "1cb6c1654701cb428e4d2525667756f58bbe0cd5a4799ecc67aaf6ab8ab31897",
-   "s": 287760
+   "h": "6692c8b970cb0a4903d99bafc329744fc69e2bd2ad1b63344730ea60458141b9",
+   "s": 287795
+  },
+  {
+   "p": "js/app4.js",
+   "h": "e72f51e7c2a9e3a3bfabae0e582a70f06141d5e88d986491b6f340733e7ab695",
+   "s": 25929
   },
   {
    "p": "js/brand.js",
@@ -113,8 +118,8 @@
   },
   {
    "p": "js/tutorial.js",
-   "h": "a511e251a7bfa2bf327ae2f5582c3094a85b61d42f0cd060c154c380c31b307f",
-   "s": 30505
+   "h": "0a12aacfa9adea3e10355b50c79b3baecb557c6214fc3432e8bd007ef97e0518",
+   "s": 29621
   },
   {
    "p": "js/ui-glass.js",
@@ -128,8 +133,8 @@
   },
   {
    "p": "js/version.js",
-   "h": "3e275d1fa9b556b027e20c74a5c1672e78e25bfe7b3f226077bd21c4ca7f2ff1",
-   "s": 140
+   "h": "d01b5dca31ec56b5d1754c73c49c34002568c58f91c5ee9a5aeff266e0e1f62d",
+   "s": 139
   },
   {
    "p": "js/views-flow.js",
@@ -173,8 +178,8 @@
   },
   {
    "p": "sw.js",
-   "h": "704051e9acd88d24b1a6debbb79d48bd812955cad1811bd357b0c2764dec03fb",
-   "s": 2615
+   "h": "5223171207f3abf4d3f58364b01790840754728977a69d9ec5a319218118b246",
+   "s": 2614
   },
   {
    "p": "vendor/capacitor/8.5.3/capacitor.js",
