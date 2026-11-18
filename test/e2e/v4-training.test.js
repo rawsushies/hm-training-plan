@@ -75,32 +75,8 @@ test("race target change: preview, confirm, completed history intact, race strat
   // cancelling the active race keeps history and asks for another race
   await H.act(page, "evEdit", { id }); await page.selectOption("#ev-status", "cancelled"); await H.act(page, "evSave");
   await H.act(page, "closeM");
-  assert.match(await page.textContent(".v5-race5"), /pilih race lain/);
+  assert.match(await page.textContent(".p-goal"), /pilih race lain/);
   assert.equal(await page.evaluate(() => S.logs.length), 1);
   assert.deepEqual(page.errors, []);
 });
 
-test("race workspace: every tab renders, split edit keeps the total, data-free inputs say what is missing", async () => {
-  const { page } = await fresh();
-  await page.evaluate(() => { M = null; S.profile.onboarded = true; persist(); });
-  await H.act(page, "nav", { t: "race" });
-  for (const t of ["overview", "pace", "splits", "elev", "hydration", "fuel", "hr", "stations", "checklist"]) {
-    await H.act(page, "raceTab", { t });
-    assert.ok(await page.$('[data-tour="race-body"] .card, [data-tour="race-body"] .sec'), t);
-  }
-  await H.act(page, "raceTab", { t: "hydration" });
-  assert.match(await page.textContent('[data-tour="race-body"]'), /Belum ada sweat rate/);
-  await H.act(page, "raceTab", { t: "hr" });
-  assert.match(await page.textContent('[data-tour="race-body"]'), /HR maksimal yang benar-benar pernah kamu ukur/);
-  await H.act(page, "raceTab", { t: "splits" });
-  await page.fill('.pace-in[data-i="0"]', "11:30"); await page.dispatchEvent('.pace-in[data-i="0"]', "change");
-  await page.waitForTimeout(900);
-  const tot = await page.evaluate(() => { const p = racePlanData(); return [p.rows[p.rows.length - 1].cum, p.T, p.rp.locked]; });
-  assert.ok(Math.abs(tot[0] - tot[1]) < 1e-6); assert.deepEqual(tot[2], [0]);
-  await H.act(page, "raceTabsCfg"); await page.click('[data-act="rtHide"][data-t="hr"]');
-  await H.act(page, "closeM");
-  assert.equal(await page.$('#rtabs [data-t="hr"]'), null, "hidden tab not shown");
-  await H.act(page, "raceSheet");
-  assert.match(await page.textContent("#race-sheet"), /Target 3:30:00/);
-  assert.deepEqual(page.errors, []);
-});

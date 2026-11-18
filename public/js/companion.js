@@ -190,7 +190,7 @@
    * sub-headline, the rest folds behind "Detail". The words stay in the page; only the shape changes. */
   const splitSent = t => t.replace(/([.!?])\s+(?=[A-Z0-9“"(])/g, "$1\u0001").split("\u0001");
   function chunk(el) {
-    if (el.dataset.ch || el.closest(".tour,.kc-sheet,.ask,.gate,.whl,.swd-wrap,label,button,td,th,.kv,.hsc,.lab2")) return;
+    if (el.dataset.ch || el.closest(".tour,.kc-sheet,.ask,.gate,.whl,.swd-wrap,label,button,td,th,.kv,.hsc,.lab2,.v5")) return;   // v5 screens write short text on purpose; never rewrite coach wording
     if (el.querySelector("button,a,input,select,textarea,svg,img,code,b.num")) return;
     const txt = el.textContent.trim(); el.dataset.ch = "1";
     if (txt.split(/\s+/).length < 19) return;

@@ -88,17 +88,17 @@ test("gate: on the Android app Health Connect is the required second link", asyn
   assert.equal(await page.evaluate(() => DEVICE.hc), "skip");
 });
 
-test("dock: four solid tabs (no glass), the current tab is marked, sub-pages light their parent; every kept page reachable", async () => {
+test("dock: three destinations (Hari ini, Coach, Plan), solid; sub-pages light their parent; settings keeps the bar; old routes redirect", async () => {
   const { page } = await H.device({ cloud: false });
   await page.goto(H.appUrl().replace("?emulator=1", "")); await H.ready(page); await H.finishOnboarding(page);
-  assert.deepEqual(await page.$$eval("#dock button span", e => e.map(x => x.textContent)), ["Hari ini", "Lari", "Lab", "Kamu"]);
+  assert.deepEqual(await page.$$eval("#dock button span", e => e.map(x => x.textContent)), ["Hari ini", "Coach", "Plan"]);
   assert.equal(await page.$eval("#dock", e => getComputedStyle(e).backdropFilter), "none", "no glass");
-  await page.click('#dock [data-t="lab"]');
-  assert.equal(await page.getAttribute('#dock [data-t="lab"]', "aria-current"), "page");
-  for (const [t, parent] of [["cal", "home"], ["log", "log"], ["shoes", "more"], ["race", "more"], ["jadwal", "more"], ["settings", "more"], ["notif", "more"], ["data", "more"]]) {
+  for (const [t, parent] of [["log", "log"], ["race", "race"], ["cal", "race"], ["jadwal", "race"], ["coach", "log"], ["plan", "race"], ["lab", "log"], ["shoes", null], ["integ", null]]) {
     await H.act(page, "nav", { t });
-    assert.equal(await page.getAttribute(`#dock [data-t="${parent}"]`, "aria-current"), "page", t);
+    if (parent) assert.equal(await page.getAttribute(`#dock [data-t="${parent}"]`, "aria-current"), "page", t);
+    else assert.equal(await page.evaluate(() => S.ui.tab), "more", t + " → Pengaturan");
   }
+  assert.equal(await page.evaluate(() => document.getElementById("dock").hidden), false, "bar stays on Pengaturan");
   assert.deepEqual(page.errors, []);
 });
 

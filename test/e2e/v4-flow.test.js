@@ -30,19 +30,20 @@ test("returning user: app is usable in well under a second, even before the upda
   assert.deepEqual(page.errors, []);
 });
 
-test("one tap marks today's session done with its planned distance; the toast opens the run to add details", async () => {
-  const { page, ctx } = await H.device();
+test("today's session: Catat hasil opens the quick sheet prefilled with the plan; nothing is recorded until the runner confirms", async () => {
+  const { page } = await H.device();
   await page.clock.setFixedTime(new Date(2026, 10, 10, 18, 0));   // Tue 10 Nov 2026: week 1 weekday run
   await H.open(page);
-  const btn = await page.waitForSelector('[data-act="quickDone"]');
-  const sid = await btn.getAttribute("data-id");
-  await btn.click();
-  const log = await page.evaluate(id => window.__hmtpTest.S().logs.find(l => l.sessionId === id), sid);
-  assert.ok(log && log.distance > 0 && log.duration === null && log.src === "cepat", "planned distance, no invented time");
-  assert.equal(await page.$(`[data-act="quickDone"][data-id="${sid}"]`), null, "button gone once done");
-  await page.click("#toast");
-  await page.waitForSelector("#lg-dur");
-  void ctx; assert.deepEqual(page.errors, []);
+  await page.click('[data-tour="log-today"]');
+  await page.waitForSelector("#ql-km");
+  const planned = await page.evaluate(() => M.q.km);
+  assert.ok(planned > 0, "prefilled with the planned distance (visible, editable)");
+  assert.equal(await page.evaluate(() => S.logs.length), 0, "nothing recorded by the tap itself");
+  await page.fill("#ql-dur", "30:00"); await page.click('[data-act="qlSave"]');
+  const l = await page.evaluate(() => S.logs[0]);
+  assert.ok(l.sessionId, "linked to the planned session"); assert.equal(l.duration, 1800);
+  assert.ok(!(await page.$('[data-tour="log-today"]')), "session shows as done");
+  assert.deepEqual(page.errors, []);
 });
 
 test("Catat: one quick sheet (distance stepper, time, effort bars); nothing is saved until Simpan; invalid input is refused", async () => {

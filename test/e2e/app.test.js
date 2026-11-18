@@ -142,15 +142,16 @@ test("merged app: removed features (friends, tutorials, check-in, strength, lock
   const { page } = await H.device({ cloud: false });
   await page.goto(H.appUrl().replace("?emulator=1", "")); await H.ready(page); await H.finishOnboarding(page);
   await page.evaluate(() => { S.checkins.push({ date: "2026-11-10", sleep: 3, soreness: 2, fatigue: 2, energy: 3, motivation: 3, pain: 1 }); S.strength.push({ id: "st1", date: "2026-11-10", sessionId: null, done: ["squat"] }); persist(); });
-  assert.deepEqual(await page.$$eval("#dock button span", e => e.map(x => x.textContent)), ["Hari ini", "Lari", "Lab", "Kamu"]);
-  for (const t of ["bareng", "tutorials", "recovery", "strength", "locked", "elev", "goals", "review", "pace", "guide", "kamus"]) {
+  assert.deepEqual(await page.$$eval("#dock button span", e => e.map(x => x.textContent)), ["Hari ini", "Coach", "Plan"]);
+  for (const [t, to] of [["bareng", "home"], ["tutorials", "home"], ["recovery", "home"], ["strength", "home"], ["locked", "home"], ["elev", "home"], ["goals", "home"], ["guide", "home"], ["kamus", "home"], ["review", "log"], ["pace", "race"]]) {
     await H.act(page, "nav", { t });
-    assert.equal(await page.evaluate(() => S.ui.tab), "home", t + " redirects to Hari ini");
+    assert.equal(await page.evaluate(() => S.ui.tab), to, `${t} redirects to ${to}`);
   }
   assert.equal(await page.$("#tour"), null, "no tutorial bubble");
   assert.equal(await page.$$eval(".helpbtn", e => e.filter(x => getComputedStyle(x).display !== "none").length), 0, "no help bubbles");
-  await H.act(page, "nav", { t: "more" }); const menu = await page.textContent("main");
-  assert.ok(!/Teman|Tutorial|Check-in|Strength|Locked-in|Elevation|Goals/.test(menu), "Kamu lists kept features only");
+  await H.act(page, "nav", { t: "more" });
+  const targets = await page.$$eval('main [data-act="nav"]', e => e.map(x => x.dataset.t));
+  assert.ok(targets.every(t => ["notif", "settings", "data", "about"].includes(t)), "Pengaturan links to kept pages only: " + targets);
   assert.deepEqual(await page.evaluate(() => [S.checkins.length, S.strength.length]), [1, 1], "stored data untouched");
   assert.deepEqual(page.errors, []);
 });
@@ -161,7 +162,7 @@ test("mobile + desktop layouts: no horizontal overflow on any page of the merged
     await page.goto(H.appUrl().replace("?emulator=1", ""));
     await H.ready(page);
     await H.finishOnboarding(page);
-    for (const t of ["home", "cal", "log", "lab", "more", "race", "jadwal", "shoes", "data", "notif", "integ", "settings", "about"]) {
+    for (const t of ["home", "log", "race", "cal", "jadwal", "more", "data", "notif", "settings", "about"]) {
       await H.act(page, "nav", { t });
       const over = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       assert.ok(over <= 1, `${t} @${vp.width}x${vp.height} overflows by ${over}px`);

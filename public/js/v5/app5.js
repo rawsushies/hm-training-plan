@@ -48,7 +48,7 @@
     const H = { warm: .36, cool: .36, rest: .26, run: .62, work: 1 }, tot = steps.reduce((a, st) => a + est(st), 0);
     let x = 0, out = "";
     steps.forEach(st => { const w = Math.max(4, (W - gap * (steps.length - 1)) * est(st) / tot), hh = Math.round((H[st.k] || .5) * h); out += `<rect x="${x.toFixed(1)}" y="${h - hh}" width="${w.toFixed(1)}" height="${hh}" rx="4" class="k-${st.k}"/>`; x += w + gap; });
-    return `<svg class="v5-shape" viewBox="0 0 ${W} ${h}" role="img" aria-label="Bentuk latihan: ${esc5(steps.map(st => st.l).join(", "))}">${out}</svg>`;
+    return `<svg class="v5-shape" viewBox="0 0 ${W} ${h}" preserveAspectRatio="xMinYMid meet" role="img" aria-label="Bentuk latihan: ${esc5(steps.map(st => st.l).join(", "))}">${out}</svg>`;
   }
 
   /* ---------- Hari ini ---------- */
@@ -72,11 +72,10 @@
         <div class="v5-row3">${D.fig(paceOf(lg) ? fmtPace(paceOf(lg), false) : "–", "/km", "pace", { size: "s" })}${D.fig(lg.duration ? fmtDur(lg.duration) : "–", "", "waktu", { size: "s" })}${D.fig(lg.rpe || "–", "/10", "effort", { size: "s" })}</div>
         ${s.dist ? D.meter(lg.distance, Math.max(lg.distance, s.dist), { tone: "pos", mark: s.dist, label: `${fmtKm(lg.distance)} dari ${fmtKm(s.dist)} km rencana` }) : ""}${next}</section>`;
     }
-    const qd = typeof quickDoneBtn === "function" ? quickDoneBtn(s, "v5-btn") : "";
     return `<section class="v5-hero" data-tour="hero" style="--c:${tc(s.type)}"><p class="ds-k">${typeDot(s.type)}${esc5(TYPES[s.type])}${s.time ? " · " + esc5(s.time) : ""}${st === "missed" ? ' · <span class="t-warn">kelewat</span>' : ""}</p>
       <button class="v5-big" data-act="openSess" data-id="${esc5(s.id)}" aria-label="${esc5(s.title)}, ${fmtKm(s.dist)} km, buka detail">${D.fig(fmtKm(s.dist), "km", "", { size: "xl" })}</button>
       ${shape(s)}
-      <div class="v5-acts">${qd.replace("✓ Selesai", `${ic("check")}Selesai`)}<button class="v5-btn pri" data-act="runStart" data-id="${esc5(s.id)}">${ic("play")}Mulai</button></div>${next}</section>`;
+      <div class="v5-acts"><button class="v5-btn pri" data-act="quickLog" data-tour="log-today">${ic("check")}Catat hasil</button></div>${next}</section>`;
   }
   function weekPanel() {
     const w = PLANW[curWeekIdx()], d0 = parseYmd(w.start), t = todayYmd(), ls = logsIn(w.start, w.end).filter(l => !l.sample);
@@ -254,5 +253,5 @@
     document.querySelectorAll(".side button[data-t]").forEach(b => { b.classList.toggle("on", b.dataset.t === cur); if (!b.querySelector(".ds-ic")) { const k = DOCK_ICON[b.dataset.t]; if (k && IC[k]) b.insertAdjacentHTML("afterbegin", IC[k].replace('class="ico"', 'class="ds-ic"')); } });
   };
   document.addEventListener("keydown", e => { const t = e.target; if ((e.key === "Enter" || e.key === " ") && t && t.matches && t.matches('g.ds-hit[data-act]')) { e.preventDefault(); t.dispatchEvent(new MouseEvent("click", { bubbles: true })); } });
-  window.__v5 = { KEPT, DROPPED };
+  window.__v5 = { KEPT, DROPPED, hero, weekPanel, wxTile, calVolume, runRow, heat12, shape, raceChip };
 })();

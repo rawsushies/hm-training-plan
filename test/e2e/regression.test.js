@@ -128,25 +128,6 @@ test("shoes and settings (kept in the merged app)", async () => {
   assert.deepEqual(page.errors, []);
 });
 
-test("activity import: GPX parsed, matched to the plan, duplicate (same file twice) detected", async () => {
-  const { page } = await fresh();
-  const gpx = `<?xml version="1.0"?><gpx xmlns="http://www.topografix.com/GPX/1/1"><trk><name>Pagi</name><type>running</type><trkseg>
-    <trkpt lat="-6.2000" lon="106.8000"><ele>10</ele><time>2026-11-10T12:00:00Z</time></trkpt>
-    <trkpt lat="-6.2100" lon="106.8000"><ele>20</ele><time>2026-11-10T12:07:00Z</time></trkpt>
-    <trkpt lat="-6.2200" lon="106.8000"><ele>12</ele><time>2026-11-10T12:14:00Z</time></trkpt></trkseg></trk></gpx>`;
-  await H.act(page, "nav", { t: "log" });
-  await page.setInputFiles("#act-file", { name: "run.gpx", mimeType: "application/gpx+xml", buffer: Buffer.from(gpx) });
-  await page.waitForSelector('[data-act="impSave"]');
-  assert.match(await page.textContent(".sheet"), /Cocok: W1/);
-  await page.click('[data-act="impSave"]');
-  const l = await page.evaluate(() => S.logs[0]);
-  assert.equal(l.sessionId, "w1-wd"); assert.ok(l.distance > 2.1 && l.distance < 2.3); assert.equal(l.duration, 840); assert.equal(l.elev, 10); assert.match(l.extId, /^t:2026-11-10T12:00/);
-  await page.setInputFiles("#act-file", { name: "run.gpx", mimeType: "application/gpx+xml", buffer: Buffer.from(gpx) });
-  await page.waitForSelector('[data-act="impSave"]');
-  assert.match(await page.textContent(".sheet"), /Udah ada/);
-  assert.ok(await page.isDisabled('[data-act="impSave"]'), "duplicate is unselected");
-});
-
 test("data: export JSON/CSV, merge-import is safe and idempotent, replace-import backs up first, sample data, reset", async () => {
   const { page } = await fresh();
   await H.logRun(page, { date: "2026-11-10", km: 4, dur: "30:00" });
