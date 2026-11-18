@@ -1,17 +1,17 @@
 {
  "version": "5.0.0",
- "build": "2026-11-18T07:00:28Z",
+ "build": "2026-11-18T07:07:20Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "RUNLAB v5: WeRunIt and RUNLAB merged; Instrument design system; four tabs (Hari ini, Lari, Lab, Kamu)"
+  "RUNLAB v5: merged app; Race and Shoes rebuilt in the Instrument system"
  ],
  "files": [
   {
    "p": "css/ds.css",
-   "h": "982b8a011b6cdea6e72511c6b82b8eb37924a2dee8cefa343406cb2c7c6bd495",
-   "s": 19479
+   "h": "9c4e8107f9458c0ef3a03bd9aceeb76f1b47beaea40cd68f0e60bc0a3b8b5f5c",
+   "s": 22022
   },
   {
    "p": "css/runlab.css",
@@ -55,8 +55,8 @@
   },
   {
    "p": "index.html",
-   "h": "d0abfbc2bfe0570d3f1331ea442ebc23e20f6d83303cd542040ec04af9869ec4",
-   "s": 285220
+   "h": "70bbe668bc9cd3bd0461ca730aa8eb310df458f7b4e8275c857f7fc996714cd9",
+   "s": 285260
   },
   {
    "p": "js/app4.js",
@@ -185,17 +185,22 @@
   },
   {
    "p": "js/v5/app5.js",
-   "h": "8f3d45e17ff5775ea8c920dfa717d593b1228a999719a41add5cbd568d0a49f3",
-   "s": 26693
+   "h": "c30bd64be6601c5aadee7cbbc92b4e268d94889c210e180c2384e3d42bb9965e",
+   "s": 26736
   },
   {
    "p": "js/v5/ds.js",
-   "h": "19beb4a7472d66812716883193977c26da22f6140686545c4c20f15fcd23b39f",
-   "s": 9632
+   "h": "2de8e2c0363a8abd85d2570704d0284f5e1b08ca6d1d8ac204efa460a21ee735",
+   "s": 9991
+  },
+  {
+   "p": "js/v5/pages5.js",
+   "h": "3e5363398d17e3988efb1325cea79cae0cfa421be638cbf21bd629bf87740d26",
+   "s": 12779
   },
   {
    "p": "js/version.js",
-   "h": "418a95e8ba921c63ef23cd4f036021c651f5dd7e4e8bc0fe076502bc7ae9ac5a",
+   "h": "9495317cd6a74326a1a346594803ae6227405bedd90dcf83ef6ef7e35b58ec8c",
    "s": 139
   },
   {
@@ -245,8 +250,8 @@
   },
   {
    "p": "sw.js",
-   "h": "0ea1cd6b505382d42e8eda494abe5a444bc6e9d245ec7f967969d2c8d99846c0",
-   "s": 2881
+   "h": "c4008f9a5d36b23b15d8aec5c5a1dd9e120b99387ffc0e46f13a12a1bb804b68",
+   "s": 2900
   },
   {
    "p": "vendor/capacitor/8.5.3/capacitor.js",

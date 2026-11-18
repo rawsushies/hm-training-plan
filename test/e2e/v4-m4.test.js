@@ -36,10 +36,10 @@ test("shoes: initial km + tracked, rotation suggestion with reason, catalogue wi
   await H.logRun(page, { date: "2026-11-10", km: 8, dur: "56:00" });
   await H.act(page, "nav", { t: "shoes" });
   const t = await page.textContent("main");
-  assert.match(t, /258 \/ 600 km/); assert.match(t, /250 km awal \(diisi manual\) \+ 8 km tercatat/);
+  assert.match(t, /258\s*km\s*dari 600/); assert.match(t, /250 km awal \(manual\) \+ 8 km tercatat/);
   assert.ok(await page.$('[data-pill="shoetab"] .glass-pill'), "glass segmented control");
   await page.click('[data-act="shoeTab"][data-v="rotation"]');
-  assert.match(await page.textContent("main"), /Saran: Harian[\s\S]*Kenapa: dipakai buat harian/);
+  assert.match(await page.textContent("main"), /Harian\s*saran sepatu[\s\S]*Kenapa: dipakai buat harian/);
   // Rekomendasi: sourced facts first, then our Plus/Minus tab below; one tap adds the model
   await page.click('[data-act="shoeTab"][data-v="catalog"]');
   const card = '[data-cat="nike-pegasus-42"]';

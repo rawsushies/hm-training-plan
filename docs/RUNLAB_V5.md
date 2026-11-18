@@ -54,13 +54,20 @@ migrations, offline support and Firestore rules are unchanged. The merge happens
 ## Phases
 
 1. **Done:** design system, shell, Hari ini, Lari, Kamu, removed routes, tests.
-2. **Next:** rebuild Race, Jadwal, Sepatu, Pengingat, Pengaturan and Data with the primitives. These pages still use the
-   older layout under the new tokens. On Race, remove the load-ratio dial (it belongs to the removed Siap/Beban scores).
+2. **In progress** (`js/v5/pages5.js`):
+   - **Race, done:** countdown ring over the plan; finish time on one axis (target outline, forecast dot, range band);
+     the whole build as plan-vs-actual bars; records as figures. The load-ratio dial and readiness blob are removed.
+     The overview tab no longer prints the target as a big "Perkiraan finish" when no forecast exists.
+   - **Sepatu, done:** a wear ring per shoe; rotation as one stacked bar with the suggestion and its reason.
+   - **Still on the older layout** under the new tokens: Jadwal (already dial pickers), Kalender, Pengingat, Pengaturan,
+     Data, Integrasi.
+   - **Open owner question:** the plan still schedules strength sessions and Jadwal still has the strength-day picker.
+     The owner asked to keep those slots for later features, so they are left in place.
 3. **After:** the Lab adopts the primitives: fewer words, findings drawn first.
 
 ## Verification (this change)
 
-- unit 106/106, rules 23/23, e2e 54/54, `check:release` 5.0.0 (local stamp only, not published).
+- unit 106/106, rules 23/23, e2e 54/54, `check:release` 5.0.0 (local stamp only, not published). Phase 2 so far: e2e 54/54 again; shoe and race assertions updated to the new layout.
 - Screenshots at 390×844, 768×1024 and 1440×900, dark and light: no horizontal overflow, no console errors.
 - E2E rewritten:
   - Friends and tutorial tests are replaced by the removed-features test.

@@ -75,7 +75,7 @@ test("race target change: preview, confirm, completed history intact, race strat
   // cancelling the active race keeps history and asks for another race
   await H.act(page, "evEdit", { id }); await page.selectOption("#ev-status", "cancelled"); await H.act(page, "evSave");
   await H.act(page, "closeM");
-  assert.match(await page.textContent(".hero-card"), /Pilih race lain/);
+  assert.match(await page.textContent(".v5-race5"), /pilih race lain/);
   assert.equal(await page.evaluate(() => S.logs.length), 1);
   assert.deepEqual(page.errors, []);
 });

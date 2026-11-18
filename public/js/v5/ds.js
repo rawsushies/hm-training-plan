@@ -96,5 +96,11 @@
   };
   const ic = (k, cls = "") => `<svg class="ds-ic${cls ? " " + cls : ""}" viewBox="0 0 24 24" aria-hidden="true">${P[k] || P.info}</svg>`;
 
-  G.WRI_DS = { fig, ring, bars, spark, meter, heat, head, ic, esc: e, f1 };
+  /** Chart width in SVG units that matches the space it will get, so 10 px axis text stays ~10 px on every screen. */
+  function cw(max = 720, inset = 36) {
+    const vw = (typeof window !== "undefined" && window.innerWidth) || 390, avail = vw >= 900 ? Math.min(vw - 208 - 80, 1080) : vw - 32;
+    return Math.round(clamp(avail - inset, 260, max));
+  }
+
+  G.WRI_DS = { cw, fig, ring, bars, spark, meter, heat, head, ic, esc: e, f1 };
 })(typeof globalThis !== "undefined" ? globalThis : this);
