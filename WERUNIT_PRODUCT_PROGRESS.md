@@ -51,8 +51,22 @@ Branch `claude/charming-cori-ge7n37`. Nothing has been deployed, merged or relea
   - Pages: Hari ini, Coach, Plan, Pengaturan.
   - No horizontal overflow, no console errors.
 
+## M4 (first slice, done)
+- `public/js/coach/plan.js` (unit-tested in `test/unit/plan-coach.test.js`).
+- **Prescriptions:** every planned session opens in Plan to show purpose, warm-up, main set, cool-down, intensity guide,
+  a shorter version and the reason for the session.
+  - Intensity is RPE-based.
+  - A pace hint appears only when the runner has at least 4 recent runs rated RPE ≤ 4 with pace. It shows their own
+    median and n. No zones are invented.
+- **Adaptation:** a missed session gets a proposal with its reason. A long run moves to a free day that is not next to a
+  hard session; anything else is let go.
+  - It never doubles up and never adds load; a completed week proposes nothing.
+  - "Terapkan" applies it (a session override or skip); "Biarkan" changes nothing.
+- **"Catat hasil" per session:** opens the quick sheet prefilled from that session.
+- **Tests:** unit 119/119, e2e 50/50 (new Plan e2e).
+
 ## Next
-- M4: programme builder (running, endurance, strength, combined) with per-session purpose, warm-up, main set,
+- M4 remainder: programme builder (running, endurance, strength, combined) with per-session purpose, warm-up, main set,
   cool-down and a shorter alternative; missed-session and fatigue adaptation proposed with a reason and applied only
   on confirmation.
 - Post-session effort/fatigue/pain check in the quick sheet; pain → professional advice.

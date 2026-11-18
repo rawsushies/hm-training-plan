@@ -81,3 +81,27 @@ test("removed Lab UI keeps its data: investigations stay stored, exported and sy
   assert.match(await page.textContent(".c-cnt"), /Investigasi Lab \(arsip\)\s*1/);
   assert.deepEqual(page.errors, []);
 });
+
+test("Plan: each session opens to a prescription (no invented pace); a missed session gets a proposal with its reason that changes nothing until confirmed", async () => {
+  const { page } = await H.device({ cloud: false });
+  await page.clock.setFixedTime(new Date(2026, 10, 12, 18, 0));     // Thu 12 Nov 2026: Tuesday's run was not logged
+  await openLocal(page);
+  await H.act(page, "nav", { t: "plan" });
+  const sx = await page.$("details.p-sx");
+  await sx.click();
+  const rx = await page.textContent("details.p-sx[open] .p-rx");
+  assert.match(rx, /Pemanasan[\s\S]*Inti[\s\S]*Pendinginan[\s\S]*Intensitas[\s\S]*Versi pendek/);
+  assert.ok(!/\d:\d\d \/km \(median/.test(await page.textContent(".c-plan")), "no pace hint without easy runs");
+  const ad = await page.textContent('[data-tour="plan-adapt"]');
+  assert.match(ad, /tidak tercatat[\s\S]*menumpuk beban tidak membantu/);
+  const before = await page.evaluate(() => JSON.stringify([S.status, S.overrides]));
+  await page.click('[data-act="planAdaptNo"]');
+  assert.equal(await page.evaluate(() => JSON.stringify([S.status, S.overrides])), before, "'Biarkan' changes nothing in the plan");
+  await page.evaluate(() => { S.ui.adaptDismissed = {}; render(true); });
+  const id = await page.getAttribute('[data-act="planAdapt"]', "data-id");
+  await page.click('[data-act="planAdapt"]');
+  assert.equal(await page.evaluate(id => S.status[id], id), "skip");
+  assert.equal(await page.$('[data-tour="plan-adapt"]'), null);
+  assert.ok(!/terlewat/i.test(await page.textContent(".c-plan")), "no guilt wording");
+  assert.deepEqual(page.errors, []);
+});

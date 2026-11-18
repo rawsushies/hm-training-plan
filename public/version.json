@@ -1,17 +1,17 @@
 {
  "version": "5.1.0",
- "build": "2026-11-18T08:45:25Z",
+ "build": "2026-11-18T08:53:09Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "WeRunIt coach reset: Hari ini, Coach, Plan; deterministic coach; Strava blocked"
+  "WeRunIt coach reset: Hari ini, Coach, Plan; prescriptions and confirmed adaptation; Strava blocked"
  ],
  "files": [
   {
    "p": "css/ds.css",
-   "h": "bedb547762eb5eb9993d837a515050f05a27ebb8043abe0f3a2db46a4b6becb8",
-   "s": 29798
+   "h": "de04efcfefb3285171a448679d1879ed651bfc34614f5e2b01cf2efdc9047cf5",
+   "s": 30738
   },
   {
    "p": "css/runlab.css",
@@ -55,8 +55,8 @@
   },
   {
    "p": "index.html",
-   "h": "aa4f0e08a1d6af45728e32fea93846f7d1c8bb48629690b016d6e95f9fd12118",
-   "s": 285393
+   "h": "0f864cda57081137c847ed245f6fc71e376bac868ee4b7dcf746ffe974af1e7b",
+   "s": 285434
   },
   {
    "p": "js/app4.js",
@@ -89,9 +89,14 @@
    "s": 4141
   },
   {
+   "p": "js/coach/plan.js",
+   "h": "436ad6e190a72d2b5240c2e6729a38ad558b5542b5f5b9057680a23d8efc4983",
+   "s": 7221
+  },
+  {
    "p": "js/coach/views-coach.js",
-   "h": "0600aa41bf8a781e53477bce2e9f4435afd6940413a59038c9e876b163014014",
-   "s": 18798
+   "h": "e4e591feaed502efc9780ba55dddd9e4f08eed4202cbfd209f3fcdf49f04a37f",
+   "s": 21587
   },
   {
    "p": "js/companion.js",
@@ -215,7 +220,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "bcb15abb373d3088a0a8719d2349ab68dd7035bf54d37e960c57b9234998ad97",
+   "h": "c68d5a1f73f386bac8c31528b0d507f72206c04d4d6058ca60dc5fb72a6fc8a8",
    "s": 139
   },
   {
@@ -265,8 +270,8 @@
   },
   {
    "p": "sw.js",
-   "h": "5e82a6379988a45e7c7c6e425ca32567e9995cedf77c8d72e376984f86482717",
-   "s": 2970
+   "h": "98e0e25f3c7654b801624a9ff5e17b269c9327e13f265cca1e55c745476171f9",
+   "s": 2990
   },
   {
    "p": "vendor/capacitor/8.5.3/capacitor.js",

@@ -107,12 +107,31 @@
 
   /* ---------- Plan ---------- */
   const ST = { done: ["selesai", "pos"], missed: ["tidak tercatat", "mu"], skip: ["dilewati", "mu"], today: ["hari ini", "acc"], up: ["", "mu"] };
+  const PL = WRI_PLAN;
+  let EASY = null;
+  /** One planned session: summary line → prescription (purpose, warm-up, main, cool-down, guide, shorter option, why). */
+  function sessRow(s) {
+    const st = sState(s), lg = s.type === "strength" ? null : logFor(s.id), rx = PL.prescribe(s, { easyPace: EASY });
+    return `<details class="p-sx" data-sess="${e(s.id)}"><summary class="p-s" style="--c:${tc(s.type)}"><i class="v5-dot"></i><span class="p-sn">${e(TYPES[s.type] || s.title)}</span><b class="num">${s.dist ? fmtKm(lg ? lg.distance : s.dist) : ""}</b>${s.dist ? '<span class="mu">km</span>' : ""}${s.type !== "strength" && ST[st] && ST[st][0] ? `<span class="p-st t-${ST[st][1]}">${ST[st][0]}</span>` : ""}</summary>
+      <div class="p-rx"><p class="p-rx-p">${e(rx.purpose)}</p>
+        <dl><dt>Pemanasan</dt><dd>${e(rx.warm)}</dd><dt>Inti</dt><dd>${e(rx.main)}</dd><dt>Pendinginan</dt><dd>${e(rx.cool)}</dd><dt>Intensitas</dt><dd>${e(rx.guide)}</dd><dt>Versi pendek</dt><dd>${e(rx.alt)}</dd></dl>
+        ${rx.why ? `<p class="c-meta">Kenapa: ${e(rx.why)}</p>` : ""}
+        <div class="p-rx-a">${st !== "done" && s.type !== "strength" && s.date <= todayYmd() ? `<button class="v5-btn pri" data-act="planLog" data-id="${e(s.id)}">${ic("check")}Catat hasil</button>` : ""}${lg ? `<button class="v5-btn" data-act="editLog" data-id="${e(lg.id)}">Lihat lari</button>` : ""}<button class="v5-btn" data-act="openSess" data-id="${e(s.id)}">Ubah / geser</button></div></div></details>`;
+  }
+  /** Missed-session proposals for this week, each with its reason; applied only on "Terapkan". */
+  function adaptBlock(w) {
+    const d0 = parseYmd(w.start), wk = [];
+    for (let i = 0; i < 7; i++) itemsOnDate(ymd(addDays(d0, i))).forEach(s => wk.push({ id: s.id, date: s.date, type: s.type, dist: s.dist, state: sState(s) }));
+    const ps = PL.adapt(wk, todayYmd()).filter(p => !(S.ui.adaptDismissed || {})[p.id]);
+    if (!ps.length) return "";
+    return `<section class="p-adapt" data-tour="plan-adapt">${D.head("Usulan penyesuaian")}${ps.map(p => `<div class="p-adapt-r"><p>${e(p.reason.replace(/\d{4}-\d{2}-\d{2}/g, d => fmtDay(d)))}</p><div class="p-rx-a"><button class="v5-btn pri" data-act="planAdapt" data-id="${e(p.id)}" data-k="${p.kind}" data-to="${e(p.to || "")}">${p.kind === "move" ? `Pindah ke ${e(fmtDay(p.to))}` : "Lepaskan sesi ini"}</button><button class="v5-btn" data-act="planAdaptNo" data-id="${e(p.id)}">Biarkan</button></div></div>`).join("")}</section>`;
+  }
   function weekList(w, label) {
     const d0 = parseYmd(w.start), t = todayYmd(), rows = [];
     for (let i = 0; i < 7; i++) {
       const d = ymd(addDays(d0, i)), items = itemsOnDate(d);
       rows.push(`<li class="p-day${d === t ? " now" : ""}"><span class="p-dd"><b class="num">${parseYmd(d).getDate()}</b><span>${e(HARI[parseYmd(d).getDay()].slice(0, 3))}</span></span>
-        <span class="p-ss">${items.length ? items.map(s => { const st = sState(s), lg = s.type === "strength" ? null : logFor(s.id); return `<button class="p-s" data-act="openSess" data-id="${e(s.id)}" style="--c:${tc(s.type)}"><i class="v5-dot"></i><span class="p-sn">${e(TYPES[s.type] || s.title)}</span><b class="num">${s.dist ? fmtKm(lg ? lg.distance : s.dist) : ""}</b>${s.dist ? '<span class="mu">km</span>' : ""}${ST[st] && ST[st][0] ? `<span class="p-st t-${ST[st][1]}">${ST[st][0]}</span>` : ""}</button>`; }).join("") : '<span class="p-rest">Istirahat</span>'}</span></li>`);
+        <span class="p-ss">${items.length ? items.map(s => sessRow(s)).join("") : '<span class="p-rest">Istirahat</span>'}</span></li>`);
     }
     const planKm = w.total, doneKm = sum(logsIn(w.start, w.end).filter(l => !l.sample), l => l.distance);
     return `<section class="p-week">${D.head(`${label} · W${w.n}`, `<span class="ds-k">${fmtKm(doneKm)} / ${fmtKm(planKm)} km</span>`)}${D.meter(doneKm, Math.max(planKm, doneKm, 1), { tone: "pos", mark: planKm, label: `${fmtKm(doneKm)} dari ${fmtKm(planKm)} km` })}<ul class="p-days">${rows.join("")}</ul></section>`;
@@ -130,10 +149,11 @@
   }
   vRace = function () {
     const wi = curWeekIdx(), w = PLANW[wi], nx = PLANW[wi + 1];
+    EASY = PL.easyPace(CM.sessionsFrom(S).sessions, todayYmd());
     return `${storageNote()}<div class="v5 c-plan">
       <header class="v5-top"><div><p class="ds-k">Program ${e(PLAN_KIND())} · ${PLANW.length} minggu</p><h1 class="v5-h">Plan</h1></div>${gear()}</header>
       ${goalBlock()}
-      ${w ? weekList(w, "Minggu ini") : `<p class="v5-empty">Belum ada program.</p>`}
+      ${w ? adaptBlock(w) + weekList(w, "Minggu ini") : `<p class="v5-empty">Belum ada program.</p>`}
       ${nx ? `<details class="p-next"><summary>${D.head(`Minggu depan · W${nx.n}`, `<span class="ds-k">${fmtKm(nx.total)} km rencana</span>`)}</summary>${weekList(nx, "Minggu depan")}</details>` : ""}
       <div class="p-links"><button class="v5-btn" data-act="nav" data-t="cal">${ic("cal")}Kalender</button><button class="v5-btn" data-act="nav" data-t="jadwal">${ic("gear")}Hari & jam lari</button></div>
       <p class="c-meta">Program disusun dari tujuan dan hari yang kamu pilih. Beban tidak naik otomatis hanya karena minggu lalu selesai; perubahan diusulkan dulu dengan alasannya.</p>
@@ -169,6 +189,14 @@
     setTimeout(() => { const a = document.querySelector(".c-ans"); if (a) a.scrollIntoView({ block: "nearest" }); }, 0);
   }
   Object.assign(ACT, {
+    planLog: d => { const s = sessById(d.id); if (!s) return; M = { kind: "qlog", q: { date: s.date, sessionId: s.id, type: s.type, km: s.dist || 5, dur: "", eff: 0 } }; render(true); },
+    planAdapt: d => {
+      const s = sessById(d.id); if (!s) return;
+      if (d.k === "move" && d.to) { const o = S.overrides[d.id] = Object.assign({}, S.overrides[d.id]); o.date = d.to; toast(`Dipindah ke ${fmtDay(d.to)}`, "ok"); }
+      else { S.status[d.id] = "skip"; toast("Sesi dilepas; jadwal lanjut", "ok"); }
+      persist(); render(true);
+    },
+    planAdaptNo: d => { S.ui.adaptDismissed = Object.assign({}, S.ui.adaptDismissed, { [d.id]: 1 }); persist(); render(true); },
     coachAsk: () => { const el = document.getElementById("coach-q"); ask(el ? el.value : ""); },
     coachQ: d => ask(d.q),
     coachObs: d => { COACH.open = { [d.id]: true }; S.ui.tab = "log"; M = null; render(false); setTimeout(() => { const el = document.querySelector(`[data-obs="${d.id}"]`); if (el) el.scrollIntoView({ block: "center" }); }, 0); }
