@@ -1,78 +1,101 @@
-// SCAFFOLD — NOT DEPLOYED. Strava integration backend for WeRunIt.
-// Why a server: the Strava client secret must never ship in app JavaScript, and Strava refresh tokens must be kept private.
-// Requirements before this can run (see docs/INTEGRATIONS.md): Firebase Blaze plan, a Strava API application,
-//   `firebase functions:secrets:set STRAVA_CLIENT_SECRET`, STRAVA_CLIENT_ID + STRAVA_VERIFY_TOKEN params, and adding
-//   "functions" to firebase.json. Nothing here is wired into the app UI yet; the app labels Strava as "Butuh server".
+// NOT DEPLOYED. Strava DISPLAY-ONLY backend for WeRunIt (owner decision 2026-11-18; see docs/STRAVA_INTEGRATION_FEASIBILITY.md).
+// Why a server: Strava's token exchange needs the client secret, which must never ship in app JavaScript.
+// What it does: OAuth connect, on-demand list of the athlete's last 7 days, disconnect, and revoke handling.
+// What it never does: store activities in Firestore, write runs, analyse data, or send Strava data to any AI or third party.
+// To activate (owner): Firebase Blaze plan, a Strava API app (with any subscription Strava requires for API access),
+//   `firebase functions:secrets:set STRAVA_CLIENT_SECRET`, params STRAVA_CLIENT_ID / STRAVA_VERIFY_TOKEN / APP_URL,
+//   add "functions" to firebase.json, deploy, then set window.HMTP_STRAVA_ENABLED = true in public/firebase-config.js.
 import { onRequest } from "firebase-functions/v2/https";
 import { defineSecret, defineString } from "firebase-functions/params";
 import { initializeApp } from "firebase-admin/app";
 import { getFirestore, FieldValue } from "firebase-admin/firestore";
 import { getAuth } from "firebase-admin/auth";
-import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { makeState, readState, authorizeUrl, needsRefresh, afterEpoch, inWindow, isDeauth } from "./strava-core.js";
 
 initializeApp();
 const db = getFirestore();
 const CLIENT_SECRET = defineSecret("STRAVA_CLIENT_SECRET");
 const CLIENT_ID = defineString("STRAVA_CLIENT_ID");
 const VERIFY_TOKEN = defineString("STRAVA_VERIFY_TOKEN");
+const APP_URL = defineString("APP_URL", { default: "https://we-run-it.web.app/" });
 const REGION = "asia-southeast2";
+const tokRef = uid => db.doc(`serverOnly/strava/tokens/${uid}`);          // serverOnly/** is denied to every client by the rules
 
-// state = uid.nonce.hmac — binds the OAuth callback to the signed-in user who started it
-const sign = (v, key) => createHmac("sha256", key).update(v).digest("base64url");
-const makeState = (uid, key) => { const n = randomBytes(12).toString("base64url"); return `${uid}.${n}.${sign(uid + "." + n, key)}`; };
-function readState(state, key) {
-  const [uid, n, mac] = String(state || "").split(".");
-  if (!uid || !n || !mac) return null;
-  const want = Buffer.from(sign(uid + "." + n, key)), got = Buffer.from(mac);
-  return want.length === got.length && timingSafeEqual(want, got) ? uid : null;
+async function userOf(req) {
+  const tok = (req.get("authorization") || "").replace(/^Bearer /, "");
+  try { return (await getAuth().verifyIdToken(tok)).uid; } catch { return null; }
+}
+async function tokenExchange(body) {
+  const r = await fetch("https://www.strava.com/oauth/token", { method: "POST", headers: { "content-type": "application/json" },
+    body: JSON.stringify(Object.assign({ client_id: CLIENT_ID.value(), client_secret: CLIENT_SECRET.value() }, body)) });
+  return r.ok ? r.json() : null;
+}
+async function forget(uid, athleteId) {
+  await tokRef(uid).delete().catch(() => {});
+  if (athleteId) await db.doc(`serverOnly/strava/athletes/${athleteId}`).delete().catch(() => {});
 }
 
-/** GET with Authorization: Bearer <Firebase ID token> → {url} to open Strava's consent screen. */
+/** GET + Firebase ID token → {url} for Strava's consent screen. */
 export const stravaStart = onRequest({ region: REGION, secrets: [CLIENT_SECRET], cors: true }, async (req, res) => {
-  const tok = (req.get("authorization") || "").replace(/^Bearer /, "");
-  let uid; try { uid = (await getAuth().verifyIdToken(tok)).uid; } catch { res.status(401).json({ error: "unauthenticated" }); return; }
-  const redirect = `https://${REGION}-${process.env.GCLOUD_PROJECT}.cloudfunctions.net/stravaCallback`;
-  const url = `https://www.strava.com/oauth/authorize?client_id=${encodeURIComponent(CLIENT_ID.value())}&response_type=code&approval_prompt=auto&scope=activity:read&redirect_uri=${encodeURIComponent(redirect)}&state=${encodeURIComponent(makeState(uid, CLIENT_SECRET.value()))}`;
-  res.json({ url });
+  const uid = await userOf(req); if (!uid) { res.status(401).json({ error: "unauthenticated" }); return; }
+  const redirectUri = `https://${REGION}-${process.env.GCLOUD_PROJECT}.cloudfunctions.net/stravaCallback`;
+  res.json({ url: authorizeUrl({ clientId: CLIENT_ID.value(), redirectUri, state: makeState(uid, CLIENT_SECRET.value()) }) });
 });
 
-/** Strava redirects here with ?code&state. Exchanges the code server-side; tokens go to a server-only collection. */
+/** Strava redirects here (?code&state&scope or ?error). Tokens only; back to the app with a status flag. */
 export const stravaCallback = onRequest({ region: REGION, secrets: [CLIENT_SECRET] }, async (req, res) => {
+  const back = s => res.redirect(302, `${APP_URL.value()}?strava=${s}`);
+  if (req.query.error) { back("denied"); return; }
   const uid = readState(req.query.state, CLIENT_SECRET.value());
-  if (!uid || !req.query.code) { res.status(400).send("Invalid state"); return; }
-  const r = await fetch("https://www.strava.com/oauth/token", { method: "POST", headers: { "content-type": "application/json" },
-    body: JSON.stringify({ client_id: CLIENT_ID.value(), client_secret: CLIENT_SECRET.value(), code: req.query.code, grant_type: "authorization_code" }) });
-  if (!r.ok) { res.status(502).send("Strava token exchange failed"); return; }
-  const t = await r.json();
-  // serverOnly/** is denied to every client by firestore.rules
-  await db.doc(`serverOnly/strava/tokens/${uid}`).set({ athleteId: t.athlete && t.athlete.id, access: t.access_token, refresh: t.refresh_token, expiresAt: t.expires_at, scope: String(req.query.scope || ""), updatedAt: FieldValue.serverTimestamp() });
-  await db.doc(`serverOnly/strava/athletes/${t.athlete && t.athlete.id}`).set({ uid });
-  res.status(200).send("Strava terhubung. Kembali ke WeRunIt.");
+  if (!uid || !req.query.code) { back("invalid"); return; }
+  if (!String(req.query.scope || "").split(",").includes("activity:read")) { back("scope"); return; }
+  const t = await tokenExchange({ code: String(req.query.code), grant_type: "authorization_code" });
+  if (!t) { back("error"); return; }
+  const athleteId = t.athlete && t.athlete.id;
+  await tokRef(uid).set({ athleteId, access: t.access_token, refresh: t.refresh_token, expiresAt: t.expires_at, scope: String(req.query.scope || ""), updatedAt: FieldValue.serverTimestamp() });
+  if (athleteId) await db.doc(`serverOnly/strava/athletes/${athleteId}`).set({ uid });
+  back("connected");
 });
 
-/** Strava webhook: GET = subscription validation, POST = activity events. Imports into users/{uid}/inbox for review in-app. */
-export const stravaWebhook = onRequest({ region: REGION, secrets: [CLIENT_SECRET] }, async (req, res) => {
+/** GET + ID token → {status, activities, fetchedAt}. Last 7 days only, fetched on demand, nothing persisted. */
+export const stravaRecent = onRequest({ region: REGION, secrets: [CLIENT_SECRET], cors: true }, async (req, res) => {
+  const uid = await userOf(req); if (!uid) { res.status(401).json({ status: "unauthenticated" }); return; }
+  const snap = await tokRef(uid).get(); if (!snap.exists) { res.json({ status: "disconnected", activities: [] }); return; }
+  const tok = snap.data(); let access = tok.access;
+  if (needsRefresh(tok.expiresAt)) {
+    const t = await tokenExchange({ grant_type: "refresh_token", refresh_token: tok.refresh });
+    if (!t) { res.json({ status: "expired", activities: [] }); return; }
+    access = t.access_token; await tokRef(uid).update({ access, refresh: t.refresh_token, expiresAt: t.expires_at });
+  }
+  const r = await fetch(`https://www.strava.com/api/v3/athlete/activities?after=${afterEpoch()}&per_page=50`, { headers: { authorization: `Bearer ${access}` } });
+  if (r.status === 401) { await forget(uid, tok.athleteId); res.json({ status: "revoked", activities: [] }); return; }
+  if (r.status === 429) { res.json({ status: "rate-limited", activities: [] }); return; }
+  if (!r.ok) { res.status(502).json({ status: "error", activities: [] }); return; }
+  res.set("Cache-Control", "no-store");
+  res.json({ status: "connected", activities: inWindow(await r.json()), fetchedAt: Date.now() });
+});
+
+/** POST + ID token → revoke at Strava and delete the stored tokens. */
+export const stravaDisconnect = onRequest({ region: REGION, secrets: [CLIENT_SECRET], cors: true }, async (req, res) => {
+  const uid = await userOf(req); if (!uid) { res.status(401).json({ status: "unauthenticated" }); return; }
+  const snap = await tokRef(uid).get();
+  if (snap.exists) {
+    const tok = snap.data();
+    await fetch("https://www.strava.com/oauth/deauthorize", { method: "POST", headers: { authorization: `Bearer ${tok.access}` } }).catch(() => {});
+    await forget(uid, tok.athleteId);
+  }
+  res.json({ status: "disconnected" });
+});
+
+/** Webhook: subscription validation and athlete de-authorisation only (activity events are ignored; nothing is imported). */
+export const stravaWebhook = onRequest({ region: REGION }, async (req, res) => {
   if (req.method === "GET") {
     if (req.query["hub.verify_token"] !== VERIFY_TOKEN.value()) { res.status(403).end(); return; }
     res.json({ "hub.challenge": req.query["hub.challenge"] }); return;
   }
-  res.status(200).end();                              // ack fast; Strava retries otherwise
+  res.status(200).end();
   const e = req.body || {};
-  if (e.object_type !== "activity" || e.aspect_type !== "create") return;
+  if (!isDeauth(e)) return;
   const link = await db.doc(`serverOnly/strava/athletes/${e.owner_id}`).get(); if (!link.exists) return;
-  const uid = link.data().uid, tokRef = db.doc(`serverOnly/strava/tokens/${uid}`), tok = (await tokRef.get()).data();
-  let access = tok.access;
-  if (tok.expiresAt * 1000 < Date.now() + 60e3) {
-    const r = await fetch("https://www.strava.com/oauth/token", { method: "POST", headers: { "content-type": "application/json" },
-      body: JSON.stringify({ client_id: CLIENT_ID.value(), client_secret: CLIENT_SECRET.value(), grant_type: "refresh_token", refresh_token: tok.refresh }) });
-    if (!r.ok) return;
-    const t = await r.json(); access = t.access_token;
-    await tokRef.update({ access, refresh: t.refresh_token, expiresAt: t.expires_at });
-  }
-  const a = await (await fetch(`https://www.strava.com/api/v3/activities/${e.object_id}`, { headers: { authorization: `Bearer ${access}` } })).json();
-  if (!/Run/.test(a.sport_type || a.type || "")) return;
-  // Only measured fields from Strava; missing values stay null.
-  await db.doc(`users/${uid}/inbox/strava_${a.id}`).set({ extId: "strava:" + a.id, src: "Strava", start: a.start_date, startLocal: a.start_date_local,
-    distance: a.distance ? Math.round(a.distance / 10) / 100 : 0, duration: a.moving_time || null, elev: a.total_elevation_gain ?? null,
-    hrAvg: a.has_heartrate ? a.average_heartrate : null, hrMax: a.has_heartrate ? a.max_heartrate : null, name: String(a.name || "").slice(0, 120), receivedAt: FieldValue.serverTimestamp() });
+  await forget(link.data().uid, e.owner_id);
 });

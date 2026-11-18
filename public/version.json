@@ -1,17 +1,17 @@
 {
- "version": "5.1.0",
- "build": "2026-11-18T08:53:09Z",
+ "version": "5.2.0",
+ "build": "2026-11-18T09:09:36Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "WeRunIt coach reset: Hari ini, Coach, Plan; prescriptions and confirmed adaptation; Strava blocked"
+  "Strava display-only connector (off until deployed): last 7 days shown, never stored, synced or analysed"
  ],
  "files": [
   {
    "p": "css/ds.css",
-   "h": "de04efcfefb3285171a448679d1879ed651bfc34614f5e2b01cf2efdc9047cf5",
-   "s": 30738
+   "h": "b965cb4d9de30ec9137714948a31c19e79e28f47cffc4613a39a466d7e459557",
+   "s": 31458
   },
   {
    "p": "css/runlab.css",
@@ -55,8 +55,8 @@
   },
   {
    "p": "index.html",
-   "h": "0f864cda57081137c847ed245f6fc71e376bac868ee4b7dcf746ffe974af1e7b",
-   "s": 285434
+   "h": "685424712ab8a8e5dcb33567a8ca3df5658078a136bee48fc0f6ddb54f8f9dbc",
+   "s": 285477
   },
   {
    "p": "js/app4.js",
@@ -75,8 +75,8 @@
   },
   {
    "p": "js/cloud-firebase.js",
-   "h": "f2f95bcb367a52b5c37f37081b793fc0b6df50b9ba02cfeb9280d85960e79b59",
-   "s": 22283
+   "h": "6934bf0e8a8e1612777c1ec0204155bce91db0e07d046e0e26c1599417358c3d",
+   "s": 22483
   },
   {
    "p": "js/coach/engine.js",
@@ -85,8 +85,8 @@
   },
   {
    "p": "js/coach/model.js",
-   "h": "00701a1f131b1057b0457a1efea4c82a23f43e3da405ba42584286616a99f676",
-   "s": 4141
+   "h": "58d4c9d0661396c4029e134f80759e172da067a4290f197c11396c1e22dd9917",
+   "s": 4167
   },
   {
    "p": "js/coach/plan.js",
@@ -94,9 +94,14 @@
    "s": 7221
   },
   {
+   "p": "js/coach/strava.js",
+   "h": "842881b59a13e6ddecfa9aa113c7d140074dd7acf78abe2f46d836e9e55c70c8",
+   "s": 4745
+  },
+  {
    "p": "js/coach/views-coach.js",
-   "h": "e4e591feaed502efc9780ba55dddd9e4f08eed4202cbfd209f3fcdf49f04a37f",
-   "s": 21587
+   "h": "17e5ce6a93dbdc96954623844babe03723fd6717a62dd1a3eeae4c9ebb645eaf",
+   "s": 24917
   },
   {
    "p": "js/companion.js",
@@ -220,7 +225,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "c68d5a1f73f386bac8c31528b0d507f72206c04d4d6058ca60dc5fb72a6fc8a8",
+   "h": "2867703ea7ce68a33a06512b3b6a7b2fd49a22866733937d5384295608c9d9ac",
    "s": 139
   },
   {
@@ -270,8 +275,8 @@
   },
   {
    "p": "sw.js",
-   "h": "98e0e25f3c7654b801624a9ff5e17b269c9327e13f265cca1e55c745476171f9",
-   "s": 2990
+   "h": "6206465b81b75a886709dfbd7af1443fe691225a1c80f017a91779ab873488d6",
+   "s": 3012
   },
   {
    "p": "vendor/capacitor/8.5.3/capacitor.js",

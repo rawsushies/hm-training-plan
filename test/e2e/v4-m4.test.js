@@ -35,7 +35,7 @@ test("Health Connect (Android bridge): read-only permission, runs only, review b
   await H.finishOnboarding(page);
   await page.evaluate(() => { if (document.querySelector("#tour")) document.querySelector('[data-act="tutClose"]').click(); });
   await H.act(page, "nav", { t: "more" });
-  assert.match(await page.textContent('[data-tour="sources"]'), /Health Connect[\s\S]*Strava[\s\S]*Diblokir/);
+  assert.match(await page.textContent('[data-tour="sources"]'), /Health Connect[\s\S]*Tersambung[\s\S]*Strava[\s\S]*hanya ditampilkan/i);
   await page.click('[data-act="hcSync"]');
   await page.waitForSelector('[data-act="impSave"]');
   const calls = await page.evaluate(() => window.__hc);

@@ -104,6 +104,8 @@ export async function createCloud(config, opts = {}) {
     async signInWithGoogleIdToken(idToken) {
       return userOf((await A.signInWithCredential(auth, A.GoogleAuthProvider.credential(idToken))).user);
     },
+    /** Firebase ID token for calling our own server functions (Strava display-only); null when signed out. */
+    async idToken() { return auth.currentUser ? auth.currentUser.getIdToken() : null; },
     async signOut() { const nat = nativeAuth(); if (nat) await nat.signOut().catch(() => {}); await A.signOut(auth); },
 
     /* ---------- Private records ---------- */

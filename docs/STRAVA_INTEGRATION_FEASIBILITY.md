@@ -1,6 +1,34 @@
 # Strava integration feasibility (product reset, M0)
 
-Status: **BLOCKED. No Strava OAuth, no Strava data ingestion, no Strava data to any AI.**
+Status (updated 2026-11-18): **DISPLAY-ONLY, built and tested, not deployed.**
+
+The owner chose display-only after being told that dropping AI does not lift the analysis and storage limits. What
+display-only means:
+
+- OAuth connect through our server function. The secret stays server-side; tokens are kept in `serverOnly/**`.
+- On demand, the server lists the athlete's activities from the last 7 days and returns only display fields.
+- The app keeps them in **this device's localStorage for at most 7 days**, per account.
+- They are shown back to the same athlete in Coach ("Strava · 7 hari terakhir"), as day tags in Plan, and as the
+  connection state in Settings.
+- **Never:** written to Firestore, saved as runs, synced, exported, analysed by the coach, used to change the plan, or
+  sent to any AI or third party.
+- Disconnect revokes access at Strava (`/oauth/deauthorize`) and deletes the stored tokens and the device cache.
+- The webhook handles only athlete de-authorisation.
+- Code: `functions/index.js`, `functions/strava-core.js`, `public/js/coach/strava.js`.
+- Tests: `test/unit/strava.test.js` and the e2e "Strava display-only" test, with the endpoints mocked.
+- **To activate (owner):**
+  1. Firebase Blaze plan.
+  2. A Strava API app (plus any subscription Strava requires).
+  3. `firebase functions:secrets:set STRAVA_CLIENT_SECRET`.
+  4. Params `STRAVA_CLIENT_ID`, `STRAVA_VERIFY_TOKEN` and `APP_URL`.
+  5. Add `functions` to `firebase.json`.
+  6. Deploy.
+  7. Set `window.HMTP_STRAVA_ENABLED = true` in `public/firebase-config.js`.
+  8. Set the Strava app's callback domain to the functions host.
+- Still **not verified** against the full policy text (the site is unreachable from this sandbox). The questions below
+  still apply.
+
+Earlier status: BLOCKED. No Strava OAuth, no Strava data ingestion, no Strava data to any AI.
 Date checked: 2026-11-18, on branch `claude/charming-cori-ge7n37`.
 
 ## How this was checked, and what could not be checked

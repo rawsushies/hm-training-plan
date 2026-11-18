@@ -102,6 +102,7 @@
       : `<section class="c-obsl" data-tour="observations">${groups.map(([k, l]) => { const os = A.observations.filter(o => o.kind === k); return os.length ? `<h2 class="ds-k c-gh">${l}</h2>${os.map(o => obsRow(o, COACH.open[o.id])).join("")}` : ""; }).join("")}</section>
       ${coverageBlock(A, sessions)}
       ${evidenceBlock(sessions)}`}
+      ${stravaList()}
     </div>`;
   };
 
@@ -131,7 +132,7 @@
     for (let i = 0; i < 7; i++) {
       const d = ymd(addDays(d0, i)), items = itemsOnDate(d);
       rows.push(`<li class="p-day${d === t ? " now" : ""}"><span class="p-dd"><b class="num">${parseYmd(d).getDate()}</b><span>${e(HARI[parseYmd(d).getDay()].slice(0, 3))}</span></span>
-        <span class="p-ss">${items.length ? items.map(s => sessRow(s)).join("") : '<span class="p-rest">Istirahat</span>'}</span></li>`);
+        <span class="p-ss">${items.length ? items.map(s => sessRow(s)).join("") : '<span class="p-rest">Istirahat</span>'}${SV.runsOn(SV.read(), d).map(a => `<span class="p-sv" title="Dari Strava, hanya ditampilkan">Strava · ${e(a.name || "lari")} · ${a.distanceKm !== null ? fmtKm(a.distanceKm) + " km" : "–"}</span>`).join("")}</span></li>`);
     }
     const planKm = w.total, doneKm = sum(logsIn(w.start, w.end).filter(l => !l.sample), l => l.distance);
     return `<section class="p-week">${D.head(`${label} · W${w.n}`, `<span class="ds-k">${fmtKm(doneKm)} / ${fmtKm(planKm)} km</span>`)}${D.meter(doneKm, Math.max(planKm, doneKm, 1), { tone: "pos", mark: planKm, label: `${fmtKm(doneKm)} dari ${fmtKm(planKm)} km` })}<ul class="p-days">${rows.join("")}</ul></section>`;
@@ -162,20 +163,44 @@
   const PLAN_KIND = () => { const k = activeEvent().distanceKm; return k >= 40 ? "marathon" : k >= 20 ? "half marathon" : k >= 9 ? "10K" : k >= 4.5 ? "5K" : "lari"; };
 
   /* ---------- Pengaturan (secondary) ---------- */
-  const PST = { connected: ["Tersambung", "pos"], disconnected: ["Belum tersambung", "mu"], connecting: ["Menyambung…", "acc"], "permission-limited": ["Izin terbatas", "warn"], expired: ["Kedaluwarsa", "warn"], revoked: ["Dicabut", "warn"], unavailable: ["Tidak tersedia di sini", "mu"], blocked: ["Diblokir", "bad"] };
+  const PST = { connected: ["Tersambung", "pos"], disconnected: ["Belum tersambung", "mu"], connecting: ["Menyambung…", "acc"], "permission-limited": ["Izin terbatas", "warn"], expired: ["Kedaluwarsa", "warn"], revoked: ["Dicabut", "warn"], unavailable: ["Tidak tersedia di sini", "mu"], "signed-out": ["Masuk dulu", "mu"], "rate-limited": ["Batas permintaan Strava", "warn"], error: ["Gagal", "bad"] };
   function hcStatus() {
     let native = false; try { native = typeof INTEG !== "undefined" && INTEG.env().native; } catch (err) { native = false; }
     if (!native) return "unavailable";
     const h = typeof DEVICE !== "undefined" ? DEVICE.hc : null;
     return h === "ok" ? "connected" : h === "na" ? "unavailable" : "disconnected";
   }
+  /* ---------- Strava (display-only) ---------- */
+  const SV = WRI_STRAVA; SV.bind(() => CLOUD);
+  const svRedirect = SV.fromRedirect(location.search);
+  if (svRedirect) { try { history.replaceState(null, "", location.pathname + location.hash); } catch (err) { /* ignore */ } }
+  let svTried = false;
+  function svAuto() {   // one on-demand refresh per app session once signed in and connected (or just returned from Strava)
+    const st = SV.status(); if (svTried || !["connected"].includes(st) || SV.ST.busy) return;
+    const c = SV.read(); if (c && Date.now() - c.fetchedAt < 30 * 6e4 && !svRedirect) return;
+    svTried = true; SV.refresh().then(() => render(true));
+  }
+  function stravaCtl() {
+    const st = SV.status(), busy = SV.ST.busy, c = SV.read();
+    if (st === "unavailable") return "";
+    if (st === "signed-out") return `<p class="c-meta">Masuk dengan Google untuk menyambungkan Strava.</p>`;
+    const btn = (act, label, pri) => `<button class="v5-btn${pri ? " pri" : ""}" data-act="${act}" ${busy ? 'disabled aria-busy="true"' : ""}>${busy ? "Memproses…" : label}</button>`;
+    return `<div class="p-rx-a">${["connected", "rate-limited", "error"].includes(st) ? btn("stravaRefresh", "Perbarui 7 hari") + btn("stravaDisconnect", "Putuskan") : btn("stravaConnect", st === "expired" || st === "revoked" ? "Sambungkan lagi" : "Sambungkan Strava", true)}</div>
+      ${c ? `<p class="c-meta">Diambil ${e(ageText(Date.now() - c.fetchedAt))} · ${c.activities.length} aktivitas · hapus otomatis setelah 7 hari</p>` : ""}${SV.ST.err ? `<p class="v5-warn" role="alert">${e(SV.ST.err)}</p>` : ""}`;
+  }
+  function stravaList() {
+    const c = SV.read(); if (!c || !c.activities.length) return "";
+    return `<section class="v5-panel c-strava" data-tour="strava">${D.head("Strava · 7 hari terakhir", `<span class="ds-k">hanya ditampilkan</span>`)}
+      <ul class="c-sv">${c.activities.map(a => `<li><span class="c-sv-d">${e(fmtDay(a.date))}</span><span class="c-sv-n">${e(a.name || a.sport)}</span><b class="num">${a.distanceKm !== null ? fmtKm(a.distanceKm) : "–"}</b><span class="mu">km</span><span class="num">${a.distanceKm && a.movingSec ? fmtPace(a.movingSec / a.distanceKm, false) + "/km" : "–"}</span></li>`).join("")}</ul>
+      <p class="c-meta">Data Strava tidak masuk ke daftar lari, analisis coach, atau penyesuaian rencana, dan terhapus dari perangkat ini setelah 7 hari.</p></section>`;
+  }
   const hcPlugin = () => { try { const v = INTEG.env(); return v.native && v.plugins.Health; } catch (err) { return false; } };
   vMore = function () {
-    const ps = CM.providers({ healthConnect: hcStatus() }), counts = [["Lari", S.logs.filter(l => !l.sample).length], ["Investigasi Lab (arsip)", Object.keys(S.lab || {}).length], ["Sepatu (arsip)", (S.shoes || []).length], ["Check-in (arsip)", (S.checkins || []).length], ["Latihan kekuatan", (S.strength || []).length]];
+    const ps = CM.providers({ healthConnect: hcStatus(), strava: SV.status() }), counts = [["Lari", S.logs.filter(l => !l.sample).length], ["Investigasi Lab (arsip)", Object.keys(S.lab || {}).length], ["Sepatu (arsip)", (S.shoes || []).length], ["Check-in (arsip)", (S.checkins || []).length], ["Latihan kekuatan", (S.strength || []).length]];
     const row = (t, k, body) => `<button class="c-set" data-act="nav" data-t="${k}">${ic(t, "c-set-ic")}<span>${body}</span>${ic("chev", "c-chev")}</button>`;
     return `<div class="v5 c-settings"><header class="v5-top"><div><h1 class="v5-h">Pengaturan</h1></div></header>
       <div data-tour="acct" class="v5-acct">${acctBox()}</div>
-      <section data-tour="sources">${D.head("Sumber data")}<ul class="c-src">${ps.map(p => `<li class="c-src-r"><span class="c-src-n"><b>${e(p.name)}</b><span class="c-src-s t-${PST[p.status][1]}"><i></i>${PST[p.status][0]}</span></span><span class="c-meta">${e(p.note)}</span>${p.id === "healthconnect" && hcPlugin() ? `<button class="v5-btn" data-act="hcSync" ${INTEG.busy ? "disabled aria-busy=\"true\"" : ""}>${INTEG.busy ? "Membaca…" : "Ambil 30 hari terakhir"}</button>` : ""}</li>`).join("")}</ul>
+      <section data-tour="sources">${D.head("Sumber data")}<ul class="c-src">${ps.map(p => `<li class="c-src-r"><span class="c-src-n"><b>${e(p.name)}</b><span class="c-src-s t-${PST[p.status][1]}"><i></i>${PST[p.status][0]}</span></span><span class="c-meta">${e(p.note)}</span>${p.id === "strava" ? stravaCtl() : ""}${p.id === "healthconnect" && hcPlugin() ? `<button class="v5-btn" data-act="hcSync" ${INTEG.busy ? "disabled aria-busy=\"true\"" : ""}>${INTEG.busy ? "Membaca…" : "Ambil 30 hari terakhir"}</button>` : ""}</li>`).join("")}</ul>
         <p class="c-meta">Impor file GPX/FIT/TCX tidak lagi tersedia. Lari yang pernah diimpor tetap tersimpan.</p></section>
       <section>${D.head("Aplikasi")}<div class="c-sets">${row("bell", "notif", "Pengingat")}${row("gear", "settings", "Tema, profil, satuan")}${row("db", "data", "Backup & ekspor")}${row("info", "about", `Tentang · v${e((window.HMTP_BUILD && window.HMTP_BUILD.version) || "")}`)}</div></section>
       <section>${D.head("Data tersimpan")}<ul class="c-cnt">${counts.map(([l, n]) => `<li><span>${e(l)}</span><b class="num">${n}</b></li>`).join("")}</ul><p class="c-meta">Fitur yang dihapus dari tampilan tidak menghapus datanya; semua ikut sinkron dan ekspor.</p></section>
@@ -189,6 +214,9 @@
     setTimeout(() => { const a = document.querySelector(".c-ans"); if (a) a.scrollIntoView({ block: "nearest" }); }, 0);
   }
   Object.assign(ACT, {
+    stravaConnect: () => { SV.connect().then(() => render(true)); render(true); },
+    stravaRefresh: () => { SV.refresh().then(() => { render(true); toast(SV.ST.err ? SV.ST.err : "Strava diperbarui", SV.ST.err ? "err" : "ok"); }); render(true); },
+    stravaDisconnect: () => { SV.disconnect().then(() => { render(true); toast(SV.ST.err ? SV.ST.err : "Strava diputus; data di perangkat dihapus", SV.ST.err ? "err" : "ok"); }); render(true); },
     planLog: d => { const s = sessById(d.id); if (!s) return; M = { kind: "qlog", q: { date: s.date, sessionId: s.id, type: s.type, km: s.dist || 5, dur: "", eff: 0 } }; render(true); },
     planAdapt: d => {
       const s = sessById(d.id); if (!s) return;
@@ -203,5 +231,7 @@
   });
   document.addEventListener("keydown", ev => { if (ev.key === "Enter" && ev.target && ev.target.id === "coach-q") { ev.preventDefault(); ACT.coachAsk(); } });
   document.addEventListener("toggle", ev => { const d = ev.target; if (d && d.matches && d.matches("details.c-obs")) COACH.open[d.dataset.obs] = d.open; }, true);
+  const _apC = afterPaint;
+  afterPaint = function () { _apC(); svAuto(); };
   window.__coach = { COACH, assessNow };
 })();

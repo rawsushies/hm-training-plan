@@ -25,7 +25,7 @@
     for (const l of (state && state.logs) || []) {
       const s = toSession(l);
       if (s.sample) { excluded.push({ id: s.id, reason: "contoh data" }); continue; }
-      if (s.source === "strava") { excluded.push({ id: s.id, reason: "data Strava tidak boleh dianalisis (kebijakan API Strava)" }); continue; }
+      if (s.source === "strava") { excluded.push({ id: s.id, reason: "data Strava hanya ditampilkan, tidak dianalisis (kebijakan API Strava)" }); continue; }
       out.push(s);
     }
     return { sessions: out.sort((a, b) => a.date.localeCompare(b.date)), excluded };
@@ -34,22 +34,19 @@
   const strengthFrom = state => ((state && state.strength) || []).filter(r => r && !r.sample && r.date).map(r => ({ id: String(r.id), date: String(r.date) }));
 
   /* ---------- Providers ---------- */
-  const STATUS = ["disconnected", "connecting", "connected", "permission-limited", "expired", "revoked", "unavailable", "blocked"];
-  const STRAVA_BLOCK = "Kebijakan API Strava (berlaku 1 Juni 2026) membatasi penyimpanan, analisis, dan penggunaan AI atas data Strava. Penggunaan ini belum terverifikasi diizinkan, jadi koneksi tidak dibuat. Lihat docs/STRAVA_INTEGRATION_FEASIBILITY.md.";
+  const STATUS = ["disconnected", "connecting", "connected", "permission-limited", "expired", "revoked", "unavailable", "signed-out", "rate-limited", "error"];
+  const STRAVA_NOTE = "Hanya ditampilkan: aktivitas 7 hari terakhir, disimpan di perangkat ini paling lama 7 hari. Tidak disimpan sebagai lari, tidak disinkronkan, tidak dianalisis coach, dan tidak dipakai untuk mengubah rencana (kebijakan API Strava).";
   function providers(env = {}) {
-    const hc = env.healthConnect || "unavailable";
+    const hc = env.healthConnect || "unavailable", sv = env.strava || "unavailable";
     return [
       { id: "manual", name: "Catatan manual", status: "connected", note: "Jarak, waktu, dan effort yang kamu isi sendiri." },
       { id: "healthconnect", name: "Health Connect", status: STATUS.includes(hc) ? hc : "unavailable", note: hc === "unavailable" ? "Hanya di aplikasi Android." : "Baca latihan dan jarak, dianalisis di perangkat." },
-      { id: "strava", name: "Strava", status: "blocked", note: STRAVA_BLOCK }
+      { id: "strava", name: "Strava", status: STATUS.includes(sv) ? sv : "unavailable", note: sv === "unavailable" ? "Server Strava belum diaktifkan oleh pemilik aplikasi. " + STRAVA_NOTE : STRAVA_NOTE, displayOnly: true }
     ];
   }
-  /** The Strava provider can never be connected from here (see the feasibility doc). */
-  function connect(id) { if (id === "strava") throw new Error(STRAVA_BLOCK); return true; }
-
   /** Field coverage across sessions: which questions can the data answer. */
   const FIELDS = [["distanceKm", "Jarak"], ["durationSec", "Durasi"], ["paceSecPerKm", "Pace"], ["rpe", "Effort (RPE)"], ["hrAvg", "Detak jantung"], ["elevGainM", "Elevasi"], ["startMin", "Jam mulai"]];
   function coverage(sessions) { const n = sessions.length; return FIELDS.map(([k, label]) => ({ k, label, have: sessions.filter(s => s[k] !== null).length, total: n })); }
 
-  G.WRI_COACH_MODEL = { toSession, sessionsFrom, strengthFrom, providers, connect, coverage, FIELDS, STATUS, STRAVA_BLOCK };
+  G.WRI_COACH_MODEL = { toSession, sessionsFrom, strengthFrom, providers, coverage, FIELDS, STATUS, STRAVA_NOTE };
 })(typeof globalThis !== "undefined" ? globalThis : this);

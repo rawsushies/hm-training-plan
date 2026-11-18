@@ -20,12 +20,13 @@ test("model: missing values stay null (no defaults), pace only when distance and
   assert.equal(M.toSession({ id: "b", date: TODAY, distance: 5, duration: 1500 }).paceSecPerKm, 300);
 });
 
-test("model: sample and Strava-origin runs never reach the coach; Strava provider is blocked and cannot connect", () => {
+test("model: sample and Strava-origin runs never reach the coach; Strava is display-only and off until the server is enabled", () => {
   const r = M.sessionsFrom({ logs: [{ id: "x", date: TODAY, distance: 5, sample: true }, { id: "y", date: TODAY, distance: 5, src: "Strava" }, { id: "z", date: TODAY, distance: 5 }] });
   assert.deepEqual(r.sessions.map(s => s.id), ["z"]);
   assert.match(r.excluded.find(e => e.id === "y").reason, /Strava/);
-  assert.equal(M.providers().find(p => p.id === "strava").status, "blocked");
-  assert.throws(() => M.connect("strava"), /Strava/);
+  const sv = M.providers().find(p => p.id === "strava");
+  assert.equal(sv.status, "unavailable"); assert.equal(sv.displayOnly, true); assert.match(sv.note, /tidak dianalisis coach/);
+  assert.equal(M.providers({ strava: "connected" }).find(p => p.id === "strava").status, "connected");
 });
 
 test("no history → every dimension is 'insufficient' with what is missing; no key insight is invented", () => {

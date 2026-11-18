@@ -65,6 +65,17 @@ Branch `claude/charming-cori-ge7n37`. Nothing has been deployed, merged or relea
 - **"Catat hasil" per session:** opens the quick sheet prefilled from that session.
 - **Tests:** unit 119/119, e2e 50/50 (new Plan e2e).
 
+## Strava display-only (done in code; not deployed)
+- Server functions:
+  - connect: `stravaStart`, `stravaCallback`;
+  - `stravaRecent`: last 7 days on demand, nothing persisted;
+  - `stravaDisconnect`;
+  - `stravaWebhook`: handles de-authorisation only.
+- Client `public/js/coach/strava.js`: a 7-day device cache, per account; the status shows in Settings.
+- Display: Coach list, Plan day tags.
+- Not deployed. Activation steps are in `docs/STRAVA_INTEGRATION_FEASIBILITY.md`.
+- Tests: unit 123/123 (4 Strava), e2e 51/51 (1 Strava flow with mocked endpoints).
+
 ## Next
 - M4 remainder: programme builder (running, endurance, strength, combined) with per-session purpose, warm-up, main set,
   cool-down and a shorter alternative; missed-session and fatigue adaptation proposed with a reason and applied only

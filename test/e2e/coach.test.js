@@ -77,7 +77,8 @@ test("removed Lab UI keeps its data: investigations stay stored, exported and sy
   assert.deepEqual(recs, ["lab/lab1"], "still a synced record");
   await H.act(page, "nav", { t: "more" });
   const src = await page.textContent('[data-tour="sources"]');
-  assert.match(src, /Catatan manual[\s\S]*Tersambung/); assert.match(src, /Health Connect[\s\S]*Tidak tersedia di sini/); assert.match(src, /Strava[\s\S]*Diblokir[\s\S]*Kebijakan API Strava/);
+  assert.match(src, /Catatan manual[\s\S]*Tersambung/); assert.match(src, /Health Connect[\s\S]*Tidak tersedia di sini/); assert.match(src, /Strava[\s\S]*Tidak tersedia di sini[\s\S]*Server Strava belum diaktifkan[\s\S]*tidak dianalisis coach/);
+  assert.equal(await page.$('[data-act="stravaConnect"]'), null, "no connect button while the server is off");
   assert.match(await page.textContent(".c-cnt"), /Investigasi Lab \(arsip\)\s*1/);
   assert.deepEqual(page.errors, []);
 });
@@ -103,5 +104,44 @@ test("Plan: each session opens to a prescription (no invented pace); a missed se
   assert.equal(await page.evaluate(id => S.status[id], id), "skip");
   assert.equal(await page.$('[data-tour="plan-adapt"]'), null);
   assert.ok(!/terlewat/i.test(await page.textContent(".c-plan")), "no guilt wording");
+  assert.deepEqual(page.errors, []);
+});
+
+test("Strava display-only: connect → back from Strava → last 7 days listed; never saved as runs, synced or analysed; disconnect clears the device cache", async () => {
+  const d = await H.device();
+  const FN = "https://asia-southeast2-demo-hmtp.cloudfunctions.net";
+  const today = new Date(), iso = x => `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, "0")}-${String(x.getDate()).padStart(2, "0")}`;
+  const yest = new Date(today); yest.setDate(today.getDate() - 1);
+  const calls = [];
+  await d.ctx.addInitScript(() => { window.HMTP_STRAVA_ENABLED = true; });
+  await d.ctx.route(FN + "/**", async r => {
+    const u = r.request().url(); calls.push([u.split("/").pop(), r.request().headers().authorization ? "auth" : "none"]);
+    if (u.endsWith("/stravaStart")) return r.fulfill({ json: { url: H.appUrl("&strava=connected") } });
+    if (u.endsWith("/stravaRecent")) return r.fulfill({ json: { status: "connected", fetchedAt: Date.now(), activities: [{ id: "9", name: "SYNTH pagi", sport: "Run", run: true, date: iso(yest), startLocal: iso(yest) + "T06:00:00", distanceKm: 8.1, movingSec: 2916, elevGainM: null, hrAvg: null }] } });
+    if (u.endsWith("/stravaDisconnect")) return r.fulfill({ json: { status: "disconnected" } });
+    return r.fulfill({ status: 404, body: "" });
+  });
+  const { page } = d; await H.open(page);
+  await H.signIn(page, "rina"); await H.waitSynced(page);
+  await H.act(page, "nav", { t: "more" });
+  assert.match(await page.textContent('[data-tour="sources"]'), /Strava[\s\S]*Belum tersambung/);
+  await page.click('[data-act="stravaConnect"]');
+  await page.waitForURL(/strava=connected|\/\?emulator=1$/);
+  await H.ready(page);
+  await H.waitFor(page, () => !!localStorage.getItem(Object.keys(localStorage).find(k => k.startsWith("hmtp:strava:recent:")) || "x"));
+  assert.ok(!/strava=/.test(page.url()), "status flag removed from the address bar");
+  assert.ok(calls.every(c => c[1] === "auth"), "every server call carries the Firebase ID token");
+  await H.act(page, "nav", { t: "more" });
+  assert.match(await page.textContent('[data-tour="sources"]'), /Strava[\s\S]*Tersambung[\s\S]*1 aktivitas · hapus otomatis setelah 7 hari/);
+  await H.act(page, "nav", { t: "log" });
+  assert.match(await page.textContent('[data-tour="strava"]'), /hanya ditampilkan[\s\S]*SYNTH pagi[\s\S]*8,1[\s\S]*tidak masuk ke daftar lari/);
+  assert.equal(await page.evaluate(() => S.logs.length), 0, "not saved as a run");
+  assert.ok(!(await page.evaluate(() => JSON.stringify(HMTP.stateToRecords(S)))).includes("SYNTH"), "not in synced records");
+  assert.match(await page.textContent('[data-tour="observations"]'), /Belum cukup data|belum punya bahan/i, "coach ignores Strava data");
+  await H.act(page, "nav", { t: "plan" });
+  await H.act(page, "nav", { t: "more" });
+  await page.click('[data-act="stravaDisconnect"]');
+  await H.waitFor(page, () => !Object.keys(localStorage).some(k => k.startsWith("hmtp:strava:recent:")));
+  assert.match(await page.textContent('[data-tour="sources"]'), /Strava[\s\S]*Belum tersambung/);
   assert.deepEqual(page.errors, []);
 });
