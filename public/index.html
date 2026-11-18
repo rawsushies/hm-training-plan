@@ -280,6 +280,9 @@ ol.steps li{margin:4px 0}
 <script src="js/shoe-catalog.js"></script>
 <script src="js/integrations.js"></script>
 <script src="js/lab/lab.js"></script>
+<script src="js/lab/analysis.js"></script>
+<script src="js/lab/charts.js"></script>
+<script src="js/lab/research.js"></script>
 <script src="js/updater.js"></script>
 <script>
 "use strict";
@@ -1024,7 +1027,7 @@ function render(keep){
       ${NAV_MORE.map(([k,l]) => `<button class="${tab===k?'on':''}" data-act="nav" data-t="${k}">${l}</button>`).join("")}
 
     </nav>
-    <main>${updateBanner()}${(views[tab] || vHome)()}</main>
+    <main class="tab-${esc(tab)}">${updateBanner()}${(views[tab] || vHome)()}</main>
   </div>
   ${M ? modal() : ""}
   ${RUN && !M ? runOverlay() : ""}

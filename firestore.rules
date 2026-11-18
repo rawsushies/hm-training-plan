@@ -71,11 +71,13 @@ service cloud.firestore {
         // RUNLAB investigation: bounded size and shape (the client sanitizer is the full validator).
         function validLab(x) {
           return x is map
-            && x.keys().hasOnly(['id', 'schema', 'createdAt', 'updatedAt', 'question', 'questionEdited', 'type', 'typeSource', 'matched', 'answers', 'status', 'notes', 'snapshots'])
+            && x.keys().hasOnly(['id', 'schema', 'createdAt', 'updatedAt', 'question', 'questionEdited', 'type', 'typeSource', 'matched', 'answers', 'status', 'notes', 'snapshots', 'sources'])
             && x.id == docId && x.question is string && x.question.size() >= 1 && x.question.size() <= 500
             && x.type in ['performance', 'consistency', 'comparison', 'environment', 'equipment', 'recovery', 'experiment']
             && (!('answers' in x) || (x.answers is map && x.answers.size() <= 12))
             && (!('notes' in x) || (x.notes is string && x.notes.size() <= 2000))
+            && (!('snapshots' in x) || (x.snapshots is list && x.snapshots.size() <= 4))
+            && (!('sources' in x) || (x.sources is list && x.sources.size() <= 12))
             && (!('questionEdited' in x) || (x.questionEdited is string && x.questionEdited.size() <= 500));
         }
         function validRun(r) {

@@ -1,17 +1,17 @@
 {
- "version": "4.1.0",
- "build": "2026-11-18T02:09:15Z",
+ "version": "4.2.0",
+ "build": "2026-11-18T02:55:48Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "RUNLAB: tab Lab untuk menyelidiki pertanyaan tentang larimu (tahap 1)"
+  "Lab baru: tampilan workspace, analisis dari catatanmu (volume, tren pace, perbandingan, kualitas data), riset PubMed/OpenAlex"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "7cb41a1dc29d3b0da44fe838e2d80e64c80688585515ea7cfb802882b4d3901d",
-   "s": 86802
+   "h": "2dd6906076e81abc4c3da78a04bbb7fb9393dc3bc27963e76fcba61010247be6",
+   "s": 99918
   },
   {
    "p": "favicon-32.png",
@@ -45,8 +45,8 @@
   },
   {
    "p": "index.html",
-   "h": "9b103206e49e34bb8344afda32f690924db95fd889c167f72c7b868e6bb3a330",
-   "s": 284421
+   "h": "f84b9b9dbe6dfca1bf727c11dc47f8e7f84f2c9ed1449e3c3de89e10456d95bd",
+   "s": 284572
   },
   {
    "p": "js/app4.js",
@@ -70,8 +70,8 @@
   },
   {
    "p": "js/companion.js",
-   "h": "179229f40fb20d172a79b95916f97e2bb287e5263b00a2437ae4f019f9c05e43",
-   "s": 14988
+   "h": "b8368fdfafcfa665cd3ec7d08f21f3c7d0874976f56f5402c58cf0d0f09b3950",
+   "s": 14994
   },
   {
    "p": "js/integrations.js",
@@ -79,14 +79,29 @@
    "s": 5213
   },
   {
+   "p": "js/lab/analysis.js",
+   "h": "d0be5606f18dc767f7d0f5da0e96a7cffb626ed7cf28e707f5f1987a4abc3ba3",
+   "s": 17303
+  },
+  {
+   "p": "js/lab/charts.js",
+   "h": "d9fb31b087af23768fe3c36455f21b0f247e622b7912eb8773bd6999cec89e8c",
+   "s": 10464
+  },
+  {
    "p": "js/lab/lab.js",
-   "h": "4c7b4a6f3a62b5ceb49d22fd2b279773d4be1ae53e04306f8f9555b6e49a806d",
-   "s": 16347
+   "h": "367838ebdbd872e38d9ead49104287661aad42413cbde173bd0a056869a21084",
+   "s": 20422
+  },
+  {
+   "p": "js/lab/research.js",
+   "h": "8ea9b1e91f8734b8be1c064b6772eed437513a273f3e9c0cf9a5cc024729714d",
+   "s": 11282
   },
   {
    "p": "js/lab/views-lab.js",
-   "h": "0ee48babc17d181a858f5f02d980f10169efc05978d6c7d23902ae47f9df1c80",
-   "s": 16633
+   "h": "bfd862a8008af3965a6a6a9136a7222d1add7d885a640de60ae4fed34be15ffb",
+   "s": 38455
   },
   {
    "p": "js/logic.js",
@@ -155,7 +170,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "ee117c74abc084b2742b1cc2e854b8a534cab2449d311c20dd7e36678192b4a7",
+   "h": "e31b7f18df1fab9baa415d5232411a38b93173cb9de38441347d2ae4e061ac3d",
    "s": 139
   },
   {
@@ -205,8 +220,8 @@
   },
   {
    "p": "sw.js",
-   "h": "3913ea63a1d103fc3a27c3610580a79a250bdd525d44b1aca9b89e935f939501",
-   "s": 2732
+   "h": "af623cd9cc6cf0f7a3a2f5e31a85f8f4ae9981cccd225e1124b332cd44ef0d0e",
+   "s": 2796
   },
   {
    "p": "vendor/capacitor/8.5.3/capacitor.js",

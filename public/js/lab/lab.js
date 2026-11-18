@@ -44,20 +44,20 @@
       { k: "focus", q: "Yang paling ingin kamu pahami?", why: "Frekuensi dan volume bisa bergerak berlawanan.", opts: [{ v: "freq", l: "Berapa kali lari per minggu" }, { v: "volume", l: "Total km per minggu" }, { v: "missed", l: "Sesi yang terlewat" }] }],
     comparison: [WINDOW,
       { k: "groups", q: "Dua kelompok apa yang dibandingkan?", why: "Perbandingan butuh dua kelompok yang jelas.", opts: [{ v: "time", l: "Pagi vs sore/malam" }, { v: "type", l: "Easy vs long run" }, { v: "period", l: "Bulan ini vs bulan lalu" }, { v: "shoe", l: "Sepatu A vs B" }] },
-      { k: "match", q: "Lari dianggap “mirip” kalau…", why: "Aturan pencocokan menentukan perbandingan yang adil.", opts: [{ v: "distance", l: "Jaraknya mirip (±20%)" }, { v: "type", l: "Jenis sesinya sama" }, { v: "both", l: "Dua-duanya" }] }],
+      { k: "match", dep: ["groups"], q: "Lari dianggap “mirip” kalau…", why: "Aturan pencocokan menentukan perbandingan yang adil.", opts: [{ v: "distance", l: "Jaraknya mirip (±20%)" }, { v: "type", l: "Jenis sesinya sama" }, { v: "both", l: "Dua-duanya" }] }],
     environment: [WINDOW,
       { k: "factor", q: "Faktor apa yang kamu curigai?", why: "Tiap faktor butuh data berbeda.", opts: [{ v: "heat", l: "Panas / lembap" }, { v: "elev", l: "Tanjakan" }, { v: "time", l: "Jam lari (pagi vs malam)" }] },
-      { k: "measure", q: "Kamu menilainya dari apa?", why: "Pace dan rasa capek bisa memberi jawaban berbeda.", opts: [{ v: "pace", l: "Pace" }, { v: "rpe", l: "Rasa berat (RPE)" }, { v: "hr", l: "Detak jantung" }] }],
+      { k: "measure", dep: ["factor"], q: "Kamu menilainya dari apa?", why: "Pace dan rasa capek bisa memberi jawaban berbeda.", opts: [{ v: "pace", l: "Pace" }, { v: "rpe", l: "Rasa berat (RPE)" }, { v: "hr", l: "Detak jantung" }] }],
     equipment: [WINDOW,
       { k: "shoeA", q: "Sepatu pertama?", why: "Perbandingan butuh dua sepatu yang jelas.", shoes: true },
-      { k: "shoeB", q: "Dibandingkan dengan?", why: "Sepatu kedua untuk pembanding.", shoes: true },
+      { k: "shoeB", dep: ["shoeA"], q: "Dibandingkan dengan?", why: "Sepatu kedua untuk pembanding.", shoes: true },
       { k: "measure", q: "Yang kamu rasakan beda di mana?", why: "Menentukan ukuran yang dipakai.", opts: [{ v: "pace", l: "Pace" }, { v: "rpe", l: "Rasa berat (RPE)" }, { v: "comfort", l: "Nyaman / pegal setelahnya" }] }],
     recovery: [WINDOW,
       { k: "signal", q: "Sinyal mana yang ingin kamu amati?", why: "Diambil dari check-in harianmu; ini observasi, bukan diagnosis.", opts: [{ v: "sleep", l: "Tidur" }, { v: "soreness", l: "Pegal" }, { v: "fatigue", l: "Capek" }, { v: "energy", l: "Tenaga" }] },
-      { k: "against", q: "Dibandingkan dengan apa?", why: "Pengamatan butuh pembanding.", opts: [{ v: "load", l: "Jarak/beban lari hari sebelumnya" }, { v: "long", l: "Hari setelah long run" }, { v: "trend", l: "Trennya saja" }] }],
+      { k: "against", dep: ["signal"], q: "Dibandingkan dengan apa?", why: "Pengamatan butuh pembanding.", opts: [{ v: "load", l: "Jarak/beban lari hari sebelumnya" }, { v: "long", l: "Hari setelah long run" }, { v: "trend", l: "Trennya saja" }] }],
     experiment: [
       { k: "variable", q: "Satu hal apa yang ingin kamu ubah?", why: "Eksperimen yang bisa dipercaya mengubah satu variabel saja.", text: true, ph: "misal: lari pagi, bukan malam" },
-      { k: "outcome", q: "Hasil apa yang mau diamati?", why: "Ukuran hasil ditentukan sebelum mulai.", opts: [{ v: "pace", l: "Pace di easy run" }, { v: "rpe", l: "Rasa berat (RPE)" }, { v: "sleep", l: "Tidur setelahnya" }] },
+      { k: "outcome", dep: ["variable"], q: "Hasil apa yang mau diamati?", why: "Ukuran hasil ditentukan sebelum mulai.", opts: [{ v: "pace", l: "Pace di easy run" }, { v: "rpe", l: "Rasa berat (RPE)" }, { v: "sleep", l: "Tidur setelahnya" }] },
       WINDOW]
   };
   const ans = (inv, k) => inv.answers && inv.answers[k];
@@ -75,8 +75,26 @@
     a[k] = { v: state === "answered" ? v : null, state, at: now };
     return Object.assign({}, inv, { answers: a, updatedAt: now });
   }
-  /** Re-open an earlier question (correction): removes it and nothing else. */
-  function reopen(inv, k, now = new Date().toISOString()) { const a = Object.assign({}, inv.answers); delete a[k]; return Object.assign({}, inv, { answers: a, updatedAt: now, status: "draft" }); }
+  /** Re-open an earlier question (correction): removes it and every later answer that depends on it (transitively).
+   *  Saved analysis snapshots stay, but no longer match the answers (see stage/snapshotFresh), so they show as outdated. */
+  function reopen(inv, k, now = new Date().toISOString()) {
+    const a = Object.assign({}, inv.answers), st = Q[inv.type] || Q.performance, gone = new Set([k]);
+    let grew = true;
+    while (grew) { grew = false; for (const s of st) if (!gone.has(s.k) && (s.dep || []).some(d => gone.has(d))) { gone.add(s.k); grew = true; } }
+    gone.forEach(x => delete a[x]);
+    return Object.assign({}, inv, { answers: a, updatedAt: now, status: inv.status === "closed" ? "closed" : "draft" });
+  }
+  /** Stable key of the answers: a snapshot is fresh only while the answers it was computed from are unchanged. */
+  const answersKey = inv => JSON.stringify(Object.keys(inv.answers || {}).sort().map(k => [k, inv.answers[k].state, inv.answers[k].v])) + "|" + inv.type;
+  const snapshotFresh = (inv, snap) => !!snap && snap.answersKey === answersKey(inv);
+  /** Investigation stage, derived only from real state. */
+  const STAGES = { draft: "Draft", context: "Mengumpulkan konteks", ready: "Siap dianalisis", findings: "Temuan tersedia", archived: "Diarsipkan" };
+  function stage(inv, shoes) {
+    if (inv.status === "closed") return "archived";
+    if (!Object.keys(inv.answers || {}).length) return "draft";
+    if (nextQuestion(inv, shoes)) return "context";
+    return (inv.snapshots || []).some(s => snapshotFresh(inv, s)) ? "findings" : "ready";
+  }
 
   // ---------- scope ----------
   const FIELDS = [
@@ -160,6 +178,14 @@
       matched: Array.isArray(x.matched) ? x.matched.filter(m => typeof m === "string").slice(0, 8).map(m => m.slice(0, 40)) : [],
       answers: {}, status: ["draft", "scoped", "closed"].includes(x.status) ? x.status : "draft", notes: str(x.notes, 2000) };
     if (str(x.questionEdited, 500).trim()) o.questionEdited = str(x.questionEdited, 500).trim();
+    if (Array.isArray(x.sources)) {
+      const src = x.sources.slice(0, 12).map(cleanSource).filter(Boolean);
+      if (src.length) o.sources = src;
+    }
+    if (Array.isArray(x.snapshots)) {
+      const snaps = x.snapshots.slice(0, 4).map(cleanSnapshot).filter(Boolean);
+      if (snaps.length) o.snapshots = snaps;
+    }
     if (x.answers && typeof x.answers === "object") for (const [k, a] of Object.entries(x.answers).slice(0, 12)) {
       if (!/^[a-zA-Z]{1,20}$/.test(k) || !a || !["answered", "skipped", "unknown"].includes(a.state)) continue;
       const v = a.state !== "answered" ? null : typeof a.v === "number" && isFinite(a.v) ? a.v : typeof a.v === "string" ? a.v.slice(0, 200) : null;
@@ -167,11 +193,30 @@
     }
     return o;
   }
+  const AIDS = ["weekly", "trend", "compare", "quality"];
+  function cleanSnapshot(sn) {
+    if (!sn || typeof sn !== "object" || !AIDS.includes(sn.analysisId) || typeof sn.methodVersion !== "string" || !ISO(sn.createdAt)) return null;
+    let metrics = null;
+    try { const j = JSON.stringify(sn.metrics || null); metrics = j && j.length <= 30000 ? JSON.parse(j) : null; } catch (e) { metrics = null; }
+    return { analysisId: sn.analysisId, methodVersion: sn.methodVersion.slice(0, 20), createdAt: sn.createdAt, answersKey: str(sn.answersKey, 2000),
+      window: sn.window && typeof sn.window === "object" ? { from: typeof sn.window.from === "string" ? sn.window.from.slice(0, 10) : null, to: str(sn.window.to, 10) } : null,
+      n: Number.isInteger(sn.n) && sn.n >= 0 ? sn.n : 0, adequacy: ["adequate", "limited", "insufficient"].includes(sn.adequacy) ? sn.adequacy : "insufficient",
+      includedRecordIds: Array.isArray(sn.includedRecordIds) ? sn.includedRecordIds.filter(i => ID_RE.test(i)).slice(0, 400) : [],
+      excludedCount: Number.isInteger(sn.excludedCount) ? sn.excludedCount : 0, metrics };
+  }
+  /** A saved research source: only provider-returned fields, https links, bounded sizes. */
+  function cleanSource(x) {
+    if (!x || typeof x !== "object" || !/^(doi|pmid|openalex):/.test(x.id || "") || !str(x.title, 300).trim() || !/^https:\/\/[^\s"<>]+$/.test(x.url || "")) return null;
+    return { id: str(x.id, 120), provider: str(x.provider, 30), title: str(x.title, 300), authors: Array.isArray(x.authors) ? x.authors.filter(a => typeof a === "string").slice(0, 6).map(a => a.slice(0, 80)) : [],
+      year: Number.isInteger(x.year) && x.year > 1800 && x.year < 2200 ? x.year : null, journal: str(x.journal, 160), pmid: /^\d{1,10}$/.test(x.pmid || "") ? x.pmid : null, doi: str(x.doi, 200) || null,
+      url: x.url, kind: ["meta", "review", "rct", "guideline", "primary", "article"].includes(x.kind) ? x.kind : "article", kindLabel: str(x.kindLabel, 40), retrievedAt: ISO(x.retrievedAt) || null };
+  }
   /** Self-describing export (snapshot of question, answers and the scope as computed now). */
   function exportJson(inv, sc, exportedAt = new Date().toISOString()) {
-    return { kind: "werunit-lab-investigation", schema: SCHEMA, exportedAt, methods: { scope: METHOD, analysis: null, research: null, synthesis: null },
+    const snaps = (inv.snapshots || []).filter(s => snapshotFresh(inv, s));
+    return { kind: "werunit-lab-investigation", schema: SCHEMA, exportedAt, methods: { scope: METHOD, analysis: snaps.length ? snaps.map(s => s.methodVersion) : null, research: null, synthesis: null },
       investigation: inv, scope: sc ? { window: sc.window, included: sc.included, excluded: sc.excluded, coverage: sc.coverage, missingNeeded: sc.missingNeeded, plan: sc.plan, confounders: sc.confounders } : null,
-      note: "Snapshot. Analysis, research and AI synthesis were not available for this investigation." };
+      note: snaps.length ? "Snapshot. Deterministic analyses included with their method versions and exact record ids. No AI synthesis." : "Snapshot. Analysis, research and AI synthesis were not available for this investigation." };
   }
 
   // Seams for later milestones (empty / unavailable on purpose).
@@ -186,5 +231,5 @@
     "Apakah tidurku berubah setelah long run?"
   ];
 
-  G.WRI_LAB = { SCHEMA, METHOD, TYPES, RULES, classify, steps, nextQuestion, answer, reopen, scope, newInvestigation, cleanInvestigation, exportJson, ANALYSES, provider: NullProvider, research: null, STARTERS };
+  G.WRI_LAB = { SCHEMA, METHOD, TYPES, RULES, STAGES, stage, answersKey, snapshotFresh, cleanSnapshot, cleanSource, classify, steps, nextQuestion, answer, reopen, scope, newInvestigation, cleanInvestigation, exportJson, ANALYSES, provider: NullProvider, research: null, STARTERS };
 })(typeof globalThis !== "undefined" ? globalThis : this);
