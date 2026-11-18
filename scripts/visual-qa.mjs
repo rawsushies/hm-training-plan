@@ -43,6 +43,7 @@ async function page(vp, theme, seed) {
 const snap = async (p, name, full = false) => { if (only && !name.includes(only)) return; const f = `${out}/${name}.png`; await p.screenshot({ path: f, fullPage: full }); shots.push(f); };
 const overflow = p => p.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
 const report = [];
+const top = p => p.evaluate(() => window.scrollTo(0, 0));
 for (const [label, vp] of [["m390", { width: 390, height: 844 }], ["t768", { width: 768, height: 1024 }], ["d1440", { width: 1440, height: 900 }], ["n320", { width: 320, height: 640 }], ["l844", { width: 844, height: 390 }]]) {
   for (const theme of label === "m390" || label === "d1440" ? ["dark", "light"] : ["dark"]) {
     // empty state
@@ -62,7 +63,7 @@ for (const [label, vp] of [["m390", { width: 390, height: 844 }], ["t768", { wid
     await p.waitForTimeout(300); await snap(p, `${label}-${theme}-inv-evidence`, true);
     await p.click('[data-act="labAnalyze"]'); await p.waitForTimeout(500);
     await p.click('#ch-compare [data-act="chartSel"]').catch(() => {});
-    await snap(p, `${label}-${theme}-inv-findings`, true);
+    await top(p); await snap(p, `${label}-${theme}-inv-findings`, true);
     report.push([label, theme, "populated overflow", await overflow(p), p.errs.slice()]);
     await b.close();
   }

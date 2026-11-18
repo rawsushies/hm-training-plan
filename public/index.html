@@ -249,6 +249,7 @@ ol.steps li{margin:4px 0}
 .banner{display:flex;gap:12px;align-items:center;padding:10px 12px;border:1px solid var(--acc);border-radius:8px;background:var(--s1);margin-bottom:14px}
 </style>
 <link rel="stylesheet" href="css/werunit.css">
+<link rel="stylesheet" href="css/runlab.css">
 </head>
 <body>
 <div id="boot" role="status" aria-live="polite" aria-label="Memuat WeRunIt">
@@ -1070,7 +1071,8 @@ function afterPaint(){
   app.querySelectorAll("[data-roll]").forEach(el => WRI_MOTION.rollNumber(el, +el.dataset.roll, v => el.dataset.fmt === "km" ? fmtKm(v) : String(Math.round(v))));
 }
 let toastT;
-function toast(msg){ const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("on"), 2600); }
+/** Snackbar: short, temporary, never blocks content. kind: "ok" | "err" | "info" (guessed from wording when omitted). */
+function toast(msg, kind){ const t = document.getElementById("toast"); t.textContent = msg; t.dataset.kind = kind || (/gagal|error|tidak bisa|belum bisa/i.test(msg) ? "err" : /^✓|tersimpan|disimpan|selesai|dihapus|diperbarui/i.test(msg) ? "ok" : "info"); t.setAttribute("role", kind === "err" ? "alert" : "status"); t.classList.remove("on"); void t.offsetWidth; t.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("on"), t.dataset.kind === "err" ? 4200 : 2600); }
 const pageHead = (title) => `<div class="pagehead"><button class="back" data-act="nav" data-t="more">‹ Menu</button></div><div class="titlerow"><h1>${title}</h1>${helpBtn(S.ui.tab)}</div>`;   // explanations live behind the ? help button
 const pill = (type, label) => `<span class="pill" style="--c:${tc(type)}"><i></i>${label || TYPES[type]}</span>`;
 const storageNote = () => STORAGE_OK ? "" : `<div class="note bad" style="margin-bottom:12px">Browser ini nggak bisa nyimpen data. Kalau halaman ditutup, perubahan bisa hilang. Pakai Export buat backup.</div>`;

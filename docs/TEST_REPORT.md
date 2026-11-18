@@ -1,5 +1,21 @@
 # Test report
 
+## RUNLAB redesign 2 + research hardening (18 Nov 2026, branch `claude/charming-cori-ge7n37`)
+
+| Suite | Result |
+|---|---|
+| `npm test` | **106 / 106 pass**: adds `research-fixtures.test.js` (synthetic PubMed/OpenAlex fixtures: parsing, normalization, dedupe, relevance, timeout, retry, malformed JSON, cache/offline/stale, markup stripping) and `analysis.test.js` grade/leadBand tests |
+| `npm run test:rules` | **23 / 23 pass** |
+| `npm run test:e2e` | **55 / 55 pass** (incl. `runlab.test.js`: evidence grade, metric n vs eligible, snackbar kind/size, FAB hidden on Lab, collapsible inspector) |
+| `npm run check:release` | 4.3.0 verified (local manifest only; not deployed) |
+| Visual QA (`node scripts/visual-qa.mjs`) | 390×844, 768×1024, 1440×900, 320×640, 844×390; dark and light at 390 and 1440. No horizontal overflow, no console errors; screenshots inspected |
+| Keyboard probe | chart marks focusable (`role=button`, labelled); focus shows the tooltip; Enter pins the readout; no unnamed controls |
+
+**Unverified (needs network or a device):** live PubMed E-utilities and OpenAlex calls (CORS headers, real field values,
+the real keyless-budget 429 body), Android WebView rendering, touch inspection, and safe areas on a physical phone. Fixture
+results are synthetic (`[FIXTURE]` titles, PMIDs 999999xx, DOI prefix `10.0000/werunit-fixture`) and are never shown as
+live research.
+
 ## RUNLAB M1 (18 Nov 2026, branch `claude/charming-cori-ge7n37`)
 
 | Suite | Result |

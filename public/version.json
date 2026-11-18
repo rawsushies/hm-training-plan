@@ -1,18 +1,23 @@
 {
- "version": "4.2.0",
- "build": "2026-11-18T03:00:40Z",
+ "version": "4.3.0",
+ "build": "2026-11-18T03:30:56Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "Lab baru: workspace, analisis dari catatanmu (volume, tren pace, perbandingan, kualitas data), riset PubMed/OpenAlex",
-  "Perbaikan: cek badan satu-tap tidak lagi mengisi jawaban check-in; rasio beban tanpa label aman/bahaya; Siap tanpa angka sebelum ada baseline"
+  "RUNLAB: tampilan Lab baru — temuan utama dengan tingkat bukti, grafik lebih besar dengan inspeksi, inspektur data, snackbar ringkas",
+  "Riset: PubMed/OpenAlex lebih tahan gangguan (timeout, ulang, cache, offline)"
  ],
  "files": [
   {
+   "p": "css/runlab.css",
+   "h": "c40289b03c7d46a2d3cf0bab861a7be1d6e340bd2633469cd7653ce87077e04e",
+   "s": 27110
+  },
+  {
    "p": "css/werunit.css",
-   "h": "2dd6906076e81abc4c3da78a04bbb7fb9393dc3bc27963e76fcba61010247be6",
-   "s": 99918
+   "h": "c7ebfdadf9251a17f29a25e6b00567832fa1880484f3fb99c91cdad3b59a0ba6",
+   "s": 84807
   },
   {
    "p": "favicon-32.png",
@@ -46,8 +51,8 @@
   },
   {
    "p": "index.html",
-   "h": "1abe1c8bcb16803845f97f7128553dce8c61dde955a7ad5a53170be7676fbe4d",
-   "s": 284614
+   "h": "6430b12614bcfd734652b1f491aab51301e79f9b069ee058f3373fbd17c03a52",
+   "s": 285094
   },
   {
    "p": "js/app4.js",
@@ -81,13 +86,13 @@
   },
   {
    "p": "js/lab/analysis.js",
-   "h": "d0be5606f18dc767f7d0f5da0e96a7cffb626ed7cf28e707f5f1987a4abc3ba3",
-   "s": 17303
+   "h": "509e73057e44adb98b8af5db39a715ea41e058318407b168227ccf94711e15f5",
+   "s": 20656
   },
   {
    "p": "js/lab/charts.js",
-   "h": "d9fb31b087af23768fe3c36455f21b0f247e622b7912eb8773bd6999cec89e8c",
-   "s": 10464
+   "h": "87e8dce4af3123f0adc11a85c12e1dd3e70a65b979ec2722b72cab2ff55f2f9c",
+   "s": 11347
   },
   {
    "p": "js/lab/consult.js",
@@ -101,13 +106,13 @@
   },
   {
    "p": "js/lab/research.js",
-   "h": "8ea9b1e91f8734b8be1c064b6772eed437513a273f3e9c0cf9a5cc024729714d",
-   "s": 11282
+   "h": "3930ed5f396869aebaf9efe96cd6f129fb1da3c0905a3bc5938047ea90dadf31",
+   "s": 13716
   },
   {
    "p": "js/lab/views-lab.js",
-   "h": "03297270e91adc6b8f7c6cf6517e5eef34e3ef6c208ed2b2a4515f91102ad385",
-   "s": 39815
+   "h": "06d8a4271bc00dbaf0dc6d49fbacf8c66bc956527e5b84fb6fcdafdf5ce48c7d",
+   "s": 49969
   },
   {
    "p": "js/logic.js",
@@ -176,7 +181,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "9855568f55082aeacc9ac6ebf3b8d9e08fd8419be61c1209d04fc50ab84ef02b",
+   "h": "09504f1f178ad79f51273984e0651927f559697d7e0a15506e5bd37a386bdb42",
    "s": 139
   },
   {
@@ -186,8 +191,8 @@
   },
   {
    "p": "js/views-flow.js",
-   "h": "828d637154fc28dbd2cdd759c506158699ff8e8b148b57d1995c26f24b4d40b5",
-   "s": 5822
+   "h": "a7204797f6332d0e597bdf7d30582fbce128618b5fdbad48ac67fb327928b9a9",
+   "s": 5836
   },
   {
    "p": "js/views-m4.js",
@@ -226,8 +231,8 @@
   },
   {
    "p": "sw.js",
-   "h": "9297f68572c48fd497c9899dfd288cdffeaec24606c9f82112cdbb232cb2a49d",
-   "s": 2817
+   "h": "85c4986893b097aa6241feae3b4d6e32e2305e8f4387aabb5ca665f97b2485c3",
+   "s": 2835
   },
   {
    "p": "vendor/capacitor/8.5.3/capacitor.js",

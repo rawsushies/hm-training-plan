@@ -78,3 +78,23 @@ test("plan maps investigation answers to analyses; snapshot is bounded and keeps
   const snap = A.snapshot(A.quality(S({ logs }), W, NOW));
   assert.equal(snap.includedRecordIds.length, 400); assert.equal(snap.methodVersion, "quality-1"); assert.ok(snap.metrics.flags.length <= 30);
 });
+
+test("grade: descriptive / insufficient / observation / supported, deterministic p", async () => {
+  const A = globalThis.WRI_ANALYSIS;
+  assert.equal(A.grade({ analysisId: "weekly" }).grade, "descriptive");
+  const mk = (pa, pb) => ({ analysisId: "compare", metrics: { diff: A.median(pb) - A.median(pa), a: { n: pa.length }, b: { n: pb.length } }, series: { a: pa.map(pace => ({ pace })), b: pb.map(pace => ({ pace })) } });
+  assert.equal(A.grade({ analysisId: "compare", metrics: { diff: null, a: { n: 2 }, b: { n: 1 } }, series: { a: [], b: [] } }).grade, "insufficient");
+  const clear = mk([400, 402, 405, 398, 401, 403, 399], [360, 362, 358, 361, 359, 363, 360]);
+  const g1 = A.grade(clear), g2 = A.grade(clear);
+  assert.equal(g1.grade, "supported"); assert.ok(g1.p < 0.05); assert.equal(g1.p, g2.p, "same data → same p");
+  assert.equal(A.grade(mk([400, 380, 420, 390, 410, 395], [398, 385, 415, 392, 405, 400])).grade, "observation", "overlapping groups are not 'supported'");
+  assert.equal(A.grade(mk([400, 402, 405], [360, 362, 358])).grade, "observation", "fewer than 6 per group never 'supported'");
+});
+
+test("leadBand: the comparable band with the most runs in its smaller half; grade reports which band it tested", () => {
+  const A = globalThis.WRI_ANALYSIS, b = (band, e, l, verdict = "faster") => ({ band, verdict, diff: -10, early: { n: e }, late: { n: l } });
+  const r = { analysisId: "trend", metrics: { bands: [b("3–6 km", 3, 3), b("6–10 km", 9, 9), b("10–16 km", 2, 1, "insufficient")], splitDate: "2026-10-01" }, series: [] };
+  assert.equal(A.leadBand(r).band, "6–10 km");
+  assert.equal(A.grade(r).band, "6–10 km");
+  assert.equal(A.leadBand({ metrics: { bands: [b("x", 1, 1, "insufficient")] } }), null);
+});

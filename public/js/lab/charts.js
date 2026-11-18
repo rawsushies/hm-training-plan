@@ -40,7 +40,7 @@
   function trend(points, band, { sel = null, w = 640, h = 240 } = {}) {
     const pts = (points || []).filter(p => !band || p.band === band.band);
     if (pts.length < 2) return empty("Belum cukup lari dengan jarak + durasi di rentang jarak ini.");
-    const pl = 44, pr = 10, pt = 14, pb = 28, iw = w - pl - pr, ih = h - pt - pb;
+    const pl = 44, pr = 10, pt = 26, pb = 28, iw = w - pl - pr, ih = h - pt - pb;
     const t = s => new Date(s + "T00:00:00").getTime(), t0 = t(pts[0].date), t1 = Math.max(t(pts[pts.length - 1].date), t0 + 864e5);
     const ps = pts.map(p => p.pace), lo = Math.min(...ps) - 10, hi = Math.max(...ps) + 10;
     const x = d => pl + iw * (t(d) - t0) / (t1 - t0), y = v => pt + ih * (v - lo) / (hi - lo);   // faster (smaller) is higher
@@ -64,21 +64,29 @@
       <div class="ch-legend"><span><i class="lg sa"></i>paruh awal</span><span><i class="lg sb"></i>paruh akhir</span><span><i class="lg med"></i>median</span><span><i class="lg iqr"></i>rentang tengah (IQR)</span></div>`;
   }
 
-  /** Two-group comparison: horizontal strips with box (IQR) and median. m: compare metrics, s: series {a,b}. */
-  function compare(m, s, { sel = null, w = 640, h = 170 } = {}) {
+  /** Two-group comparison: horizontal strips with box (IQR) and median, pace gridlines and a median-difference bracket.
+   *  m: compare metrics, s: series {a,b}. Faster is to the right. */
+  function compare(m, s, { sel = null, w = 640, h = 230 } = {}) {
     if (!s || (!s.a.length && !s.b.length)) return empty("Belum ada lari yang masuk ke kedua kelompok.");
     const all = s.a.concat(s.b).map(x => x.pace), lo = Math.min(...all) - 10, hi = Math.max(...all) + 10;
-    const pl = 12, pr = 12, iw = w - pl - pr, x = v => pl + iw * (hi - v) / (hi - lo);       // faster to the right
+    const pl = 12, pr = 12, pt = 8, pb = 34, iw = w - pl - pr, x = v => pl + iw * (hi - v) / (hi - lo);
+    const ya = pt + (h - pt - pb) * 0.3, yb = pt + (h - pt - pb) * 0.78;
     let g = "";
-    [["a", 46, "sa"], ["b", 112, "sb"]].forEach(([k, cy, c]) => {
+    const step = [5, 10, 15, 20, 30, 60].find(st => (hi - lo) / st <= 6) || 60;
+    for (let v = Math.ceil(lo / step) * step; v <= hi; v += step) g += `<line x1="${x(v).toFixed(1)}" x2="${x(v).toFixed(1)}" y1="${pt}" y2="${h - pb}" class="ch-grid"/><text x="${x(v).toFixed(1)}" y="${h - pb + 14}" class="ch-ax" text-anchor="middle">${pace(v)}</text>`;
+    [["a", ya, "sa"], ["b", yb, "sb"]].forEach(([k, cy, c]) => {
       const st = m[k];
       g += `<text x="${pl}" y="${cy - 22}" class="ch-lbl">${e(m.labels[k])} · n ${st.n}${st.n ? ` · median ${pace(st.median)} /km` : ""}</text>`;
-      if (st.n) g += `<rect x="${x(st.q3)}" y="${cy - 10}" width="${Math.max(2, x(st.q1) - x(st.q3))}" height="20" rx="4" class="ch-iqr ${c}"/><line x1="${x(st.median)}" x2="${x(st.median)}" y1="${cy - 13}" y2="${cy + 13}" class="ch-med ${c}"/>`;
-      s[k].forEach((p, i) => { const idx = k === "a" ? i : s.a.length + i; g += mark("compare", idx, `${e(m.labels[k])}: ${dlabel(p.date)}, ${km(p.km)} km, ${pace(p.pace)} /km`, `<circle cx="${x(p.pace).toFixed(1)}" cy="${cy}" r="${sel === idx ? 7 : 4.5}" class="ch-pt ${c}"/>`, sel === idx); });
+      if (st.n) g += `<rect x="${x(st.q3)}" y="${cy - 11}" width="${Math.max(2, x(st.q1) - x(st.q3))}" height="22" rx="4" class="ch-iqr ${c}"/><line x1="${x(st.median)}" x2="${x(st.median)}" y1="${cy - 15}" y2="${cy + 15}" class="ch-med ${c}"/>`;
+      s[k].forEach((p, i) => { const idx = k === "a" ? i : s.a.length + i; g += mark("compare", idx, `${e(m.labels[k])}: ${dlabel(p.date)}, ${km(p.km)} km, ${pace(p.pace)} /km`, `<circle cx="${x(p.pace).toFixed(1)}" cy="${cy}" r="${sel === idx ? 8 : 5.5}" class="ch-pt ${c}"/>`, sel === idx); });
     });
-    g += `<text x="${pl}" y="${h - 8}" class="ch-ax">${pace(hi)} /km (lebih lambat)</text><text x="${w - pr}" y="${h - 8}" class="ch-ax" text-anchor="end">${pace(lo)} /km (lebih cepat) →</text>`;
+    if (m.diff !== null && m.diff !== undefined && m.a.n && m.b.n) {
+      const xa = x(m.a.median), xb = x(m.b.median), ym = (ya + yb) / 2;
+      g += `<path d="M${xa.toFixed(1)} ${ya + 15} V${ym} H${xb.toFixed(1)} V${yb - 15}" class="ch-bracket"/><text x="${((xa + xb) / 2).toFixed(1)}" y="${ym - 5}" class="ch-lbl ch-diff" text-anchor="middle">${Math.abs(m.diff)} dtk/km</text>`;
+    }
+    g += `<text x="${pl}" y="${h - 4}" class="ch-ax">← lebih lambat</text><text x="${w - pr}" y="${h - 4}" class="ch-ax" text-anchor="end">lebih cepat → (pace /km)</text>`;
     return `<svg class="ch" viewBox="0 0 ${w} ${h}" role="img" aria-label="Perbandingan pace ${e(m.labels.a)} (n ${m.a.n}) dan ${e(m.labels.b)} (n ${m.b.n})">${g}</svg>
-      <div class="ch-legend"><span><i class="lg sa"></i>${e(m.labels.a)}</span><span><i class="lg sb"></i>${e(m.labels.b)}</span><span><i class="lg iqr"></i>IQR · garis = median</span></div>`;
+      <div class="ch-legend"><span><i class="lg sa"></i>${e(m.labels.a)}</span><span><i class="lg sb"></i>${e(m.labels.b)}</span><span><i class="lg iqr"></i>kotak = rentang tengah (IQR) · garis = median</span></div>`;
   }
 
   /** Coverage bars: how many of the included runs carry each field. coverage: [{k,label,n,total,need?,provenance?}] */

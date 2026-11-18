@@ -2,6 +2,8 @@
 import { test, before, after, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import * as H from "./harness.js";
+// Inspector sections are collapsible on phones; open one the way a user would (tap its summary).
+const openFold = async (page, cls) => { if (!(await page.$eval(`details.${cls}`, d => d.open))) await page.click(`details.${cls} > summary`); };
 
 before(async () => { await H.startServer(); await H.launch(); });
 after(async () => { await H.closeBrowser(); H.stopServer(); });
@@ -25,6 +27,10 @@ test("Lab: create â†’ one question at a time (answer, unknown, skip, correct) â†
   await page.fill("#lab-q", "Kenapa pace-ku nggak membaik padahal aku lari lebih banyak?");
   await page.click('[data-act="labCreate"]');
   await page.waitForSelector('[data-tour="lab-ask"]');
+  // feedback: compact success snackbar; the floating record button never covers the Lab
+  assert.equal(await page.getAttribute("#toast", "data-kind"), "ok"); assert.match(await page.textContent("#toast"), /Investigasi tersimpan/);
+  assert.equal(await page.$eval("#rec", e => getComputedStyle(e).display), "none");
+  const tb = await page.$eval("#toast", e => e.getBoundingClientRect().height); assert.ok(tb < 64, "snackbar stays compact");
   assert.match(await page.textContent(".lab-type"), /Tren performa[\s\S]*dikenali dari: .*pace/);
   // exactly one question card at a time, each with a reason
   assert.equal((await page.$$('[data-tour="lab-ask"]')).length, 1);
@@ -48,7 +54,7 @@ test("Lab: create â†’ one question at a time (answer, unknown, skip, correct) â†
   // edit question, notes
   await page.click('[data-act="labEditQ"]'); await page.fill("#lab-eq", "Apakah pace easy run-ku membaik 3 bulan ini?"); await page.click('[data-act="labSaveQ"]');
   assert.match(await page.textContent(".lab-head"), /Pertanyaan asli: Kenapa pace-ku/);
-  await page.fill("#lab-notes", "Mungkin karena lebih sering lari malam."); await page.click('[data-act="labSaveNotes"]');
+  await openFold(page, "lab-notes"); await page.fill("#lab-notes", "Mungkin karena lebih sering lari malam."); await page.click('[data-act="labSaveNotes"]');
   await H.waitSynced(page);
   // synced as a private record
   const uid = (await H.state(page)).uid, docs = await H.adminDocs(`users/${uid}/lab`);
@@ -112,6 +118,10 @@ test("Lab analysis + research: deterministic findings with method and record set
   const cmp = await page.textContent('[data-analysis="compare"]');
   assert.match(cmp, /Pagi \(sebelum 10:00\): median 6:45 \/km \(n 3\)[\s\S]*Sore\/malam \(setelah 15:00\): median 7:05 \/km \(n 3\)/);
   assert.match(cmp, /Data terbatas|Data cukup/);
+  // focal finding: evidence grade (3 per group can never be "supported"), metric n vs eligible records, exclusions
+  assert.match(await page.getAttribute('[data-analysis="compare"]', "class"), /is-lead/);
+  assert.match(cmp, /Observasi/); assert.ok(!/Didukung uji statistik/.test(cmp));
+  assert.match(cmp, /n 6 \(3 \+ 3\) dipakai di analisis ini dari \d+ lari yang memenuhi syarat/);
   // chart point selection â†’ readout with a link to the source run
   await page.click('#ch-compare [data-act="chartSel"][data-i="0"]');
   assert.match(await page.textContent("#ro-compare"), /6 km[\s\S]*Buka lari/);
@@ -124,7 +134,7 @@ test("Lab analysis + research: deterministic findings with method and record set
   assert.deepEqual(snaps.map(s => s.methodVersion).sort(), ["compare-1", "quality-1"]);
   assert.deepEqual(snaps.find(s => s.analysisId === "compare").includedRecordIds.sort(), ["m1", "m2", "m3", "n1", "n2", "n3"]);
   // correcting an earlier answer drops the dependent answer and makes the snapshot stale
-  await page.click('[data-act="labReopen"][data-k="factor"]');
+  await openFold(page, "lab-answers"); await page.click('[data-act="labReopen"][data-k="factor"]');
   assert.equal(await page.evaluate(() => Object.values(window.__hmtpTest.S().lab)[0].answers.measure), undefined, "dependent answer removed");
   assert.equal(await page.$('[data-tour="lab-findings"]'), null, "no stale findings shown");
   await page.click('[data-act="labAns"][data-v="time"]'); await page.click('[data-act="labAns"][data-v="rpe"]');

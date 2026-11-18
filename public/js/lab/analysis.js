@@ -204,5 +204,47 @@
   }
   const fmtPace = s => s === null || s === undefined ? "–" : `${Math.floor(s / 60)}:${p2(Math.round(s % 60))}`;
 
-  G.WRI_ANALYSIS = { V, BANDS, PACE_MIN, PACE_MAX, weekly, trend, compare, quality, plan, run, snapshot, median, quantile, monday, addDays, fmtPace, startTime };
+
+  /* ---------- evidence grading (added for the findings view; does not change any metric) ---------- */
+  /** Deterministic PRNG so the same data always gives the same p-value. */
+  const prng = seed => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  /** Two-sided permutation test on the difference of medians (b − a). Returns {p, iterations}. */
+  function permTest(a, b, iterations = 4000) {
+    if (a.length < 2 || b.length < 2) return null;
+    const obs = Math.abs(median(b) - median(a)), pool = a.concat(b), na = a.length;
+    const rnd = prng(pool.reduce((h, v) => (h * 31 + Math.round(v)) | 0, pool.length));
+    let hit = 0;
+    for (let it = 0; it < iterations; it++) {
+      const x = pool.slice();
+      for (let i = x.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); const t = x[i]; x[i] = x[j]; x[j] = t; }
+      if (Math.abs(median(x.slice(na)) - median(x.slice(0, na))) >= obs - 1e-9) hit++;
+    }
+    return { p: (hit + 1) / (iterations + 1), iterations };
+  }
+  /** Trend: the comparable distance band with the most runs in its smaller half (ties → shorter band). */
+  function leadBand(r) { const ok = (r.metrics.bands || []).filter(b => b.verdict !== "insufficient"); return ok.length ? ok.reduce((a, b) => Math.min(b.early.n, b.late.n) > Math.min(a.early.n, a.late.n) ? b : a) : null; }
+  const GRADE_LABEL = { descriptive: "Deskriptif", insufficient: "Bukti belum cukup", observation: "Observasi", supported: "Didukung uji statistik" };
+  /**
+   * Grade a result for display: descriptive (counts/coverage only) · insufficient (below minimum n) ·
+   * observation (difference seen, not supported by the test, or too few runs per group) ·
+   * supported (permutation p < 0.05, ≥ 6 runs per group, and difference ≥ 5 s/km). Never implies causation.
+   */
+  function grade(r) {
+    const out = (g, extra = {}) => Object.assign({ grade: g, label: GRADE_LABEL[g], test: null, p: null, diff: null, groups: null }, extra);
+    if (r.analysisId === "weekly" || r.analysisId === "quality") return out("descriptive");
+    let a, b, diff, groups;
+    if (r.analysisId === "compare") {
+      const m = r.metrics; if (m.diff === null) return out("insufficient", { groups: [m.a.n, m.b.n] });
+      a = r.series.a.map(x => x.pace); b = r.series.b.map(x => x.pace); diff = m.diff; groups = [m.a.n, m.b.n];
+    } else if (r.analysisId === "trend") {
+      const band = leadBand(r); if (!band) return out("insufficient");
+      const pts = r.series.filter(p => p.band === band.band);
+      a = pts.filter(p => p.date <= r.metrics.splitDate).map(p => p.pace); b = pts.filter(p => p.date > r.metrics.splitDate).map(p => p.pace);
+      diff = band.diff; groups = [band.early.n, band.late.n]; var bandLabel = band.band;
+    } else return out("descriptive");
+    const t = permTest(a, b), p = t ? Math.round(t.p * 1000) / 1000 : null;
+    const ok = t && t.p < 0.05 && Math.min(a.length, b.length) >= 6 && Math.abs(diff) >= 5;
+    return out(ok ? "supported" : "observation", { band: typeof bandLabel === "undefined" ? null : bandLabel, test: t ? `permutasi selisih median, ${t.iterations} acakan, seed tetap` : null, p, diff, groups });
+  }
+  G.WRI_ANALYSIS = { permTest, grade, leadBand, GRADE_LABEL, V, BANDS, PACE_MIN, PACE_MAX, weekly, trend, compare, quality, plan, run, snapshot, median, quantile, monday, addDays, fmtPace, startTime };
 })(typeof globalThis !== "undefined" ? globalThis : this);

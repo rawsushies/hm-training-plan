@@ -67,3 +67,32 @@ question / findings with large charts) and a right inspector (scope, coverage, m
 2. Investigation (stepper, tile answers, why-expander, editable answers, evidence visuals, run analysis, findings with charts and
    inspector, research section).
 3. Shared chart components: weekly timeline, pace trend dot plot with IQR, two-group comparison, coverage bars.
+
+## Redesign 2 (18 Nov 2026): composition, not just tokens
+
+The M1.5 Lab worked but read as a stack of identical rounded cards. Redesign 2 changes the structure:
+
+- **Surfaces:** at most one raised surface per view: the focal block (the open question, the "ready to analyse" plan or
+  the lead finding). Everything else sits on the page and is separated by hairline dividers and spacing. Pills are no
+  longer used for status; status is a small dot plus a word.
+- **Colour roles:** orange = action, primary data series, selection. Teal = complete or statistically supported. Amber =
+  warning or insufficient. Red = destructive or error. Slate = secondary series and neutral data (replaces blue).
+- **Lab home:** a question-first header (large type, real pace trace as a thin signature line), a single composer
+  field with the action inside it, and the capability state as one status line that expands for details. Starter
+  questions and investigations are divided lists, not tile grids. The evidence rail (KPIs with vertical rules, weekly
+  chart, collapsible coverage and source sections) sits on the right only from 1200 px.
+- **Investigation:** a header band (back, stage, actions, title, type, stepper). Then a canvas with the focal block and an
+  inspector with collapsible *Data & cakupan*, *Jawabanmu* and *Catatanmu* sections. The two columns appear only from
+  1240 px (canvas + 340 px inspector beside the 232 px app sidebar). Below that, the inspector follows the canvas, and on
+  phones its sections start collapsed once findings exist.
+- **Findings:** the lead finding shows its evidence grade, one large key figure (72 px Barlow), the deterministic
+  sentence, the n strip (metric n vs eligible records and exclusion reasons), a large chart (760 px viewBox, 360 px on
+  phones), a pinned readout with a link to the run, and the method fold. Supporting findings use the same anatomy at a
+  smaller size without a surface. After them: "Yang bisa dikatakan / Yang belum bisa disimpulkan / Kemungkinan penjelasan
+  lain", then research, the AI fold (not configured) and the experiment placeholder.
+- **Charts:** hover/focus shows a tooltip over the mark (pointer devices), and tap/Enter pins the readout. The compare
+  chart adds pace gridlines and a median-difference bracket. The trend chart keeps the distance-band filter.
+- **Feedback:** compact snackbar (dot + text, bottom-left above the dock, or beside the sidebar on desktop), with
+  ok/err/info kinds. The busy state has a spinner and `aria-busy`. Every row and button has hover, pressed and
+  focus-visible states, and disabled elements are visibly disabled.
+- Styles live in `public/css/runlab.css` (loaded after `werunit.css`).

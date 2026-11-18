@@ -55,7 +55,7 @@ Object.assign(ACT, {
     delete S.status[s.id]; S.logs.push(l); QUICK_LAST = l.id; persist(); render(true);
     toast(`✓ ${fmtKm(s.dist)} km tercatat. Tap buat isi waktu/RPE.`);
     const t = document.getElementById("toast");
-    if(t){ t.setAttribute("role", "button"); t.onclick = () => { t.onclick = null; t.removeAttribute("role"); t.classList.remove("on"); if(QUICK_LAST) ACT.editLog({id:QUICK_LAST}); }; setTimeout(() => { t.onclick = null; t.removeAttribute("role"); }, 2700); }
+    if(t){ t.setAttribute("role", "button"); t.onclick = () => { t.onclick = null; t.setAttribute("role", "status"); t.classList.remove("on"); if(QUICK_LAST) ACT.editLog({id:QUICK_LAST}); }; setTimeout(() => { t.onclick = null; t.setAttribute("role", "status"); }, 2700); }
   }
 });
 // Dashboard: put "✓ Selesai" next to Mulai/Catat when the next session is today.
