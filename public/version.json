@@ -1,20 +1,17 @@
 {
- "version": "4.0.1",
- "build": "2026-11-08T11:15:11Z",
+ "version": "4.1.0",
+ "build": "2026-11-18T02:09:15Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "Perbaikan: aplikasi bisa dibuka di iPhone lama",
-  "Perbaikan: ganti jawaban sebelumnya ikut memperbarui pertanyaan berikutnya",
-  "Perbaikan: lanjut offline cuma berlaku selama offline",
-  "Perbaikan: tombol geser dan sorotan tidak tumpang tindih"
+  "RUNLAB: tab Lab untuk menyelidiki pertanyaan tentang larimu (tahap 1)"
  ],
  "files": [
   {
    "p": "css/werunit.css",
-   "h": "e9f560e80e61b21f6907b980a34720f0e9a37a6c8f70f2bdbf7d629939580e9e",
-   "s": 84702
+   "h": "7cb41a1dc29d3b0da44fe838e2d80e64c80688585515ea7cfb802882b4d3901d",
+   "s": 86802
   },
   {
    "p": "favicon-32.png",
@@ -48,8 +45,8 @@
   },
   {
    "p": "index.html",
-   "h": "0a891ca0b526f6dbcbe9d07e845bdf3f97c7de3f4b19ccafb87c09d51da134cf",
-   "s": 284323
+   "h": "9b103206e49e34bb8344afda32f690924db95fd889c167f72c7b868e6bb3a330",
+   "s": 284421
   },
   {
    "p": "js/app4.js",
@@ -68,8 +65,8 @@
   },
   {
    "p": "js/cloud-firebase.js",
-   "h": "4f945d4fee0275394492f0b3a35e3ddfb0e7cce035743952bb5b3f89d7afa321",
-   "s": 22019
+   "h": "f2f95bcb367a52b5c37f37081b793fc0b6df50b9ba02cfeb9280d85960e79b59",
+   "s": 22283
   },
   {
    "p": "js/companion.js",
@@ -82,9 +79,19 @@
    "s": 5213
   },
   {
+   "p": "js/lab/lab.js",
+   "h": "4c7b4a6f3a62b5ceb49d22fd2b279773d4be1ae53e04306f8f9555b6e49a806d",
+   "s": 16347
+  },
+  {
+   "p": "js/lab/views-lab.js",
+   "h": "0ee48babc17d181a858f5f02d980f10169efc05978d6c7d23902ae47f9df1c80",
+   "s": 16633
+  },
+  {
    "p": "js/logic.js",
-   "h": "8ae7572585b40cf95b8d9e9335ad763d92395bea3e97d180060ce08e5de936bd",
-   "s": 38141
+   "h": "07a92d827a594ec76b0769c152f974d6441f51285d65dbcbadf038f8ada93a9a",
+   "s": 38606
   },
   {
    "p": "js/motion.js",
@@ -148,7 +155,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "d2f75d40b1235c41f21e34a21ce5eefab661c36a16b4e3178cd16f866c2b2565",
+   "h": "ee117c74abc084b2742b1cc2e854b8a534cab2449d311c20dd7e36678192b4a7",
    "s": 139
   },
   {
@@ -198,8 +205,8 @@
   },
   {
    "p": "sw.js",
-   "h": "5d0894c4ab977760fabe20ae2ae5f4732f62c1cf5e8cf4a91dfafad9bf68c539",
-   "s": 2692
+   "h": "3913ea63a1d103fc3a27c3610580a79a250bdd525d44b1aca9b89e935f939501",
+   "s": 2732
   },
   {
    "p": "vendor/capacitor/8.5.3/capacitor.js",

@@ -298,3 +298,18 @@ test("profiles directory: owner-only writes with exact fields; signed-in prefix 
   await assertFails(setDoc(doc(db("dave"), "requests/alice_dave"), req("dave", "alice")), "blocked");
   await assertSucceeds(deleteDoc(doc(db("alice"), "profiles/alice")));
 });
+
+test("lab (RUNLAB investigations): owner-only record sync; other accounts and friends are denied", async () => {
+  const inv = { id: "lab1", question: "Kenapa pace-ku nggak membaik?", type: "performance", answers: {} };
+  await assertSucceeds(setDoc(doc(db("alice"), "users/alice/lab/lab1"), rec(inv)));
+  await assertSucceeds(getDoc(doc(db("alice"), "users/alice/lab/lab1")));
+  await assertSucceeds(getDocs(collection(db("alice"), "users/alice/lab")));
+  await assertFails(getDoc(doc(db("bob"), "users/alice/lab/lab1")), "another account");
+  await assertFails(setDoc(doc(db("bob"), "users/alice/lab/lab2"), rec(inv)), "cannot write into someone else's lab");
+  await assertSucceeds(setDoc(doc(db("alice"), "friendships/alice_bob"), { members: ["alice", "bob"], createdAt: serverTimestamp() }).catch(() => null));
+  await assertFails(getDocs(collection(db("bob"), "users/alice/lab")), "friends never see investigations");
+  await assertFails(getDoc(doc(db(null), "users/alice/lab/lab1")), "signed out");
+  await assertFails(setDoc(doc(db("alice"), "users/alice/lab/lab3"), rec({ id: "other", question: "x", type: "performance" })), "id must match the document");
+  await assertFails(setDoc(doc(db("alice"), "users/alice/lab/lab4"), rec({ id: "lab4", question: "x", type: "diagnosis" })), "no diagnosis type");
+  await assertFails(setDoc(doc(db("alice"), "users/alice/lab/lab5"), rec({ id: "lab5", question: "x", type: "performance", email: "a@b.c" })), "unknown fields rejected");
+});

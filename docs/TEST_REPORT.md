@@ -1,5 +1,16 @@
 # Test report
 
+## RUNLAB M1 (18 Nov 2026, branch `claude/charming-cori-ge7n37`)
+
+| Suite | Result |
+|---|---|
+| `npm test` | **82 / 82 pass** (incl. `lab.test.js`) |
+| `npm run test:rules` | **23 / 23 pass** (incl. `lab` owner-only + payload shape) |
+| `npm run test:e2e` | **54 / 54 pass** (incl. `runlab.test.js`) |
+| `npm run check:release` | 4.1.0 verified, 44 files |
+
+Baseline on `main` @ 52a89c4 before the change: 77 unit, 22 rules, 52 e2e, all passing. Not run: physical-device tests (none available).
+
 Run on 7 Nov 2026 in the development container: Node 22.23, Chromium (Playwright 1.63),
 firebase-tools 15.35 with the **real** Auth and Firestore emulators, OpenJDK 21. Firebase SDK
 12.19.0 (vendored). All results below come from actual runs; none are simulated.

@@ -95,16 +95,16 @@ test("dock: the glass pill moves only on a real tab tap, stretches in flight, se
   const pill = () => page.evaluate(() => { const e = document.querySelector("#dock .glass-pill"); return { t: e.style.transform, w: parseFloat(e.style.width), blur: parseFloat(e.style.getPropertyValue("--blur")) }; });
   const a = await pill(); await page.waitForTimeout(1500);
   assert.deepEqual(await pill(), a, "no automatic movement");
-  await page.click('#dock [data-t="race"]');
+  await page.click('#dock [data-t="lab"]');
   await page.waitForTimeout(70);
   const mid = await pill();
   assert.ok(mid.w > a.w + 20, `stretched in flight (${a.w} → ${mid.w})`); assert.ok(mid.blur > 2, "frosted while moving");
   await page.waitForTimeout(1200);
   const rest = await pill();
   assert.ok(Math.abs(rest.w - a.w) < 2 && rest.blur < 1.7, "settled clear at the new tab");
-  assert.equal(await page.getAttribute('#dock [data-t="race"]', "aria-current"), "page");
+  assert.equal(await page.getAttribute('#dock [data-t="lab"]', "aria-current"), "page");
   // sub-pages light their parent tab; every page reachable
-  for (const [t, parent] of [["locked", "home"], ["cal", "home"], ["review", "log"], ["shoes", "more"], ["pace", "race"], ["settings", "more"], ["bareng", "more"]]) {   // 4.0 tabs: Hari ini, Lari, Race, Kamu
+  for (const [t, parent] of [["locked", "home"], ["cal", "home"], ["review", "log"], ["shoes", "more"], ["pace", "more"], ["race", "more"], ["settings", "more"], ["bareng", "more"]]) {   // RUNLAB tabs: Hari ini, Lab, Lari, Kamu (Race lives under Kamu)
     await H.act(page, "nav", { t });
     assert.equal(await page.getAttribute(`#dock [data-t="${parent}"]`, "aria-current"), "page", t);
   }

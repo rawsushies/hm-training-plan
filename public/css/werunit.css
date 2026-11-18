@@ -1069,3 +1069,32 @@ body[data-tab="home"] .a4-race{background:rgba(255,255,255,.12);border-color:rgb
 /* 4.0.1: file pickers look like the rest of the app */
 input[type="file"]{font:inherit;color:var(--mu);font-size:13px;max-width:100%}
 input[type="file"]::file-selector-button{font:600 13px var(--font);color:var(--tx);background:var(--s2);border:1px solid var(--line);border-radius:999px;padding:8px 14px;margin-right:10px;cursor:pointer}
+
+/* ---------- RUNLAB (Lab tab) ---------- */
+.lab-status{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 12px}
+.lab-chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;border:1px solid var(--line);color:var(--mu)}
+.lab-chip.ok{color:var(--tx);border-color:var(--line2,var(--line))}
+.lab-chip.off{opacity:.85}
+.lab-new textarea,.lab-head textarea,.lab textarea{width:100%;min-height:72px;resize:vertical;margin-top:8px}
+.lab-starters{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.lab-starters .a4-chip{text-align:left;white-space:normal}
+.lab-list{display:flex;flex-direction:column;gap:8px}
+.lab-item{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;width:100%;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--s1);color:inherit}
+.lab-q{font-weight:600;line-height:1.35}
+.lab-title{font-size:22px;line-height:1.25}
+.lab-type{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:8px}
+.lab-ans{width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:10px 0;color:inherit}
+.lab-opts{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.lab-opts .btn{justify-content:flex-start;text-align:left;width:100%}
+.lab-cov{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}
+.lab-cov caption{text-align:left;padding-bottom:4px}
+.lab-cov td,.lab-cov th{padding:6px 0;border-bottom:1px solid var(--line);text-align:left}
+.lab-cov th{font-size:12px;color:var(--mu);font-weight:600}
+.lab-cov td.num{text-align:right}
+.lab-cov tr.miss td{color:var(--warn,#e2a336)}
+.lab-conf{margin:4px 0 0;padding-left:18px}
+.lab-tools{display:flex;flex-direction:column;gap:8px}
+.lab-tool{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;border:1px dashed var(--line);opacity:.7}
+.lab-actions{margin:14px 0 6px}
+.lab-cont{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;width:100%;color:inherit}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}

@@ -11,7 +11,7 @@ const [{ initializeApp }, A, F] = await Promise.all([
   import(base + "firebase-app.js"), import(base + "firebase-auth.js"), import(base + "firebase-firestore.js")
 ]);
 
-const PATH_RE = /^(runs|strength|checkins|shoes|reviews|plan)\/[A-Za-z0-9_-]{1,60}$/;
+const PATH_RE = /^(runs|strength|checkins|shoes|reviews|plan|lab)\/[A-Za-z0-9_-]{1,60}$/;
 const chunk = (a, n) => { const o = []; for (let i = 0; i < a.length; i += n) o.push(a.slice(i, i + n)); return o; };
 const sha256Hex = async t => [...new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t)))].map(b => b.toString(16).padStart(2, "0")).join("");
 const rand = bytes => { const b = crypto.getRandomValues(new Uint8Array(bytes)); return btoa(String.fromCharCode(...b)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); };
@@ -116,20 +116,22 @@ export async function createCloud(config, opts = {}) {
     /** All records of the account: {key: {data, rev, deleted}} */
     async fetchAll(uid) {
       const out = {};
-      await Promise.all(["runs", "strength", "checkins", "shoes", "reviews", "plan"].map(async c => {
-        const qs = await F.getDocs(F.collection(db, "users", uid, c));
+      await Promise.all(["runs", "strength", "checkins", "shoes", "reviews", "plan", "lab"].map(async c => {
+        let qs;
+        try { qs = await F.getDocs(F.collection(db, "users", uid, c)); }
+        catch (e) { if (c === "lab" && e && e.code === "permission-denied") return; throw e; }   // older production rules without `lab`: the rest still syncs
         qs.forEach(d => { const x = d.data(); out[`${c}/${d.id}`] = { data: x.data, rev: x.rev, deleted: !!x.deleted }; });
       }));
       return out;
     },
     /** Live updates: cb([{key,data,rev,deleted}]) for changes confirmed by the server. */
     subscribe(uid, cb, onErr) {
-      const unsubs = ["runs", "strength", "checkins", "shoes", "reviews", "plan"].map(c =>
+      const unsubs = ["runs", "strength", "checkins", "shoes", "reviews", "plan", "lab"].map(c =>
         F.onSnapshot(F.collection(db, "users", uid, c), qs => {
           if (qs.metadata.hasPendingWrites) return;
           const ch = qs.docChanges().filter(x => x.type !== "removed").map(x => { const d = x.doc.data(); return { key: `${c}/${x.doc.id}`, data: d.data, rev: d.rev, deleted: !!d.deleted }; });
           if (ch.length) cb(ch, c);
-        }, e => onErr && onErr(e)));
+        }, e => { if (c === "lab" && e && e.code === "permission-denied") return; onErr && onErr(e); }));
       return () => unsubs.forEach(u => u());
     },
     /**

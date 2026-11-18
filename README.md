@@ -17,6 +17,8 @@ integrations (file import, Health Connect). Status and what still needs credenti
 shape with one-tap done/start, check-in is one tap, runs are a feed of cards, records are medals. Data, sync and every
 older feature are unchanged. Design rules: [DESIGN.md](DESIGN.md).
 
+**RUNLAB (4.1, in progress):** WeRunIt is evolving into a *Personal Running Lab*: a Lab tab where you ask a question about your running, answer one follow-up at a time, and see exactly which of your data can and cannot answer it. Analysis, research and AI arrive in later milestones and are clearly marked unavailable until then. See [RUNLAB spec](docs/RUNLAB_PRODUCT_SPEC.md) · [architecture](docs/RUNLAB_ARCHITECTURE.md) · [migration plan](docs/RUNLAB_MIGRATION_PLAN.md) · [audit](docs/RUNLAB_AUDIT.md).
+
 **Live:** https://we-run-it.web.app · **Android:** see [docs/ANDROID.md](docs/ANDROID.md) ·
 **Shipping changes:** see [docs/UPDATES.md](docs/UPDATES.md) (installed apps update themselves).
 

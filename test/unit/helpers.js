@@ -1,6 +1,7 @@
 import "../../public/js/schedule.js";
 import "../../public/js/social.js";
 import "../../public/js/logic.js";
+import "../../public/js/lab/lab.js";
 import "../../public/js/sync.js";
 export const H = globalThis.HMTP;
 export const { SyncEngine } = globalThis.HMTPSync;

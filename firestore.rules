@@ -47,7 +47,7 @@ service cloud.firestore {
 
       // Synced training records: runs, strength, checkins, shoes, reviews, plan.
       match /{coll}/{docId} {
-        function syncColl() { return coll in ['runs', 'strength', 'checkins', 'shoes', 'reviews', 'plan']; }
+        function syncColl() { return coll in ['runs', 'strength', 'checkins', 'shoes', 'reviews', 'plan', 'lab']; }   // lab = RUNLAB investigations (owner-only)
 
         function envelope(d) {
           return d.keys().hasOnly(['data', 'rev', 'deleted', 'updatedAt', 'device'])
@@ -65,7 +65,18 @@ service cloud.firestore {
             || (coll == 'checkins' && validCheckin(d.data))
             || (coll == 'shoes' && validShoe(d.data))
             || (coll == 'reviews' && d.data is map && docId.matches('^[0-7]$'))
-            || (coll == 'plan' && (d.data is map || d.data == 'skip'));
+            || (coll == 'plan' && (d.data is map || d.data == 'skip'))
+            || (coll == 'lab' && validLab(d.data));
+        }
+        // RUNLAB investigation: bounded size and shape (the client sanitizer is the full validator).
+        function validLab(x) {
+          return x is map
+            && x.keys().hasOnly(['id', 'schema', 'createdAt', 'updatedAt', 'question', 'questionEdited', 'type', 'typeSource', 'matched', 'answers', 'status', 'notes', 'snapshots'])
+            && x.id == docId && x.question is string && x.question.size() >= 1 && x.question.size() <= 500
+            && x.type in ['performance', 'consistency', 'comparison', 'environment', 'equipment', 'recovery', 'experiment']
+            && (!('answers' in x) || (x.answers is map && x.answers.size() <= 12))
+            && (!('notes' in x) || (x.notes is string && x.notes.size() <= 2000))
+            && (!('questionEdited' in x) || (x.questionEdited is string && x.questionEdited.size() <= 500));
         }
         function validRun(r) {
           return r is map && r.id == docId && isDate(r.date) && numIn(r.distance, 0, 1000)
