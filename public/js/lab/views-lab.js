@@ -191,6 +191,13 @@
     const shoes = S.shoes || [], nm = id => (shoes.find(s => s.id === id) || {}).name;
     return AN.plan(inv).map(([id, opts]) => AN.run(id, S, w, Object.assign({}, opts, { shoeAName: nm(opts.shoeA), shoeBName: nm(opts.shoeB) })));
   }
+  /** Where the shown list came from: live provider call, fresh cache, or an older cache used because offline/providers failed. */
+  function originNote(st) {
+    if (st.origin === "cache") return `<p class="xs mu" data-origin="cache">Dari hasil tersimpan ${esc(st.cache)} (belum 14 hari). Tekan "Cari lagi" untuk mengambil ulang.</p>`;
+    if (st.origin === "stale-cache") return `<p class="xs mu" data-origin="stale-cache">Hasil lama dari ${esc(st.cache)}, ditampilkan karena ${st.offline ? "kamu offline" : "sumber tidak bisa dihubungi"}. Bisa sudah berubah.</p>`;
+    if (st.origin === "live") return `<p class="xs mu" data-origin="live">Diambil langsung dari penyedia barusan.</p>`;
+    return "";
+  }
   function researchPanel(inv) {
     const R = window.WRI_RESEARCH, st = LAB.research, saved = inv.sources || [];
     const online = isOnline(), list = st.results && st.inv === inv.id ? st.results : null;
@@ -205,7 +212,8 @@
       ${saved.length ? `<h4>Tersimpan di investigasi ini</h4><ul class="lab-srcs">${saved.map(x => card(x, true)).join("")}</ul>` : ""}
       ${!R ? `<p class="sm mu">Modul riset tidak tersedia.</p>` : `<div class="lab-run"><button class="btn${saved.length ? "" : " pri"}" data-act="labResearch" ${st.busy ? "disabled" : ""}>${st.busy ? "Mencari…" : list ? "Cari lagi" : "Cari riset terkait"}</button><span class="xs mu">Kata kunci: ${esc(R.queryFor(inv, LAB.lastResults || []).text)}</span></div>`}
       ${st.err && st.inv === inv.id ? `<div class="note warn" style="margin-top:8px">${esc(st.err)}</div>` : ""}
-      ${list ? (list.length ? `<ul class="lab-srcs">${list.filter(x => !saved.some(s => s.id === x.id)).map(x => card(x, false)).join("")}</ul>${st.cache ? `<p class="xs mu">Dari cache ${esc(st.cache)}.</p>` : ""}` : `<p class="sm">Tidak ada riset yang cukup relevan ditemukan untuk kata kunci ini. Itu hasil yang sah.</p>`) : ""}</section>`;
+      ${st.notes && st.notes.length && st.inv === inv.id && !st.err ? `<p class="xs mu" data-research-notes>Catatan: ${esc(st.notes.join(" "))}</p>` : ""}
+      ${list ? (list.length ? `<ul class="lab-srcs">${list.filter(x => !saved.some(s => s.id === x.id)).map(x => card(x, false)).join("")}</ul>${originNote(st)}` : `<p class="sm">Tidak ada riset yang cukup relevan ditemukan untuk kata kunci ini. Itu hasil yang sah.</p>`) : ""}</section>`;
   }
   /** AI consultation: credential-gated. Shows exactly what would be sent, and that nothing is sent today. */
   function aiPanel(inv, res) {
@@ -302,9 +310,15 @@
     },
     labResearch: async () => {
       const i = cur(), R = window.WRI_RESEARCH; if (!i || !R) return;
-      if (!isOnline()) { LAB.research = Object.assign(LAB.research, { inv: i.id, err: "Kamu sedang offline. Riset butuh koneksi; sumber yang sudah tersimpan tetap bisa dibuka.", results: null }); swap("lab-research", researchPanel(i)); return; }
+      const offline = !isOnline(), again = !!(LAB.research.results && LAB.research.inv === i.id);
       LAB.research = { busy: true, err: "", results: null, inv: i.id }; swap("lab-research", researchPanel(i));
-      try { const r = await R.search(R.queryFor(i, LAB.lastResults || [])); LAB.research = { busy: false, err: r.errors.length && !r.items.length ? r.errors.join(" ") : "", results: r.items, inv: i.id, cache: r.cachedAt ? fmtWhen(r.cachedAt) : "" }; toast(r.items.length ? `${r.items.length} sumber ditemukan` : "Tidak ada riset yang cukup relevan"); }
+      try {
+        const r = await R.search(R.queryFor(i, LAB.lastResults || []), { offline, force: again && !offline });
+        const failed = r.origin === "none";
+        LAB.research = { busy: false, err: failed ? (offline ? "Kamu sedang offline dan belum ada hasil tersimpan untuk pertanyaan ini. Sumber yang sudah disimpan tetap bisa dibuka." : "Pencarian riset gagal: " + r.errors.join(" ")) : "",
+          notes: failed ? [] : r.errors, results: failed ? null : r.items, inv: i.id, origin: r.origin, offline, cache: r.cachedAt ? fmtWhen(r.cachedAt) : "" };
+        if (!failed) toast(r.items.length ? `${r.items.length} sumber${r.origin === "live" ? " ditemukan" : " dari hasil tersimpan"}` : "Tidak ada riset yang cukup relevan");
+      }
       catch (e) { LAB.research = { busy: false, err: "Pencarian riset gagal: " + String(e && e.message || e).slice(0, 120), results: null, inv: i.id }; }
       const n = cur(); if (n) swap("lab-research", researchPanel(n));
     },

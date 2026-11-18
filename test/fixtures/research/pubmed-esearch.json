@@ -1,0 +1,1 @@
+{"header":{"type":"esearch","version":"0.3"},"esearchresult":{"count":"3","retmax":"3","retstart":"0","idlist":["99999901","99999902","99999903"],"translationset":[],"querytranslation":"time[tiab] AND day[tiab] AND (running[tiab] OR runners[tiab])"}}

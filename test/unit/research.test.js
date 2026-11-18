@@ -6,8 +6,9 @@ const R = globalThis.WRI_RESEARCH;
 const NOW = "2026-11-18T00:00:00.000Z";
 // minimal XML parser for Node (the browser uses DOMParser)
 R.setXml(s => ({ getElementsByTagName: tag => tag === "PubmedArticle" ? [...s.matchAll(/<PubmedArticle>([\s\S]*?)<\/PubmedArticle>/g)].map(m => ({ getElementsByTagName: t => [...m[1].matchAll(new RegExp(`<${t}>([\\s\\S]*?)</${t}>`, "g"))].map(x => ({ textContent: x[1] })) })) : [] }));
+R.setRetryDelay(1); R.setTimeoutMs(500);
 function fakeFetch(map, calls) {
-  return async url => { calls.push(url); const k = Object.keys(map).find(k => url.includes(k)); const v = map[k]; if (!v) return { ok: false, status: 404 }; if (v.status) return { ok: false, status: v.status }; return { ok: true, status: 200, json: async () => v, text: async () => v }; };
+  return async url => { calls.push(url); const k = Object.keys(map).find(k => url.includes(k)); const v = map[k]; if (!v) return { ok: false, status: 404, text: async () => "" }; if (v.status) return { ok: false, status: v.status, text: async () => "" }; const body = typeof v === "string" ? v : JSON.stringify(v); return { ok: true, status: 200, json: async () => JSON.parse(body), text: async () => body }; };
 }
 
 test("query is built from the investigation only (no personal data)", () => {

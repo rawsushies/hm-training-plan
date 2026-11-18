@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<!DOCTYPE PubmedArticleSet PUBLIC "-//NLM//DTD PubMedArticle, 1st January 2024//EN" "https://dtd.nlm.nih.gov/ncbi/pubmed/out/pubmed_240101.dtd">
+<PubmedArticleSet>
+<PubmedArticle><MedlineCitation Status="MEDLINE" Owner="NLM"><PMID Version="1">99999901</PMID><Article PubModel="Print"><ArticleTitle>[FIXTURE] Time-of-day differences in endurance running performance: a systematic review and meta-analysis.</ArticleTitle><Abstract><AbstractText Label="BACKGROUND" NlmCategory="BACKGROUND">[FIXTURE] Synthetic abstract for offline tests.</AbstractText><AbstractText Label="RESULTS" NlmCategory="RESULTS">[FIXTURE] Running time-trial results differed slightly between morning and evening sessions in this invented dataset.</AbstractText></Abstract></Article></MedlineCitation></PubmedArticle>
+<PubmedArticle><MedlineCitation Status="MEDLINE" Owner="NLM"><PMID Version="1">99999902</PMID><Article PubModel="Print"><ArticleTitle>[FIXTURE] Morning versus evening easy runs.</ArticleTitle><Abstract><AbstractText>[FIXTURE] Invented crossover data about easy running pace &amp; perceived effort in runners.</AbstractText></Abstract></Article></MedlineCitation></PubmedArticle>
+</PubmedArticleSet>
