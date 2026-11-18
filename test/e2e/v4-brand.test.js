@@ -88,23 +88,14 @@ test("gate: on the Android app Health Connect is the required second link", asyn
   assert.equal(await page.evaluate(() => DEVICE.hc), "skip");
 });
 
-test("dock: the glass pill moves only on a real tab tap, stretches in flight, settles; every page reachable", async () => {
+test("dock: four solid tabs (no glass), the current tab is marked, sub-pages light their parent; every kept page reachable", async () => {
   const { page } = await H.device({ cloud: false });
   await page.goto(H.appUrl().replace("?emulator=1", "")); await H.ready(page); await H.finishOnboarding(page);
-  await page.evaluate(() => document.querySelector('[data-act="tutClose"]')?.click());
-  const pill = () => page.evaluate(() => { const e = document.querySelector("#dock .glass-pill"); return { t: e.style.transform, w: parseFloat(e.style.width), blur: parseFloat(e.style.getPropertyValue("--blur")) }; });
-  const a = await pill(); await page.waitForTimeout(1500);
-  assert.deepEqual(await pill(), a, "no automatic movement");
+  assert.deepEqual(await page.$$eval("#dock button span", e => e.map(x => x.textContent)), ["Hari ini", "Lari", "Lab", "Kamu"]);
+  assert.equal(await page.$eval("#dock", e => getComputedStyle(e).backdropFilter), "none", "no glass");
   await page.click('#dock [data-t="lab"]');
-  await page.waitForTimeout(70);
-  const mid = await pill();
-  assert.ok(mid.w > a.w + 20, `stretched in flight (${a.w} → ${mid.w})`); assert.ok(mid.blur > 2, "frosted while moving");
-  await page.waitForTimeout(1200);
-  const rest = await pill();
-  assert.ok(Math.abs(rest.w - a.w) < 2 && rest.blur < 1.7, "settled clear at the new tab");
   assert.equal(await page.getAttribute('#dock [data-t="lab"]', "aria-current"), "page");
-  // sub-pages light their parent tab; every page reachable
-  for (const [t, parent] of [["locked", "home"], ["cal", "home"], ["review", "log"], ["shoes", "more"], ["pace", "more"], ["race", "more"], ["settings", "more"], ["bareng", "more"]]) {   // RUNLAB tabs: Hari ini, Lab, Lari, Kamu (Race lives under Kamu)
+  for (const [t, parent] of [["cal", "home"], ["log", "log"], ["shoes", "more"], ["race", "more"], ["jadwal", "more"], ["settings", "more"], ["notif", "more"], ["data", "more"]]) {
     await H.act(page, "nav", { t });
     assert.equal(await page.getAttribute(`#dock [data-t="${parent}"]`, "aria-current"), "page", t);
   }

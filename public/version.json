@@ -1,18 +1,22 @@
 {
- "version": "4.3.0",
- "build": "2026-11-18T03:30:56Z",
+ "version": "5.0.0",
+ "build": "2026-11-18T07:00:28Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "RUNLAB: tampilan Lab baru — temuan utama dengan tingkat bukti, grafik lebih besar dengan inspeksi, inspektur data, snackbar ringkas",
-  "Riset: PubMed/OpenAlex lebih tahan gangguan (timeout, ulang, cache, offline)"
+  "RUNLAB v5: WeRunIt and RUNLAB merged; Instrument design system; four tabs (Hari ini, Lari, Lab, Kamu)"
  ],
  "files": [
   {
+   "p": "css/ds.css",
+   "h": "982b8a011b6cdea6e72511c6b82b8eb37924a2dee8cefa343406cb2c7c6bd495",
+   "s": 19479
+  },
+  {
    "p": "css/runlab.css",
-   "h": "c40289b03c7d46a2d3cf0bab861a7be1d6e340bd2633469cd7653ce87077e04e",
-   "s": 27110
+   "h": "5052ce075ee04fe50fc92ab3f5948ac9c62af9d54854879fe3ffb61c579827e8",
+   "s": 28773
   },
   {
    "p": "css/werunit.css",
@@ -51,8 +55,8 @@
   },
   {
    "p": "index.html",
-   "h": "6430b12614bcfd734652b1f491aab51301e79f9b069ee058f3373fbd17c03a52",
-   "s": 285094
+   "h": "d0abfbc2bfe0570d3f1331ea442ebc23e20f6d83303cd542040ec04af9869ec4",
+   "s": 285220
   },
   {
    "p": "js/app4.js",
@@ -91,8 +95,8 @@
   },
   {
    "p": "js/lab/charts.js",
-   "h": "87e8dce4af3123f0adc11a85c12e1dd3e70a65b979ec2722b72cab2ff55f2f9c",
-   "s": 11347
+   "h": "451785b91dd366ab542ac6ff57329b2da666879cf7caee4770465b78808879c9",
+   "s": 14356
   },
   {
    "p": "js/lab/consult.js",
@@ -111,8 +115,8 @@
   },
   {
    "p": "js/lab/views-lab.js",
-   "h": "06d8a4271bc00dbaf0dc6d49fbacf8c66bc956527e5b84fb6fcdafdf5ce48c7d",
-   "s": 49969
+   "h": "c2150f8272b158f37fc52bd7ec09e8d038b32c821f11638c10df79724fa12c0b",
+   "s": 51787
   },
   {
    "p": "js/logic.js",
@@ -180,8 +184,18 @@
    "s": 11541
   },
   {
+   "p": "js/v5/app5.js",
+   "h": "8f3d45e17ff5775ea8c920dfa717d593b1228a999719a41add5cbd568d0a49f3",
+   "s": 26693
+  },
+  {
+   "p": "js/v5/ds.js",
+   "h": "19beb4a7472d66812716883193977c26da22f6140686545c4c20f15fcd23b39f",
+   "s": 9632
+  },
+  {
    "p": "js/version.js",
-   "h": "09504f1f178ad79f51273984e0651927f559697d7e0a15506e5bd37a386bdb42",
+   "h": "418a95e8ba921c63ef23cd4f036021c651f5dd7e4e8bc0fe076502bc7ae9ac5a",
    "s": 139
   },
   {
@@ -231,8 +245,8 @@
   },
   {
    "p": "sw.js",
-   "h": "85c4986893b097aa6241feae3b4d6e32e2305e8f4387aabb5ca665f97b2485c3",
-   "s": 2835
+   "h": "0ea1cd6b505382d42e8eda494abe5a444bc6e9d245ec7f967969d2c8d99846c0",
+   "s": 2881
   },
   {
    "p": "vendor/capacitor/8.5.3/capacitor.js",

@@ -35,7 +35,7 @@ test("weather: nothing is requested until the user picks a location; city search
   await page.waitForSelector('[data-act="wxPick"]'); await page.click('[data-act="wxPick"]');
   await H.waitFor(page, () => /Prakiraan model/.test(document.querySelector('[data-tour="weather"]').textContent));
   const card = await page.textContent('[data-tour="weather"]');
-  assert.match(card, /Cuaca · Jakarta/);
+  assert.match(card, /Cuaca[\s\S]*Jakarta/);
   assert.match(card, /°C/); assert.match(card, /Open-Meteo\.com \(CC BY 4\.0\)/); assert.match(card, /diambil baru saja/);
   assert.match(card, /Kenapa: Terasa/, "tip explains the numbers behind it");
   const f = calls.find(u => u.includes("/v1/forecast"));

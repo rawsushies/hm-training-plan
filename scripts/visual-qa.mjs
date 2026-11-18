@@ -65,6 +65,14 @@ for (const [label, vp] of [["m390", { width: 390, height: 844 }], ["t768", { wid
     await p.click('#ch-compare [data-act="chartSel"]').catch(() => {});
     await top(p); await snap(p, `${label}-${theme}-inv-findings`, true);
     report.push([label, theme, "populated overflow", await overflow(p), p.errs.slice()]);
+    // comparison controls: time view, then hide one group (viewport shot around the lead chart)
+    if (theme === "dark" || label === "m390") {
+      await p.click('#ch-compare [data-act="labCompView"][data-v="time"]').catch(() => {});
+      await p.click('#ch-compare [data-act="labCompHide"][data-g="b"]').catch(() => {});
+      await p.evaluate(() => document.getElementById("ch-compare")?.scrollIntoView({ block: "center" })); await p.waitForTimeout(200);
+      await snap(p, `${label}-${theme}-compare-time`);
+      report.push([label, theme, "compare controls", await overflow(p), p.errs.slice()]);
+    }
     await b.close();
   }
 }

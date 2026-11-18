@@ -169,6 +169,22 @@
 .ch-readout .mu{color:var(--mu)}
 .ch-empty{display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;border-radius:10px;border:1px dashed var(--line2);color:var(--mu);font-size:14px;line-height:1.45}
 .lab-ctl{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.lab-ctl-c{justify-content:space-between;gap:8px 16px;margin:4px 0 10px}
+.lab-ctl-g{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.lab-gchip{display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:6px 11px;border:1px solid var(--line2);border-radius:8px;background:transparent;color:var(--tx);font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.lab-gchip i{width:10px;height:10px;border-radius:50%;flex:none;border:2px solid currentColor}
+.lab-gchip.sa i{color:var(--sa)}.lab-gchip.sb i{color:var(--sb)}
+.lab-gchip[aria-pressed="true"].sa i{background:var(--sa)}.lab-gchip[aria-pressed="true"].sb i{background:var(--sb)}
+.lab-gchip[aria-pressed="false"]{color:var(--mu);border-style:dashed}
+.lab-gchip .num{color:var(--mu);font-weight:500}
+.lab-gchip:hover{background:color-mix(in srgb,var(--tx) 6%,transparent)}
+.lab-gchip:active{transform:scale(.97)}
+.lab-gchip:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.lab-ctl-note{margin:6px 0 0;max-width:62ch}
+.lab-gchip-l{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:620px){.lab-ctl-c>.lab-ctl-g[role="group"]{width:100%;flex-wrap:nowrap}.lab-ctl-c .lab-gchip{flex:1 1 0;min-width:0}}
+.ch-medline{stroke-width:2;stroke-dasharray:5 4;opacity:.85}.ch-medline.sa{stroke:var(--sa)}.ch-medline.sb{stroke:var(--sb)}
+.lg.medd{height:0;width:16px;border:0;border-top:2px dashed var(--tx);border-radius:0;background:none}
 .cov{display:flex;flex-direction:column;gap:7px}
 .cov-row{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) 44px;gap:10px;align-items:center;font-size:13px}
 .cov-l{display:flex;gap:6px;align-items:center;min-width:0}
@@ -309,7 +325,9 @@ body[data-tab="lab"] .a4-rec{display:none}
 #toast[data-kind="err"]::before{background:var(--bad)}
 #toast[data-kind="err"]{box-shadow:inset 3px 0 0 var(--bad),0 10px 30px rgba(0,0,0,.32)}
 body[data-tab="lab"] #toast{max-width:calc(100vw - 32px)}
-@media (min-width:900px){#toast{left:calc(232px + 32px);bottom:24px;max-width:440px}}
+@media (min-width:900px){#toast{left:auto;right:24px;bottom:24px;max-width:400px}}
+/* Lab: the reading column ends with breathing room so a transient snackbar never sits on the last line. */
+body[data-tab="lab"] .lab2{padding-bottom:72px}
 @media (prefers-reduced-motion:reduce){.lab-go,.lab-opt,.lab-tile,.lab-inv,.icbtn,.ch-pt,.ch-bar,.lab-chev,#toast,.ch-tip{transition:none!important}.lab-spin{animation:none}.lab-go:active,.lab-opt:active,.lab-tile:active,.lab-inv:active,.icbtn:active,.lab-ans:active{transform:none}}
 .lab2 details>summary::after,.lab-caps>summary::after{content:none!important}
 @media (max-width:520px){

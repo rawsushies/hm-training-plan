@@ -138,104 +138,33 @@ test("concurrent edit of the same run: one wins, the other is preserved and rest
   await H.waitFor(a.page, () => window.__hmtpTest.S().logs[0].distance === 9);
 });
 
-test("friends: find by name or email, request/accept, hidden users not findable, private by default, per-friend permissions, shared goal, block", async () => {
-  const a = await H.device(), b = await H.device(), c = await H.device();
-  for (const [d, n] of [[a, "alice"], [b, "bob"], [c, "carol"]]) { await H.open(d.page); await H.signIn(d.page, n); await H.waitSynced(d.page); await H.act(d.page, "nav", { t: "bareng" }); }
-  // Carol hides herself from search
-  await c.page.click('[data-act="frDiscover"]');
-  const search = async (d, q) => { await d.page.fill("#fr-q", q); await d.page.click('[data-act="frSearch"]'); await H.waitFor(d.page, () => FRIENDS.results && !FRIENDS.searching); return d.page.evaluate(() => FRIENDS.results.map ? FRIENDS.results.map(r => r.name) : FRIENDS.results); };
-  await H.waitFor(c.page, () => S.settings.discoverable === false);
-  await new Promise(r => setTimeout(r, 800));
-  assert.deepEqual(await search(a, "car"), [], "hidden user is not findable");
-  assert.deepEqual(await search(b, "ali"), ["Alice"], "name prefix search");
-  assert.deepEqual(await search(b, "ALICE@example.com"), ["Alice"], "exact email search (hashed)");
-  const profiles = await H.adminDocs("profiles");
-  assert.ok(profiles.every(p => !JSON.stringify(p).includes("@example.com")), "email never stored in the directory");
-  // Bob adds Alice; Alice accepts
-  await b.page.click('[data-act="frAdd"]');
-  await H.waitFor(b.page, () => document.body.textContent.includes("Terkirim") || document.body.textContent.includes("menunggu diterima"));
-  await H.waitFor(a.page, () => !!document.querySelector('[data-act="frAccept"]'));
-  assert.match(await a.page.textContent("main"), /Bob/);
-  await a.page.click('[data-act="frAccept"]');
-  await H.waitFor(a.page, () => !!document.querySelector('[data-act="frPerms"]'));
-  await H.waitFor(b.page, () => !!document.querySelector('[data-act="frPerms"]'));
-  // Bob logs a run with private notes. Private by default: Alice sees only his name.
-  await H.logRun(b.page, { date: "2026-11-10", km: 7.5, dur: "52:00" }); await H.waitSynced(b.page);
-  await H.waitFor(a.page, () => document.querySelector('[data-tour="share-toggle"]').textContent.includes("belum membagikan"));
-  const aUid = await a.page.evaluate(() => window.__hmtpTest.uid()), bUid = await b.page.evaluate(() => window.__hmtpTest.uid());
-  // Bob enables weekly distance for Alice only → only whitelisted fields reach the server
-  await b.page.click('[data-act="frPerms"]'); await b.page.check("#pm-weekly"); await b.page.click('[data-act="frPermsSave"]');
-  await H.waitFor(a.page, () => document.querySelector('[data-tour="share-toggle"]').textContent.includes("7,5"), null, 20000);
-  const sh = (await H.adminDocs("shares")).find(d => d.name.endsWith(`/${bUid}_${aUid}`));
-  assert.ok(sh, "share doc exists");
-  assert.deepEqual(Object.keys(sh.fields).sort(), ["name", "owner", "photo", "totalKm", "updatedAt", "viewer", "weekKm"]);
-  // Shared goal: Alice creates, both see Bob's contribution
-  await a.page.click('[data-act="goalNew"]');
-  await a.page.fill("#gn-n", "100 km bareng"); await a.page.fill("#gn-k", "100"); await a.page.fill("#gn-d", "2027-06-13");
-  await a.page.click('[data-act="goalCreate"]');
-  await H.waitFor(b.page, () => document.body.textContent.includes("100 km bareng"), null, 20000);
-  // Bob revokes sharing → numbers disappear for Alice
-  await b.page.click('[data-act="frPerms"]'); await b.page.click('[data-act="frPermsNone"]');
-  await H.waitFor(a.page, () => document.querySelector('[data-tour="share-toggle"]').textContent.includes("belum membagikan"), null, 20000);
-  // Alice blocks Bob → friendship gone for both; Bob cannot read Alice's share any more
-  await a.page.click('[data-act="frBlock"]'); await a.page.click('[data-act="frBlockOk"]');
-  await H.waitFor(b.page, () => !document.querySelector('[data-act="frPerms"]'), null, 20000);
-  assert.equal((await H.adminDocs("friendships")).length, 0);
-  // both sides clean up their share docs once the friendship is gone
-  for (let i = 0; i < 50 && (await H.adminDocs("shares")).length; i++) await new Promise(r => setTimeout(r, 200));
-  assert.equal((await H.adminDocs("shares")).length, 0);
-  for (const p of [a.page, b.page, c.page]) assert.deepEqual(p.errors, []);
+test("merged app: removed features (friends, tutorials, check-in, strength, locked-in, elevation, goals, review, pace calculator) are unreachable; their stored data is kept", async () => {
+  const { page } = await H.device({ cloud: false });
+  await page.goto(H.appUrl().replace("?emulator=1", "")); await H.ready(page); await H.finishOnboarding(page);
+  await page.evaluate(() => { S.checkins.push({ date: "2026-11-10", sleep: 3, soreness: 2, fatigue: 2, energy: 3, motivation: 3, pain: 1 }); S.strength.push({ id: "st1", date: "2026-11-10", sessionId: null, done: ["squat"] }); persist(); });
+  assert.deepEqual(await page.$$eval("#dock button span", e => e.map(x => x.textContent)), ["Hari ini", "Lari", "Lab", "Kamu"]);
+  for (const t of ["bareng", "tutorials", "recovery", "strength", "locked", "elev", "goals", "review", "pace", "guide", "kamus"]) {
+    await H.act(page, "nav", { t });
+    assert.equal(await page.evaluate(() => S.ui.tab), "home", t + " redirects to Hari ini");
+  }
+  assert.equal(await page.$("#tour"), null, "no tutorial bubble");
+  assert.equal(await page.$$eval(".helpbtn", e => e.filter(x => getComputedStyle(x).display !== "none").length), 0, "no help bubbles");
+  await H.act(page, "nav", { t: "more" }); const menu = await page.textContent("main");
+  assert.ok(!/Teman|Tutorial|Check-in|Strength|Locked-in|Elevation|Goals/.test(menu), "Kamu lists kept features only");
+  assert.deepEqual(await page.evaluate(() => [S.checkins.length, S.strength.length]), [1, 1], "stored data untouched");
+  assert.deepEqual(page.errors, []);
 });
 
-test("tutorial: no automatic tour after onboarding; quick start on request, completion per account and synced; contextual help opens a feature tour", async () => {
-  const d = await H.device();
-  await d.page.goto(H.appUrl());
-  await H.waitFor(d.page, () => window.__hmtpTest);
-  await H.ready(d.page);
-  await H.finishOnboarding(d.page);
-  await d.page.waitForTimeout(600);
-  assert.equal(await d.page.$("#tour"), null, "nothing pops up by itself");
-  await H.signIn(d.page, "dina"); await H.waitSynced(d.page);
-  // quick start when the user asks for it
-  await H.act(d.page, "tutStart", { id: "quick" });
-  await d.page.waitForSelector("#tour");
-  assert.match(await d.page.textContent("#tour"), /· 1\/6/);
-  for (let i = 0; i < 6; i++) await d.page.click('[data-act="tutNext"]');
-  await H.waitSynced(d.page);
-  const uid = (await H.state(d.page)).uid;
-  const tut = (await H.adminDocs(`users/${uid}/plan`)).find(x => x.name.endsWith("/tutorial"));
-  assert.equal(tut.fields.data.mapValue.fields.quick.booleanValue, true);
-  // contextual help on the calendar → starts the calendar tour on the right page with a real highlight
-  await H.act(d.page, "nav", { t: "cal" });
-  await d.page.click('.helpbtn[data-k="cal"]');
-  assert.match(await d.page.textContent(".sheet"), /Apa ini\?[\s\S]*Cara pakai/);
-  await d.page.click('.sheet [data-act="tutStart"]');
-  assert.match(await d.page.textContent("#tour"), /Jadwal latihan · 1\/6/);
-  for (let i = 0; i < 4; i++) await d.page.click('[data-act="tutNext"]');
-  assert.ok(await d.page.$('[data-tour="cal-actions"].tour-hl'), "session actions highlighted on a day that has sessions");
-  // a new device for the same account does not show the quick start again
-  const d2 = await H.device(); await d2.page.goto(H.appUrl()); await H.waitFor(d2.page, () => window.__hmtpTest); await H.ready(d2.page);
-  await d2.page.evaluate(() => { const x = document.querySelector('[data-act="tutClose"]'); if (x) x.click(); });
-  await H.signIn(d2.page, "dina"); await H.waitSynced(d2.page);
-  assert.equal(await d2.page.evaluate(() => window.__hmtpTest.S().tutorial.quick), true);
-});
-
-test("mobile + desktop layouts: no horizontal overflow, tour bubble does not cover the target", async () => {
+test("mobile + desktop layouts: no horizontal overflow on any page of the merged app", async () => {
   for (const vp of [{ width: 320, height: 640 }, { width: 390, height: 844 }, { width: 844, height: 390 }, { width: 1280, height: 800 }]) {
     const { page } = await H.device({ viewport: vp, cloud: false });
     await page.goto(H.appUrl().replace("?emulator=1", ""));
     await H.ready(page);
     await H.finishOnboarding(page);
-    for (const t of ["home", "cal", "log", "review", "more", "bareng", "data", "notif", "tutorials", "settings"]) {
+    for (const t of ["home", "cal", "log", "lab", "more", "race", "jadwal", "shoes", "data", "notif", "integ", "settings", "about"]) {
       await H.act(page, "nav", { t });
       const over = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       assert.ok(over <= 1, `${t} @${vp.width}x${vp.height} overflows by ${over}px`);
-    }
-    await H.act(page, "tutStart", { id: "dashboard" });
-    for (let i = 0; i < 7; i++) {
-      const overlap = await page.evaluate(() => { const t = document.querySelector(".tour-hl"), b = document.querySelector("#tour .bubble"); if (!t || !b) return 0; const r = t.getBoundingClientRect(), q = b.getBoundingClientRect(); const top = Math.max(r.top, q.top), bot = Math.min(r.top + Math.min(r.height, 100), q.bottom); return Math.max(0, bot - top); });
-      assert.ok(overlap < 30, `bubble covers target (step ${i + 1}) by ${overlap}px @${vp.width}x${vp.height}`);
-      await page.click('[data-act="tutNext"]');
     }
     assert.deepEqual(page.errors, []);
   }

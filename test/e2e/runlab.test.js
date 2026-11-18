@@ -16,7 +16,7 @@ test("Lab: create â†’ one question at a time (answer, unknown, skip, correct) â†
   await H.signIn(page, "rina"); await H.waitSynced(page);
   for (const [d, km, dur] of [["2026-11-10", 5, "35:00"], ["2026-11-12", 8, ""], ["2026-11-14", 10, "1:05:00"]]) await H.logRun(page, { date: d, km, dur });
   await page.click('#dock [data-t="lab"]');
-  assert.deepEqual(await page.$$eval("#dock button span", e => e.map(x => x.textContent)), ["Hari ini", "Lab", "Lari", "Kamu"]);
+  assert.deepEqual(await page.$$eval("#dock button span", e => e.map(x => x.textContent)), ["Hari ini", "Lari", "Lab", "Kamu"]);
   const caps = await page.textContent(".lab-caps");
   assert.match(caps, /Analisis lokal[\s\S]*Aktif/); assert.match(caps, /Konsultasi AI[\s\S]*Tidak aktif[\s\S]*Belum diatur/);
   // Workout Compiler is a visibly disabled placeholder with no action
@@ -126,6 +126,20 @@ test("Lab analysis + research: deterministic findings with method and record set
   await page.click('#ch-compare [data-act="chartSel"][data-i="0"]');
   assert.match(await page.textContent("#ro-compare"), /6 km[\s\S]*Buka lari/);
   assert.equal(await page.getAttribute('#ch-compare [data-act="chartSel"][data-i="0"]', "aria-pressed"), "true");
+  // comparison controls: time view keeps the selection; hiding a group drops its marks and the median bracket; both can never be hidden
+  await page.click('#ch-compare [data-act="labCompView"][data-v="time"]');
+  assert.equal(await page.locator('#ch-compare .ch-medline').count(), 2);
+  assert.equal(await page.getAttribute('#ch-compare [data-act="chartSel"][data-i="0"]', "aria-pressed"), "true");
+  await page.click('#ch-compare [data-act="labCompHide"][data-g="b"]');
+  assert.equal(await page.getAttribute('#ch-compare [data-act="labCompHide"][data-g="b"]', "aria-pressed"), "false");
+  assert.equal(await page.locator('#ch-compare [data-act="chartSel"]').count(), 3);
+  await page.click('#ch-compare [data-act="labCompHide"][data-g="a"]');
+  assert.equal(await page.getAttribute('#ch-compare [data-act="labCompHide"][data-g="b"]', "aria-pressed"), "true");
+  assert.equal(await page.getAttribute('#ch-compare [data-act="labCompHide"][data-g="a"]', "aria-pressed"), "false");
+  assert.match(await page.textContent("#ro-compare"), /Arahkan atau ketuk titik/);
+  await page.click('#ch-compare [data-act="labCompHide"][data-g="a"]');
+  await page.click('#ch-compare [data-act="labCompView"][data-v="spread"]');
+  assert.equal(await page.locator('#ch-compare .ch-bracket').count(), 1);
   // method inspector: version, window and exclusions are inspectable
   await page.click('[data-analysis="compare"] .lab-method summary');
   assert.match(await page.textContent('[data-analysis="compare"] .lab-method'), /compare-1[\s\S]*Cara hitung[\s\S]*Batasan/);

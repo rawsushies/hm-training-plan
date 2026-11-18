@@ -3,6 +3,13 @@
 Branch `claude/charming-cori-ge7n37` (based on `main` @ 52a89c4). Pushed to the feature branch only. Nothing is deployed,
 merged or released. Local release manifest: 4.3.0 (stamped for `check:release`, not published).
 
+## v5 merge (current direction, see `docs/RUNLAB_V5.md`)
+- WeRunIt and RUNLAB are merged into one visual-first app: four tabs (Hari ini · Lari · Lab · Kamu) and the "Instrument"
+  design system.
+- Removed features are hidden; their data is kept.
+- Phase 1 is done. Phase 2 is next: Race, Jadwal, Sepatu, Pengingat, Pengaturan and Data. Phase 3 is the Lab.
+- The items below record earlier history; any UI described there is superseded by v5.
+
 ## Done
 - M0 docs, M1 Lab slice.
 - M1.5 first redesign; **Redesign 2** (composition, not tokens: see `docs/RUNLAB_VISUAL_DIRECTION.md` §Redesign 2):

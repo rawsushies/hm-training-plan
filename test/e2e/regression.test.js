@@ -116,32 +116,12 @@ test("calendar: skip/unskip, edit session, reschedule blocks Wednesday, reset to
   assert.equal(await page.evaluate(() => sessById("w1-sat").dist), 6);
 });
 
-test("strength, check-in, goals, shoes, locked-in target, elevation target, review notes, settings", async () => {
+test("shoes and settings (kept in the merged app)", async () => {
   const { page } = await fresh();
-  await H.act(page, "startStr", { id: "w1-sA" });
-  await page.click('[data-act="strTick"][data-k="lunge"]'); await page.click('[data-act="strTick"][data-k="squat"]');
-  await page.click('[data-act="strSave"]');
-  assert.deepEqual(await page.evaluate(() => [S.strength.length, S.strength[0].sessionId, S.strength[0].done.length]), [1, "w1-sA", 2]);
-  await H.act(page, "nav", { t: "recovery" });
-  await page.click('[data-act="askStart"][data-f="ci"]');           // check-in is six questions from Kiki
-  for (const v of [3, 2, 2, 3, 3, 4]) await H.askPick(page, v);
-  assert.match(await page.textContent('[data-tour="ci-result"]'), /Mending istirahat/);
-  await page.click('[data-act="askSave"]');
-  assert.equal(await page.evaluate(() => S.checkins.length), 1);
-  await H.act(page, "goalEdit", { id: "longrun" }); await page.fill("#gl-target", "18"); await page.click('[data-act="saveGoal"]');
-  assert.equal(await page.evaluate(() => S.goals.items.find(x => x.id === "longrun").target), 18);
   await H.act(page, "askStart", { f: "shoe" }); await H.askSkip(page); await H.askType(page, "Biru");
   await H.askPick(page, "daily"); await H.askPick(page, 0); await H.askPick(page, 700); await page.click('[data-act="askSave"]');
   const shoeId = await page.evaluate(() => S.shoes[0].id);
   assert.equal(await page.evaluate(() => S.settings.defaultShoe), shoeId);
-  await H.act(page, "lockCfg", { id: "w2-wd" }); await page.fill("#lc-pace", "7:30"); await page.click('[data-act="saveLockCfg"]');
-  assert.equal(await page.evaluate(() => lockedCfg("w2-wd", 2, "locked").targetPace), 450);
-  await H.act(page, "applyPace", { id: "w2-wd" });
-  assert.equal(await page.evaluate(() => lockedCfg("w6-wd", 6, "locked").targetPace), 450);
-  await H.act(page, "elevCfg", { id: "w3-sat" }); await page.fill("#ev-t", "120"); await page.click('[data-act="saveElevCfg"]');
-  assert.equal(await page.evaluate(() => S.elev["w3-sat"].target), 120);
-  await H.act(page, "nav", { t: "review" }); await page.fill("#rv-best", "Rutin!"); await page.click('[data-act="saveReview"]');
-  assert.equal(await page.evaluate(() => S.reviews[S.ui.revBlock ?? PLANW[curWeekIdx()].block].best), "Rutin!");
   await H.act(page, "nav", { t: "settings" });
   await page.selectOption("#st-wd", "3"); await page.fill("#st-goal", "3:15:00"); await page.click('[data-act="saveSettings"]');
   assert.deepEqual(await page.evaluate(() => [S.settings.weekday, S.settings.goalTime, sessById("w1-wd").date]), [3, "3:15:00", "2026-11-12"]);
@@ -235,6 +215,6 @@ test("offline startup: after one online visit the app opens with no network (ser
   await page.reload();
   await page.waitForSelector("main");
   assert.equal(await page.evaluate(() => S.logs.length), 1);
-  assert.match(await page.textContent("main"), /hari lagi|Race/);
+  assert.match(await page.textContent("main"), /Hari ini[\s\S]*hari/);
   await ctx.setOffline(false);
 });

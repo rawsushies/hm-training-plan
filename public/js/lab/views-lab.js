@@ -6,7 +6,7 @@
 (function () {
   "use strict";
   const LB = WRI_LAB, AN = WRI_ANALYSIS, CH = WRI_CHARTS;
-  const LAB = { open: null, editQ: false, editType: false, draft: "", range: 12, sel: {}, band: null, live: {}, research: { busy: false, err: "", results: null, q: "" } };
+  const LAB = { open: null, editQ: false, editType: false, draft: "", range: 12, sel: {}, band: null, cview: "spread", chide: {}, live: {}, research: { busy: false, err: "", results: null, q: "" } };
 
   /* ---------- navigation ---------- */
   IC.lab = '<svg class="ico" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5.5 9.5A1.6 1.6 0 0 0 5.9 21h12.2a1.6 1.6 0 0 0 1.4-2.5L14 9V3"/><path d="M7.5 15h9"/></svg>';
@@ -205,8 +205,18 @@
       const b = bands.find(x => x.band === LAB.band) || AN.leadBand(r) || bands[0];
       return `${bands.length > 1 ? `<div class="lab-ctl"><span class="xs mu">Rentang jarak</span>${segPill("trendband", bands.map(x => [x.band, x.band]), b.band, "labBand")}</div>` : ""}${CH.trend(r.series, Object.assign({}, b, { splitDate: r.metrics.splitDate }), { sel, w: W, h: N ? 250 : lead ? 300 : 250 })}`;
     }
-    if (r.analysisId === "compare") return CH.compare(r.metrics, r.series, { sel, w: W, h: N ? 230 : 250 });
+    if (r.analysisId === "compare") {
+      const m = r.metrics, hide = LAB.chide, chip = k => `<button type="button" class="lab-gchip ${k === "a" ? "sa" : "sb"}" data-act="labCompHide" data-g="${k}" aria-pressed="${!hide[k]}" title="${hide[k] ? "Tampilkan" : "Sembunyikan"} ${esc(m.labels[k])}"><i aria-hidden="true"></i><span class="lab-gchip-l">${esc(m.labels[k])}</span><span class="num">${m[k].n}</span></button>`;
+      return `<div class="lab-ctl lab-ctl-c"><div class="lab-ctl-g">${segPill("compview", [["spread", "Sebaran"], ["time", "Urutan waktu"]], LAB.cview, "labCompView")}</div><div class="lab-ctl-g" role="group" aria-label="Kelompok yang ditampilkan">${chip("a")}${chip("b")}</div></div>
+        ${CH.compare(m, r.series, { sel, w: W, h: N ? (LAB.cview === "time" ? 240 : 230) : LAB.cview === "time" ? 290 : 250, view: LAB.cview, hide })}
+        ${LAB.cview === "time" ? `<p class="xs mu lab-ctl-note">Kalau satu kelompok berkumpul di minggu-minggu tertentu, selisihnya bisa ikut dipengaruhi waktu (kebugaran, musim), bukan hanya kelompoknya.</p>` : ""}`;
+    }
     return CH.coverage(r.metrics.coverage);
+  }
+  function redrawChart(id) {
+    const r = LAB.live[id]; if (!r) return;
+    const box = document.getElementById("ch-" + id); if (box) { box.innerHTML = findingChart(r, isLead(id)); if (typeof mountSegPills === "function") mountSegPills(box); }
+    const ro = document.getElementById("ro-" + id); if (ro) ro.innerHTML = readout(r);
   }
   function readout(r) {
     const i = LAB.sel[r.analysisId]; if (i === undefined || i === null) return `<span class="mu">Arahkan atau ketuk ${r.analysisId === "weekly" ? "batang" : "titik"} untuk detail${r.analysisId === "weekly" ? "" : " dan buka lari aslinya"}.</span>`;
@@ -336,7 +346,7 @@
       if (q.length < 5) { toast("Tulis pertanyaanmu dulu (minimal 5 huruf)", "err"); const el = document.getElementById("lab-q"); if (el) el.focus(); return; }
       const inv = LB.newInvestigation(q); save(inv); LAB.open = inv.id; LAB.draft = ""; LAB.editQ = LAB.editType = false; LAB.sel = {}; render(false); window.scrollTo(0, 0); toast("Investigasi tersimpan", "ok");
     },
-    labOpen: d => { LAB.open = d.id; LAB.editQ = LAB.editType = false; LAB.sel = {}; LAB.band = null; S.ui.tab = "lab"; render(false); window.scrollTo(0, 0); },
+    labOpen: d => { LAB.open = d.id; LAB.editQ = LAB.editType = false; LAB.sel = {}; LAB.band = null; LAB.cview = "spread"; LAB.chide = {}; S.ui.tab = "lab"; render(false); window.scrollTo(0, 0); },
     labBack: () => { LAB.open = null; LAB.editQ = LAB.editType = false; render(false); },
     labAns: d => { const i = cur(); if (!i) return; const v = /^-?\d+(\.\d+)?$/.test(d.v) ? Number(d.v) : d.v; save(LB.answer(i, d.k, v)); render(true); },
     labAnsText: d => { const i = cur(), v = ((document.getElementById("lab-txt") || {}).value || "").trim(); if (!i) return; if (!v) { toast("Tulis jawabannya, atau pilih Lewati / Nggak tahu", "err"); return; } save(LB.answer(i, d.k, v.slice(0, 200))); render(true); },
@@ -363,6 +373,8 @@
     labDelete: () => { const i = cur(); if (!i) return; M = { kind: "confirm", title: "Hapus investigasi ini?", msg: "Pertanyaan, jawaban, snapshot analisis, sumber tersimpan dan catatanmu untuk investigasi ini dihapus dari perangkat dan akun. Data lari kamu nggak kena. Mau simpan dulu? Pakai tombol Export.", ok: "labDeleteOk", okId: i.id, okLabel: "Hapus", danger: true }; render(true); },
     labDeleteOk: d => { const o = Object.assign({}, S.lab); delete o[d.id]; S.lab = o; persist(); M = null; LAB.open = null; render(false); toast("Investigasi dihapus", "ok"); },
     labRange: d => { LAB.range = +d.v || 12; LAB.sel.weekly = null; swap("lab-ev", evidence()); },
+    labCompView: d => { LAB.cview = d.v === "time" ? "time" : "spread"; redrawChart("compare"); },
+    labCompHide: d => { const k = d.g === "b" ? "b" : "a", o = k === "a" ? "b" : "a"; LAB.chide[k] = !LAB.chide[k]; if (LAB.chide[k] && LAB.chide[o]) LAB.chide[o] = false; const r = LAB.live.compare, sel = LAB.sel.compare; if (r && sel != null && LAB.chide[sel < r.series.a.length ? "a" : "b"]) LAB.sel.compare = null; redrawChart("compare"); },
     labBand: d => { LAB.band = d.v; LAB.sel.trend = null; const r = LAB.live.trend; if (!r) return; const box = document.getElementById("ch-trend"); if (box) { box.innerHTML = findingChart(r, isLead("trend")); if (typeof mountSegPills === "function") mountSegPills(box); } const ro = document.getElementById("ro-trend"); if (ro) ro.innerHTML = readout(r); },
     chartSel: d => {
       const id = d.chart, i = +d.i; LAB.sel[id] = LAB.sel[id] === i ? null : i;

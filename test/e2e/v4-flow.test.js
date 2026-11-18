@@ -45,32 +45,22 @@ test("one tap marks today's session done with its planned distance; the toast op
   void ctx; assert.deepEqual(page.errors, []);
 });
 
-test("Catat: Kiki asks one question at a time, answers fold up, the summary shows pace before anything is saved", async () => {
+test("Catat: one quick sheet (distance stepper, time, effort bars); nothing is saved until Simpan; invalid input is refused", async () => {
   const { page } = await H.device(); await H.open(page);
-  await page.click("#rec");
-  await page.waitForSelector(".ask .ask-q");
-  await page.click(".ask-q .ask-o");                                   // Hari ini
-  if (await page.evaluate(() => /sesi/.test(document.querySelector(".ask-qt").textContent))) await page.click(".ask-q .ask-o:last-of-type");   // lari bebas
-  await H.askType(page, "6");
-  await H.askType(page, "42:00");
-  if (await page.evaluate(() => /jenis/.test(document.querySelector(".ask-qt").textContent))) await H.askPick(page, "easy");
-  assert.ok((await page.$$(".ask-h")).length >= 3, "answered questions fold into the history");
-  await H.askPick(page, 4);
-  await page.waitForSelector(".ask-sum");
-  assert.match(await page.textContent(".ask-sum"), /6[\s\S]*7:00[\s\S]*42:00/);
-  assert.equal(await page.evaluate(() => S.logs.length), 0, "nothing saved before the summary is confirmed");
-  // changing an earlier answer asks the later questions again (a different date can mean different sessions)
-  await page.click('.ask-h[data-i="0"]');
-  await page.click(".ask-q .ask-o:nth-child(2)");                     // Kemarin
-  assert.equal(await page.evaluate(() => M.a.km), undefined, "later answers cleared");
-  await page.click('.ask-h[data-i="0"]'); await page.click(".ask-q .ask-o:nth-child(1)");   // back to Hari ini
-  if (await page.evaluate(() => /sesi/.test(document.querySelector(".ask-qt").textContent))) await page.click(".ask-q .ask-o:last-of-type");
-  await H.askType(page, "6"); await H.askType(page, "42:00");
-  if (await page.evaluate(() => /jenis/.test(document.querySelector(".ask-qt").textContent))) await H.askPick(page, "easy");
-  await H.askPick(page, 4);
-  await page.waitForSelector(".ask-sum");
-  await page.click('[data-act="askSave"]');
+  await H.act(page, "nav", { t: "log" });
+  await page.click('[data-act="quickLog"]');
+  await page.waitForSelector("#ql-km");
+  await page.fill("#ql-km", "");
+  await page.click('[data-act="qlSave"]');
+  assert.equal(await page.evaluate(() => S.logs.length), 0, "empty distance is refused");
+  await page.fill("#ql-km", "5,5"); await page.click('[data-act="qlStep"][data-v="0.5"]');
+  assert.equal(await page.inputValue("#ql-km"), "6");
+  await page.fill("#ql-dur", "42:00"); await page.click('[data-act="qlEff"][data-v="2"]');
+  assert.equal(await page.evaluate(() => S.logs.length), 0, "nothing saved before Simpan");
+  await page.click('[data-act="qlSave"]');
   const l = await page.evaluate(() => S.logs[0]);
   assert.equal(l.distance, 6); assert.equal(l.duration, 2520); assert.equal(l.rpe, 4);
+  assert.match(await page.textContent("#toast"), /Tersimpan · 6 km · 7:00/);
+  assert.match(await page.textContent(".v5-list"), /6\s*km[\s\S]*7:00/);
   assert.deepEqual(page.errors, []);
 });
