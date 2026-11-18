@@ -74,3 +74,32 @@ test("lab records sync additively; v3/v4 users without Lab data get identical re
   const m = H.mergeStates(S, H.sanitizeState(Object.assign(defaults(), { lab: { lab2: L.newInvestigation("tidur?", T0, "lab2") } }), defaults), defaults);
   assert.deepEqual(Object.keys(m.state.lab).sort(), ["lab1", "lab2"]);
 });
+
+test("quick body check is a separate coarse signal: no invented check-in answers; full check-ins untouched; synced as plan/quick_*", () => {
+  const full = ci("2026-11-17");
+  const S = H.sanitizeState(Object.assign(defaults(), { checkins: [full], quickChecks: { "2026-11-18": { v: "capek" }, "bad": { v: "capek" }, "2026-11-16": { v: "segar banget" } } }), defaults);
+  assert.deepEqual(S.quickChecks, { "2026-11-18": { v: "capek" } });
+  assert.deepEqual(S.checkins, [full], "no six-field check-in created from a tap");
+  const recs = H.stateToRecords(S);
+  assert.deepEqual(recs["plan/quick_2026-11-18"], { v: "capek" });
+  assert.deepEqual(recs["checkins/2026-11-17"], full);
+  assert.deepEqual(H.recordsToState(recs, defaults(), defaults).quickChecks, { "2026-11-18": { v: "capek" } });
+  const base = H.sanitizeState(defaults(), defaults);
+  assert.ok(!Object.keys(H.stateToRecords(base)).some(k => k.startsWith("plan/quick_")), "users without quick checks: records unchanged");
+});
+
+test("correcting an answer removes dependent answers transitively; stages and snapshot freshness follow the answers", () => {
+  let inv = L.newInvestigation("Apakah aku lebih efisien lari pagi atau malam?", T0, "env1");
+  assert.equal(L.stage(inv), "draft");
+  inv = L.answer(inv, "window", 56, "answered", T0); assert.equal(L.stage(inv), "context");
+  inv = L.answer(inv, "factor", "time", "answered", T0); inv = L.answer(inv, "measure", "pace", "answered", T0);
+  assert.equal(L.stage(inv), "ready");
+  inv = Object.assign({}, inv, { snapshots: [{ analysisId: "compare", methodVersion: "compare-1", createdAt: T0, answersKey: L.answersKey(inv), n: 6, adequacy: "limited", includedRecordIds: ["a"], excludedCount: 0, metrics: {} }] });
+  assert.equal(L.stage(inv), "findings");
+  const re = L.reopen(inv, "factor", T0);
+  assert.equal(re.answers.measure, undefined, "measure depends on factor"); assert.ok(re.answers.window, "unrelated answer kept");
+  assert.equal(L.stage(re), "context"); assert.equal(L.snapshotFresh(re, re.snapshots[0]), false);
+  const cleaned = L.cleanInvestigation(Object.assign({}, inv, { snapshots: [{ analysisId: "evil", methodVersion: "x", createdAt: T0 }, inv.snapshots[0]], sources: [{ id: "pmid:1", title: "T", url: "javascript:alert(1)" }, { id: "pmid:2", title: "Run study", url: "https://pubmed.ncbi.nlm.nih.gov/2/", year: 2024, kind: "rct" }] }));
+  assert.equal(cleaned.snapshots.length, 1); assert.deepEqual(cleaned.sources.map(s => s.id), ["pmid:2"]);
+  assert.equal(L.archived, undefined); assert.equal(L.stage(Object.assign({}, inv, { status: "closed" })), "archived");
+});

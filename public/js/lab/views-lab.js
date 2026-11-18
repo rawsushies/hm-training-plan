@@ -55,7 +55,7 @@
     return [
       { k: "analysis", l: "Analisis lokal", st: "on", d: "Dihitung di perangkatmu dari catatan lari. Bekerja offline." },
       { k: "research", l: "Riset ilmiah", st: !R ? "off" : online ? "ready" : "off", d: !R ? "Modul riset tidak dimuat." : online ? "PubMed & OpenAlex, dicari saat kamu minta." : "Butuh koneksi. Hasil yang tersimpan tetap bisa dibuka." },
-      { k: "ai", l: "Konsultasi AI", st: "off", d: "Belum diatur: butuh server aman + kunci API milik pemilik app. Tidak ada jawaban AI palsu." }
+      { k: "ai", l: "Konsultasi AI", st: window.WRI_CONSULT && WRI_CONSULT.status(window.HMTP_LAB_AI || null) === "configured" ? "ready" : "off", d: "Belum diatur: butuh server aman + kunci API milik pemilik app. Tidak ada jawaban AI palsu." }
     ];
   }
   const CAPW = { on: "Aktif", ready: "Siap saat diminta", off: "Tidak aktif" };
@@ -207,6 +207,16 @@
       ${st.err && st.inv === inv.id ? `<div class="note warn" style="margin-top:8px">${esc(st.err)}</div>` : ""}
       ${list ? (list.length ? `<ul class="lab-srcs">${list.filter(x => !saved.some(s => s.id === x.id)).map(x => card(x, false)).join("")}</ul>${st.cache ? `<p class="xs mu">Dari cache ${esc(st.cache)}.</p>` : ""}` : `<p class="sm">Tidak ada riset yang cukup relevan ditemukan untuk kata kunci ini. Itu hasil yang sah.</p>`) : ""}</section>`;
   }
+  /** AI consultation: credential-gated. Shows exactly what would be sent, and that nothing is sent today. */
+  function aiPanel(inv, res) {
+    const C = window.WRI_CONSULT; if (!C) return "";
+    const st = C.status(window.HMTP_LAB_AI || null), prev = C.buildPayload(inv, S, res, C.CATEGORIES.map(c => c.k));
+    return `<section class="lab-panel lab-locked" data-tour="lab-ai"><div class="lab-ph"><h3>Konsultasi AI</h3><span class="lab-badge">${st === "configured" ? "Siap" : "Belum diatur"}</span></div>
+      <p class="sm">${st === "configured" ? "" : "Belum aktif: butuh server aman dan kunci API milik pemilik app. Tidak ada data yang dikirim, dan tidak ada jawaban AI palsu."}</p>
+      <details class="lab-why"><summary>Yang akan dikirim kalau nanti diaktifkan (dengan izinmu)</summary>
+        <ul class="sm">${C.CATEGORIES.map(c => `<li><label><input type="checkbox" disabled ${c.k === "hr" ? "" : "checked"}> ${esc(c.l)}</label></li>`).join("")}</ul>
+        <p class="xs mu">Tidak pernah dikirim: catatan pribadi, nama, email, rute/GPS, data teman${prev.excluded.strava ? `, dan ${prev.excluded.strava} lari dari Strava (aturan Strava melarang pemakaian AI)` : ", dan lari dari Strava"}.</p></details></section>`;
+  }
   function vInvestigation(inv) {
     const shoes = S.shoes || [], st = LB.steps(inv, shoes), next = LB.nextQuestion(inv, shoes), T = LB.TYPES[inv.type], stage = LB.stage(inv, shoes);
     const answered = st.filter(s => inv.answers[s.k]);
@@ -229,6 +239,7 @@
         ${next ? askCard(next) : ""}
         ${res ? `<section class="lab-findings" data-tour="lab-findings"><div class="lab-ph"><h2>Temuan · datamu</h2>${changed ? `<span class="lab-badge st-context">Data berubah sejak snapshot</span>` : ""}</div>${res.map(findingCard).join("")}</section>
           ${researchPanel(inv)}
+          ${aiPanel(inv, res)}
           <section class="lab-panel"><h3>Kemungkinan penjelasan</h3><p class="sm">Lab belum membuat penjelasan otomatis: itu butuh konsultasi AI yang <b>belum diatur</b>. Hal-hal ini bisa ikut menjelaskan pola di atas dan <b>belum diuji</b>:</p><div class="lab-chips">${sc.confounders.map(c => `<span class="chip">${esc(c)}</span>`).join("")}</div><p class="xs mu" style="margin-top:6px">Punya dugaan sendiri? Tulis di Catatan di bawah.</p></section>
           <section class="lab-panel"><h3>Yang belum bisa disimpulkan</h3><ul class="sm lab-conf"><li>Ini pola dari catatanmu sendiri, bukan bukti sebab-akibat.</li>${res.filter(r => r.adequacy !== "adequate").map(r => `<li>${esc(ADQ[r.adequacy])} untuk ${esc({ weekly: "volume mingguan", trend: "tren pace", compare: "perbandingan", quality: "kualitas data" }[r.analysisId])} (n ${r.n}).</li>`).join("")}${[...new Set(res.flatMap(r => r.missingFields))].map(f => `<li>Tanpa data ${esc(f)}.</li>`).join("")}</ul></section>
           <section class="lab-panel lab-locked"><h3>Eksperimen berikutnya</h3><p class="sm mu">Merancang eksperimen pribadi (satu variabel, baseline vs periode uji) hadir di tahap berikutnya. Belum aktif.</p></section>` : ""}

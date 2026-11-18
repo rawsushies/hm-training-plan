@@ -226,6 +226,8 @@
     s.profile = cleanProfile(saved.profile);
     s.racePrefs = cleanRacePrefs(saved.racePrefs);
     s.planMap = cleanPlanMap(saved.planMap);
+    // One-tap body check (coarse, user-reported): kept apart from the six-field check-in so no answers are invented.
+    s.quickChecks = cleanMap(saved.quickChecks, /^\d{4}-\d{2}-\d{2}$/, v => isObj(v) && ["segar", "oke", "capek", "nyeri"].includes(v.v) ? { v: v.v } : null);
     const LB = G.WRI_LAB;      // RUNLAB investigations (private; never shared)
     s.lab = LB ? cleanMap(saved.lab, ID_RE, LB.cleanInvestigation) : {};
     for (const k of Object.keys(s.lab)) if (s.lab[k].id !== k) delete s.lab[k];     // record key must be the investigation id
@@ -272,7 +274,7 @@
    * (relative to users/{uid}). Each record syncs on its own, so two devices adding runs
    * never overwrite each other. */
   const PLAN_SINGLE = ["settings", "goals", "raceCheck", "tutorial"];
-  const PLAN_MAPS = { ovr: "overrides", status: "status", locked: "locked", elev: "elev", event: "events", share: "shareWith" };
+  const PLAN_MAPS = { ovr: "overrides", status: "status", locked: "locked", elev: "elev", event: "events", share: "shareWith", quick: "quickChecks" };
   // v4 single records (absent = not set; v3 users have none, which means "keep the v3 behaviour")
   const PLAN_V4 = { schedule: "schedule", profile: "profile", race: "racePrefs", planmap: "planMap" };
   const COLLS = ["runs", "strength", "checkins", "shoes", "reviews", "plan", "lab"];
@@ -299,7 +301,7 @@
   function recordsToState(recs, S, defaults) {
     const raw = { settings: recs["plan/settings"], goals: recs["plan/goals"], raceCheck: recs["plan/raceCheck"], tutorial: recs["plan/tutorial"],
       schedule: recs["plan/schedule"], profile: recs["plan/profile"], racePrefs: recs["plan/race"], planMap: recs["plan/planmap"],
-      overrides: {}, status: {}, locked: {}, elev: {}, events: {}, shareWith: {}, reviews: {}, lab: {}, logs: [], strength: [], checkins: [], shoes: [] };
+      overrides: {}, status: {}, locked: {}, elev: {}, events: {}, shareWith: {}, quickChecks: {}, reviews: {}, lab: {}, logs: [], strength: [], checkins: [], shoes: [] };
     // keep existing array order where possible (stable rendering), append new ones
     const order = { runs: S.logs.map(x => x.id), strength: S.strength.map(x => x.id), checkins: S.checkins.map(x => x.date), shoes: S.shoes.map(x => x.id) };
     const buckets = { runs: [], strength: [], checkins: [], shoes: [] };
@@ -439,7 +441,7 @@
       if (changed) rep.reviews.combined++;
     }
     // plan maps: union, primary wins per key
-    for (const f of ["overrides", "status", "locked", "elev", "events", "lab"]) for (const [k, v] of Object.entries(B[f] || {})) { A[f] = A[f] || {}; if (!(k in A[f])) { A[f][k] = clone(v); rep.plan.added++; } }
+    for (const f of ["overrides", "status", "locked", "elev", "events", "lab", "quickChecks"]) for (const [k, v] of Object.entries(B[f] || {})) { A[f] = A[f] || {}; if (!(k in A[f])) { A[f][k] = clone(v); rep.plan.added++; } }
     for (const f of ["schedule", "planMap"]) if (!A[f] && B[f]) A[f] = clone(B[f]);
     for (const k of Object.keys(A.profile || {})) if ((A.profile[k] === null || A.profile[k] === false) && B.profile && B.profile[k] !== null && B.profile[k] !== undefined) A.profile[k] = B.profile[k];
     for (const [k, v] of Object.entries(B.raceCheck)) if (v) A.raceCheck[k] = true;

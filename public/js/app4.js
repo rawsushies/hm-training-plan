@@ -78,7 +78,7 @@
     return r.st === "rest" ? "nyeri" : r.st === "easy" ? "capek" : r.v >= 4.5 ? "segar" : "oke";
   }
   function bodyCheck() {
-    const t = todayYmd(), c = S.checkins.find(x => x.date === t && !x.sample), lv = bodyLevel(c);
+    const t = todayYmd(), c = S.checkins.find(x => x.date === t && !x.sample), qc = S.quickChecks && S.quickChecks[t], lv = qc ? qc.v : bodyLevel(c);
     const ch = c && G4.WRI_SCORES ? G4.WRI_SCORES.charge(scoreCtx()) : null, st = ch && ch.score !== null ? { green: "ready", yellow: "easy", red: "rest" }[ch.band] : null;
     return `<section class="a4-card a4-body" data-tour="body"><div class="a4-row"><h2>Badan hari ini</h2>${st ? `<span class="a4-st st-${st}">Siap ${ch.score}% · ${BANDW[ch.band]}</span>` : ""}</div>
       <div class="a4-batt" role="group" aria-label="Gimana badan hari ini">${BODY.map(b => `<button class="${lv === b.k ? "on" : ""} b-${b.k}" data-act="ciQuick" data-k="${b.k}" aria-pressed="${lv === b.k}">${battery(b.n, b.x)}<span>${b.l}</span></button>`).join("")}</div></section>`;
@@ -161,11 +161,10 @@
       ["tidur", "Tidur", c ? c.sleep >= 3 : null],
       ["energi", "Energi", c ? c.energy >= 3 : null],
       ["pegal", "Pegal", c ? c.soreness <= 3 : null],
-      ["nyeri", "Nyeri", c ? c.pain <= 2 : null],
-      ["beban", "Rasio", rz === "none" ? null : rz === "sweet" || rz === "low"]
+      ["nyeri", "Nyeri", c ? c.pain <= 2 : null]
     ];
     const ok = sig.filter(x => x[2] === true).length, known = sig.filter(x => x[2] !== null).length;
-    return `<section class="a4-card mon" data-tour="monitor"><button class="mon-h" data-act="score" data-k="siap"><h2 class="cap">Monitor badan</h2><span class="chev">›</span></button>
+    return `<section class="a4-card mon" data-tour="monitor"><button class="mon-h" data-act="score" data-k="siap"><h2 class="cap">Jawaban check-in</h2><span class="chev">›</span></button>
       <div class="mon-row">${sig.map(([k, l, v]) => `<div class="mon-i"><svg viewBox="0 0 24 24" aria-hidden="true">${ICO[k]}</svg><span class="cap">${l}</span><i class="mk ${v === null ? "na" : v ? "ok" : "bad"}" aria-label="${l}: ${v === null ? "belum ada data" : v ? "dalam rentang" : "di luar rentang"}">${v === null ? "–" : v ? IC.check : "!"}</i></div>`).join("")}</div>
       <div class="mon-f ${known && ok === known ? "all" : ""}"><i class="mk ${known && ok === known ? "ok" : known ? "bad" : "na"}">${known && ok === known ? IC.check : known ? "!" : "–"}</i>${known ? `${ok}/${known} sinyal dalam rentang` : "Check-in buat lihat sinyal badan"}</div></section>`;
   }
@@ -237,13 +236,13 @@
       detail = `<section class="a4-card"><h2 class="cap">Pemicu</h2>
         ${row("Badan vs biasanya", "wellness" in d ? (d.wellness >= 0 ? "+" : "") + d.wellness.toFixed(1).replace(".", ",") + " σ" : "belum check-in", "wellness" in d ? d.wellness >= -0.5 : null)}
         ${row("Kesegaran (fitness − capek)", "freshness" in d ? (d.freshness >= 0 ? "segar" : "capek") + " " + (d.freshness >= 0 ? "+" : "") + d.freshness.toFixed(1).replace(".", ",") : "belum ada lari", "freshness" in d ? d.freshness >= -0.8 : null)}
-        ${row("Rasio beban 7:28 hari", L.acwr === null ? "–" : L.acwr.toFixed(2).replace(".", ",") + "×", rz === "none" ? null : rz === "sweet" || rz === "low")}
+        ${row("Beban 7 hari ÷ rata-rata 28 hari", L.acwr === null ? "–" : L.acwr.toFixed(2).replace(".", ",") + "×", null)}
         ${d.pain ? row("Nyeri", "tercatat · dibatasi merah", false) : ""}
-        <p class="xs mu" style="margin-top:8px">Dibandingin sama baseline-mu sendiri (EWMA 14 hari). Pendekatan ilmiah terbuka, bukan saran medis.</p></section>`;
+        <p class="xs mu" style="margin-top:8px">Dibandingkan dengan check-in-mu sendiri (EWMA 14 hari). Angka Siap baru muncul setelah minimal 4 check-in lengkap. Ini heuristik, bukan pemeriksaan kesehatan atau batas aman.</p></section>`;
     } else if (k === "beban") {
       const ls = SC().dayLoads(S.logs.filter(l => !l.sample), S.strength, todayYmd(), 7, S.profile && S.profile.hrMax);
       detail = `<section class="a4-card"><h2 class="cap">7 hari terakhir</h2>${ls.map(x => `<div class="drv"><span>${fmtDay(x.date)}</span><b class="num">${SC().effort(x.load)}</b></div>`).join("")}
-        <p class="xs mu" style="margin-top:8px">Beban = menit × intensitas (RPE, atau zona detak jantung kalau HR maks diisi), dalam skala log 0–100.</p></section>`;
+        <p class="xs mu" style="margin-top:8px">Beban = menit × intensitas, skala log 0–100. Sumber per lari: zona detak jantung (kalau ada HR + HR maks terukur), RPE yang kamu isi, atau <b>perkiraan</b> dari jenis sesi. Lari tanpa durasi memakai <b>perkiraan</b> 6:30 /km. Strength dihitung tetap 25 menit × intensitas 2,5.${ls.some(x => x.est) ? ` Hari dengan perkiraan: ${ls.filter(x => x.est).map(x => fmtDay(x.date)).join(", ")}.` : ""}</p></section>`;
     } else {
       const ci = S.checkins.filter(c => !c.sample).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 7);
       detail = `<section class="a4-card"><h2 class="cap">Tidur 7 hari</h2>${ci.length ? ci.map(c => `<div class="drv"><span>${fmtDay(c.date)}</span><b>${["", "Jelek", "Kurang", "Lumayan", "Nyenyak", "Nyenyak banget"][c.sleep] || "–"}</b></div>`).join("") : `<p class="mu sm">Belum ada check-in</p>`}
@@ -269,7 +268,7 @@
   function ratioDial(r) {
     const lo = 0.5, hi = 2.0, ang = v => Math.PI * (1 - (Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo)), P = (v, rr) => [100 + rr * Math.cos(ang(v)), 100 - rr * Math.sin(ang(v))];
     const arc = (a, b, rr) => { const [x1, y1] = P(a, rr), [x2, y2] = P(b, rr); return `M${x1.toFixed(1)} ${y1.toFixed(1)} A${rr} ${rr} 0 0 1 ${x2.toFixed(1)} ${y2.toFixed(1)}`; };
-    const z = SC().ratioZone(r), word = { none: "Belum cukup data", low: "Di bawah biasanya", sweet: "Aman, sesuai kapasitas", high: "Naik cepat, hati-hati", danger: "Terlalu tinggi, kurangi" }[z];
+    const z = SC().ratioZone(r), word = { none: "Belum cukup data", low: "Di bawah rata-rata 28 hari", sweet: "Mirip rata-rata 28 hari", high: "Di atas rata-rata 28 hari", danger: "Jauh di atas rata-rata 28 hari" }[z];
     const ticks = [0.5, 0.8, 1, 1.3, 1.5, 2].map(v => { const [x1, y1] = P(v, 78), [x2, y2] = P(v, 86); return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="var(--mu2)" stroke-width="1.2"/>`; }).join("");
     const needle = r === null ? "" : (() => { const [x, y] = P(r, 70); return `<line x1="100" y1="100" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--tx)" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="100" r="6" fill="var(--tx)"/>`; })();
     return `<section class="a4-card dial"><h2 class="cap">Rasio beban</h2><svg viewBox="0 0 200 112" role="img" aria-label="Rasio beban ${r === null ? "belum ada" : r.toFixed(2)}">
@@ -277,7 +276,7 @@
       <path d="${arc(0.8, 1.3, 90)}" fill="none" stroke="${COL.green}" stroke-width="12"/>
       <path d="${arc(1.3, 1.5, 90)}" fill="none" stroke="${COL.yellow}" stroke-width="12"/>
       <path d="${arc(1.5, 2.0, 90)}" fill="none" stroke="${COL.red}" stroke-width="12" stroke-linecap="round"/>${ticks}${needle}</svg>
-      <div class="dial-v"><b class="num">${r === null ? "–" : r.toFixed(2).replace(".", ",") + "×"}</b><span class="${z === "sweet" ? "ok" : z === "none" || z === "low" ? "mu" : "bad"}">${word}</span><span class="xs mu">Beban 7 hari dibanding 28 hari. Aman 0,8–1,3×</span></div></section>`;
+      <div class="dial-v"><b class="num">${r === null ? "–" : r.toFixed(2).replace(".", ",") + "×"}</b><span class="mu">${word}</span><span class="xs mu">Beban 7 hari ÷ rata-rata 28 hari. Ini gambaran, bukan batas aman atau prediksi cedera.</span></div></section>`;
   }
 
   vHome = function () {
@@ -444,14 +443,13 @@
       S.logs.push(l); M = null; persist(); render(true);
       toast(`Tersimpan · ${fmtKm(l.distance)} km${sec ? " · " + fmtPace(sec / l.distance) : ""}`);
     },
+    // RUNLAB fix: one tap is stored as one coarse answer (quickChecks), never as six invented check-in values.
     ciQuick: d => {
       const b = BODY.find(x => x.k === d.k); if (!b) return;
       const t = todayYmd();
-      S.checkins = S.checkins.filter(c => c.date !== t);
-      S.checkins.push(Object.assign({ date: t }, b.c));
+      S.quickChecks = Object.assign({}, S.quickChecks, { [t]: { v: b.k } });
       persist(); render(true);
-      const r = readiness(S.checkins[S.checkins.length - 1]);
-      toast(`Check-in: ${b.l} · ${RD_LBL[r.st]}`);
+      toast(b.k === "nyeri" ? "Tercatat: nyeri. Kurangi atau stop dulu; kalau nyeri berlanjut, periksa ke dokter atau fisio." : `Tercatat: ${b.l}. Isi check-in lengkap kalau mau angka Siap.`);
     },
     feedMore: () => { S.ui.feedN = (S.ui.feedN || 20) + 20; render(true); },
     score: d => { S.ui.score = d.k; S.ui.tab = "score"; M = null; persist(); render(false); }

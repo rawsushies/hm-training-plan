@@ -93,3 +93,15 @@ None of these breaks data. All are presentation/method issues, scheduled for RUN
 
 See `docs/TEST_REPORT.md` (updated) and the numbers in the M0/M1 report. The suites run here were `npm test`,
 `npm run test:rules`, `npm run test:e2e` (Firestore + Auth emulators, Chromium) and `npm run check:release`. Device tests: none.
+
+## 7. Status of the §5 findings (RUNLAB 4.2, this branch)
+
+| Finding | Status |
+|---|---|
+| 1. ACWR shown as "Aman" / "Terlalu tinggi, kurangi" | **Fixed**: descriptive wording only ("Di atas rata-rata 28 hari"), neutral colour, footnote "bukan batas aman atau prediksi cedera"; removed from the pass/fail check-in row. |
+| 2. Siap percentage while calibrating | **Fixed**: `charge()` returns no score until ≥4 past full check-ins (unit-tested). |
+| 3. Estimated inputs hidden | **Fixed (disclosed)**: Beban detail names the source per run (HR zone / RPE / estimate), the 6:30 /km assumption, and which days used estimates. RUNLAB analyses never use estimated values. |
+| 4. HR zones without measured HRmax | Unchanged in code (already requires the profile's measured HRmax); now disclosed in the Beban detail. |
+| 5. Quick body check invented six answers | **Fixed**: stored as `quickChecks[date] = {v}` (plan records `plan/quick_*`); never writes check-in fields; full check-ins unchanged (unit-tested). Older taps already saved as full check-ins cannot be told apart and are left untouched. |
+| 6. "Monitor badan" pass/fail marks | **Partly**: renamed "Jawaban check-in", load ratio removed from it; per-answer marks remain as a reading of the user's own answers. |
+| 7. Strength fixed load | **Disclosed** in the Beban detail. |

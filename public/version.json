@@ -1,11 +1,12 @@
 {
  "version": "4.2.0",
- "build": "2026-11-18T02:55:48Z",
+ "build": "2026-11-18T03:00:40Z",
  "minApp": "3.0.0",
  "minNative": 1,
  "apkUrl": "https://github.com/rawsushies/hm-training-plan/releases/latest",
  "notes": [
-  "Lab baru: tampilan workspace, analisis dari catatanmu (volume, tren pace, perbandingan, kualitas data), riset PubMed/OpenAlex"
+  "Lab baru: workspace, analisis dari catatanmu (volume, tren pace, perbandingan, kualitas data), riset PubMed/OpenAlex",
+  "Perbaikan: cek badan satu-tap tidak lagi mengisi jawaban check-in; rasio beban tanpa label aman/bahaya; Siap tanpa angka sebelum ada baseline"
  ],
  "files": [
   {
@@ -45,13 +46,13 @@
   },
   {
    "p": "index.html",
-   "h": "f84b9b9dbe6dfca1bf727c11dc47f8e7f84f2c9ed1449e3c3de89e10456d95bd",
-   "s": 284572
+   "h": "1abe1c8bcb16803845f97f7128553dce8c61dde955a7ad5a53170be7676fbe4d",
+   "s": 284614
   },
   {
    "p": "js/app4.js",
-   "h": "73624a7666e6fb6471e06134534efcaa91304cb5f7364d9301c557e73a6f58ce",
-   "s": 43131
+   "h": "ba4f78347d39cacd6240d75933c6011fe5736727a9f4a908dd133b4e3924e2fc",
+   "s": 43586
   },
   {
    "p": "js/ask.js",
@@ -89,6 +90,11 @@
    "s": 10464
   },
   {
+   "p": "js/lab/consult.js",
+   "h": "d193668b8c7f353e06974646d5d3bff2416e903d009154466da418b526e4b5eb",
+   "s": 4661
+  },
+  {
    "p": "js/lab/lab.js",
    "h": "367838ebdbd872e38d9ead49104287661aad42413cbde173bd0a056869a21084",
    "s": 20422
@@ -100,13 +106,13 @@
   },
   {
    "p": "js/lab/views-lab.js",
-   "h": "bfd862a8008af3965a6a6a9136a7222d1add7d885a640de60ae4fed34be15ffb",
-   "s": 38455
+   "h": "03297270e91adc6b8f7c6cf6517e5eef34e3ef6c208ed2b2a4515f91102ad385",
+   "s": 39815
   },
   {
    "p": "js/logic.js",
-   "h": "07a92d827a594ec76b0769c152f974d6441f51285d65dbcbadf038f8ada93a9a",
-   "s": 38606
+   "h": "fd228726d8f1dbe37470b9279f20957190e0436a404530841de14695e56c4e25",
+   "s": 38937
   },
   {
    "p": "js/motion.js",
@@ -130,8 +136,8 @@
   },
   {
    "p": "js/scores.js",
-   "h": "b5289ed6592f34f68f34a1865d74a4cac8ffdf63353c6639fddb835d0e1a03f0",
-   "s": 10276
+   "h": "eb1f63829f93fdffebf3401e8d3aedbc32a86feeba487a8a5d1c2215c40dbe50",
+   "s": 10512
   },
   {
    "p": "js/shoe-catalog.js",
@@ -170,7 +176,7 @@
   },
   {
    "p": "js/version.js",
-   "h": "e31b7f18df1fab9baa415d5232411a38b93173cb9de38441347d2ae4e061ac3d",
+   "h": "9855568f55082aeacc9ac6ebf3b8d9e08fd8419be61c1209d04fc50ab84ef02b",
    "s": 139
   },
   {
@@ -220,8 +226,8 @@
   },
   {
    "p": "sw.js",
-   "h": "af623cd9cc6cf0f7a3a2f5e31a85f8f4ae9981cccd225e1124b332cd44ef0d0e",
-   "s": 2796
+   "h": "9297f68572c48fd497c9899dfd288cdffeaec24606c9f82112cdbb232cb2a49d",
+   "s": 2817
   },
   {
    "p": "vendor/capacitor/8.5.3/capacitor.js",

@@ -192,6 +192,12 @@ motion:
   accent because it is the key session of the week.
 - **Banned:** hue-to-hue gradients, gradient text, coloured glows and shadows, radial washes, blobs, glass blur, holo
   foil. A gradient is allowed only as a tiny tone step inside one neutral.
+- **Shipped exceptions (verified against `public/css/werunit.css`, RUNLAB 4.2):** (1) the frosted spring pill in the dock
+  and segmented controls (backdrop blur that rises with speed; the owner's motion spec), (2) the liquid score vessels on
+  Hari ini (canvas, see below), (3) the faint dashed lane behind the Lab hero trace. Older `.glass/.vglass/.card` rules
+  in the CSS are flattened to solid surfaces by later overrides; they are not a licence to add glass.
+- **RUNLAB tokens:** the Lab adds `--lab-bg / --lab-panel / --lab-panel-2 / --lab-grid` and data series `--sa` (orange),
+  `--sb` (blue), `--sc` (teal), dark and light. Canonical list, layouts and components: `docs/RUNLAB_VISUAL_DIRECTION.md`.
 
 ## Typography
 

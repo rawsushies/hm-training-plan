@@ -123,6 +123,8 @@
     }
     if (hasLoad) terms.push({ k: "freshness", z: clamp(ls.tsb / Math.max(8, ls.ctl * 0.6), -3, 3), wt: 0.35 });
     if (!terms.length) return { score: null, band: "none", tier: "calibrating", drivers: {}, load: ls };
+    // RUNLAB audit: with fewer than `seed` past check-ins there is no personal baseline, so no percentage is shown.
+    if (bl.status === "calibrating") return { score: null, band: "none", tier: "calibrating", drivers: {}, load: ls };
     const wsum = terms.reduce((a, t) => a + t.wt, 0), z = terms.reduce((a, t) => a + t.z * t.wt, 0) / wsum;
     let score = Math.round(logistic(z));
     const pain = today && today.pain >= 4;

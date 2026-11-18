@@ -47,9 +47,12 @@ test("Siap: better-than-usual wellness → green, worse → red, pain caps it; n
   assert.equal(none.score, null); assert.equal(none.tier, "calibrating");
 });
 
-test("Siap without today's check-in falls back to freshness only and says so (building)", () => {
+test("Siap shows no percentage until a personal baseline exists (≥4 past check-ins); then without today's check-in it uses freshness and says so", () => {
   const logs = Array.from({ length: 21 }, (_, i) => run(S.addDays("2027-01-20", -i)));
-  const c = S.charge({ date: "2027-01-21", checkins: [], logs });
+  const none = S.charge({ date: "2027-01-21", checkins: [], logs });
+  assert.equal(none.score, null, "RUNLAB audit: no confident-looking number while uncalibrated"); assert.equal(none.tier, "calibrating");
+  const past = [1, 2, 3, 4, 5].map(i => ci(S.addDays("2027-01-21", -i)));
+  const c = S.charge({ date: "2027-01-21", checkins: past, logs });
   assert.notEqual(c.score, null); assert.equal(c.tier, "building"); assert.ok("freshness" in c.drivers);
 });
 
